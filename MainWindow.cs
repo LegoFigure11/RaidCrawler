@@ -239,7 +239,7 @@ namespace RaidCrawler
             for (int i = 0; i < 2; i++) await Click(DDOWN, 0_200, token).ConfigureAwait(false);
             await Click(A, 0_500, token).ConfigureAwait(false);
             await Click(DUP, 0_200, token).ConfigureAwait(false);
-            for (int i = 0; i < 5; i++) await Click(DRIGHT, 0_100, token).ConfigureAwait(false);
+            for (int i = 0; i < 6; i++) await Click(DRIGHT, 0_100, token).ConfigureAwait(false);
             await Click(A, 0_500, token).ConfigureAwait(false);
             await Click(HOME, 2_500, token).ConfigureAwait(false);
             await Click(HOME, 4_000, token).ConfigureAwait(false);
