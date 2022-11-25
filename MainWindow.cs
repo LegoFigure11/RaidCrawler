@@ -112,6 +112,7 @@ namespace RaidCrawler
             PID.Text = $"{raid.PID:X8}";
             TeraType.Text = raid.TeraType;
             Area.Text = $"{Areas.Area[raid.Area - 1]} - Den {raid.Den}";
+            IsEvent.Checked = raid.IsEvent;
             Flawless0.Text = IVsString(raid.Flawless_0);
             Flawless1.Text = IVsString(raid.Flawless_1);
             Flawless2.Text = IVsString(raid.Flawless_2);
