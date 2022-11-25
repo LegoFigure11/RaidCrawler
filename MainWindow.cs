@@ -38,7 +38,8 @@ namespace RaidCrawler
         {
             InputSwitchIP.Text = Settings.Default.SwitchIP;
             LabelIndex.Text = string.Empty;
-            DefaultColor = Flawless0.BackColor;
+            DefaultColor = IVs.BackColor;
+            Progress.SelectedIndex = Settings.Default.Progress;
         }
 
         private void InputSwitchIP_Changed(object sender, EventArgs e)
@@ -113,13 +114,12 @@ namespace RaidCrawler
             TeraType.Text = raid.TeraType;
             Area.Text = $"{Areas.Area[raid.Area - 1]} - Den {raid.Den}";
             IsEvent.Checked = raid.IsEvent;
-            IsBlack.Checked = raid.IsBlack;
-            Flawless0.Text = IVsString(raid.Flawless_0);
-            Flawless1.Text = IVsString(raid.Flawless_1);
-            Flawless2.Text = IVsString(raid.Flawless_2);
-            Flawless3.Text = IVsString(raid.Flawless_3);
-            Flawless4.Text = IVsString(raid.Flawless_4);
-            Flawless5.Text = IVsString(raid.Flawless_5);
+
+            int StarCount = GetStarCount(raid.Difficulty, Progress.SelectedIndex, raid.IsBlack);
+
+            Difficulty.Text = raid.IsEvent ? "coming soon™" : string.Concat(Enumerable.Repeat("☆", StarCount)) + $" ({raid.Difficulty})";
+            IVs.Text = IVsString(raid.GetIVs(raid.Seed, StarCount - 1));
+
             if (raid.IsShiny)
             {
                 PID.BackColor = Color.Gold;
@@ -130,54 +130,53 @@ namespace RaidCrawler
                 PID.BackColor = DefaultColor;
             }
 
-            if (Flawless0.Text is "31/31/31/31/31/31")
+            if (IVs.Text is "31/31/31/31/31/31")
             {
-                Flawless0.BackColor = Color.YellowGreen;
+                IVs.BackColor = Color.YellowGreen;
             }
             else
             {
-                Flawless0.BackColor = DefaultColor;
+                IVs.BackColor = DefaultColor;
             }
-            if (Flawless1.Text is "31/31/31/31/31/31")
+        }
+
+        private static int GetStarCount(uint Difficulty, int Progress, bool IsBlack)
+        {
+            if (IsBlack) return 6;
+            return Progress switch
             {
-                Flawless1.BackColor = Color.YellowGreen;
-            }
-            else
-            {
-                Flawless1.BackColor = DefaultColor;
-            }
-            if (Flawless2.Text is "31/31/31/31/31/31")
-            {
-                Flawless2.BackColor = Color.YellowGreen;
-            }
-            else
-            {
-                Flawless2.BackColor = DefaultColor;
-            }
-            if (Flawless3.Text is "31/31/31/31/31/31")
-            {
-                Flawless3.BackColor = Color.YellowGreen;
-            }
-            else
-            {
-                Flawless3.BackColor = DefaultColor;
-            }
-            if (Flawless4.Text is "31/31/31/31/31/31")
-            {
-                Flawless4.BackColor = Color.YellowGreen;
-            }
-            else
-            {
-                Flawless4.BackColor = DefaultColor;
-            }
-            if (Flawless5.Text is "31/31/31/31/31/31")
-            {
-                Flawless5.BackColor = Color.YellowGreen;
-            }
-            else
-            {
-                Flawless5.BackColor = DefaultColor;
-            }
+                0 => Difficulty switch
+                {
+                    > 80 => 2,
+                    _ => 1,
+                },
+                1 => Difficulty switch
+                {
+                    > 70 => 3,
+                    > 30 => 2,
+                    _ => 1,
+                },
+                2 => Difficulty switch
+                {
+                    > 70 => 4,
+                    > 40 => 3,
+                    > 20 => 2,
+                    _ => 1,
+                },
+                3 => Difficulty switch
+                {
+                    > 75 => 5,
+                    > 40 => 4,
+                    _ => 3,
+                },
+                4 => Difficulty switch
+                {
+                    > 70 => 5,
+                    > 30 => 4,
+                    _ => 3,
+                },
+                _ => 1,
+            };
         }
 
         private static string IVsString(int[] ivs)
@@ -305,6 +304,13 @@ namespace RaidCrawler
             }
 
             DisplayRaid(index);
+        }
+
+        private void Progress_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Settings.Default.Progress = Progress.SelectedIndex;
+            Settings.Default.Save();
+            if (Raids.Count > 0) DisplayRaid(index);
         }
     }
 }

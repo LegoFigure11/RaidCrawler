@@ -34,5 +34,17 @@ namespace RaidCrawler.Properties {
                 this["SwitchIP"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Progress {
+            get {
+                return ((int)(this["Progress"]));
+            }
+            set {
+                this["Progress"] = value;
+            }
+        }
     }
 }

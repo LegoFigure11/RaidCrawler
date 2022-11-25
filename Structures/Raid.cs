@@ -26,6 +26,8 @@ namespace RaidCrawler.Structures
 
         // Derived Values
         public virtual string? TeraType => GetTeraType(Seed);
+        public virtual uint Difficulty => GetDifficulty(Seed);
+
         public virtual uint EC => GenericRaidData[0];
         /* public virtual uint TIDSID => GenericRaidData[1]; */ // Unneeded
         public virtual uint PID => GenericRaidData[2];
@@ -66,13 +68,13 @@ namespace RaidCrawler.Structures
             return new uint[] { EC, TIDSID, PID, (uint)Shiny };
         }
 
-        private static int[] GetIVs(uint Seed, int FlawlessIVs)
+        public int[] GetIVs(uint Seed, int FlawlessIVs)
         {
             var rng = new Xoroshiro128Plus(Seed);
             // Dummy calls
-            rng.NextInt();
-            rng.NextInt();
-            rng.NextInt();
+            rng.NextInt(); // EC
+            rng.NextInt(); // TIDSID
+            rng.NextInt(); // PID
 
             Span<int> ivs = stackalloc[] { -1, -1, -1, -1, -1, -1 };
             // Flawless IVs
@@ -92,6 +94,12 @@ namespace RaidCrawler.Structures
             }
 
             return ivs.ToArray();
+        }
+
+        private static uint GetDifficulty(uint Seed)
+        {
+            var rng = new Xoroshiro128Plus(Seed);
+            return (uint)rng.NextInt(100);
         }
     }
 }

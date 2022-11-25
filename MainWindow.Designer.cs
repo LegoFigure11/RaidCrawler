@@ -49,25 +49,17 @@
             this.ButtonPrevious = new System.Windows.Forms.Button();
             this.Area = new System.Windows.Forms.TextBox();
             this.LabelUNK_2 = new System.Windows.Forms.Label();
-            this.Flawless0 = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.Flawless1 = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.Flawless3 = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.Flawless2 = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.Flawless5 = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.Flawless4 = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
+            this.IVs = new System.Windows.Forms.TextBox();
+            this.LabelIVs = new System.Windows.Forms.Label();
             this.ButtonReadRaids = new System.Windows.Forms.Button();
             this.ButtonAdvanceDate = new System.Windows.Forms.Button();
             this.CheckContinueUntilShiny = new System.Windows.Forms.CheckBox();
             this.IsEvent = new System.Windows.Forms.CheckBox();
             this.LabelIsEvent = new System.Windows.Forms.Label();
-            this.LabelIsBlack = new System.Windows.Forms.Label();
-            this.IsBlack = new System.Windows.Forms.CheckBox();
+            this.Difficulty = new System.Windows.Forms.TextBox();
+            this.LabelDifficulty = new System.Windows.Forms.Label();
+            this.Progress = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // ButtonDisconnect
@@ -269,119 +261,24 @@
             this.LabelUNK_2.TabIndex = 60;
             this.LabelUNK_2.Text = "Area:";
             // 
-            // Flawless0
+            // IVs
             // 
-            this.Flawless0.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Flawless0.Location = new System.Drawing.Point(326, 197);
-            this.Flawless0.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.Flawless0.Name = "Flawless0";
-            this.Flawless0.ReadOnly = true;
-            this.Flawless0.Size = new System.Drawing.Size(126, 22);
-            this.Flawless0.TabIndex = 69;
+            this.IVs.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.IVs.Location = new System.Drawing.Point(357, 162);
+            this.IVs.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.IVs.Name = "IVs";
+            this.IVs.ReadOnly = true;
+            this.IVs.Size = new System.Drawing.Size(270, 22);
+            this.IVs.TabIndex = 69;
             // 
-            // label2
+            // LabelIVs
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(326, 179);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(38, 15);
-            this.label2.TabIndex = 68;
-            this.label2.Text = "1-Star";
-            // 
-            // Flawless1
-            // 
-            this.Flawless1.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Flawless1.Location = new System.Drawing.Point(502, 197);
-            this.Flawless1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.Flawless1.Name = "Flawless1";
-            this.Flawless1.ReadOnly = true;
-            this.Flawless1.Size = new System.Drawing.Size(126, 22);
-            this.Flawless1.TabIndex = 71;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(502, 179);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(38, 15);
-            this.label3.TabIndex = 70;
-            this.label3.Text = "2-Star";
-            // 
-            // Flawless3
-            // 
-            this.Flawless3.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Flawless3.Location = new System.Drawing.Point(502, 245);
-            this.Flawless3.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.Flawless3.Name = "Flawless3";
-            this.Flawless3.ReadOnly = true;
-            this.Flawless3.Size = new System.Drawing.Size(126, 22);
-            this.Flawless3.TabIndex = 75;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(502, 227);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(38, 15);
-            this.label1.TabIndex = 74;
-            this.label1.Text = "4-Star";
-            // 
-            // Flawless2
-            // 
-            this.Flawless2.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Flawless2.Location = new System.Drawing.Point(326, 245);
-            this.Flawless2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.Flawless2.Name = "Flawless2";
-            this.Flawless2.ReadOnly = true;
-            this.Flawless2.Size = new System.Drawing.Size(126, 22);
-            this.Flawless2.TabIndex = 73;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(326, 227);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(38, 15);
-            this.label4.TabIndex = 72;
-            this.label4.Text = "3-Star";
-            // 
-            // Flawless5
-            // 
-            this.Flawless5.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Flawless5.Location = new System.Drawing.Point(502, 298);
-            this.Flawless5.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.Flawless5.Name = "Flawless5";
-            this.Flawless5.ReadOnly = true;
-            this.Flawless5.Size = new System.Drawing.Size(126, 22);
-            this.Flawless5.TabIndex = 79;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(502, 280);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(38, 15);
-            this.label5.TabIndex = 78;
-            this.label5.Text = "6-Star";
-            // 
-            // Flawless4
-            // 
-            this.Flawless4.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Flawless4.Location = new System.Drawing.Point(326, 298);
-            this.Flawless4.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.Flawless4.Name = "Flawless4";
-            this.Flawless4.ReadOnly = true;
-            this.Flawless4.Size = new System.Drawing.Size(126, 22);
-            this.Flawless4.TabIndex = 77;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(326, 280);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(38, 15);
-            this.label6.TabIndex = 76;
-            this.label6.Text = "5-Star";
+            this.LabelIVs.AutoSize = true;
+            this.LabelIVs.Location = new System.Drawing.Point(325, 164);
+            this.LabelIVs.Name = "LabelIVs";
+            this.LabelIVs.Size = new System.Drawing.Size(25, 15);
+            this.LabelIVs.TabIndex = 68;
+            this.LabelIVs.Text = "IVs:";
             // 
             // ButtonReadRaids
             // 
@@ -410,18 +307,18 @@
             // CheckContinueUntilShiny
             // 
             this.CheckContinueUntilShiny.AutoSize = true;
-            this.CheckContinueUntilShiny.Location = new System.Drawing.Point(117, 143);
+            this.CheckContinueUntilShiny.Location = new System.Drawing.Point(21, 172);
             this.CheckContinueUntilShiny.Name = "CheckContinueUntilShiny";
-            this.CheckContinueUntilShiny.Size = new System.Drawing.Size(138, 19);
+            this.CheckContinueUntilShiny.Size = new System.Drawing.Size(199, 19);
             this.CheckContinueUntilShiny.TabIndex = 82;
-            this.CheckContinueUntilShiny.Text = "Continue until shiny?";
+            this.CheckContinueUntilShiny.Text = "Keep advancing date until shiny?";
             this.CheckContinueUntilShiny.UseVisualStyleBackColor = true;
             // 
             // IsEvent
             // 
             this.IsEvent.AutoCheck = false;
             this.IsEvent.AutoSize = true;
-            this.IsEvent.Location = new System.Drawing.Point(357, 140);
+            this.IsEvent.Location = new System.Drawing.Point(533, 137);
             this.IsEvent.Name = "IsEvent";
             this.IsEvent.Size = new System.Drawing.Size(15, 14);
             this.IsEvent.TabIndex = 83;
@@ -430,55 +327,72 @@
             // LabelIsEvent
             // 
             this.LabelIsEvent.AutoSize = true;
-            this.LabelIsEvent.Location = new System.Drawing.Point(309, 139);
+            this.LabelIsEvent.Location = new System.Drawing.Point(483, 136);
             this.LabelIsEvent.Name = "LabelIsEvent";
             this.LabelIsEvent.Size = new System.Drawing.Size(41, 15);
             this.LabelIsEvent.TabIndex = 84;
             this.LabelIsEvent.Text = "Event?";
             // 
-            // LabelIsBlack
+            // Difficulty
             // 
-            this.LabelIsBlack.AutoSize = true;
-            this.LabelIsBlack.Location = new System.Drawing.Point(417, 139);
-            this.LabelIsBlack.Name = "LabelIsBlack";
-            this.LabelIsBlack.Size = new System.Drawing.Size(107, 15);
-            this.LabelIsBlack.TabIndex = 86;
-            this.LabelIsBlack.Text = "Black Raid (6-star)?";
+            this.Difficulty.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.Difficulty.Location = new System.Drawing.Point(357, 134);
+            this.Difficulty.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.Difficulty.Name = "Difficulty";
+            this.Difficulty.ReadOnly = true;
+            this.Difficulty.Size = new System.Drawing.Size(95, 22);
+            this.Difficulty.TabIndex = 86;
             // 
-            // IsBlack
+            // LabelDifficulty
             // 
-            this.IsBlack.AutoCheck = false;
-            this.IsBlack.AutoSize = true;
-            this.IsBlack.Location = new System.Drawing.Point(531, 140);
-            this.IsBlack.Name = "IsBlack";
-            this.IsBlack.Size = new System.Drawing.Size(15, 14);
-            this.IsBlack.TabIndex = 85;
-            this.IsBlack.UseVisualStyleBackColor = true;
+            this.LabelDifficulty.AutoSize = true;
+            this.LabelDifficulty.Location = new System.Drawing.Point(292, 136);
+            this.LabelDifficulty.Name = "LabelDifficulty";
+            this.LabelDifficulty.Size = new System.Drawing.Size(58, 15);
+            this.LabelDifficulty.TabIndex = 85;
+            this.LabelDifficulty.Text = "Difficulty:";
+            // 
+            // Progress
+            // 
+            this.Progress.FormattingEnabled = true;
+            this.Progress.Items.AddRange(new object[] {
+            "1",
+            "2",
+            "3",
+            "4",
+            "5"});
+            this.Progress.Location = new System.Drawing.Point(142, 143);
+            this.Progress.Name = "Progress";
+            this.Progress.Size = new System.Drawing.Size(37, 23);
+            this.Progress.TabIndex = 87;
+            this.Progress.Text = "w";
+            this.Progress.SelectedIndexChanged += new System.EventHandler(this.Progress_SelectedIndexChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(21, 146);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(115, 15);
+            this.label1.TabIndex = 88;
+            this.label1.Text = "Story Progress Level:";
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(640, 339);
-            this.Controls.Add(this.LabelIsBlack);
-            this.Controls.Add(this.IsBlack);
+            this.ClientSize = new System.Drawing.Size(640, 213);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.Progress);
+            this.Controls.Add(this.Difficulty);
+            this.Controls.Add(this.LabelDifficulty);
             this.Controls.Add(this.LabelIsEvent);
             this.Controls.Add(this.IsEvent);
             this.Controls.Add(this.CheckContinueUntilShiny);
             this.Controls.Add(this.ButtonAdvanceDate);
             this.Controls.Add(this.ButtonReadRaids);
-            this.Controls.Add(this.Flawless5);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.Flawless4);
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.Flawless3);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.Flawless2);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.Flawless1);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.Flawless0);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.IVs);
+            this.Controls.Add(this.LabelIVs);
             this.Controls.Add(this.Area);
             this.Controls.Add(this.LabelUNK_2);
             this.Controls.Add(this.LabelIndex);
@@ -529,24 +443,16 @@
         private Button ButtonPrevious;
         private TextBox Area;
         private Label LabelUNK_2;
-        private TextBox Flawless0;
-        private Label label2;
-        private TextBox Flawless1;
-        private Label label3;
-        private TextBox Flawless3;
-        private Label label1;
-        private TextBox Flawless2;
-        private Label label4;
-        private TextBox Flawless5;
-        private Label label5;
-        private TextBox Flawless4;
-        private Label label6;
+        private TextBox IVs;
+        private Label LabelIVs;
         private Button ButtonReadRaids;
         private Button ButtonAdvanceDate;
         private CheckBox CheckContinueUntilShiny;
         private CheckBox IsEvent;
         private Label LabelIsEvent;
-        private Label LabelIsBlack;
-        private CheckBox IsBlack;
+        private TextBox Difficulty;
+        private Label LabelDifficulty;
+        private ComboBox Progress;
+        private Label label1;
     }
 }
