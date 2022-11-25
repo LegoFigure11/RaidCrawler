@@ -18,7 +18,6 @@ namespace RaidCrawler
         private readonly List<Raid> Raids = new();
 
         private int index = 0;
-        private bool HasAssignedBlackRaid = false;
 
         private Color DefaultColor;
 
@@ -281,7 +280,6 @@ namespace RaidCrawler
 
             Raids.Clear();
             index = 0;
-            HasAssignedBlackRaid = false;
 
             ConnectionStatusText.Text = "Reading raid block...";
             Raid raid;
@@ -290,16 +288,7 @@ namespace RaidCrawler
                 ConnectionStatusText.Text = $"Reading raid block... {i / Raid.SIZE}%";
                 var Data = await SwitchConnection.ReadBytesAbsoluteAsync(offset + i, Raid.SIZE, token);
                 raid = new Raid(Data);
-                if (raid.IsValid)
-                {
-                    if (!raid.IsEvent && !HasAssignedBlackRaid)
-                    {
-                        raid.IsBlack = true;
-                        HasAssignedBlackRaid = true;
-                    }
-                    Raids.Add(raid);
-                }
-
+                if (raid.IsValid) Raids.Add(raid);
             }
 
             ConnectionStatusText.Text = "Completed!";

@@ -20,8 +20,9 @@ namespace RaidCrawler.Structures
         public virtual uint UNK_3 => ReadUInt32LittleEndian(Data.AsSpan(0x08));  // Unused? Seems to always be 1
         public virtual uint Den => ReadUInt32LittleEndian(Data.AsSpan(0x0C));
         public virtual uint Seed => ReadUInt32LittleEndian(Data.AsSpan(0x10));
-        public virtual bool IsEvent => ReadUInt32LittleEndian(Data.AsSpan(0x18)) == 2;
-        public virtual bool IsBlack { get; set; }
+        public virtual uint Flags => ReadUInt32LittleEndian(Data.AsSpan(0x18));
+        public virtual bool IsBlack => Flags == 1;
+        public virtual bool IsEvent => Flags == 2;
 
         // Derived Values
         public virtual string? TeraType => GetTeraType(Seed);
