@@ -21,6 +21,7 @@ namespace RaidCrawler.Structures
         public virtual uint Den => ReadUInt32LittleEndian(Data.AsSpan(0x0C));
         public virtual uint Seed => ReadUInt32LittleEndian(Data.AsSpan(0x10));
         public virtual bool IsEvent => ReadUInt32LittleEndian(Data.AsSpan(0x18)) == 2;
+        public virtual bool IsBlack { get; set; }
 
         // Derived Values
         public virtual string? TeraType => GetTeraType(Seed);

@@ -66,6 +66,8 @@
             this.CheckContinueUntilShiny = new System.Windows.Forms.CheckBox();
             this.IsEvent = new System.Windows.Forms.CheckBox();
             this.LabelIsEvent = new System.Windows.Forms.Label();
+            this.LabelIsBlack = new System.Windows.Forms.Label();
+            this.IsBlack = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // ButtonDisconnect
@@ -434,11 +436,32 @@
             this.LabelIsEvent.TabIndex = 84;
             this.LabelIsEvent.Text = "Event?";
             // 
+            // LabelIsBlack
+            // 
+            this.LabelIsBlack.AutoSize = true;
+            this.LabelIsBlack.Location = new System.Drawing.Point(417, 139);
+            this.LabelIsBlack.Name = "LabelIsBlack";
+            this.LabelIsBlack.Size = new System.Drawing.Size(107, 15);
+            this.LabelIsBlack.TabIndex = 86;
+            this.LabelIsBlack.Text = "Black Raid (6-star)?";
+            // 
+            // IsBlack
+            // 
+            this.IsBlack.AutoCheck = false;
+            this.IsBlack.AutoSize = true;
+            this.IsBlack.Location = new System.Drawing.Point(531, 140);
+            this.IsBlack.Name = "IsBlack";
+            this.IsBlack.Size = new System.Drawing.Size(15, 14);
+            this.IsBlack.TabIndex = 85;
+            this.IsBlack.UseVisualStyleBackColor = true;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(640, 339);
+            this.Controls.Add(this.LabelIsBlack);
+            this.Controls.Add(this.IsBlack);
             this.Controls.Add(this.LabelIsEvent);
             this.Controls.Add(this.IsEvent);
             this.Controls.Add(this.CheckContinueUntilShiny);
@@ -523,5 +546,7 @@
         private CheckBox CheckContinueUntilShiny;
         private CheckBox IsEvent;
         private Label LabelIsEvent;
+        private Label LabelIsBlack;
+        private CheckBox IsBlack;
     }
 }

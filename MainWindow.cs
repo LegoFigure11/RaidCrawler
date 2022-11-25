@@ -18,6 +18,7 @@ namespace RaidCrawler
         private readonly List<Raid> Raids = new();
 
         private int index = 0;
+        private bool HasAssignedBlackRaid = false;
 
         private Color DefaultColor;
 
@@ -113,6 +114,7 @@ namespace RaidCrawler
             TeraType.Text = raid.TeraType;
             Area.Text = $"{Areas.Area[raid.Area - 1]} - Den {raid.Den}";
             IsEvent.Checked = raid.IsEvent;
+            IsBlack.Checked = raid.IsBlack;
             Flawless0.Text = IVsString(raid.Flawless_0);
             Flawless1.Text = IVsString(raid.Flawless_1);
             Flawless2.Text = IVsString(raid.Flawless_2);
@@ -279,6 +281,7 @@ namespace RaidCrawler
 
             Raids.Clear();
             index = 0;
+            HasAssignedBlackRaid = false;
 
             ConnectionStatusText.Text = "Reading raid block...";
             Raid raid;
@@ -287,7 +290,16 @@ namespace RaidCrawler
                 ConnectionStatusText.Text = $"Reading raid block... {i / Raid.SIZE}%";
                 var Data = await SwitchConnection.ReadBytesAbsoluteAsync(offset + i, Raid.SIZE, token);
                 raid = new Raid(Data);
-                if (raid.IsValid) Raids.Add(raid);
+                if (raid.IsValid)
+                {
+                    if (!raid.IsEvent && !HasAssignedBlackRaid)
+                    {
+                        raid.IsBlack = true;
+                        HasAssignedBlackRaid = true;
+                    }
+                    Raids.Add(raid);
+                }
+
             }
 
             ConnectionStatusText.Text = "Completed!";
