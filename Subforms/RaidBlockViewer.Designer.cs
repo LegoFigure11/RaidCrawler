@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RaidBlockViewer));
             this.RAM = new System.Windows.Forms.TextBox();
             this.AbsoluteAddress = new System.Windows.Forms.TextBox();
             this.LabelAbsoluteAddress = new System.Windows.Forms.Label();
@@ -48,6 +49,7 @@
             this.AbsoluteAddress.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.AbsoluteAddress.Location = new System.Drawing.Point(235, 360);
             this.AbsoluteAddress.Name = "AbsoluteAddress";
+            this.AbsoluteAddress.ReadOnly = true;
             this.AbsoluteAddress.Size = new System.Drawing.Size(119, 22);
             this.AbsoluteAddress.TabIndex = 1;
             this.AbsoluteAddress.Text = "0123456789ABCDEF";
@@ -69,6 +71,7 @@
             this.Controls.Add(this.LabelAbsoluteAddress);
             this.Controls.Add(this.AbsoluteAddress);
             this.Controls.Add(this.RAM);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "RaidBlockViewer";
             this.Text = "RaidBlockViewer";
             this.ResumeLayout(false);
