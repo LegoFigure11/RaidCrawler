@@ -106,37 +106,44 @@ namespace RaidCrawler
 
         private void DisplayRaid(int index)
         {
-            LabelIndex.Text = $"{(index + 1):D2} / {Raids.Count:D2}";
-            Raid raid = Raids[index];
-            Seed.Text = $"{raid.Seed:X8}";
-            EC.Text = $"{raid.EC:X8}";
-            PID.Text = $"{raid.PID:X8}";
-            TeraType.Text = raid.TeraType;
-            Area.Text = $"{Areas.Area[raid.Area - 1]} - Den {raid.Den}";
-            IsEvent.Checked = raid.IsEvent;
-
-            int StarCount = GetStarCount(raid.Difficulty, Progress.SelectedIndex, raid.IsBlack);
-
-            Difficulty.Text = raid.IsEvent ? "coming soon™" : string.Concat(Enumerable.Repeat("☆", StarCount)) + $" ({raid.Difficulty})";
-            IVs.Text = IVsString(raid.GetIVs(raid.Seed, StarCount - 1));
-
-            if (raid.IsShiny)
+            LabelIndex.Text = $"{index + 1:D2} / {Raids.Count:D2}";
+            if (Raids.Count >= index) 
             {
-                PID.BackColor = Color.Gold;
-                PID.Text += " (☆)";
+                Raid raid = Raids[index];
+                Seed.Text = $"{raid.Seed:X8}";
+                EC.Text = $"{raid.EC:X8}";
+                PID.Text = $"{raid.PID:X8}";
+                TeraType.Text = raid.TeraType;
+                Area.Text = $"{Areas.Area[raid.Area - 1]} - Den {raid.Den}";
+                IsEvent.Checked = raid.IsEvent;
+
+                int StarCount = GetStarCount(raid.Difficulty, Progress.SelectedIndex, raid.IsBlack);
+
+                Difficulty.Text = raid.IsEvent ? "coming soon™" : string.Concat(Enumerable.Repeat("☆", StarCount)) + $" ({raid.Difficulty})";
+                IVs.Text = IVsString(raid.GetIVs(raid.Seed, StarCount - 1));
+
+                if (raid.IsShiny)
+                {
+                    PID.BackColor = Color.Gold;
+                    PID.Text += " (☆)";
+                }
+                else
+                {
+                    PID.BackColor = DefaultColor;
+                }
+
+                if (IVs.Text is "31/31/31/31/31/31")
+                {
+                    IVs.BackColor = Color.YellowGreen;
+                }
+                else
+                {
+                    IVs.BackColor = DefaultColor;
+                }
             }
             else
             {
-                PID.BackColor = DefaultColor;
-            }
-
-            if (IVs.Text is "31/31/31/31/31/31")
-            {
-                IVs.BackColor = Color.YellowGreen;
-            }
-            else
-            {
-                IVs.BackColor = DefaultColor;
+                MessageBox.Show($"Unable to display raid at index {index}. Ensure there are no cheats running or anything else that might shift RAM (Edizon, overlays, etc.), then reboot your console and try again.");
             }
         }
 
@@ -303,7 +310,14 @@ namespace RaidCrawler
                 ButtonNext.Enabled = false;
             }
 
-            DisplayRaid(index);
+            if (Raids.Count > 0)
+            {
+                DisplayRaid(index);
+            }
+            else if (Raids.Count > 69 || Raids.Count == 0)
+            {
+                MessageBox.Show("Bad read, ensure there are no cheats running or anything else that might shift RAM (Edizon, overlays, etc.), then reboot your console and try again.");
+            }      
         }
 
         private void Progress_SelectedIndexChanged(object sender, EventArgs e)

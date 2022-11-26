@@ -33,13 +33,6 @@ namespace RaidCrawler.Structures
         public virtual uint PID => GenericRaidData[2];
         public virtual bool IsShiny => GenericRaidData[3] == 1;
 
-        public virtual int[] Flawless_0 => GetIVs(Seed, 0);
-        public virtual int[] Flawless_1 => GetIVs(Seed, 1);
-        public virtual int[] Flawless_2 => GetIVs(Seed, 2);
-        public virtual int[] Flawless_3 => GetIVs(Seed, 3);
-        public virtual int[] Flawless_4 => GetIVs(Seed, 4);
-        public virtual int[] Flawless_5 => GetIVs(Seed, 5);
-
 
         uint[] GenericRaidData => GenerateGenericRaidData(Seed);
 
@@ -47,6 +40,9 @@ namespace RaidCrawler.Structures
         private bool Validate()
         {
             if (Seed == 0) return false;
+            if (UNK_1 > 1) return false;
+            if (UNK_3 > 1) return false;
+            if (Area > 22) return false;
             GenerateGenericRaidData(Seed);
             return true;
         }
