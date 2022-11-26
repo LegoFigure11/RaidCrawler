@@ -4,6 +4,7 @@ using RaidCrawler.Subforms;
 using SysBot.Base;
 using System.Data;
 using System.Net.Sockets;
+using PKHeX.Core;
 using static SysBot.Base.SwitchButton;
 
 namespace RaidCrawler
@@ -34,6 +35,10 @@ namespace RaidCrawler
             var v = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version!;
             Text = "RaidCrawler v" + v.Major + "." + v.Minor + "." + v.Build + build;
 
+            Raid.GemTeraRaids = TeraEncounter.GetAllEncounters("encounter_gem_paldea.pkl");
+            Raid.DistTeraRaids = TeraDistribution.GetAllEncounters("encounter_dist_paldea.pkl");
+            Raid.Game = Settings.Default.Game;
+
             InitializeComponent();
         }
 
@@ -43,6 +48,7 @@ namespace RaidCrawler
             LabelIndex.Text = string.Empty;
             DefaultColor = IVs.BackColor;
             Progress.SelectedIndex = Settings.Default.Progress;
+            Game.SelectedIndex = Game.FindString(Settings.Default.Game);
         }
 
         private void InputSwitchIP_Changed(object sender, EventArgs e)
@@ -124,9 +130,18 @@ namespace RaidCrawler
                 Area.Text = $"{Areas.Area[raid.Area - 1]} - Den {raid.Den}";
                 IsEvent.Checked = raid.IsEvent;
 
-                int StarCount = GetStarCount(raid.Difficulty, Progress.SelectedIndex, raid.IsBlack);
+                int StarCount = Raid.GetStarCount(raid.Difficulty, Progress.SelectedIndex, raid.IsBlack);
+                ITeraRaid? encounter = raid.IsEvent ? TeraDistribution.GetEncounter(raid.Seed, Progress.SelectedIndex - 1) : TeraEncounter.GetEncounter(raid.Seed, Progress.SelectedIndex, raid.IsBlack);
+                Species.Text = encounter == null ? "Unknown" : $"{Raid.strings.Species[encounter.Species]} ({encounter.Species}) [{(Gender)encounter.Gender}]";
+                if (encounter != null)
+                {
+                    Move1.Text = Raid.strings.Move[encounter.Move1];
+                    Move2.Text = Raid.strings.Move[encounter.Move2];
+                    Move3.Text = Raid.strings.Move[encounter.Move3];
+                    Move4.Text = Raid.strings.Move[encounter.Move4];
+                }
 
-                Difficulty.Text = raid.IsEvent ? "coming soon™" : string.Concat(Enumerable.Repeat("☆", StarCount)) + $" ({raid.Difficulty})";
+                Difficulty.Text = raid.IsEvent ? string.Concat(Enumerable.Repeat("☆", StarCount)) : string.Concat(Enumerable.Repeat("☆", StarCount)) + $" ({raid.Difficulty})";
                 IVs.Text = IVsString(raid.GetIVs(raid.Seed, StarCount - 1));
 
                 if (raid.IsShiny)
@@ -152,45 +167,6 @@ namespace RaidCrawler
             {
                 MessageBox.Show($"Unable to display raid at index {index}. Ensure there are no cheats running or anything else that might shift RAM (Edizon, overlays, etc.), then reboot your console and try again.");
             }
-        }
-
-        private static int GetStarCount(uint Difficulty, int Progress, bool IsBlack)
-        {
-            if (IsBlack) return 6;
-            return Progress switch
-            {
-                0 => Difficulty switch
-                {
-                    > 80 => 2,
-                    _ => 1,
-                },
-                1 => Difficulty switch
-                {
-                    > 70 => 3,
-                    > 30 => 2,
-                    _ => 1,
-                },
-                2 => Difficulty switch
-                {
-                    > 70 => 4,
-                    > 40 => 3,
-                    > 20 => 2,
-                    _ => 1,
-                },
-                3 => Difficulty switch
-                {
-                    > 75 => 5,
-                    > 40 => 4,
-                    _ => 3,
-                },
-                4 => Difficulty switch
-                {
-                    > 70 => 5,
-                    > 30 => 4,
-                    _ => 3,
-                },
-                _ => 1,
-            };
         }
 
         private static string IVsString(int[] ivs)
@@ -384,6 +360,14 @@ namespace RaidCrawler
                     IsReading = false;
                 }
             }
+        }
+
+        private void Game_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Raid.Game = Game.Text;
+            Settings.Default.Game = Game.Text;
+            Settings.Default.Save();
+            if (Raids.Count > 0) DisplayRaid(index);
         }
     }
 }
