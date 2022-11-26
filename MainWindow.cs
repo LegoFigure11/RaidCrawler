@@ -140,6 +140,13 @@ namespace RaidCrawler
                     Move3.Text = Raid.strings.Move[encounter.Move3];
                     Move4.Text = Raid.strings.Move[encounter.Move4];
                 }
+                else
+                {
+                    Move1.Text = string.Empty;
+                    Move2.Text = string.Empty;
+                    Move3.Text = string.Empty;
+                    Move4.Text = string.Empty;
+                }
 
                 Difficulty.Text = raid.IsEvent ? string.Concat(Enumerable.Repeat("☆", StarCount)) : string.Concat(Enumerable.Repeat("☆", StarCount)) + $" ({raid.Difficulty})";
                 IVs.Text = IVsString(raid.GetIVs(raid.Seed, StarCount - 1));
