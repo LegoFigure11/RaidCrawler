@@ -210,6 +210,18 @@ namespace RaidCrawler
             if (Raids.Count > 0)
             {
                 index = (index + Raids.Count - 1) % Raids.Count; // Wrap around
+                if (ModifierKeys == Keys.Shift)
+                {
+                    for (int i = 0; i < Raids.Count; i++)
+                    {
+                        var chk = (index + Raids.Count - i) % Raids.Count;
+                        if (Raids[chk].IsShiny)
+                        {
+                            index = chk;
+                            break;
+                        }
+                    }
+                }
                 DisplayRaid(index);
             }
         }
@@ -219,6 +231,18 @@ namespace RaidCrawler
             if (Raids.Count > 0)
             {
                 index = (index + Raids.Count + 1) % Raids.Count; // Wrap around
+                if (ModifierKeys == Keys.Shift)
+                {
+                    for (int i = 0; i < Raids.Count; i++)
+                    {
+                        var chk = (index + Raids.Count + i) % Raids.Count;
+                        if (Raids[chk].IsShiny)
+                        {
+                            index = chk;
+                            break;
+                        }
+                    }
+                }
                 DisplayRaid(index);
             }
         }
