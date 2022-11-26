@@ -4,7 +4,9 @@
 
 [sys-botbase](https://github.com/olliz0r/sys-botbase) client Raid Viewer for Pokémon Scarlet and Violet.
 
-Supports viewing Tera Type, Location, Shininess, and IVs of all raids, as well as skipping dates to search for shinies.
+Supports viewing Species, Tera Type, Difficulty, Location, Shininess, and IVs of all raids, as well as skipping dates to search for shinies.
+
+**Basic usage guide:** [Click here](https://billo-guides.github.io/cfw/sv/raidcrawler) (thanks [Billo](https://github.com/Billo-PS)!)
 
 ![](https://i.imgur.com/tYdk8mv.png)
 
