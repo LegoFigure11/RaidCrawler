@@ -12,7 +12,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\encounter_dist_paldea.pkl" />
+    <None Remove="Resources\encounter_gem_paldea.pkl" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="TitanMark.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\encounter_dist_paldea.pkl" />
+    <EmbeddedResource Include="Resources\encounter_gem_paldea.pkl" />
   </ItemGroup>
 
   <ItemGroup>

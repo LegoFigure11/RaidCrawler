@@ -9,6 +9,12 @@ namespace RaidCrawler.Structures
         public const byte SIZE = 0x20;
         const int IV_MAX = 31;
 
+        public static string Game = "Scarlet";
+        public static readonly GameStrings strings = GameInfo.GetStrings(1);
+
+        public static ITeraRaid[] GemTeraRaids;
+        public static ITeraRaid[] DistTeraRaids;
+
         public readonly byte[] Data; // Raw data
 
         public Raid(byte[] data) => Data = data;
@@ -51,7 +57,7 @@ namespace RaidCrawler.Structures
         {
             var rng = new Xoroshiro128Plus(Seed);
             var Type = rng.NextInt(18);
-            return $"{GameInfo.GetStrings(1).types[Type]} ({Type})";
+            return $"{strings.types[Type]} ({Type})";
         }
 
         private static uint[] GenerateGenericRaidData(uint Seed)
@@ -90,6 +96,45 @@ namespace RaidCrawler.Structures
             }
 
             return ivs.ToArray();
+        }
+
+        public static int GetStarCount(uint Difficulty, int Progress, bool IsBlack)
+        {
+            if (IsBlack) return 6;
+            return Progress switch
+            {
+                0 => Difficulty switch
+                {
+                    > 80 => 2,
+                    _ => 1,
+                },
+                1 => Difficulty switch
+                {
+                    > 70 => 3,
+                    > 30 => 2,
+                    _ => 1,
+                },
+                2 => Difficulty switch
+                {
+                    > 70 => 4,
+                    > 40 => 3,
+                    > 20 => 2,
+                    _ => 1,
+                },
+                3 => Difficulty switch
+                {
+                    > 75 => 5,
+                    > 40 => 4,
+                    _ => 3,
+                },
+                4 => Difficulty switch
+                {
+                    > 70 => 5,
+                    > 30 => 4,
+                    _ => 3,
+                },
+                _ => 1,
+            };
         }
 
         private static uint GetDifficulty(uint Seed)

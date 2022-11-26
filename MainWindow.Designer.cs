@@ -61,6 +61,15 @@
             this.Progress = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.ButtonViewRAM = new System.Windows.Forms.Button();
+            this.Species = new System.Windows.Forms.TextBox();
+            this.LabelSpecies = new System.Windows.Forms.Label();
+            this.LabelMoves = new System.Windows.Forms.Label();
+            this.Move1 = new System.Windows.Forms.TextBox();
+            this.Move2 = new System.Windows.Forms.TextBox();
+            this.Move4 = new System.Windows.Forms.TextBox();
+            this.Move3 = new System.Windows.Forms.TextBox();
+            this.LabelGame = new System.Windows.Forms.Label();
+            this.Game = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // ButtonDisconnect
@@ -308,7 +317,7 @@
             // CheckContinueUntilShiny
             // 
             this.CheckContinueUntilShiny.AutoSize = true;
-            this.CheckContinueUntilShiny.Location = new System.Drawing.Point(21, 172);
+            this.CheckContinueUntilShiny.Location = new System.Drawing.Point(13, 233);
             this.CheckContinueUntilShiny.Name = "CheckContinueUntilShiny";
             this.CheckContinueUntilShiny.Size = new System.Drawing.Size(199, 19);
             this.CheckContinueUntilShiny.TabIndex = 82;
@@ -362,9 +371,9 @@
             "3",
             "4",
             "5"});
-            this.Progress.Location = new System.Drawing.Point(142, 143);
+            this.Progress.Location = new System.Drawing.Point(164, 204);
             this.Progress.Name = "Progress";
-            this.Progress.Size = new System.Drawing.Size(37, 23);
+            this.Progress.Size = new System.Drawing.Size(48, 23);
             this.Progress.TabIndex = 87;
             this.Progress.Text = "w";
             this.Progress.SelectedIndexChanged += new System.EventHandler(this.Progress_SelectedIndexChanged);
@@ -372,28 +381,127 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(21, 146);
+            this.label1.Location = new System.Drawing.Point(13, 207);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(115, 15);
             this.label1.TabIndex = 88;
             this.label1.Text = "Story Progress Level:";
             // 
-            // ViewRAM
+            // ButtonViewRAM
             // 
             this.ButtonViewRAM.Enabled = false;
             this.ButtonViewRAM.Location = new System.Drawing.Point(531, 9);
-            this.ButtonViewRAM.Name = "ViewRAM";
+            this.ButtonViewRAM.Name = "ButtonViewRAM";
             this.ButtonViewRAM.Size = new System.Drawing.Size(97, 23);
             this.ButtonViewRAM.TabIndex = 89;
             this.ButtonViewRAM.Text = "View Block";
             this.ButtonViewRAM.UseVisualStyleBackColor = true;
             this.ButtonViewRAM.Click += new System.EventHandler(this.ViewRAM_Click);
             // 
+            // Species
+            // 
+            this.Species.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.Species.Location = new System.Drawing.Point(357, 192);
+            this.Species.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.Species.Name = "Species";
+            this.Species.ReadOnly = true;
+            this.Species.Size = new System.Drawing.Size(270, 22);
+            this.Species.TabIndex = 93;
+            // 
+            // LabelSpecies
+            // 
+            this.LabelSpecies.AutoSize = true;
+            this.LabelSpecies.Location = new System.Drawing.Point(301, 194);
+            this.LabelSpecies.Name = "LabelSpecies";
+            this.LabelSpecies.Size = new System.Drawing.Size(49, 15);
+            this.LabelSpecies.TabIndex = 92;
+            this.LabelSpecies.Text = "Species:";
+            // 
+            // LabelMoves
+            // 
+            this.LabelMoves.AutoSize = true;
+            this.LabelMoves.Location = new System.Drawing.Point(301, 235);
+            this.LabelMoves.Name = "LabelMoves";
+            this.LabelMoves.Size = new System.Drawing.Size(45, 15);
+            this.LabelMoves.TabIndex = 94;
+            this.LabelMoves.Text = "Moves:";
+            // 
+            // Move1
+            // 
+            this.Move1.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.Move1.Location = new System.Drawing.Point(357, 220);
+            this.Move1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.Move1.Name = "Move1";
+            this.Move1.ReadOnly = true;
+            this.Move1.Size = new System.Drawing.Size(133, 22);
+            this.Move1.TabIndex = 95;
+            // 
+            // Move2
+            // 
+            this.Move2.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.Move2.Location = new System.Drawing.Point(494, 220);
+            this.Move2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.Move2.Name = "Move2";
+            this.Move2.ReadOnly = true;
+            this.Move2.Size = new System.Drawing.Size(133, 22);
+            this.Move2.TabIndex = 96;
+            // 
+            // Move4
+            // 
+            this.Move4.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.Move4.Location = new System.Drawing.Point(494, 245);
+            this.Move4.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.Move4.Name = "Move4";
+            this.Move4.ReadOnly = true;
+            this.Move4.Size = new System.Drawing.Size(133, 22);
+            this.Move4.TabIndex = 98;
+            // 
+            // Move3
+            // 
+            this.Move3.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.Move3.Location = new System.Drawing.Point(357, 245);
+            this.Move3.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.Move3.Name = "Move3";
+            this.Move3.ReadOnly = true;
+            this.Move3.Size = new System.Drawing.Size(133, 22);
+            this.Move3.TabIndex = 97;
+            // 
+            // LabelGame
+            // 
+            this.LabelGame.AutoSize = true;
+            this.LabelGame.Location = new System.Drawing.Point(13, 182);
+            this.LabelGame.Name = "LabelGame";
+            this.LabelGame.Size = new System.Drawing.Size(41, 15);
+            this.LabelGame.TabIndex = 100;
+            this.LabelGame.Text = "Game:";
+            // 
+            // Game
+            // 
+            this.Game.FormattingEnabled = true;
+            this.Game.Items.AddRange(new object[] {
+            "Scarlet",
+            "Violet"});
+            this.Game.Location = new System.Drawing.Point(116, 179);
+            this.Game.Name = "Game";
+            this.Game.Size = new System.Drawing.Size(96, 23);
+            this.Game.TabIndex = 99;
+            this.Game.Text = "w";
+            this.Game.SelectedIndexChanged += new System.EventHandler(this.Game_SelectedIndexChanged);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(640, 213);
+            this.ClientSize = new System.Drawing.Size(640, 275);
+            this.Controls.Add(this.LabelGame);
+            this.Controls.Add(this.Game);
+            this.Controls.Add(this.Move4);
+            this.Controls.Add(this.Move3);
+            this.Controls.Add(this.Move2);
+            this.Controls.Add(this.Move1);
+            this.Controls.Add(this.LabelMoves);
+            this.Controls.Add(this.Species);
+            this.Controls.Add(this.LabelSpecies);
             this.Controls.Add(this.ButtonViewRAM);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.Progress);
@@ -468,5 +576,14 @@
         private ComboBox Progress;
         private Label label1;
         private Button ButtonViewRAM;
+        private TextBox Species;
+        private Label LabelSpecies;
+        private Label LabelMoves;
+        private TextBox Move1;
+        private TextBox Move2;
+        private TextBox Move4;
+        private TextBox Move3;
+        private Label LabelGame;
+        private ComboBox Game;
     }
 }
