@@ -132,7 +132,7 @@ namespace RaidCrawler
 
                 int StarCount = Raid.GetStarCount(raid.Difficulty, Progress.SelectedIndex, raid.IsBlack);
                 ITeraRaid? encounter = raid.IsEvent ? TeraDistribution.GetEncounter(raid.Seed, Progress.SelectedIndex - 1) : TeraEncounter.GetEncounter(raid.Seed, Progress.SelectedIndex, raid.IsBlack);
-                Species.Text = encounter == null ? "Unknown" : $"{Raid.strings.Species[encounter.Species]} ({encounter.Species}) [{(Gender)encounter.Gender}]";
+                Species.Text = encounter == null ? "Unknown" : $"{Raid.strings.Species[encounter.Species]} ({encounter.Species})";
                 if (encounter != null)
                 {
                     Move1.Text = Raid.strings.Move[encounter.Move1];
