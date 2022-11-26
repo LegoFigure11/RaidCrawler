@@ -60,6 +60,7 @@
             this.LabelDifficulty = new System.Windows.Forms.Label();
             this.Progress = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.ButtonViewRAM = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // ButtonDisconnect
@@ -377,11 +378,23 @@
             this.label1.TabIndex = 88;
             this.label1.Text = "Story Progress Level:";
             // 
+            // ViewRAM
+            // 
+            this.ButtonViewRAM.Enabled = false;
+            this.ButtonViewRAM.Location = new System.Drawing.Point(531, 9);
+            this.ButtonViewRAM.Name = "ViewRAM";
+            this.ButtonViewRAM.Size = new System.Drawing.Size(97, 23);
+            this.ButtonViewRAM.TabIndex = 89;
+            this.ButtonViewRAM.Text = "View Block";
+            this.ButtonViewRAM.UseVisualStyleBackColor = true;
+            this.ButtonViewRAM.Click += new System.EventHandler(this.ViewRAM_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(640, 213);
+            this.Controls.Add(this.ButtonViewRAM);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.Progress);
             this.Controls.Add(this.Difficulty);
@@ -454,5 +467,6 @@
         private Label LabelDifficulty;
         private ComboBox Progress;
         private Label label1;
+        private Button ButtonViewRAM;
     }
 }

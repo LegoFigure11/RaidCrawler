@@ -1,5 +1,6 @@
 ﻿using RaidCrawler.Properties;
 using RaidCrawler.Structures;
+using RaidCrawler.Subforms;
 using SysBot.Base;
 using System.Data;
 using System.Net.Sockets;
@@ -18,6 +19,8 @@ namespace RaidCrawler
         private readonly List<Raid> Raids = new();
 
         private int index = 0;
+        private ulong offset;
+        private bool IsReading = false;
 
         private Color DefaultColor;
 
@@ -67,11 +70,14 @@ namespace RaidCrawler
                     ConnectionStatusText.Text = "Connecting...";
                     SwitchConnection.Connect();
                     ConnectionStatusText.Text = "Connected!";
+                    IsReading = true;
                     await ReadRaids(CancellationToken.None);
+                    IsReading = false;
                     ButtonAdvanceDate.Enabled = true;
                     ButtonReadRaids.Enabled = true;
                     ButtonConnect.Enabled = false;
                     ButtonDisconnect.Enabled = true;
+                    ButtonViewRAM.Enabled = true;
                 }
                 catch (SocketException err)
                 {
@@ -96,6 +102,7 @@ namespace RaidCrawler
                 ButtonDisconnect.Enabled = false;
                 ButtonReadRaids.Enabled = false;
                 ButtonAdvanceDate.Enabled = false;
+                ButtonViewRAM.Enabled = false;
             }
         }
 
@@ -107,7 +114,7 @@ namespace RaidCrawler
         private void DisplayRaid(int index)
         {
             LabelIndex.Text = $"{index + 1:D2} / {Raids.Count:D2}";
-            if (Raids.Count >= index) 
+            if (Raids.Count >= index)
             {
                 Raid raid = Raids[index];
                 Seed.Text = $"{raid.Seed:X8}";
@@ -273,7 +280,16 @@ namespace RaidCrawler
         {
             ButtonReadRaids.Enabled = false;
             ButtonAdvanceDate.Enabled = false;
-            await ReadRaids(CancellationToken.None);
+            if (IsReading)
+            {
+                MessageBox.Show("Please wait for the current RAM read to finish.");
+            }
+            else
+            {
+                IsReading = true;
+                await ReadRaids(CancellationToken.None);
+                IsReading = false;
+            }
             ButtonReadRaids.Enabled = true;
             ButtonAdvanceDate.Enabled = true;
 
@@ -282,7 +298,7 @@ namespace RaidCrawler
         private async Task ReadRaids(CancellationToken token)
         {
             ConnectionStatusText.Text = "Parsing pointer...";
-            ulong offset = await OffsetUtil.GetPointerAddress(Offsets.RaidBlockPointer, CancellationToken.None);
+            offset = await OffsetUtil.GetPointerAddress(Offsets.RaidBlockPointer, CancellationToken.None);
 
             Raids.Clear();
             index = 0;
@@ -314,10 +330,10 @@ namespace RaidCrawler
             {
                 DisplayRaid(index);
             }
-            else if (Raids.Count > 69 || Raids.Count == 0)
+            else if (Raids.Count > RaidBlock.MAX_COUNT || Raids.Count == 0)
             {
                 MessageBox.Show("Bad read, ensure there are no cheats running or anything else that might shift RAM (Edizon, overlays, etc.), then reboot your console and try again.");
-            }      
+            }
         }
 
         private void Progress_SelectedIndexChanged(object sender, EventArgs e)
@@ -325,6 +341,25 @@ namespace RaidCrawler
             Settings.Default.Progress = Progress.SelectedIndex;
             Settings.Default.Save();
             if (Raids.Count > 0) DisplayRaid(index);
+        }
+
+        private async void ViewRAM_Click(object sender, EventArgs e)
+        {
+            if (SwitchConnection.Connected)
+            {
+                if (IsReading)
+                {
+                    MessageBox.Show("Please wait for the current RAM read to finish.");
+                }
+                else
+                {
+                    IsReading = true;
+                    var Data = await SwitchConnection.ReadBytesAbsoluteAsync(offset, (int)RaidBlock.SIZE, CancellationToken.None);
+                    RaidBlockViewer BlockViewerWindow = new(Data, offset);
+                    BlockViewerWindow.ShowDialog();
+                    IsReading = false;
+                }
+            }
         }
     }
 }

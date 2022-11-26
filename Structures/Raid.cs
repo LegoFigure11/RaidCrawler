@@ -4,6 +4,7 @@ using static System.Buffers.Binary.BinaryPrimitives;
 namespace RaidCrawler.Structures
 {
     public partial class Raid
+    // See also https://github.com/kwsch/PKHeX/blob/master/PKHeX.Core/Saves/Substructures/Gen9/RaidSpawnList9.cs
     {
         public const byte SIZE = 0x20;
         const int IV_MAX = 31;
@@ -15,9 +16,9 @@ namespace RaidCrawler.Structures
 
         public virtual bool IsValid => Validate(); // Does this look like an actual raid
 
-        public virtual uint UNK_1 => ReadUInt32LittleEndian(Data.AsSpan(0x00));  // Unused? Seems to always be 1
+        public virtual bool IsActive => ReadUInt32LittleEndian(Data.AsSpan(0x00)) == 1;
         public virtual uint Area => ReadUInt32LittleEndian(Data.AsSpan(0x04));
-        public virtual uint UNK_3 => ReadUInt32LittleEndian(Data.AsSpan(0x08));  // Unused? Seems to always be 1
+        public virtual uint DisplayType => ReadUInt32LittleEndian(Data.AsSpan(0x08));
         public virtual uint Den => ReadUInt32LittleEndian(Data.AsSpan(0x0C));
         public virtual uint Seed => ReadUInt32LittleEndian(Data.AsSpan(0x10));
         public virtual uint Flags => ReadUInt32LittleEndian(Data.AsSpan(0x18));
@@ -40,8 +41,7 @@ namespace RaidCrawler.Structures
         private bool Validate()
         {
             if (Seed == 0) return false;
-            if (UNK_1 > 1) return false;
-            if (UNK_3 > 1) return false;
+            if (!IsActive) return false;
             if (Area > 22) return false;
             GenerateGenericRaidData(Seed);
             return true;
