@@ -36,6 +36,9 @@
             // 
             // RAM
             // 
+            this.RAM.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.RAM.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.RAM.Location = new System.Drawing.Point(12, 12);
             this.RAM.Multiline = true;
@@ -46,6 +49,7 @@
             // 
             // AbsoluteAddress
             // 
+            this.AbsoluteAddress.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.AbsoluteAddress.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.AbsoluteAddress.Location = new System.Drawing.Point(235, 360);
             this.AbsoluteAddress.Name = "AbsoluteAddress";
@@ -56,6 +60,7 @@
             // 
             // LabelAbsoluteAddress
             // 
+            this.LabelAbsoluteAddress.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.LabelAbsoluteAddress.AutoSize = true;
             this.LabelAbsoluteAddress.Location = new System.Drawing.Point(127, 362);
             this.LabelAbsoluteAddress.Name = "LabelAbsoluteAddress";
