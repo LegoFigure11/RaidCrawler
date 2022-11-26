@@ -33,7 +33,7 @@ namespace RaidCrawler.Structures
 
         public static ITeraRaid? GetEncounter(uint Seed, int stage)
         {
-            if (stage == 0)
+            if (stage < 0)
                 return null;
             foreach (TeraDistribution enc in Raid.DistTeraRaids)
             {

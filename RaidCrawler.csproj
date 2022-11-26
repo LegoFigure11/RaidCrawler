@@ -30,7 +30,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="NLog" Version="5.0.5" />
-    <PackageReference Include="PKHeX.Core" Version="22.9.13" />
+    <PackageReference Include="PKHeX.Core" Version="22.11.24" />
   </ItemGroup>
 
   <ItemGroup>
