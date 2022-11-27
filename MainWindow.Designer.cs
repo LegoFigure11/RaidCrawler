@@ -59,7 +59,7 @@
             this.Difficulty = new System.Windows.Forms.TextBox();
             this.LabelDifficulty = new System.Windows.Forms.Label();
             this.Progress = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.LabelStoryProgress = new System.Windows.Forms.Label();
             this.ButtonViewRAM = new System.Windows.Forms.Button();
             this.Species = new System.Windows.Forms.TextBox();
             this.LabelSpecies = new System.Windows.Forms.Label();
@@ -70,6 +70,8 @@
             this.Move3 = new System.Windows.Forms.TextBox();
             this.LabelGame = new System.Windows.Forms.Label();
             this.Game = new System.Windows.Forms.ComboBox();
+            this.LabelEventProgress = new System.Windows.Forms.Label();
+            this.EventProgress = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // ButtonDisconnect
@@ -371,21 +373,21 @@
             "3",
             "4",
             "5"});
-            this.Progress.Location = new System.Drawing.Point(164, 204);
+            this.Progress.Location = new System.Drawing.Point(164, 168);
             this.Progress.Name = "Progress";
             this.Progress.Size = new System.Drawing.Size(48, 23);
             this.Progress.TabIndex = 87;
             this.Progress.Text = "w";
             this.Progress.SelectedIndexChanged += new System.EventHandler(this.Progress_SelectedIndexChanged);
             // 
-            // label1
+            // LabelStoryProgress
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(13, 207);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(115, 15);
-            this.label1.TabIndex = 88;
-            this.label1.Text = "Story Progress Level:";
+            this.LabelStoryProgress.AutoSize = true;
+            this.LabelStoryProgress.Location = new System.Drawing.Point(13, 171);
+            this.LabelStoryProgress.Name = "LabelStoryProgress";
+            this.LabelStoryProgress.Size = new System.Drawing.Size(115, 15);
+            this.LabelStoryProgress.TabIndex = 88;
+            this.LabelStoryProgress.Text = "Story Progress Level:";
             // 
             // ButtonViewRAM
             // 
@@ -469,7 +471,7 @@
             // LabelGame
             // 
             this.LabelGame.AutoSize = true;
-            this.LabelGame.Location = new System.Drawing.Point(13, 182);
+            this.LabelGame.Location = new System.Drawing.Point(13, 144);
             this.LabelGame.Name = "LabelGame";
             this.LabelGame.Size = new System.Drawing.Size(41, 15);
             this.LabelGame.TabIndex = 100;
@@ -481,18 +483,44 @@
             this.Game.Items.AddRange(new object[] {
             "Scarlet",
             "Violet"});
-            this.Game.Location = new System.Drawing.Point(116, 179);
+            this.Game.Location = new System.Drawing.Point(116, 141);
             this.Game.Name = "Game";
             this.Game.Size = new System.Drawing.Size(96, 23);
             this.Game.TabIndex = 99;
             this.Game.Text = "w";
             this.Game.SelectedIndexChanged += new System.EventHandler(this.Game_SelectedIndexChanged);
             // 
+            // LabelEventProgress
+            // 
+            this.LabelEventProgress.AutoSize = true;
+            this.LabelEventProgress.Location = new System.Drawing.Point(12, 199);
+            this.LabelEventProgress.Name = "LabelEventProgress";
+            this.LabelEventProgress.Size = new System.Drawing.Size(117, 15);
+            this.LabelEventProgress.TabIndex = 102;
+            this.LabelEventProgress.Text = "Event Progress Level:";
+            // 
+            // EventProgress
+            // 
+            this.EventProgress.FormattingEnabled = true;
+            this.EventProgress.Items.AddRange(new object[] {
+            "1",
+            "2",
+            "3",
+            "4"});
+            this.EventProgress.Location = new System.Drawing.Point(164, 196);
+            this.EventProgress.Name = "EventProgress";
+            this.EventProgress.Size = new System.Drawing.Size(48, 23);
+            this.EventProgress.TabIndex = 101;
+            this.EventProgress.Text = "w";
+            this.EventProgress.SelectedIndexChanged += new System.EventHandler(this.EventProgress_SelectedIndexChanged);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(640, 275);
+            this.Controls.Add(this.LabelEventProgress);
+            this.Controls.Add(this.EventProgress);
             this.Controls.Add(this.LabelGame);
             this.Controls.Add(this.Game);
             this.Controls.Add(this.Move4);
@@ -503,7 +531,7 @@
             this.Controls.Add(this.Species);
             this.Controls.Add(this.LabelSpecies);
             this.Controls.Add(this.ButtonViewRAM);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.LabelStoryProgress);
             this.Controls.Add(this.Progress);
             this.Controls.Add(this.Difficulty);
             this.Controls.Add(this.LabelDifficulty);
@@ -574,7 +602,7 @@
         private TextBox Difficulty;
         private Label LabelDifficulty;
         private ComboBox Progress;
-        private Label label1;
+        private Label LabelStoryProgress;
         private Button ButtonViewRAM;
         private TextBox Species;
         private Label LabelSpecies;
@@ -585,5 +613,7 @@
         private TextBox Move3;
         private Label LabelGame;
         private ComboBox Game;
+        private Label LabelEventProgress;
+        private ComboBox EventProgress;
     }
 }

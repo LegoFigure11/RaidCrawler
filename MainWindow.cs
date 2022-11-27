@@ -48,6 +48,7 @@ namespace RaidCrawler
             LabelIndex.Text = string.Empty;
             DefaultColor = IVs.BackColor;
             Progress.SelectedIndex = Settings.Default.Progress;
+            EventProgress.SelectedIndex = Settings.Default.EventProgress;
             Game.SelectedIndex = Game.FindString(Settings.Default.Game);
         }
 
@@ -131,7 +132,7 @@ namespace RaidCrawler
                 IsEvent.Checked = raid.IsEvent;
 
                 int StarCount = Raid.GetStarCount(raid.Difficulty, Progress.SelectedIndex, raid.IsBlack);
-                ITeraRaid? encounter = raid.IsEvent ? TeraDistribution.GetEncounter(raid.Seed, Progress.SelectedIndex - 1) : TeraEncounter.GetEncounter(raid.Seed, Progress.SelectedIndex, raid.IsBlack);
+                ITeraRaid? encounter = raid.IsEvent ? TeraDistribution.GetEncounter(raid.Seed, EventProgress.SelectedIndex) : TeraEncounter.GetEncounter(raid.Seed, Progress.SelectedIndex, raid.IsBlack);
                 Species.Text = encounter == null ? "Unknown" : $"{Raid.strings.Species[encounter.Species]} ({encounter.Species})";
                 if (encounter != null)
                 {
@@ -346,6 +347,13 @@ namespace RaidCrawler
         private void Progress_SelectedIndexChanged(object sender, EventArgs e)
         {
             Settings.Default.Progress = Progress.SelectedIndex;
+            Settings.Default.Save();
+            if (Raids.Count > 0) DisplayRaid(index);
+        }
+
+        private void EventProgress_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Settings.Default.EventProgress = EventProgress.SelectedIndex;
             Settings.Default.Save();
             if (Raids.Count > 0) DisplayRaid(index);
         }

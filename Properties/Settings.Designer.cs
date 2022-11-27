@@ -58,5 +58,17 @@ namespace RaidCrawler.Properties {
                 this["Game"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int EventProgress {
+            get {
+                return ((int)(this["EventProgress"]));
+            }
+            set {
+                this["EventProgress"] = value;
+            }
+        }
     }
 }

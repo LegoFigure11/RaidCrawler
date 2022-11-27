@@ -7,8 +7,8 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationIcon>TitanMark.ico</ApplicationIcon>
-    <AssemblyVersion>1.0.2</AssemblyVersion>
-    <FileVersion>1.0.2</FileVersion>
+    <AssemblyVersion>1.0.3</AssemblyVersion>
+    <FileVersion>1.0.3</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -30,7 +30,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="NLog" Version="5.0.5" />
-    <PackageReference Include="PKHeX.Core" Version="22.11.24" />
+    <PackageReference Include="PKHeX.Core" Version="22.11.26" />
   </ItemGroup>
 
   <ItemGroup>
