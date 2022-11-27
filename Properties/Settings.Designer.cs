@@ -70,5 +70,89 @@ namespace RaidCrawler.Properties {
                 this["EventProgress"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("25")]
+        public int SpeciesFilter {
+            get {
+                return ((int)(this["SpeciesFilter"]));
+            }
+            set {
+                this["SpeciesFilter"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SpeciesEnabled {
+            get {
+                return ((bool)(this["SpeciesEnabled"]));
+            }
+            set {
+                this["SpeciesEnabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int NatureFilter {
+            get {
+                return ((int)(this["NatureFilter"]));
+            }
+            set {
+                this["NatureFilter"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool NatureEnabled {
+            get {
+                return ((bool)(this["NatureEnabled"]));
+            }
+            set {
+                this["NatureEnabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public int StarsFilter {
+            get {
+                return ((int)(this["StarsFilter"]));
+            }
+            set {
+                this["StarsFilter"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool StarsEnabled {
+            get {
+                return ((bool)(this["StarsEnabled"]));
+            }
+            set {
+                this["StarsEnabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SearchTillShiny {
+            get {
+                return ((bool)(this["SearchTillShiny"]));
+            }
+            set {
+                this["SearchTillShiny"] = value;
+            }
+        }
     }
 }

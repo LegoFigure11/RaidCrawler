@@ -53,7 +53,6 @@
             this.LabelIVs = new System.Windows.Forms.Label();
             this.ButtonReadRaids = new System.Windows.Forms.Button();
             this.ButtonAdvanceDate = new System.Windows.Forms.Button();
-            this.CheckContinueUntilShiny = new System.Windows.Forms.CheckBox();
             this.IsEvent = new System.Windows.Forms.CheckBox();
             this.LabelIsEvent = new System.Windows.Forms.Label();
             this.Difficulty = new System.Windows.Forms.TextBox();
@@ -72,6 +71,11 @@
             this.Game = new System.Windows.Forms.ComboBox();
             this.LabelEventProgress = new System.Windows.Forms.Label();
             this.EventProgress = new System.Windows.Forms.ComboBox();
+            this.Nature = new System.Windows.Forms.TextBox();
+            this.LabelNature = new System.Windows.Forms.Label();
+            this.Gender = new System.Windows.Forms.TextBox();
+            this.LabelGender = new System.Windows.Forms.Label();
+            this.StopFilter = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // ButtonDisconnect
@@ -316,16 +320,6 @@
             this.ButtonAdvanceDate.UseVisualStyleBackColor = true;
             this.ButtonAdvanceDate.Click += new System.EventHandler(this.ButtonAdvanceDate_Click);
             // 
-            // CheckContinueUntilShiny
-            // 
-            this.CheckContinueUntilShiny.AutoSize = true;
-            this.CheckContinueUntilShiny.Location = new System.Drawing.Point(13, 233);
-            this.CheckContinueUntilShiny.Name = "CheckContinueUntilShiny";
-            this.CheckContinueUntilShiny.Size = new System.Drawing.Size(199, 19);
-            this.CheckContinueUntilShiny.TabIndex = 82;
-            this.CheckContinueUntilShiny.Text = "Keep advancing date until shiny?";
-            this.CheckContinueUntilShiny.UseVisualStyleBackColor = true;
-            // 
             // IsEvent
             // 
             this.IsEvent.AutoCheck = false;
@@ -422,7 +416,7 @@
             // LabelMoves
             // 
             this.LabelMoves.AutoSize = true;
-            this.LabelMoves.Location = new System.Drawing.Point(301, 235);
+            this.LabelMoves.Location = new System.Drawing.Point(305, 234);
             this.LabelMoves.Name = "LabelMoves";
             this.LabelMoves.Size = new System.Drawing.Size(45, 15);
             this.LabelMoves.TabIndex = 94;
@@ -514,11 +508,64 @@
             this.EventProgress.Text = "w";
             this.EventProgress.SelectedIndexChanged += new System.EventHandler(this.EventProgress_SelectedIndexChanged);
             // 
+            // Nature
+            // 
+            this.Nature.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.Nature.Location = new System.Drawing.Point(530, 273);
+            this.Nature.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.Nature.Name = "Nature";
+            this.Nature.ReadOnly = true;
+            this.Nature.Size = new System.Drawing.Size(97, 22);
+            this.Nature.TabIndex = 106;
+            // 
+            // LabelNature
+            // 
+            this.LabelNature.AutoSize = true;
+            this.LabelNature.Location = new System.Drawing.Point(465, 275);
+            this.LabelNature.Name = "LabelNature";
+            this.LabelNature.Size = new System.Drawing.Size(46, 15);
+            this.LabelNature.TabIndex = 105;
+            this.LabelNature.Text = "Nature:";
+            // 
+            // Gender
+            // 
+            this.Gender.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.Gender.Location = new System.Drawing.Point(356, 273);
+            this.Gender.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.Gender.Name = "Gender";
+            this.Gender.ReadOnly = true;
+            this.Gender.Size = new System.Drawing.Size(95, 22);
+            this.Gender.TabIndex = 104;
+            // 
+            // LabelGender
+            // 
+            this.LabelGender.AutoSize = true;
+            this.LabelGender.Location = new System.Drawing.Point(302, 275);
+            this.LabelGender.Name = "LabelGender";
+            this.LabelGender.Size = new System.Drawing.Size(48, 15);
+            this.LabelGender.TabIndex = 103;
+            this.LabelGender.Text = "Gender:";
+            // 
+            // StopFilter
+            // 
+            this.StopFilter.Location = new System.Drawing.Point(13, 258);
+            this.StopFilter.Name = "StopFilter";
+            this.StopFilter.Size = new System.Drawing.Size(199, 23);
+            this.StopFilter.TabIndex = 107;
+            this.StopFilter.Text = "Set Stop Filters";
+            this.StopFilter.UseVisualStyleBackColor = true;
+            this.StopFilter.Click += new System.EventHandler(this.StopFilter_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(640, 275);
+            this.ClientSize = new System.Drawing.Size(640, 308);
+            this.Controls.Add(this.StopFilter);
+            this.Controls.Add(this.Nature);
+            this.Controls.Add(this.LabelNature);
+            this.Controls.Add(this.Gender);
+            this.Controls.Add(this.LabelGender);
             this.Controls.Add(this.LabelEventProgress);
             this.Controls.Add(this.EventProgress);
             this.Controls.Add(this.LabelGame);
@@ -537,7 +584,6 @@
             this.Controls.Add(this.LabelDifficulty);
             this.Controls.Add(this.LabelIsEvent);
             this.Controls.Add(this.IsEvent);
-            this.Controls.Add(this.CheckContinueUntilShiny);
             this.Controls.Add(this.ButtonAdvanceDate);
             this.Controls.Add(this.ButtonReadRaids);
             this.Controls.Add(this.IVs);
@@ -596,7 +642,6 @@
         private Label LabelIVs;
         private Button ButtonReadRaids;
         private Button ButtonAdvanceDate;
-        private CheckBox CheckContinueUntilShiny;
         private CheckBox IsEvent;
         private Label LabelIsEvent;
         private TextBox Difficulty;
@@ -615,5 +660,10 @@
         private ComboBox Game;
         private Label LabelEventProgress;
         private ComboBox EventProgress;
+        private TextBox Nature;
+        private Label LabelNature;
+        private TextBox Gender;
+        private Label LabelGender;
+        private Button StopFilter;
     }
 }

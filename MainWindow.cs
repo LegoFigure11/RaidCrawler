@@ -151,6 +151,23 @@ namespace RaidCrawler
 
                 Difficulty.Text = raid.IsEvent ? string.Concat(Enumerable.Repeat("☆", StarCount)) : string.Concat(Enumerable.Repeat("☆", StarCount)) + $" ({raid.Difficulty})";
                 IVs.Text = IVsString(raid.GetIVs(raid.Seed, StarCount - 1));
+                
+                if (encounter != null)
+                {
+                    var pi = PersonalTable.SV.GetFormEntry(encounter.Species, encounter.Form);
+                    var param = new GenerateParam9((byte)pi.Gender, (byte)(StarCount - 1), 1, 0, 0, 0, encounter.Ability, encounter.Shiny);
+                    var blank = new PK9();
+                    blank.Species = encounter.Species;
+                    blank.Form = encounter.Form;
+                    Encounter9RNG.GenerateData(blank, param, EncounterCriteria.Unrestricted, raid.Seed);
+                    Gender.Text = $"{(Gender)blank.Gender}";
+                    Nature.Text = $"{Raid.strings.Natures[blank.Nature]}";
+                }
+                else
+                {
+                    Gender.Text = string.Empty;
+                    Nature.Text = string.Empty;
+                }
 
                 if (raid.IsShiny)
                 {
@@ -199,7 +216,7 @@ namespace RaidCrawler
                     for (int i = 0; i < Raids.Count; i++)
                     {
                         var chk = (index + Raids.Count - i) % Raids.Count;
-                        if (Raids[chk].IsShiny)
+                        if (RaidFilters.FilterSatisfied(Raids[chk], Progress.SelectedIndex, EventProgress.SelectedIndex))
                         {
                             index = chk;
                             break;
@@ -220,7 +237,7 @@ namespace RaidCrawler
                     for (int i = 0; i < Raids.Count; i++)
                     {
                         var chk = (index + Raids.Count + i) % Raids.Count;
-                        if (Raids[chk].IsShiny)
+                        if (RaidFilters.FilterSatisfied(Raids[chk], Progress.SelectedIndex, EventProgress.SelectedIndex))
                         {
                             index = chk;
                             break;
@@ -278,7 +295,7 @@ namespace RaidCrawler
                 {
                     await AdvanceDate(CancellationToken.None);
                     await ReadRaids(CancellationToken.None);
-                } while (CheckContinueUntilShiny.Checked && !Raids.Where(raid => raid.IsShiny).Any());
+                } while (!RaidFilters.FilterSatisfied(Raids, Progress.SelectedIndex, EventProgress.SelectedIndex));
                 ButtonReadRaids.Enabled = true;
                 ButtonAdvanceDate.Enabled = true;
             }
@@ -383,6 +400,12 @@ namespace RaidCrawler
             Settings.Default.Game = Game.Text;
             Settings.Default.Save();
             if (Raids.Count > 0) DisplayRaid(index);
+        }
+
+        private void StopFilter_Click(object sender, EventArgs e)
+        {
+            var form = new FilterSettings();
+            form.ShowDialog();
         }
     }
 }
