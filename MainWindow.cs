@@ -105,10 +105,11 @@ namespace RaidCrawler
             }
         }
 
-        private void Disconnect(bool SkipCheckForExistingConnection = false)
+        private async void Disconnect(bool SkipCheckForExistingConnection = false)
         {
             if (SwitchConnection.Connected || SkipCheckForExistingConnection)
             {
+                await SwitchConnection.SendAsync(SwitchCommand.DetachController(true), CancellationToken.None).ConfigureAwait(false);
                 SwitchConnection.Disconnect();
                 ConnectionStatusText.Text = "Disconnected.";
                 ButtonConnect.Enabled = true;
@@ -451,6 +452,11 @@ namespace RaidCrawler
         {
             var form = new FilterSettings();
             form.ShowDialog();
+        }
+
+        private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Disconnect();
         }
     }
 }
