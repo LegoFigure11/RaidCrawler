@@ -9,6 +9,7 @@ namespace RaidCrawler.Structures
         public static bool Shiny = Settings.Default.SearchTillShiny;
         public static Nature? Nature = Settings.Default.NatureEnabled ? (Nature)Settings.Default.NatureFilter : null;
         public static int IVBin = Settings.Default.IVBin;
+        public static int IVVals = Settings.Default.IVVals;
 
         public static bool IsFilterSet()
         {
@@ -64,7 +65,7 @@ namespace RaidCrawler.Structures
             var ivs = raid.GetIVs(raid.Seed, StarCount - 1);
             for (int i = 0; i < 6; i++) 
             {
-                if (ivs[i] != 31 && ((IVBin >> i) & 1) == 1) 
+                if (ivs[i] != ((IVVals >> (i * 5)) & 31) && ((IVBin >> i) & 1) == 1) 
                     return false; 
             }
             return true;

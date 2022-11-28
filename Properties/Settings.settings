@@ -38,5 +38,8 @@
     <Setting Name="IVBin" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
+    <Setting Name="IVVals" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1073741823</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

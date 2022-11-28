@@ -166,5 +166,17 @@ namespace RaidCrawler.Properties {
                 this["IVBin"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1073741823")]
+        public int IVVals {
+            get {
+                return ((int)(this["IVVals"]));
+            }
+            set {
+                this["IVVals"] = value;
+            }
+        }
     }
 }
