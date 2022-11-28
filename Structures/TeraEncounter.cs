@@ -41,7 +41,7 @@ namespace RaidCrawler.Structures
                 if (enc.Stars != starcount)
                     continue;
                 var minimum = Raid.Game == "Scarlet" ? enc.Entity.RandRateMinScarlet : enc.Entity.RandRateMinViolet;
-                if ((uint)((int)speciesroll - minimum) < enc.Entity.RandRate)
+                if (minimum >= 0 && (uint)((int)speciesroll - minimum) < enc.Entity.RandRate)
                     return enc;
             }
             return null;
