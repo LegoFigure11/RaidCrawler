@@ -37,13 +37,25 @@
             this.ShinyCheck = new System.Windows.Forms.CheckBox();
             this.Save = new System.Windows.Forms.Button();
             this.PerfectIVFilterGroup = new System.Windows.Forms.GroupBox();
-            this.HP = new System.Windows.Forms.CheckBox();
-            this.Atk = new System.Windows.Forms.CheckBox();
+            this.Spe = new System.Windows.Forms.CheckBox();
+            this.SpD = new System.Windows.Forms.CheckBox();
             this.SpA = new System.Windows.Forms.CheckBox();
             this.Def = new System.Windows.Forms.CheckBox();
-            this.SpD = new System.Windows.Forms.CheckBox();
-            this.Spe = new System.Windows.Forms.CheckBox();
+            this.Atk = new System.Windows.Forms.CheckBox();
+            this.HP = new System.Windows.Forms.CheckBox();
+            this.IVHP = new System.Windows.Forms.NumericUpDown();
+            this.IVATK = new System.Windows.Forms.NumericUpDown();
+            this.IVDEF = new System.Windows.Forms.NumericUpDown();
+            this.IVSPA = new System.Windows.Forms.NumericUpDown();
+            this.IVSPD = new System.Windows.Forms.NumericUpDown();
+            this.IVSPE = new System.Windows.Forms.NumericUpDown();
             this.PerfectIVFilterGroup.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.IVHP)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.IVATK)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.IVDEF)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.IVSPA)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.IVSPD)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.IVSPE)).BeginInit();
             this.SuspendLayout();
             // 
             // Species
@@ -120,9 +132,9 @@
             // 
             // Save
             // 
-            this.Save.Location = new System.Drawing.Point(12, 185);
+            this.Save.Location = new System.Drawing.Point(11, 218);
             this.Save.Name = "Save";
-            this.Save.Size = new System.Drawing.Size(210, 23);
+            this.Save.Size = new System.Drawing.Size(214, 23);
             this.Save.TabIndex = 9;
             this.Save.Text = "Save";
             this.Save.UseVisualStyleBackColor = true;
@@ -130,6 +142,12 @@
             // 
             // PerfectIVFilterGroup
             // 
+            this.PerfectIVFilterGroup.Controls.Add(this.IVSPE);
+            this.PerfectIVFilterGroup.Controls.Add(this.IVSPD);
+            this.PerfectIVFilterGroup.Controls.Add(this.IVSPA);
+            this.PerfectIVFilterGroup.Controls.Add(this.IVDEF);
+            this.PerfectIVFilterGroup.Controls.Add(this.IVATK);
+            this.PerfectIVFilterGroup.Controls.Add(this.IVHP);
             this.PerfectIVFilterGroup.Controls.Add(this.Spe);
             this.PerfectIVFilterGroup.Controls.Add(this.SpD);
             this.PerfectIVFilterGroup.Controls.Add(this.SpA);
@@ -138,40 +156,40 @@
             this.PerfectIVFilterGroup.Controls.Add(this.HP);
             this.PerfectIVFilterGroup.Location = new System.Drawing.Point(12, 122);
             this.PerfectIVFilterGroup.Name = "PerfectIVFilterGroup";
-            this.PerfectIVFilterGroup.Size = new System.Drawing.Size(213, 57);
+            this.PerfectIVFilterGroup.Size = new System.Drawing.Size(213, 90);
             this.PerfectIVFilterGroup.TabIndex = 10;
             this.PerfectIVFilterGroup.TabStop = false;
-            this.PerfectIVFilterGroup.Text = "Perfect IV Filters";
+            this.PerfectIVFilterGroup.Text = "IV Filters";
             // 
-            // HP
+            // Spe
             // 
-            this.HP.AutoSize = true;
-            this.HP.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.HP.Location = new System.Drawing.Point(3, 19);
-            this.HP.Name = "HP";
-            this.HP.Size = new System.Drawing.Size(27, 33);
-            this.HP.TabIndex = 0;
-            this.HP.Text = "HP";
-            this.HP.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.HP.UseVisualStyleBackColor = true;
+            this.Spe.AutoSize = true;
+            this.Spe.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.Spe.Location = new System.Drawing.Point(179, 51);
+            this.Spe.Name = "Spe";
+            this.Spe.Size = new System.Drawing.Size(30, 33);
+            this.Spe.TabIndex = 5;
+            this.Spe.Text = "Spe";
+            this.Spe.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.Spe.UseVisualStyleBackColor = true;
             // 
-            // Atk
+            // SpD
             // 
-            this.Atk.AutoSize = true;
-            this.Atk.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.Atk.Location = new System.Drawing.Point(36, 19);
-            this.Atk.Name = "Atk";
-            this.Atk.Size = new System.Drawing.Size(29, 33);
-            this.Atk.TabIndex = 1;
-            this.Atk.Text = "Atk";
-            this.Atk.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.Atk.UseVisualStyleBackColor = true;
+            this.SpD.AutoSize = true;
+            this.SpD.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.SpD.Location = new System.Drawing.Point(142, 51);
+            this.SpD.Name = "SpD";
+            this.SpD.Size = new System.Drawing.Size(32, 33);
+            this.SpD.TabIndex = 4;
+            this.SpD.Text = "SpD";
+            this.SpD.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.SpD.UseVisualStyleBackColor = true;
             // 
             // SpA
             // 
             this.SpA.AutoSize = true;
             this.SpA.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.SpA.Location = new System.Drawing.Point(106, 19);
+            this.SpA.Location = new System.Drawing.Point(106, 51);
             this.SpA.Name = "SpA";
             this.SpA.Size = new System.Drawing.Size(32, 33);
             this.SpA.TabIndex = 3;
@@ -183,7 +201,7 @@
             // 
             this.Def.AutoSize = true;
             this.Def.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.Def.Location = new System.Drawing.Point(71, 19);
+            this.Def.Location = new System.Drawing.Point(73, 51);
             this.Def.Name = "Def";
             this.Def.Size = new System.Drawing.Size(29, 33);
             this.Def.TabIndex = 2;
@@ -191,35 +209,137 @@
             this.Def.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.Def.UseVisualStyleBackColor = true;
             // 
-            // SpD
+            // Atk
             // 
-            this.SpD.AutoSize = true;
-            this.SpD.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.SpD.Location = new System.Drawing.Point(144, 19);
-            this.SpD.Name = "SpD";
-            this.SpD.Size = new System.Drawing.Size(32, 33);
-            this.SpD.TabIndex = 4;
-            this.SpD.Text = "SpD";
-            this.SpD.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.SpD.UseVisualStyleBackColor = true;
+            this.Atk.AutoSize = true;
+            this.Atk.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.Atk.Location = new System.Drawing.Point(38, 51);
+            this.Atk.Name = "Atk";
+            this.Atk.Size = new System.Drawing.Size(29, 33);
+            this.Atk.TabIndex = 1;
+            this.Atk.Text = "Atk";
+            this.Atk.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.Atk.UseVisualStyleBackColor = true;
             // 
-            // Spe
+            // HP
             // 
-            this.Spe.AutoSize = true;
-            this.Spe.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.Spe.Location = new System.Drawing.Point(182, 19);
-            this.Spe.Name = "Spe";
-            this.Spe.Size = new System.Drawing.Size(30, 33);
-            this.Spe.TabIndex = 5;
-            this.Spe.Text = "Spe";
-            this.Spe.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.Spe.UseVisualStyleBackColor = true;
+            this.HP.AutoSize = true;
+            this.HP.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.HP.Location = new System.Drawing.Point(3, 51);
+            this.HP.Name = "HP";
+            this.HP.Size = new System.Drawing.Size(27, 33);
+            this.HP.TabIndex = 0;
+            this.HP.Text = "HP";
+            this.HP.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.HP.UseVisualStyleBackColor = true;
+            // 
+            // IVHP
+            // 
+            this.IVHP.Location = new System.Drawing.Point(3, 22);
+            this.IVHP.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.IVHP.Name = "IVHP";
+            this.IVHP.Size = new System.Drawing.Size(32, 23);
+            this.IVHP.TabIndex = 6;
+            this.IVHP.Value = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            // 
+            // IVATK
+            // 
+            this.IVATK.Location = new System.Drawing.Point(38, 22);
+            this.IVATK.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.IVATK.Name = "IVATK";
+            this.IVATK.Size = new System.Drawing.Size(32, 23);
+            this.IVATK.TabIndex = 7;
+            this.IVATK.Value = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            // 
+            // IVDEF
+            // 
+            this.IVDEF.Location = new System.Drawing.Point(73, 22);
+            this.IVDEF.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.IVDEF.Name = "IVDEF";
+            this.IVDEF.Size = new System.Drawing.Size(32, 23);
+            this.IVDEF.TabIndex = 8;
+            this.IVDEF.Value = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            // 
+            // IVSPA
+            // 
+            this.IVSPA.Location = new System.Drawing.Point(108, 22);
+            this.IVSPA.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.IVSPA.Name = "IVSPA";
+            this.IVSPA.Size = new System.Drawing.Size(32, 23);
+            this.IVSPA.TabIndex = 9;
+            this.IVSPA.Value = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            // 
+            // IVSPD
+            // 
+            this.IVSPD.Location = new System.Drawing.Point(143, 22);
+            this.IVSPD.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.IVSPD.Name = "IVSPD";
+            this.IVSPD.Size = new System.Drawing.Size(32, 23);
+            this.IVSPD.TabIndex = 10;
+            this.IVSPD.Value = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            // 
+            // IVSPE
+            // 
+            this.IVSPE.Location = new System.Drawing.Point(178, 22);
+            this.IVSPE.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.IVSPE.Name = "IVSPE";
+            this.IVSPE.Size = new System.Drawing.Size(32, 23);
+            this.IVSPE.TabIndex = 11;
+            this.IVSPE.Value = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
             // 
             // FilterSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(238, 220);
+            this.ClientSize = new System.Drawing.Size(238, 252);
             this.Controls.Add(this.PerfectIVFilterGroup);
             this.Controls.Add(this.Save);
             this.Controls.Add(this.ShinyCheck);
@@ -237,6 +357,12 @@
             this.Text = "FilterSettings";
             this.PerfectIVFilterGroup.ResumeLayout(false);
             this.PerfectIVFilterGroup.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.IVHP)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.IVATK)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.IVDEF)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.IVSPA)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.IVSPD)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.IVSPE)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -259,5 +385,11 @@
         private CheckBox Def;
         private CheckBox Atk;
         private CheckBox HP;
+        private NumericUpDown IVSPE;
+        private NumericUpDown IVSPD;
+        private NumericUpDown IVSPA;
+        private NumericUpDown IVDEF;
+        private NumericUpDown IVATK;
+        private NumericUpDown IVHP;
     }
 }
