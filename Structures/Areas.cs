@@ -7,7 +7,7 @@
             "", // Unused
             "", // Unused
             "South Province (Area 2)",
-            "South Province (Area 5)",
+            "South Province (Area 4)",
             "South Province (Area 6)",
             "South Province (Area 5)",
             "South Province (Area 3)",
