@@ -72,6 +72,12 @@ namespace RaidCrawler
         private void Disconnect_Click(object sender, EventArgs e)
         {
             Disconnect();
+            ConnectionStatusText.Text = "Disconnected.";
+            ButtonConnect.Enabled = true;
+            ButtonDisconnect.Enabled = false;
+            ButtonReadRaids.Enabled = false;
+            ButtonAdvanceDate.Enabled = false;
+            ButtonViewRAM.Enabled = false;
         }
 
         private async void Connect()
@@ -111,12 +117,6 @@ namespace RaidCrawler
             {
                 await SwitchConnection.SendAsync(SwitchCommand.DetachController(true), CancellationToken.None).ConfigureAwait(false);
                 SwitchConnection.Disconnect();
-                ConnectionStatusText.Text = "Disconnected.";
-                ButtonConnect.Enabled = true;
-                ButtonDisconnect.Enabled = false;
-                ButtonReadRaids.Enabled = false;
-                ButtonAdvanceDate.Enabled = false;
-                ButtonViewRAM.Enabled = false;
             }
         }
 
