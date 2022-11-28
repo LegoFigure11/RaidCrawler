@@ -100,7 +100,7 @@ namespace RaidCrawler
                 }
                 catch (SocketException err)
                 {
-                    Disconnect(true);
+                    Disconnect();
                     // a bit hacky but it works
                     if (err.Message.Contains("failed to respond") || err.Message.Contains("actively refused"))
                     {
@@ -111,11 +111,11 @@ namespace RaidCrawler
             }
         }
 
-        private async void Disconnect(bool SkipCheckForExistingConnection = false)
+        private async void Disconnect()
         {
-            if (SwitchConnection.Connected || SkipCheckForExistingConnection)
+            if (SwitchConnection.Connected)
             {
-                if (SwitchConnection.Connected) await SwitchConnection.SendAsync(SwitchCommand.DetachController(true), CancellationToken.None).ConfigureAwait(false);
+                await SwitchConnection.SendAsync(SwitchCommand.DetachController(true), CancellationToken.None).ConfigureAwait(false);
                 SwitchConnection.Disconnect();
             }
         }
