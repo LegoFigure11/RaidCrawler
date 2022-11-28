@@ -32,7 +32,7 @@ namespace RaidCrawler.Structures
         public virtual bool IsEvent => Flags == 2;
 
         // Derived Values
-        public virtual string? TeraType => GetTeraType(Seed);
+        public virtual int TeraType => GetTeraType(Seed);
         public virtual uint Difficulty => GetDifficulty(Seed);
 
         public virtual uint EC => GenericRaidData[0];
@@ -53,11 +53,10 @@ namespace RaidCrawler.Structures
             return true;
         }
 
-        private static string GetTeraType(uint Seed)
+        private static int GetTeraType(uint Seed)
         {
             var rng = new Xoroshiro128Plus(Seed);
-            var Type = rng.NextInt(18);
-            return $"{strings.types[Type]} ({Type})";
+            return (int)rng.NextInt(18);
         }
 
         private static uint[] GenerateGenericRaidData(uint Seed)

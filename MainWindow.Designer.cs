@@ -76,6 +76,10 @@
             this.Gender = new System.Windows.Forms.TextBox();
             this.LabelGender = new System.Windows.Forms.Label();
             this.StopFilter = new System.Windows.Forms.Button();
+            this.Sprite = new System.Windows.Forms.PictureBox();
+            this.Ability = new System.Windows.Forms.TextBox();
+            this.LabelAbility = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.Sprite)).BeginInit();
             this.SuspendLayout();
             // 
             // ButtonDisconnect
@@ -154,7 +158,7 @@
             // TeraType
             // 
             this.TeraType.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.TeraType.Location = new System.Drawing.Point(531, 50);
+            this.TeraType.Location = new System.Drawing.Point(531, 61);
             this.TeraType.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.TeraType.Name = "TeraType";
             this.TeraType.ReadOnly = true;
@@ -164,7 +168,7 @@
             // LabelTeraType
             // 
             this.LabelTeraType.AutoSize = true;
-            this.LabelTeraType.Location = new System.Drawing.Point(466, 52);
+            this.LabelTeraType.Location = new System.Drawing.Point(466, 63);
             this.LabelTeraType.Name = "LabelTeraType";
             this.LabelTeraType.Size = new System.Drawing.Size(58, 15);
             this.LabelTeraType.TabIndex = 48;
@@ -173,7 +177,7 @@
             // PID
             // 
             this.PID.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.PID.Location = new System.Drawing.Point(533, 80);
+            this.PID.Location = new System.Drawing.Point(533, 91);
             this.PID.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.PID.Name = "PID";
             this.PID.ReadOnly = true;
@@ -183,7 +187,7 @@
             // LabelPID
             // 
             this.LabelPID.AutoSize = true;
-            this.LabelPID.Location = new System.Drawing.Point(496, 82);
+            this.LabelPID.Location = new System.Drawing.Point(496, 93);
             this.LabelPID.Name = "LabelPID";
             this.LabelPID.Size = new System.Drawing.Size(28, 15);
             this.LabelPID.TabIndex = 46;
@@ -192,7 +196,7 @@
             // EC
             // 
             this.EC.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.EC.Location = new System.Drawing.Point(357, 78);
+            this.EC.Location = new System.Drawing.Point(357, 89);
             this.EC.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.EC.Name = "EC";
             this.EC.ReadOnly = true;
@@ -202,7 +206,7 @@
             // LabelEC
             // 
             this.LabelEC.AutoSize = true;
-            this.LabelEC.Location = new System.Drawing.Point(232, 80);
+            this.LabelEC.Location = new System.Drawing.Point(232, 91);
             this.LabelEC.Name = "LabelEC";
             this.LabelEC.Size = new System.Drawing.Size(118, 15);
             this.LabelEC.TabIndex = 44;
@@ -211,7 +215,7 @@
             // Seed
             // 
             this.Seed.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Seed.Location = new System.Drawing.Point(357, 50);
+            this.Seed.Location = new System.Drawing.Point(357, 61);
             this.Seed.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Seed.Name = "Seed";
             this.Seed.ReadOnly = true;
@@ -221,7 +225,7 @@
             // LabelSeed
             // 
             this.LabelSeed.AutoSize = true;
-            this.LabelSeed.Location = new System.Drawing.Point(315, 52);
+            this.LabelSeed.Location = new System.Drawing.Point(315, 63);
             this.LabelSeed.Name = "LabelSeed";
             this.LabelSeed.Size = new System.Drawing.Size(35, 15);
             this.LabelSeed.TabIndex = 42;
@@ -261,7 +265,7 @@
             // Area
             // 
             this.Area.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Area.Location = new System.Drawing.Point(357, 106);
+            this.Area.Location = new System.Drawing.Point(357, 117);
             this.Area.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Area.Name = "Area";
             this.Area.ReadOnly = true;
@@ -271,7 +275,7 @@
             // LabelUNK_2
             // 
             this.LabelUNK_2.AutoSize = true;
-            this.LabelUNK_2.Location = new System.Drawing.Point(316, 110);
+            this.LabelUNK_2.Location = new System.Drawing.Point(316, 121);
             this.LabelUNK_2.Name = "LabelUNK_2";
             this.LabelUNK_2.Size = new System.Drawing.Size(34, 15);
             this.LabelUNK_2.TabIndex = 60;
@@ -280,7 +284,7 @@
             // IVs
             // 
             this.IVs.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.IVs.Location = new System.Drawing.Point(357, 162);
+            this.IVs.Location = new System.Drawing.Point(357, 201);
             this.IVs.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.IVs.Name = "IVs";
             this.IVs.ReadOnly = true;
@@ -290,7 +294,7 @@
             // LabelIVs
             // 
             this.LabelIVs.AutoSize = true;
-            this.LabelIVs.Location = new System.Drawing.Point(325, 164);
+            this.LabelIVs.Location = new System.Drawing.Point(325, 203);
             this.LabelIVs.Name = "LabelIVs";
             this.LabelIVs.Size = new System.Drawing.Size(25, 15);
             this.LabelIVs.TabIndex = 68;
@@ -324,7 +328,7 @@
             // 
             this.IsEvent.AutoCheck = false;
             this.IsEvent.AutoSize = true;
-            this.IsEvent.Location = new System.Drawing.Point(533, 137);
+            this.IsEvent.Location = new System.Drawing.Point(357, 41);
             this.IsEvent.Name = "IsEvent";
             this.IsEvent.Size = new System.Drawing.Size(15, 14);
             this.IsEvent.TabIndex = 83;
@@ -333,7 +337,7 @@
             // LabelIsEvent
             // 
             this.LabelIsEvent.AutoSize = true;
-            this.LabelIsEvent.Location = new System.Drawing.Point(483, 136);
+            this.LabelIsEvent.Location = new System.Drawing.Point(307, 40);
             this.LabelIsEvent.Name = "LabelIsEvent";
             this.LabelIsEvent.Size = new System.Drawing.Size(41, 15);
             this.LabelIsEvent.TabIndex = 84;
@@ -342,7 +346,7 @@
             // Difficulty
             // 
             this.Difficulty.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Difficulty.Location = new System.Drawing.Point(357, 134);
+            this.Difficulty.Location = new System.Drawing.Point(356, 173);
             this.Difficulty.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Difficulty.Name = "Difficulty";
             this.Difficulty.ReadOnly = true;
@@ -352,7 +356,7 @@
             // LabelDifficulty
             // 
             this.LabelDifficulty.AutoSize = true;
-            this.LabelDifficulty.Location = new System.Drawing.Point(292, 136);
+            this.LabelDifficulty.Location = new System.Drawing.Point(292, 176);
             this.LabelDifficulty.Name = "LabelDifficulty";
             this.LabelDifficulty.Size = new System.Drawing.Size(58, 15);
             this.LabelDifficulty.TabIndex = 85;
@@ -397,7 +401,7 @@
             // Species
             // 
             this.Species.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Species.Location = new System.Drawing.Point(357, 192);
+            this.Species.Location = new System.Drawing.Point(356, 145);
             this.Species.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Species.Name = "Species";
             this.Species.ReadOnly = true;
@@ -407,7 +411,7 @@
             // LabelSpecies
             // 
             this.LabelSpecies.AutoSize = true;
-            this.LabelSpecies.Location = new System.Drawing.Point(301, 194);
+            this.LabelSpecies.Location = new System.Drawing.Point(300, 147);
             this.LabelSpecies.Name = "LabelSpecies";
             this.LabelSpecies.Size = new System.Drawing.Size(49, 15);
             this.LabelSpecies.TabIndex = 92;
@@ -416,7 +420,7 @@
             // LabelMoves
             // 
             this.LabelMoves.AutoSize = true;
-            this.LabelMoves.Location = new System.Drawing.Point(305, 234);
+            this.LabelMoves.Location = new System.Drawing.Point(305, 245);
             this.LabelMoves.Name = "LabelMoves";
             this.LabelMoves.Size = new System.Drawing.Size(45, 15);
             this.LabelMoves.TabIndex = 94;
@@ -425,7 +429,7 @@
             // Move1
             // 
             this.Move1.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Move1.Location = new System.Drawing.Point(357, 220);
+            this.Move1.Location = new System.Drawing.Point(357, 231);
             this.Move1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Move1.Name = "Move1";
             this.Move1.ReadOnly = true;
@@ -435,7 +439,7 @@
             // Move2
             // 
             this.Move2.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Move2.Location = new System.Drawing.Point(494, 220);
+            this.Move2.Location = new System.Drawing.Point(494, 231);
             this.Move2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Move2.Name = "Move2";
             this.Move2.ReadOnly = true;
@@ -445,7 +449,7 @@
             // Move4
             // 
             this.Move4.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Move4.Location = new System.Drawing.Point(494, 245);
+            this.Move4.Location = new System.Drawing.Point(494, 256);
             this.Move4.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Move4.Name = "Move4";
             this.Move4.ReadOnly = true;
@@ -455,7 +459,7 @@
             // Move3
             // 
             this.Move3.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Move3.Location = new System.Drawing.Point(357, 245);
+            this.Move3.Location = new System.Drawing.Point(357, 256);
             this.Move3.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Move3.Name = "Move3";
             this.Move3.ReadOnly = true;
@@ -511,7 +515,7 @@
             // Nature
             // 
             this.Nature.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Nature.Location = new System.Drawing.Point(530, 273);
+            this.Nature.Location = new System.Drawing.Point(530, 284);
             this.Nature.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Nature.Name = "Nature";
             this.Nature.ReadOnly = true;
@@ -521,7 +525,7 @@
             // LabelNature
             // 
             this.LabelNature.AutoSize = true;
-            this.LabelNature.Location = new System.Drawing.Point(465, 275);
+            this.LabelNature.Location = new System.Drawing.Point(465, 286);
             this.LabelNature.Name = "LabelNature";
             this.LabelNature.Size = new System.Drawing.Size(46, 15);
             this.LabelNature.TabIndex = 105;
@@ -530,7 +534,7 @@
             // Gender
             // 
             this.Gender.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Gender.Location = new System.Drawing.Point(356, 273);
+            this.Gender.Location = new System.Drawing.Point(356, 284);
             this.Gender.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Gender.Name = "Gender";
             this.Gender.ReadOnly = true;
@@ -540,7 +544,7 @@
             // LabelGender
             // 
             this.LabelGender.AutoSize = true;
-            this.LabelGender.Location = new System.Drawing.Point(302, 275);
+            this.LabelGender.Location = new System.Drawing.Point(302, 286);
             this.LabelGender.Name = "LabelGender";
             this.LabelGender.Size = new System.Drawing.Size(48, 15);
             this.LabelGender.TabIndex = 103;
@@ -548,7 +552,7 @@
             // 
             // StopFilter
             // 
-            this.StopFilter.Location = new System.Drawing.Point(13, 258);
+            this.StopFilter.Location = new System.Drawing.Point(13, 279);
             this.StopFilter.Name = "StopFilter";
             this.StopFilter.Size = new System.Drawing.Size(199, 23);
             this.StopFilter.TabIndex = 107;
@@ -556,11 +560,42 @@
             this.StopFilter.UseVisualStyleBackColor = true;
             this.StopFilter.Click += new System.EventHandler(this.StopFilter_Click);
             // 
+            // Sprite
+            // 
+            this.Sprite.Location = new System.Drawing.Point(458, -1);
+            this.Sprite.Name = "Sprite";
+            this.Sprite.Size = new System.Drawing.Size(68, 56);
+            this.Sprite.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.Sprite.TabIndex = 108;
+            this.Sprite.TabStop = false;
+            // 
+            // Ability
+            // 
+            this.Ability.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.Ability.Location = new System.Drawing.Point(529, 173);
+            this.Ability.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.Ability.Name = "Ability";
+            this.Ability.ReadOnly = true;
+            this.Ability.Size = new System.Drawing.Size(97, 22);
+            this.Ability.TabIndex = 110;
+            // 
+            // LabelAbility
+            // 
+            this.LabelAbility.AutoSize = true;
+            this.LabelAbility.Location = new System.Drawing.Point(478, 176);
+            this.LabelAbility.Name = "LabelAbility";
+            this.LabelAbility.Size = new System.Drawing.Size(44, 15);
+            this.LabelAbility.TabIndex = 109;
+            this.LabelAbility.Text = "Ability:";
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(640, 308);
+            this.ClientSize = new System.Drawing.Size(640, 314);
+            this.Controls.Add(this.Ability);
+            this.Controls.Add(this.LabelAbility);
+            this.Controls.Add(this.Sprite);
             this.Controls.Add(this.StopFilter);
             this.Controls.Add(this.Nature);
             this.Controls.Add(this.LabelNature);
@@ -608,9 +643,13 @@
             this.Controls.Add(this.InputSwitchIP);
             this.Controls.Add(this.LabelStatus);
             this.Controls.Add(this.LabelSwitchIP);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "MainWindow";
             this.Load += new System.EventHandler(this.MainWindow_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.Sprite)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -665,5 +704,8 @@
         private TextBox Gender;
         private Label LabelGender;
         private Button StopFilter;
+        private PictureBox Sprite;
+        private TextBox Ability;
+        private Label LabelAbility;
     }
 }

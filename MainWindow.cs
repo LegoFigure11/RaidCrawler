@@ -5,6 +5,8 @@ using SysBot.Base;
 using System.Data;
 using System.Net.Sockets;
 using PKHeX.Core;
+using PKHeX.Drawing;
+using PKHeX.Drawing.PokeSprite;
 using static SysBot.Base.SwitchButton;
 
 namespace RaidCrawler
@@ -38,6 +40,10 @@ namespace RaidCrawler
             Raid.GemTeraRaids = TeraEncounter.GetAllEncounters("encounter_gem_paldea.pkl");
             Raid.DistTeraRaids = TeraDistribution.GetAllEncounters("encounter_dist_paldea.pkl");
             Raid.Game = Settings.Default.Game;
+            SpriteBuilder.ShowTeraThicknessStripe = 0x4;
+            SpriteBuilder.ShowTeraOpacityStripe = 0xAF;
+            SpriteBuilder.ShowTeraOpacityBackground = 0xFF;
+            SpriteUtil.ChangeMode(SpriteBuilderMode.SpritesArtwork5668);
 
             InitializeComponent();
         }
@@ -127,7 +133,7 @@ namespace RaidCrawler
                 Seed.Text = $"{raid.Seed:X8}";
                 EC.Text = $"{raid.EC:X8}";
                 PID.Text = $"{raid.PID:X8}";
-                TeraType.Text = raid.TeraType;
+                TeraType.Text = $"{Raid.strings.types[raid.TeraType]} ({raid.TeraType})";
                 Area.Text = $"{Areas.Area[raid.Area - 1]} - Den {raid.Den}";
                 IsEvent.Checked = raid.IsEvent;
 
@@ -160,13 +166,18 @@ namespace RaidCrawler
                     blank.Species = encounter.Species;
                     blank.Form = encounter.Form;
                     Encounter9RNG.GenerateData(blank, param, EncounterCriteria.Unrestricted, raid.Seed);
+                    var img = blank.Sprite(SpriteBuilderTweak.None);
+                    img = ApplyTeraColor((byte)raid.TeraType, img, SpriteBackgroundType.BottomStripe);
+                    Sprite.Image = img;
                     Gender.Text = $"{(Gender)blank.Gender}";
                     Nature.Text = $"{Raid.strings.Natures[blank.Nature]}";
+                    Ability.Text = $"{Raid.strings.Ability[blank.Ability]}";
                 }
                 else
                 {
                     Gender.Text = string.Empty;
                     Nature.Text = string.Empty;
+                    Ability.Text = string.Empty;
                 }
 
                 if (raid.IsShiny)
@@ -204,6 +215,40 @@ namespace RaidCrawler
                     s += "/";
             }
             return s;
+        }
+
+        private static Image ApplyTeraColor(byte elementalType, Image img, SpriteBackgroundType type)
+        {
+            var color = TypeColor.GetTypeSpriteColor(elementalType);
+            var thk = SpriteBuilder.ShowTeraThicknessStripe;
+            var op = SpriteBuilder.ShowTeraOpacityStripe;
+            var bg = SpriteBuilder.ShowTeraOpacityBackground;
+            return ApplyColor(img, type, color, thk, op, bg);
+        }
+
+        private static Image ApplyColor(Image img, SpriteBackgroundType type, Color color, int thick, byte opacStripe, byte opacBack)
+        {
+            if (type == SpriteBackgroundType.BottomStripe)
+            {
+                int stripeHeight = thick; // from bottom
+                if ((uint)stripeHeight > img.Height) // clamp negative & too-high values back to height.
+                    stripeHeight = img.Height;
+
+                return ImageUtil.BlendTransparentTo(img, color, opacStripe, img.Width * 4 * (img.Height - stripeHeight));
+            }
+            if (type == SpriteBackgroundType.TopStripe)
+            {
+                int stripeHeight = thick; // from top
+                if ((uint)stripeHeight > img.Height) // clamp negative & too-high values back to height.
+                    stripeHeight = img.Height;
+
+                return ImageUtil.BlendTransparentTo(img, color, opacStripe, 0, (img.Width * 4 * stripeHeight) - 4);
+            }
+            if (type == SpriteBackgroundType.FullBackground) // full background
+            {
+                return ImageUtil.BlendTransparentTo(img, color, opacBack);
+            }
+            return img;
         }
 
         private void ButtonPrevious_Click(object sender, EventArgs e)
