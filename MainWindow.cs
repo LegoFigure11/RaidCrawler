@@ -115,7 +115,7 @@ namespace RaidCrawler
         {
             if (SwitchConnection.Connected || SkipCheckForExistingConnection)
             {
-                await SwitchConnection.SendAsync(SwitchCommand.DetachController(true), CancellationToken.None).ConfigureAwait(false);
+                if (SwitchConnection.Connected) await SwitchConnection.SendAsync(SwitchCommand.DetachController(true), CancellationToken.None).ConfigureAwait(false);
                 SwitchConnection.Disconnect();
             }
         }
