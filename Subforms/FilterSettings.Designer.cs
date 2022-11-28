@@ -36,6 +36,14 @@
             this.Stars = new System.Windows.Forms.ComboBox();
             this.ShinyCheck = new System.Windows.Forms.CheckBox();
             this.Save = new System.Windows.Forms.Button();
+            this.PerfectIVFilterGroup = new System.Windows.Forms.GroupBox();
+            this.HP = new System.Windows.Forms.CheckBox();
+            this.Atk = new System.Windows.Forms.CheckBox();
+            this.SpA = new System.Windows.Forms.CheckBox();
+            this.Def = new System.Windows.Forms.CheckBox();
+            this.SpD = new System.Windows.Forms.CheckBox();
+            this.Spe = new System.Windows.Forms.CheckBox();
+            this.PerfectIVFilterGroup.SuspendLayout();
             this.SuspendLayout();
             // 
             // Species
@@ -112,7 +120,7 @@
             // 
             // Save
             // 
-            this.Save.Location = new System.Drawing.Point(12, 147);
+            this.Save.Location = new System.Drawing.Point(12, 185);
             this.Save.Name = "Save";
             this.Save.Size = new System.Drawing.Size(210, 23);
             this.Save.TabIndex = 9;
@@ -120,11 +128,99 @@
             this.Save.UseVisualStyleBackColor = true;
             this.Save.Click += new System.EventHandler(this.Save_Click);
             // 
+            // PerfectIVFilterGroup
+            // 
+            this.PerfectIVFilterGroup.Controls.Add(this.Spe);
+            this.PerfectIVFilterGroup.Controls.Add(this.SpD);
+            this.PerfectIVFilterGroup.Controls.Add(this.SpA);
+            this.PerfectIVFilterGroup.Controls.Add(this.Def);
+            this.PerfectIVFilterGroup.Controls.Add(this.Atk);
+            this.PerfectIVFilterGroup.Controls.Add(this.HP);
+            this.PerfectIVFilterGroup.Location = new System.Drawing.Point(12, 122);
+            this.PerfectIVFilterGroup.Name = "PerfectIVFilterGroup";
+            this.PerfectIVFilterGroup.Size = new System.Drawing.Size(213, 57);
+            this.PerfectIVFilterGroup.TabIndex = 10;
+            this.PerfectIVFilterGroup.TabStop = false;
+            this.PerfectIVFilterGroup.Text = "Perfect IV Filters";
+            // 
+            // HP
+            // 
+            this.HP.AutoSize = true;
+            this.HP.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.HP.Location = new System.Drawing.Point(3, 19);
+            this.HP.Name = "HP";
+            this.HP.Size = new System.Drawing.Size(27, 33);
+            this.HP.TabIndex = 0;
+            this.HP.Text = "HP";
+            this.HP.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.HP.UseVisualStyleBackColor = true;
+            // 
+            // Atk
+            // 
+            this.Atk.AutoSize = true;
+            this.Atk.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.Atk.Location = new System.Drawing.Point(36, 19);
+            this.Atk.Name = "Atk";
+            this.Atk.Size = new System.Drawing.Size(29, 33);
+            this.Atk.TabIndex = 1;
+            this.Atk.Text = "Atk";
+            this.Atk.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.Atk.UseVisualStyleBackColor = true;
+            // 
+            // SpA
+            // 
+            this.SpA.AutoSize = true;
+            this.SpA.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.SpA.Location = new System.Drawing.Point(106, 19);
+            this.SpA.Name = "SpA";
+            this.SpA.Size = new System.Drawing.Size(32, 33);
+            this.SpA.TabIndex = 3;
+            this.SpA.Text = "SpA";
+            this.SpA.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.SpA.UseVisualStyleBackColor = true;
+            // 
+            // Def
+            // 
+            this.Def.AutoSize = true;
+            this.Def.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.Def.Location = new System.Drawing.Point(71, 19);
+            this.Def.Name = "Def";
+            this.Def.Size = new System.Drawing.Size(29, 33);
+            this.Def.TabIndex = 2;
+            this.Def.Text = "Def";
+            this.Def.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.Def.UseVisualStyleBackColor = true;
+            // 
+            // SpD
+            // 
+            this.SpD.AutoSize = true;
+            this.SpD.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.SpD.Location = new System.Drawing.Point(144, 19);
+            this.SpD.Name = "SpD";
+            this.SpD.Size = new System.Drawing.Size(32, 33);
+            this.SpD.TabIndex = 4;
+            this.SpD.Text = "SpD";
+            this.SpD.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.SpD.UseVisualStyleBackColor = true;
+            // 
+            // Spe
+            // 
+            this.Spe.AutoSize = true;
+            this.Spe.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.Spe.Location = new System.Drawing.Point(182, 19);
+            this.Spe.Name = "Spe";
+            this.Spe.Size = new System.Drawing.Size(30, 33);
+            this.Spe.TabIndex = 5;
+            this.Spe.Text = "Spe";
+            this.Spe.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.Spe.UseVisualStyleBackColor = true;
+            // 
             // FilterSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(238, 186);
+            this.ClientSize = new System.Drawing.Size(238, 220);
+            this.Controls.Add(this.PerfectIVFilterGroup);
             this.Controls.Add(this.Save);
             this.Controls.Add(this.ShinyCheck);
             this.Controls.Add(this.StarCheck);
@@ -139,6 +235,8 @@
             this.Name = "FilterSettings";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "FilterSettings";
+            this.PerfectIVFilterGroup.ResumeLayout(false);
+            this.PerfectIVFilterGroup.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -154,5 +252,12 @@
         private ComboBox Stars;
         private CheckBox ShinyCheck;
         private Button Save;
+        private GroupBox PerfectIVFilterGroup;
+        private CheckBox Spe;
+        private CheckBox SpD;
+        private CheckBox SpA;
+        private CheckBox Def;
+        private CheckBox Atk;
+        private CheckBox HP;
     }
 }

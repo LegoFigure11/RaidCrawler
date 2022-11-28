@@ -8,6 +8,7 @@ namespace RaidCrawler.Structures
         public static int? Stars = Settings.Default.StarsEnabled ? Settings.Default.StarsFilter : null;
         public static bool Shiny = Settings.Default.SearchTillShiny;
         public static Nature? Nature = Settings.Default.NatureEnabled ? (Nature)Settings.Default.NatureFilter : null;
+        public static int IVBin = Settings.Default.IVBin;
 
         public static bool IsFilterSet()
         {
@@ -57,7 +58,19 @@ namespace RaidCrawler.Structures
             return blank.Nature == (int)Nature;
         }
 
-        public static bool FilterSatisfied(Raid raid, int StoryProgress, int EventProgress) => IsSpeciesSatisfied(raid, StoryProgress, EventProgress) && IsStarsSatisfied(raid, StoryProgress) && IsShinySatisfied(raid) && IsNatureSatisfied(raid, StoryProgress, EventProgress);
+        public static bool IsIVsSatisfied(Raid raid, int StoryProgress)
+        {
+            int StarCount = Raid.GetStarCount(raid.Difficulty, StoryProgress, raid.IsBlack);
+            var ivs = raid.GetIVs(raid.Seed, StarCount - 1);
+            for (int i = 0; i < 6; i++) 
+            {
+                if (ivs[i] != 31 && ((IVBin >> i) & 1) == 1) 
+                    return false; 
+            }
+            return true;
+        }
+
+        public static bool FilterSatisfied(Raid raid, int StoryProgress, int EventProgress) => IsSpeciesSatisfied(raid, StoryProgress, EventProgress) && IsStarsSatisfied(raid, StoryProgress) && IsIVsSatisfied(raid, StoryProgress) && IsShinySatisfied(raid) && IsNatureSatisfied(raid, StoryProgress, EventProgress);
         public static bool FilterSatisfied(List<Raid> Raids, int StoryProgress, int EventProgress)
         {
             foreach (Raid raid in Raids)
