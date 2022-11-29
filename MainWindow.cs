@@ -1,12 +1,12 @@
-﻿using RaidCrawler.Properties;
+﻿using PKHeX.Core;
+using PKHeX.Drawing;
+using PKHeX.Drawing.PokeSprite;
+using RaidCrawler.Properties;
 using RaidCrawler.Structures;
 using RaidCrawler.Subforms;
 using SysBot.Base;
 using System.Data;
 using System.Net.Sockets;
-using PKHeX.Core;
-using PKHeX.Drawing;
-using PKHeX.Drawing.PokeSprite;
 using static SysBot.Base.SwitchButton;
 
 namespace RaidCrawler
@@ -78,6 +78,7 @@ namespace RaidCrawler
             ButtonReadRaids.Enabled = false;
             ButtonAdvanceDate.Enabled = false;
             ButtonViewRAM.Enabled = false;
+            ButtonDumpRaid.Enabled = false;
         }
 
         private async void Connect()
@@ -97,6 +98,7 @@ namespace RaidCrawler
                     ButtonConnect.Enabled = false;
                     ButtonDisconnect.Enabled = true;
                     ButtonViewRAM.Enabled = true;
+                    ButtonDumpRaid.Enabled = true;
                 }
                 catch (SocketException err)
                 {
@@ -158,7 +160,7 @@ namespace RaidCrawler
 
                 Difficulty.Text = raid.IsEvent ? string.Concat(Enumerable.Repeat("☆", StarCount)) : string.Concat(Enumerable.Repeat("☆", StarCount)) + $" ({raid.Difficulty})";
                 IVs.Text = IVsString(raid.GetIVs(raid.Seed, StarCount - 1));
-                
+
                 if (encounter != null)
                 {
                     var pi = PersonalTable.SV.GetFormEntry(encounter.Species, encounter.Form);
@@ -170,6 +172,7 @@ namespace RaidCrawler
                     var img = blank.Sprite(SpriteBuilderTweak.None);
                     img = ApplyTeraColor((byte)raid.TeraType, img, SpriteBackgroundType.BottomStripe);
                     Sprite.Image = img;
+                    GemIcon.Image = PKHeX.Drawing.Misc.TypeSpriteUtil.GetTypeSpriteGem((byte)raid.TeraType);
                     Gender.Text = $"{(Gender)blank.Gender}";
                     Nature.Text = $"{Raid.strings.Natures[blank.Nature]}";
                     Ability.Text = $"{Raid.strings.Ability[blank.Ability]}";
@@ -457,6 +460,15 @@ namespace RaidCrawler
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
             Disconnect();
+        }
+
+        private void ButtonDumpRaid_Click(object sender, EventArgs e)
+        {
+            if (Raids[index] != null)
+            {
+                RaidBlockViewer BlockViewerWindow = new(Raids[index].Data, offset);
+                BlockViewerWindow.ShowDialog();
+            }
         }
     }
 }

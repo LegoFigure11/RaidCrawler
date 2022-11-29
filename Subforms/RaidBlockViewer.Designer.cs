@@ -62,11 +62,11 @@
             // 
             this.LabelAbsoluteAddress.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.LabelAbsoluteAddress.AutoSize = true;
-            this.LabelAbsoluteAddress.Location = new System.Drawing.Point(127, 362);
+            this.LabelAbsoluteAddress.Location = new System.Drawing.Point(69, 362);
             this.LabelAbsoluteAddress.Name = "LabelAbsoluteAddress";
-            this.LabelAbsoluteAddress.Size = new System.Drawing.Size(102, 15);
+            this.LabelAbsoluteAddress.Size = new System.Drawing.Size(160, 15);
             this.LabelAbsoluteAddress.TabIndex = 2;
-            this.LabelAbsoluteAddress.Text = "Absolute Address:";
+            this.LabelAbsoluteAddress.Text = "Raid Block Absolute Address:";
             // 
             // RaidBlockViewer
             // 

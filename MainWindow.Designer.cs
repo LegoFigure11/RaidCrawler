@@ -79,7 +79,10 @@
             this.Sprite = new System.Windows.Forms.PictureBox();
             this.Ability = new System.Windows.Forms.TextBox();
             this.LabelAbility = new System.Windows.Forms.Label();
+            this.GemIcon = new System.Windows.Forms.PictureBox();
+            this.ButtonDumpRaid = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.Sprite)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.GemIcon)).BeginInit();
             this.SuspendLayout();
             // 
             // ButtonDisconnect
@@ -390,11 +393,11 @@
             // ButtonViewRAM
             // 
             this.ButtonViewRAM.Enabled = false;
-            this.ButtonViewRAM.Location = new System.Drawing.Point(531, 9);
+            this.ButtonViewRAM.Location = new System.Drawing.Point(545, 6);
             this.ButtonViewRAM.Name = "ButtonViewRAM";
-            this.ButtonViewRAM.Size = new System.Drawing.Size(97, 23);
+            this.ButtonViewRAM.Size = new System.Drawing.Size(83, 23);
             this.ButtonViewRAM.TabIndex = 89;
-            this.ButtonViewRAM.Text = "View Block";
+            this.ButtonViewRAM.Text = "Dump Block";
             this.ButtonViewRAM.UseVisualStyleBackColor = true;
             this.ButtonViewRAM.Click += new System.EventHandler(this.ViewRAM_Click);
             // 
@@ -562,7 +565,7 @@
             // 
             // Sprite
             // 
-            this.Sprite.Location = new System.Drawing.Point(458, -1);
+            this.Sprite.Location = new System.Drawing.Point(471, -1);
             this.Sprite.Name = "Sprite";
             this.Sprite.Size = new System.Drawing.Size(68, 56);
             this.Sprite.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
@@ -588,11 +591,33 @@
             this.LabelAbility.TabIndex = 109;
             this.LabelAbility.Text = "Ability:";
             // 
+            // GemIcon
+            // 
+            this.GemIcon.Location = new System.Drawing.Point(405, -1);
+            this.GemIcon.Name = "GemIcon";
+            this.GemIcon.Size = new System.Drawing.Size(60, 60);
+            this.GemIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.GemIcon.TabIndex = 111;
+            this.GemIcon.TabStop = false;
+            // 
+            // ButtonDumpRaid
+            // 
+            this.ButtonDumpRaid.Enabled = false;
+            this.ButtonDumpRaid.Location = new System.Drawing.Point(545, 32);
+            this.ButtonDumpRaid.Name = "ButtonDumpRaid";
+            this.ButtonDumpRaid.Size = new System.Drawing.Size(83, 23);
+            this.ButtonDumpRaid.TabIndex = 112;
+            this.ButtonDumpRaid.Text = "Dump Raid";
+            this.ButtonDumpRaid.UseVisualStyleBackColor = true;
+            this.ButtonDumpRaid.Click += new System.EventHandler(this.ButtonDumpRaid_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(640, 314);
+            this.Controls.Add(this.ButtonDumpRaid);
+            this.Controls.Add(this.GemIcon);
             this.Controls.Add(this.Ability);
             this.Controls.Add(this.LabelAbility);
             this.Controls.Add(this.Sprite);
@@ -651,6 +676,7 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainWindow_FormClosing);
             this.Load += new System.EventHandler(this.MainWindow_Load);
             ((System.ComponentModel.ISupportInitialize)(this.Sprite)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.GemIcon)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -708,5 +734,8 @@
         private PictureBox Sprite;
         private TextBox Ability;
         private Label LabelAbility;
+        private PictureBox GemIcon;
+        private Button button1;
+        private Button ButtonDumpRaid;
     }
 }
