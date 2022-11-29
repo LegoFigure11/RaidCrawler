@@ -378,7 +378,7 @@ namespace RaidCrawler
             Raid raid;
             for (uint i = RaidBlock.HEADER_SIZE; i < RaidBlock.SIZE; i += Raid.SIZE)
             {
-                ConnectionStatusText.Text = $"Reading raid block... {i / Raid.SIZE}%";
+                ConnectionStatusText.Text = $"Reading raid block... {(int)((float)((float)i / RaidBlock.SIZE) * 100)}%";
                 var Data = await SwitchConnection.ReadBytesAbsoluteAsync(offset + i, Raid.SIZE, token);
                 raid = new Raid(Data);
                 if (raid.IsValid) Raids.Add(raid);
