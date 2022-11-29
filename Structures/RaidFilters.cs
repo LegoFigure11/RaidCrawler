@@ -63,10 +63,10 @@ namespace RaidCrawler.Structures
         {
             int StarCount = Raid.GetStarCount(raid.Difficulty, StoryProgress, raid.IsBlack);
             var ivs = raid.GetIVs(raid.Seed, StarCount - 1);
-            for (int i = 0; i < 6; i++) 
+            for (int i = 0; i < 6; i++)
             {
-                if (ivs[i] != ((IVVals >> (i * 5)) & 31) && ((IVBin >> i) & 1) == 1) 
-                    return false; 
+                if (ivs[i] != ((IVVals >> (i * 5)) & 31) && ((IVBin >> i) & 1) == 1)
+                    return false;
             }
             return true;
         }
