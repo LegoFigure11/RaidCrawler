@@ -12,8 +12,8 @@ namespace RaidCrawler.Structures
         public static string Game = "Scarlet";
         public static readonly GameStrings strings = GameInfo.GetStrings(1);
 
-        public static ITeraRaid[] GemTeraRaids;
-        public static ITeraRaid[] DistTeraRaids;
+        public static ITeraRaid[]? GemTeraRaids;
+        public static ITeraRaid[]? DistTeraRaids;
 
         public readonly byte[] Data; // Raw data
 

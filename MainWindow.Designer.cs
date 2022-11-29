@@ -735,7 +735,6 @@
         private TextBox Ability;
         private Label LabelAbility;
         private PictureBox GemIcon;
-        private Button button1;
         private Button ButtonDumpRaid;
     }
 }
