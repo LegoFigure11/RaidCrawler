@@ -24,7 +24,7 @@ namespace RaidCrawler.Structures
 
         public static ITeraRaid[] GetAllEncounters(string resource)
         {
-            var encs = EncounterDist9.GetArray(Utils.GetBinaryResource("encounter_dist_paldea.pkl"));
+            var encs = EncounterDist9.GetArray(FlatbufferDumper.DumpDistributionRaids(resource));
             var result = new TeraDistribution[encs.Length];
             for (int i = 0; i < encs.Length; i++)
                 result[i] = new TeraDistribution(encs[i]);

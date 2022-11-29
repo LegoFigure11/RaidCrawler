@@ -38,7 +38,7 @@ namespace RaidCrawler
             Text = "RaidCrawler v" + v.Major + "." + v.Minor + "." + v.Build + build;
 
             Raid.GemTeraRaids = TeraEncounter.GetAllEncounters("encounter_gem_paldea.pkl");
-            Raid.DistTeraRaids = TeraDistribution.GetAllEncounters("encounter_dist_paldea.pkl");
+            Raid.DistTeraRaids = TeraDistribution.GetAllEncounters("raid_enemy_array");
             Raid.Game = Settings.Default.Game;
             SpriteBuilder.ShowTeraThicknessStripe = 0x4;
             SpriteBuilder.ShowTeraOpacityStripe = 0xAF;

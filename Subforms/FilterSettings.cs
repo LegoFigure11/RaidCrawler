@@ -8,7 +8,7 @@ namespace RaidCrawler.Subforms
         public FilterSettings()
         {
             InitializeComponent();
-            Species.DataSource = Enum.GetValues(typeof(Species));
+            Species.DataSource = Enum.GetValues(typeof(Species)).Cast<Species>().Where(z => z != PKHeX.Core.Species.MAX_COUNT).ToArray();
             Nature.DataSource = Enum.GetValues(typeof(Nature));
             Species.SelectedIndex = Properties.Settings.Default.SpeciesFilter;
             Nature.SelectedIndex = Properties.Settings.Default.NatureFilter;
