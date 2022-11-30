@@ -178,5 +178,53 @@ namespace RaidCrawler.Properties {
                 this["IVVals"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SatisfyAny {
+            get {
+                return ((bool)(this["SatisfyAny"]));
+            }
+            set {
+                this["SatisfyAny"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SpeciesFixed {
+            get {
+                return ((bool)(this["SpeciesFixed"]));
+            }
+            set {
+                this["SpeciesFixed"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool NatureFixed {
+            get {
+                return ((bool)(this["NatureFixed"]));
+            }
+            set {
+                this["NatureFixed"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool StarFixed {
+            get {
+                return ((bool)(this["StarFixed"]));
+            }
+            set {
+                this["StarFixed"] = value;
+            }
+        }
     }
 }

@@ -10,6 +10,10 @@ namespace RaidCrawler.Structures
         public static Nature? Nature = Settings.Default.NatureEnabled ? (Nature)Settings.Default.NatureFilter : null;
         public static int IVBin = Settings.Default.IVBin;
         public static int IVVals = Settings.Default.IVVals;
+        public static bool SatisfyAny = Settings.Default.SatisfyAny;
+        public static bool SpeciesFixed = Settings.Default.SpeciesFixed;
+        public static bool NatureFixed = Settings.Default.NatureFixed;
+        public static bool StarFixed = Settings.Default.StarFixed;
 
         public static bool IsFilterSet()
         {
@@ -21,7 +25,7 @@ namespace RaidCrawler.Structures
         public static bool IsSpeciesSatisfied(Raid raid, int StoryProgress, int EventProgress)
         {
             if (Species == null)
-                return true;
+                return SatisfyAny ? false : true;
             var progress = raid.IsEvent ? EventProgress : StoryProgress;
             ITeraRaid? encounter = raid.Encounter(progress);
             if (encounter == null)
@@ -32,21 +36,21 @@ namespace RaidCrawler.Structures
         public static bool IsStarsSatisfied(Raid raid, int StoryProgress)
         {
             if (Stars == null)
-                return true;
+                return SatisfyAny ? false : true;
             return (int)Stars == Raid.GetStarCount(raid.Difficulty, StoryProgress, raid.IsBlack);
         }
 
         public static bool IsShinySatisfied(Raid raid)
         {
             if (Shiny == false)
-                return true;
+                return SatisfyAny ? false : true;
             return raid.IsShiny == true;
         }
 
         public static bool IsNatureSatisfied(Raid raid, int StoryProgress, int EventProgress)
         {
             if (Nature == null)
-                return true;
+                return SatisfyAny ? false : true;
             var progress = raid.IsEvent ? EventProgress : StoryProgress;
             ITeraRaid? encounter = raid.Encounter(progress);
             if (encounter == null)
@@ -63,7 +67,8 @@ namespace RaidCrawler.Structures
 
         public static bool IsIVsSatisfied(Raid raid, int StoryProgress, int EventProgress)
         {
-            int StarCount = Raid.GetStarCount(raid.Difficulty, StoryProgress, raid.IsBlack);
+            if (IVBin == 0)
+                return SatisfyAny ? false : true;
             var progress = raid.IsEvent ? EventProgress : StoryProgress;
             ITeraRaid? encounter = raid.Encounter(progress);
             if (encounter == null)
@@ -77,7 +82,39 @@ namespace RaidCrawler.Structures
             return true;
         }
 
-        public static bool FilterSatisfied(Raid raid, int StoryProgress, int EventProgress) => IsSpeciesSatisfied(raid, StoryProgress, EventProgress) && IsStarsSatisfied(raid, StoryProgress) && IsIVsSatisfied(raid, StoryProgress, EventProgress) && IsShinySatisfied(raid) && IsNatureSatisfied(raid, StoryProgress, EventProgress);
+        public static bool FilterSatisfied(Raid raid, int StoryProgress, int EventProgress)
+        {
+            var speciessatisfied = Species != null && SpeciesFixed ? IsSpeciesSatisfied(raid, StoryProgress, EventProgress) : true;
+            var naturesatisfied = Nature != null && NatureFixed ? IsNatureSatisfied(raid, StoryProgress, EventProgress) : true;
+            var starsatisfied = Stars != null && StarFixed ? IsStarsSatisfied(raid, StoryProgress) : true;
+            var fixedsatisfied = speciessatisfied && naturesatisfied && starsatisfied;
+            if (!fixedsatisfied)
+                return false;
+            var satisfied = false;
+            if (SatisfyAny)
+            {
+                satisfied = IsIVsSatisfied(raid, StoryProgress, EventProgress) || IsShinySatisfied(raid);
+                if (!SpeciesFixed)
+                    satisfied = satisfied || IsSpeciesSatisfied(raid, StoryProgress, EventProgress);
+                if (!NatureFixed)
+                    satisfied = satisfied || IsNatureSatisfied(raid, StoryProgress, EventProgress);
+                if (!StarFixed)
+                    satisfied = satisfied || IsStarsSatisfied(raid, StoryProgress);
+
+            }
+            else
+            {
+                satisfied = IsIVsSatisfied(raid, StoryProgress, EventProgress) && IsShinySatisfied(raid);
+                if (!SpeciesFixed)
+                    satisfied = satisfied && IsSpeciesSatisfied(raid, StoryProgress, EventProgress);
+                if (!NatureFixed)
+                    satisfied = satisfied && IsNatureSatisfied(raid, StoryProgress, EventProgress);
+                if (!StarFixed)
+                    satisfied = satisfied && IsStarsSatisfied(raid, StoryProgress);
+            }
+            return satisfied;
+        }
+
         public static bool FilterSatisfied(List<Raid> Raids, int StoryProgress, int EventProgress)
         {
             foreach (Raid raid in Raids)

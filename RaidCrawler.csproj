@@ -27,7 +27,7 @@
 
   <ItemGroup>
     <PackageReference Include="FlatSharp" Version="6.3.5" />
-    <PackageReference Include="NLog" Version="5.0.5" />
+    <PackageReference Include="NLog" Version="5.1.0" />
     <PackageReference Include="PKHeX.Core" Version="22.11.26" />
   </ItemGroup>
 

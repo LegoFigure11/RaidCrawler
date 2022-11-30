@@ -37,31 +37,37 @@
             this.ShinyCheck = new System.Windows.Forms.CheckBox();
             this.Save = new System.Windows.Forms.Button();
             this.PerfectIVFilterGroup = new System.Windows.Forms.GroupBox();
+            this.IVSPE = new System.Windows.Forms.NumericUpDown();
+            this.IVSPD = new System.Windows.Forms.NumericUpDown();
+            this.IVSPA = new System.Windows.Forms.NumericUpDown();
+            this.IVDEF = new System.Windows.Forms.NumericUpDown();
+            this.IVATK = new System.Windows.Forms.NumericUpDown();
+            this.IVHP = new System.Windows.Forms.NumericUpDown();
             this.Spe = new System.Windows.Forms.CheckBox();
             this.SpD = new System.Windows.Forms.CheckBox();
             this.SpA = new System.Windows.Forms.CheckBox();
             this.Def = new System.Windows.Forms.CheckBox();
             this.Atk = new System.Windows.Forms.CheckBox();
             this.HP = new System.Windows.Forms.CheckBox();
-            this.IVHP = new System.Windows.Forms.NumericUpDown();
-            this.IVATK = new System.Windows.Forms.NumericUpDown();
-            this.IVDEF = new System.Windows.Forms.NumericUpDown();
-            this.IVSPA = new System.Windows.Forms.NumericUpDown();
-            this.IVSPD = new System.Windows.Forms.NumericUpDown();
-            this.IVSPE = new System.Windows.Forms.NumericUpDown();
+            this.SatisfyAny = new System.Windows.Forms.CheckBox();
+            this.SpeciesFixed = new System.Windows.Forms.CheckBox();
+            this.NatureFixed = new System.Windows.Forms.CheckBox();
+            this.StarFixed = new System.Windows.Forms.CheckBox();
+            this.LabelFix = new System.Windows.Forms.Label();
+            this.LabelEnabled = new System.Windows.Forms.Label();
             this.PerfectIVFilterGroup.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.IVHP)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.IVATK)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.IVDEF)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.IVSPA)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.IVSPD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.IVSPE)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.IVSPD)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.IVSPA)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.IVDEF)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.IVATK)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.IVHP)).BeginInit();
             this.SuspendLayout();
             // 
             // Species
             // 
             this.Species.FormattingEnabled = true;
-            this.Species.Location = new System.Drawing.Point(104, 12);
+            this.Species.Location = new System.Drawing.Point(104, 23);
             this.Species.Name = "Species";
             this.Species.Size = new System.Drawing.Size(121, 23);
             this.Species.TabIndex = 0;
@@ -69,7 +75,7 @@
             // SpeciesCheck
             // 
             this.SpeciesCheck.AutoSize = true;
-            this.SpeciesCheck.Location = new System.Drawing.Point(15, 14);
+            this.SpeciesCheck.Location = new System.Drawing.Point(15, 25);
             this.SpeciesCheck.Name = "SpeciesCheck";
             this.SpeciesCheck.Size = new System.Drawing.Size(65, 19);
             this.SpeciesCheck.TabIndex = 1;
@@ -79,7 +85,7 @@
             // NatureCheck
             // 
             this.NatureCheck.AutoSize = true;
-            this.NatureCheck.Location = new System.Drawing.Point(15, 43);
+            this.NatureCheck.Location = new System.Drawing.Point(15, 54);
             this.NatureCheck.Name = "NatureCheck";
             this.NatureCheck.Size = new System.Drawing.Size(62, 19);
             this.NatureCheck.TabIndex = 3;
@@ -89,7 +95,7 @@
             // Nature
             // 
             this.Nature.FormattingEnabled = true;
-            this.Nature.Location = new System.Drawing.Point(104, 41);
+            this.Nature.Location = new System.Drawing.Point(104, 52);
             this.Nature.Name = "Nature";
             this.Nature.Size = new System.Drawing.Size(121, 23);
             this.Nature.TabIndex = 2;
@@ -97,7 +103,7 @@
             // StarCheck
             // 
             this.StarCheck.AutoSize = true;
-            this.StarCheck.Location = new System.Drawing.Point(15, 72);
+            this.StarCheck.Location = new System.Drawing.Point(15, 83);
             this.StarCheck.Name = "StarCheck";
             this.StarCheck.Size = new System.Drawing.Size(51, 19);
             this.StarCheck.TabIndex = 5;
@@ -115,7 +121,7 @@
             "5",
             "6",
             "7"});
-            this.Stars.Location = new System.Drawing.Point(104, 70);
+            this.Stars.Location = new System.Drawing.Point(104, 81);
             this.Stars.Name = "Stars";
             this.Stars.Size = new System.Drawing.Size(121, 23);
             this.Stars.TabIndex = 4;
@@ -123,7 +129,7 @@
             // ShinyCheck
             // 
             this.ShinyCheck.AutoSize = true;
-            this.ShinyCheck.Location = new System.Drawing.Point(15, 97);
+            this.ShinyCheck.Location = new System.Drawing.Point(15, 119);
             this.ShinyCheck.Name = "ShinyCheck";
             this.ShinyCheck.Size = new System.Drawing.Size(119, 19);
             this.ShinyCheck.TabIndex = 6;
@@ -132,9 +138,9 @@
             // 
             // Save
             // 
-            this.Save.Location = new System.Drawing.Point(11, 218);
+            this.Save.Location = new System.Drawing.Point(12, 263);
             this.Save.Name = "Save";
-            this.Save.Size = new System.Drawing.Size(214, 23);
+            this.Save.Size = new System.Drawing.Size(228, 23);
             this.Save.TabIndex = 9;
             this.Save.Text = "Save";
             this.Save.UseVisualStyleBackColor = true;
@@ -154,18 +160,120 @@
             this.PerfectIVFilterGroup.Controls.Add(this.Def);
             this.PerfectIVFilterGroup.Controls.Add(this.Atk);
             this.PerfectIVFilterGroup.Controls.Add(this.HP);
-            this.PerfectIVFilterGroup.Location = new System.Drawing.Point(12, 122);
+            this.PerfectIVFilterGroup.Location = new System.Drawing.Point(9, 144);
             this.PerfectIVFilterGroup.Name = "PerfectIVFilterGroup";
-            this.PerfectIVFilterGroup.Size = new System.Drawing.Size(213, 90);
+            this.PerfectIVFilterGroup.Size = new System.Drawing.Size(231, 90);
             this.PerfectIVFilterGroup.TabIndex = 10;
             this.PerfectIVFilterGroup.TabStop = false;
             this.PerfectIVFilterGroup.Text = "IV Filters";
+            // 
+            // IVSPE
+            // 
+            this.IVSPE.Location = new System.Drawing.Point(193, 22);
+            this.IVSPE.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.IVSPE.Name = "IVSPE";
+            this.IVSPE.Size = new System.Drawing.Size(32, 23);
+            this.IVSPE.TabIndex = 11;
+            this.IVSPE.Value = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            // 
+            // IVSPD
+            // 
+            this.IVSPD.Location = new System.Drawing.Point(155, 22);
+            this.IVSPD.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.IVSPD.Name = "IVSPD";
+            this.IVSPD.Size = new System.Drawing.Size(32, 23);
+            this.IVSPD.TabIndex = 10;
+            this.IVSPD.Value = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            // 
+            // IVSPA
+            // 
+            this.IVSPA.Location = new System.Drawing.Point(117, 22);
+            this.IVSPA.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.IVSPA.Name = "IVSPA";
+            this.IVSPA.Size = new System.Drawing.Size(32, 23);
+            this.IVSPA.TabIndex = 9;
+            this.IVSPA.Value = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            // 
+            // IVDEF
+            // 
+            this.IVDEF.Location = new System.Drawing.Point(79, 22);
+            this.IVDEF.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.IVDEF.Name = "IVDEF";
+            this.IVDEF.Size = new System.Drawing.Size(32, 23);
+            this.IVDEF.TabIndex = 8;
+            this.IVDEF.Value = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            // 
+            // IVATK
+            // 
+            this.IVATK.Location = new System.Drawing.Point(41, 22);
+            this.IVATK.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.IVATK.Name = "IVATK";
+            this.IVATK.Size = new System.Drawing.Size(32, 23);
+            this.IVATK.TabIndex = 7;
+            this.IVATK.Value = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            // 
+            // IVHP
+            // 
+            this.IVHP.Location = new System.Drawing.Point(3, 22);
+            this.IVHP.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.IVHP.Name = "IVHP";
+            this.IVHP.Size = new System.Drawing.Size(32, 23);
+            this.IVHP.TabIndex = 6;
+            this.IVHP.Value = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
             // 
             // Spe
             // 
             this.Spe.AutoSize = true;
             this.Spe.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.Spe.Location = new System.Drawing.Point(179, 51);
+            this.Spe.Location = new System.Drawing.Point(194, 51);
             this.Spe.Name = "Spe";
             this.Spe.Size = new System.Drawing.Size(30, 33);
             this.Spe.TabIndex = 5;
@@ -177,7 +285,7 @@
             // 
             this.SpD.AutoSize = true;
             this.SpD.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.SpD.Location = new System.Drawing.Point(142, 51);
+            this.SpD.Location = new System.Drawing.Point(154, 51);
             this.SpD.Name = "SpD";
             this.SpD.Size = new System.Drawing.Size(32, 33);
             this.SpD.TabIndex = 4;
@@ -189,7 +297,7 @@
             // 
             this.SpA.AutoSize = true;
             this.SpA.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.SpA.Location = new System.Drawing.Point(106, 51);
+            this.SpA.Location = new System.Drawing.Point(115, 51);
             this.SpA.Name = "SpA";
             this.SpA.Size = new System.Drawing.Size(32, 33);
             this.SpA.TabIndex = 3;
@@ -201,7 +309,7 @@
             // 
             this.Def.AutoSize = true;
             this.Def.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.Def.Location = new System.Drawing.Point(73, 51);
+            this.Def.Location = new System.Drawing.Point(79, 51);
             this.Def.Name = "Def";
             this.Def.Size = new System.Drawing.Size(29, 33);
             this.Def.TabIndex = 2;
@@ -213,7 +321,7 @@
             // 
             this.Atk.AutoSize = true;
             this.Atk.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.Atk.Location = new System.Drawing.Point(38, 51);
+            this.Atk.Location = new System.Drawing.Point(41, 51);
             this.Atk.Name = "Atk";
             this.Atk.Size = new System.Drawing.Size(29, 33);
             this.Atk.TabIndex = 1;
@@ -233,113 +341,75 @@
             this.HP.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.HP.UseVisualStyleBackColor = true;
             // 
-            // IVHP
+            // SatisfyAny
             // 
-            this.IVHP.Location = new System.Drawing.Point(3, 22);
-            this.IVHP.Maximum = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
-            this.IVHP.Name = "IVHP";
-            this.IVHP.Size = new System.Drawing.Size(32, 23);
-            this.IVHP.TabIndex = 6;
-            this.IVHP.Value = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
+            this.SatisfyAny.AutoSize = true;
+            this.SatisfyAny.Location = new System.Drawing.Point(15, 240);
+            this.SatisfyAny.Name = "SatisfyAny";
+            this.SatisfyAny.Size = new System.Drawing.Size(226, 19);
+            this.SatisfyAny.TabIndex = 11;
+            this.SatisfyAny.Text = "Stop if any optional filters are satisfied";
+            this.SatisfyAny.UseVisualStyleBackColor = true;
             // 
-            // IVATK
+            // SpeciesFixed
             // 
-            this.IVATK.Location = new System.Drawing.Point(38, 22);
-            this.IVATK.Maximum = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
-            this.IVATK.Name = "IVATK";
-            this.IVATK.Size = new System.Drawing.Size(32, 23);
-            this.IVATK.TabIndex = 7;
-            this.IVATK.Value = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
+            this.SpeciesFixed.AutoSize = true;
+            this.SpeciesFixed.Location = new System.Drawing.Point(231, 27);
+            this.SpeciesFixed.Name = "SpeciesFixed";
+            this.SpeciesFixed.Size = new System.Drawing.Size(15, 14);
+            this.SpeciesFixed.TabIndex = 12;
+            this.SpeciesFixed.UseVisualStyleBackColor = true;
+            this.SpeciesFixed.CheckedChanged += new System.EventHandler(this.SpeciesFixed_CheckedChanged);
             // 
-            // IVDEF
+            // NatureFixed
             // 
-            this.IVDEF.Location = new System.Drawing.Point(73, 22);
-            this.IVDEF.Maximum = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
-            this.IVDEF.Name = "IVDEF";
-            this.IVDEF.Size = new System.Drawing.Size(32, 23);
-            this.IVDEF.TabIndex = 8;
-            this.IVDEF.Value = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
+            this.NatureFixed.AutoSize = true;
+            this.NatureFixed.Location = new System.Drawing.Point(231, 56);
+            this.NatureFixed.Name = "NatureFixed";
+            this.NatureFixed.Size = new System.Drawing.Size(15, 14);
+            this.NatureFixed.TabIndex = 13;
+            this.NatureFixed.UseVisualStyleBackColor = true;
+            this.NatureFixed.CheckedChanged += new System.EventHandler(this.NatureFixed_CheckedChanged);
             // 
-            // IVSPA
+            // StarFixed
             // 
-            this.IVSPA.Location = new System.Drawing.Point(108, 22);
-            this.IVSPA.Maximum = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
-            this.IVSPA.Name = "IVSPA";
-            this.IVSPA.Size = new System.Drawing.Size(32, 23);
-            this.IVSPA.TabIndex = 9;
-            this.IVSPA.Value = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
+            this.StarFixed.AutoSize = true;
+            this.StarFixed.Location = new System.Drawing.Point(231, 85);
+            this.StarFixed.Name = "StarFixed";
+            this.StarFixed.Size = new System.Drawing.Size(15, 14);
+            this.StarFixed.TabIndex = 14;
+            this.StarFixed.UseVisualStyleBackColor = true;
+            this.StarFixed.CheckedChanged += new System.EventHandler(this.StarFixed_CheckedChanged);
             // 
-            // IVSPD
+            // LabelFix
             // 
-            this.IVSPD.Location = new System.Drawing.Point(143, 22);
-            this.IVSPD.Maximum = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
-            this.IVSPD.Name = "IVSPD";
-            this.IVSPD.Size = new System.Drawing.Size(32, 23);
-            this.IVSPD.TabIndex = 10;
-            this.IVSPD.Value = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
+            this.LabelFix.AutoSize = true;
+            this.LabelFix.Location = new System.Drawing.Point(212, 5);
+            this.LabelFix.Name = "LabelFix";
+            this.LabelFix.Size = new System.Drawing.Size(35, 15);
+            this.LabelFix.TabIndex = 15;
+            this.LabelFix.Text = "Fixed";
             // 
-            // IVSPE
+            // LabelEnabled
             // 
-            this.IVSPE.Location = new System.Drawing.Point(178, 22);
-            this.IVSPE.Maximum = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
-            this.IVSPE.Name = "IVSPE";
-            this.IVSPE.Size = new System.Drawing.Size(32, 23);
-            this.IVSPE.TabIndex = 11;
-            this.IVSPE.Value = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
+            this.LabelEnabled.AutoSize = true;
+            this.LabelEnabled.Location = new System.Drawing.Point(12, 5);
+            this.LabelEnabled.Name = "LabelEnabled";
+            this.LabelEnabled.Size = new System.Drawing.Size(42, 15);
+            this.LabelEnabled.TabIndex = 16;
+            this.LabelEnabled.Text = "Enable";
             // 
             // FilterSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(238, 252);
+            this.ClientSize = new System.Drawing.Size(252, 295);
+            this.Controls.Add(this.LabelEnabled);
+            this.Controls.Add(this.LabelFix);
+            this.Controls.Add(this.StarFixed);
+            this.Controls.Add(this.NatureFixed);
+            this.Controls.Add(this.SpeciesFixed);
+            this.Controls.Add(this.SatisfyAny);
             this.Controls.Add(this.PerfectIVFilterGroup);
             this.Controls.Add(this.Save);
             this.Controls.Add(this.ShinyCheck);
@@ -357,12 +427,12 @@
             this.Text = "FilterSettings";
             this.PerfectIVFilterGroup.ResumeLayout(false);
             this.PerfectIVFilterGroup.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.IVHP)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.IVATK)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.IVDEF)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.IVSPA)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.IVSPD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.IVSPE)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.IVSPD)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.IVSPA)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.IVDEF)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.IVATK)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.IVHP)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -391,5 +461,11 @@
         private NumericUpDown IVDEF;
         private NumericUpDown IVATK;
         private NumericUpDown IVHP;
+        private CheckBox SatisfyAny;
+        private CheckBox SpeciesFixed;
+        private CheckBox NatureFixed;
+        private CheckBox StarFixed;
+        private Label LabelFix;
+        private Label LabelEnabled;
     }
 }

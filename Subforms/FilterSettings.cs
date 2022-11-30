@@ -5,20 +5,32 @@ namespace RaidCrawler.Subforms
 {
     public partial class FilterSettings : Form
     {
+        private static Color Highlight = Color.YellowGreen;
+        private static Color DefaultColor;
         public FilterSettings()
         {
             InitializeComponent();
+            var settings = Properties.Settings.Default;
             Species.DataSource = Enum.GetValues(typeof(Species)).Cast<Species>().Where(z => z != PKHeX.Core.Species.MAX_COUNT).ToArray();
             Nature.DataSource = Enum.GetValues(typeof(Nature));
-            Species.SelectedIndex = Properties.Settings.Default.SpeciesFilter;
-            Nature.SelectedIndex = Properties.Settings.Default.NatureFilter;
-            Stars.SelectedIndex = Properties.Settings.Default.StarsFilter;
-            SpeciesCheck.Checked = Properties.Settings.Default.SpeciesEnabled;
-            NatureCheck.Checked = Properties.Settings.Default.NatureEnabled;
-            StarCheck.Checked = Properties.Settings.Default.StarsEnabled;
-            ShinyCheck.Checked = Properties.Settings.Default.SearchTillShiny;
+            Species.SelectedIndex = settings.SpeciesFilter;
+            Nature.SelectedIndex = settings.NatureFilter;
+            Stars.SelectedIndex = settings.StarsFilter;
+            SpeciesCheck.Checked = settings.SpeciesEnabled;
+            NatureCheck.Checked = settings.NatureEnabled;
+            StarCheck.Checked = settings.StarsEnabled;
+            ShinyCheck.Checked = settings.SearchTillShiny;
+            SatisfyAny.Checked = settings.SatisfyAny;
+            SpeciesFixed.Checked = settings.SpeciesFixed;
+            NatureFixed.Checked = settings.NatureFixed;
+            StarFixed.Checked = settings.StarFixed;
 
-            var ivbin = Properties.Settings.Default.IVBin;
+            // highlight fixed components
+            Species.BackColor = settings.SpeciesFixed ? Highlight : DefaultColor;
+            Nature.BackColor = settings.NatureFixed ? Highlight : DefaultColor;
+            StarFixed.BackColor = settings.StarFixed ? Highlight : DefaultColor;
+
+            var ivbin = settings.IVBin;
             HP.Checked = (ivbin & 1) == 1;
             Atk.Checked = ((ivbin >> 1) & 1) == 1;
             Def.Checked = ((ivbin >> 2) & 1) == 1;
@@ -26,7 +38,7 @@ namespace RaidCrawler.Subforms
             SpD.Checked = ((ivbin >> 4) & 1) == 1;
             Spe.Checked = ((ivbin >> 5) & 1) == 1;
 
-            var ivvals = Properties.Settings.Default.IVVals;
+            var ivvals = settings.IVVals;
             IVHP.Value = ivvals & 31;
             IVATK.Value = (ivvals >> 5) & 31;
             IVDEF.Value = (ivvals >> 10) & 31;
@@ -49,6 +61,10 @@ namespace RaidCrawler.Subforms
             Properties.Settings.Default.NatureEnabled = NatureCheck.Checked;
             Properties.Settings.Default.StarsEnabled = StarCheck.Checked;
             Properties.Settings.Default.SearchTillShiny = ShinyCheck.Checked;
+            Properties.Settings.Default.SatisfyAny = SatisfyAny.Checked;
+            Properties.Settings.Default.SpeciesFixed = SpeciesFixed.Checked;
+            Properties.Settings.Default.NatureFixed = NatureFixed.Checked;
+            Properties.Settings.Default.StarFixed = StarFixed.Checked;
             Properties.Settings.Default.IVBin = ivbin;
             Properties.Settings.Default.IVVals = ivvals;
             Properties.Settings.Default.Save();
@@ -57,6 +73,10 @@ namespace RaidCrawler.Subforms
             RaidFilters.Nature = NatureCheck.Checked ? (Nature)Nature.SelectedIndex : null;
             RaidFilters.Stars = StarCheck.Checked ? Stars.SelectedIndex + 1 : null;
             RaidFilters.Shiny = ShinyCheck.Checked;
+            RaidFilters.SatisfyAny = SatisfyAny.Checked;
+            RaidFilters.SpeciesFixed = SpeciesFixed.Checked;
+            RaidFilters.NatureFixed = NatureFixed.Checked;
+            RaidFilters.StarFixed = StarFixed.Checked;
             RaidFilters.IVBin = ivbin;
             RaidFilters.IVVals = ivvals;
 
@@ -64,5 +84,20 @@ namespace RaidCrawler.Subforms
         }
 
         private static int ToInt(bool b) => b ? 1 : 0;
+
+        private void SpeciesFixed_CheckedChanged(object sender, EventArgs e)
+        {
+            Species.BackColor = SpeciesFixed.Checked ? Highlight : DefaultColor;
+        }
+
+        private void NatureFixed_CheckedChanged(object sender, EventArgs e)
+        {
+            Nature.BackColor = NatureFixed.Checked ? Highlight : DefaultColor;
+        }
+
+        private void StarFixed_CheckedChanged(object sender, EventArgs e)
+        {
+            StarFixed.BackColor = StarFixed.Checked ? Highlight : DefaultColor;
+        }
     }
 }
