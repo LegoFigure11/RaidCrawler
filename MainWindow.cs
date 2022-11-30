@@ -135,73 +135,54 @@ namespace RaidCrawler
                 Raid raid = Raids[index];
                 Seed.Text = $"{raid.Seed:X8}";
                 EC.Text = $"{raid.EC:X8}";
-                PID.Text = $"{raid.PID:X8}";
+                PID.Text = $"{raid.PID:X8}{(raid.IsShiny ? " (☆)": string.Empty)}";
                 TeraType.Text = $"{Raid.strings.types[raid.TeraType]} ({raid.TeraType})";
                 Area.Text = $"{Areas.Area[raid.Area - 1]} - Den {raid.Den}";
                 IsEvent.Checked = raid.IsEvent;
 
                 int StarCount = Raid.GetStarCount(raid.Difficulty, Progress.SelectedIndex, raid.IsBlack);
-                ITeraRaid? encounter = raid.IsEvent ? TeraDistribution.GetEncounter(raid.Seed, EventProgress.SelectedIndex) : TeraEncounter.GetEncounter(raid.Seed, Progress.SelectedIndex, raid.IsBlack);
-                Species.Text = encounter == null ? "Unknown" : $"{Raid.strings.Species[encounter.Species]} ({encounter.Species})";
-                if (encounter != null)
-                {
-                    Move1.Text = Raid.strings.Move[encounter.Move1];
-                    Move2.Text = Raid.strings.Move[encounter.Move2];
-                    Move3.Text = Raid.strings.Move[encounter.Move3];
-                    Move4.Text = Raid.strings.Move[encounter.Move4];
-                }
-                else
-                {
-                    Move1.Text = string.Empty;
-                    Move2.Text = string.Empty;
-                    Move3.Text = string.Empty;
-                    Move4.Text = string.Empty;
-                }
-
                 Difficulty.Text = raid.IsEvent ? string.Concat(Enumerable.Repeat("☆", StarCount)) : string.Concat(Enumerable.Repeat("☆", StarCount)) + $" ({raid.Difficulty})";
-                IVs.Text = IVsString(raid.GetIVs(raid.Seed, StarCount - 1));
+                
+                var progress = raid.IsEvent ? EventProgress.SelectedIndex : Progress.SelectedIndex;
+                ITeraRaid? encounter = raid.Encounter(progress);
 
                 if (encounter != null)
                 {
                     var pi = PersonalTable.SV.GetFormEntry(encounter.Species, encounter.Form);
-                    var param = new GenerateParam9((byte)pi.Gender, (byte)(StarCount - 1), 1, 0, 0, 0, encounter.Ability, encounter.Shiny);
+                    var param = new GenerateParam9((byte)pi.Gender, encounter.FlawlessIVCount, 1, 0, 0, 0, encounter.Ability, encounter.Shiny);
                     var blank = new PK9();
                     blank.Species = encounter.Species;
                     blank.Form = encounter.Form;
                     Encounter9RNG.GenerateData(blank, param, EncounterCriteria.Unrestricted, raid.Seed);
                     var img = blank.Sprite(SpriteBuilderTweak.None);
                     img = ApplyTeraColor((byte)raid.TeraType, img, SpriteBackgroundType.BottomStripe);
+                    Species.Text = $"{Raid.strings.Species[encounter.Species]} ({encounter.Species})";
                     Sprite.Image = img;
                     GemIcon.Image = PKHeX.Drawing.Misc.TypeSpriteUtil.GetTypeSpriteGem((byte)raid.TeraType);
                     Gender.Text = $"{(Gender)blank.Gender}";
                     Nature.Text = $"{Raid.strings.Natures[blank.Nature]}";
                     Ability.Text = $"{Raid.strings.Ability[blank.Ability]}";
+                    Move1.Text = Raid.strings.Move[encounter.Move1];
+                    Move2.Text = Raid.strings.Move[encounter.Move2];
+                    Move3.Text = Raid.strings.Move[encounter.Move3];
+                    Move4.Text = Raid.strings.Move[encounter.Move4];
+                    IVs.Text = IVsString(raid.GetIVs(raid.Seed, encounter.FlawlessIVCount));
                 }
                 else
                 {
+                    Species.Text = string.Empty;
+                    Move1.Text = string.Empty;
+                    Move2.Text = string.Empty;
+                    Move3.Text = string.Empty;
+                    Move4.Text = string.Empty;
+                    IVs.Text = string.Empty;
                     Gender.Text = string.Empty;
                     Nature.Text = string.Empty;
                     Ability.Text = string.Empty;
                 }
 
-                if (raid.IsShiny)
-                {
-                    PID.BackColor = Color.Gold;
-                    PID.Text += " (☆)";
-                }
-                else
-                {
-                    PID.BackColor = DefaultColor;
-                }
-
-                if (IVs.Text is "31/31/31/31/31/31")
-                {
-                    IVs.BackColor = Color.YellowGreen;
-                }
-                else
-                {
-                    IVs.BackColor = DefaultColor;
-                }
+                PID.BackColor = raid.IsShiny ? Color.Gold : DefaultColor;
+                IVs.BackColor = IVs.Text is "31/31/31/31/31/31" ? Color.YellowGreen : DefaultColor;
             }
             else
             {

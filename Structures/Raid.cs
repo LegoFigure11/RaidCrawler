@@ -34,6 +34,7 @@ namespace RaidCrawler.Structures
         // Derived Values
         public virtual int TeraType => GetTeraType(Seed);
         public virtual uint Difficulty => GetDifficulty(Seed);
+        public ITeraRaid? Encounter(int Stage) => IsEvent ? TeraDistribution.GetEncounter(Seed, Stage) : TeraEncounter.GetEncounter(Seed, Stage, IsBlack);
 
         public virtual uint EC => GenericRaidData[0];
         /* public virtual uint TIDSID => GenericRaidData[1]; */ // Unneeded

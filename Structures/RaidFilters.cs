@@ -22,7 +22,8 @@ namespace RaidCrawler.Structures
         {
             if (Species == null)
                 return true;
-            ITeraRaid? encounter = raid.IsEvent ? TeraDistribution.GetEncounter(raid.Seed, EventProgress) : TeraEncounter.GetEncounter(raid.Seed, StoryProgress, raid.IsBlack);
+            var progress = raid.IsEvent ? EventProgress : StoryProgress;
+            ITeraRaid? encounter = raid.Encounter(progress);
             if (encounter == null)
                 return false;
             return encounter.Species == (int)Species;
@@ -46,7 +47,8 @@ namespace RaidCrawler.Structures
         {
             if (Nature == null)
                 return true;
-            ITeraRaid? encounter = raid.IsEvent ? TeraDistribution.GetEncounter(raid.Seed, EventProgress) : TeraEncounter.GetEncounter(raid.Seed, StoryProgress, raid.IsBlack);
+            var progress = raid.IsEvent ? EventProgress : StoryProgress;
+            ITeraRaid? encounter = raid.Encounter(progress);
             if (encounter == null)
                 return false;
             var pi = PersonalTable.SV.GetFormEntry(encounter.Species, encounter.Form);
@@ -59,10 +61,14 @@ namespace RaidCrawler.Structures
             return blank.Nature == (int)Nature;
         }
 
-        public static bool IsIVsSatisfied(Raid raid, int StoryProgress)
+        public static bool IsIVsSatisfied(Raid raid, int StoryProgress, int EventProgress)
         {
             int StarCount = Raid.GetStarCount(raid.Difficulty, StoryProgress, raid.IsBlack);
-            var ivs = raid.GetIVs(raid.Seed, StarCount - 1);
+            var progress = raid.IsEvent ? EventProgress : StoryProgress;
+            ITeraRaid? encounter = raid.Encounter(progress);
+            if (encounter == null)
+                return false;
+            var ivs = raid.GetIVs(raid.Seed, encounter.FlawlessIVCount);
             for (int i = 0; i < 6; i++)
             {
                 if (ivs[i] != ((IVVals >> (i * 5)) & 31) && ((IVBin >> i) & 1) == 1)
@@ -71,7 +77,7 @@ namespace RaidCrawler.Structures
             return true;
         }
 
-        public static bool FilterSatisfied(Raid raid, int StoryProgress, int EventProgress) => IsSpeciesSatisfied(raid, StoryProgress, EventProgress) && IsStarsSatisfied(raid, StoryProgress) && IsIVsSatisfied(raid, StoryProgress) && IsShinySatisfied(raid) && IsNatureSatisfied(raid, StoryProgress, EventProgress);
+        public static bool FilterSatisfied(Raid raid, int StoryProgress, int EventProgress) => IsSpeciesSatisfied(raid, StoryProgress, EventProgress) && IsStarsSatisfied(raid, StoryProgress) && IsIVsSatisfied(raid, StoryProgress, EventProgress) && IsShinySatisfied(raid) && IsNatureSatisfied(raid, StoryProgress, EventProgress);
         public static bool FilterSatisfied(List<Raid> Raids, int StoryProgress, int EventProgress)
         {
             foreach (Raid raid in Raids)
