@@ -135,14 +135,14 @@ namespace RaidCrawler
                 Raid raid = Raids[index];
                 Seed.Text = $"{raid.Seed:X8}";
                 EC.Text = $"{raid.EC:X8}";
-                PID.Text = $"{raid.PID:X8}{(raid.IsShiny ? " (☆)": string.Empty)}";
+                PID.Text = $"{raid.PID:X8}{(raid.IsShiny ? " (☆)" : string.Empty)}";
                 TeraType.Text = $"{Raid.strings.types[raid.TeraType]} ({raid.TeraType})";
                 Area.Text = $"{Areas.Area[raid.Area - 1]} - Den {raid.Den}";
                 IsEvent.Checked = raid.IsEvent;
 
                 int StarCount = Raid.GetStarCount(raid.Difficulty, Progress.SelectedIndex, raid.IsBlack);
                 Difficulty.Text = raid.IsEvent ? string.Concat(Enumerable.Repeat("☆", StarCount)) : string.Concat(Enumerable.Repeat("☆", StarCount)) + $" ({raid.Difficulty})";
-                
+
                 var progress = raid.IsEvent ? EventProgress.SelectedIndex : Progress.SelectedIndex;
                 ITeraRaid? encounter = raid.Encounter(progress);
 
@@ -369,7 +369,7 @@ namespace RaidCrawler
             }
 
             ConnectionStatusText.Text = "Completed!";
-            LabelLoadedRaids.Text = $"Loaded Raids: {Raids.Count} | Shiny Raids: {Raids.Where(raid => raid.IsShiny).Count()}";
+            LabelLoadedRaids.Text = $"Raids: {Raids.Count} | Shiny: {Raids.Where(raid => raid.IsShiny).Count()}";
             if (Raids.Count > 0)
             {
                 ButtonPrevious.Enabled = true;

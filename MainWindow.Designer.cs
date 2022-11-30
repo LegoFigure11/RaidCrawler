@@ -154,9 +154,9 @@
             this.LabelLoadedRaids.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.LabelLoadedRaids.Location = new System.Drawing.Point(220, 9);
             this.LabelLoadedRaids.Name = "LabelLoadedRaids";
-            this.LabelLoadedRaids.Size = new System.Drawing.Size(89, 15);
+            this.LabelLoadedRaids.Size = new System.Drawing.Size(97, 15);
             this.LabelLoadedRaids.TabIndex = 12;
-            this.LabelLoadedRaids.Text = "Loaded Raids: 0";
+            this.LabelLoadedRaids.Text = "Raids: 0 | Shiny: 0";
             // 
             // TeraType
             // 
