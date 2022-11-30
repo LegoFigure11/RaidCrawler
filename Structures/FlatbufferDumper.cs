@@ -1,6 +1,5 @@
-﻿using System.Buffers.Binary;
-using FlatSharp;
-using FlatSharp.Attributes;
+﻿using FlatSharp;
+using System.Buffers.Binary;
 
 namespace RaidCrawler.Structures
 {

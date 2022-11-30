@@ -1,8 +1,5 @@
-﻿using System;
+﻿using FlatSharp.Attributes;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
-using FlatSharp.Attributes;
 // ReSharper disable UnusedMember.Global
 // ReSharper disable ClassNeverInstantiated.Global
 // ReSharper disable UnusedType.Global
