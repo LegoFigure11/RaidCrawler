@@ -353,7 +353,7 @@
             this.Difficulty.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Difficulty.Name = "Difficulty";
             this.Difficulty.ReadOnly = true;
-            this.Difficulty.Size = new System.Drawing.Size(95, 22);
+            this.Difficulty.Size = new System.Drawing.Size(83, 22);
             this.Difficulty.TabIndex = 86;
             // 
             // LabelDifficulty
@@ -575,17 +575,17 @@
             // Ability
             // 
             this.Ability.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Ability.Location = new System.Drawing.Point(529, 173);
+            this.Ability.Location = new System.Drawing.Point(494, 173);
             this.Ability.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Ability.Name = "Ability";
             this.Ability.ReadOnly = true;
-            this.Ability.Size = new System.Drawing.Size(97, 22);
+            this.Ability.Size = new System.Drawing.Size(132, 22);
             this.Ability.TabIndex = 110;
             // 
             // LabelAbility
             // 
             this.LabelAbility.AutoSize = true;
-            this.LabelAbility.Location = new System.Drawing.Point(478, 176);
+            this.LabelAbility.Location = new System.Drawing.Point(443, 176);
             this.LabelAbility.Name = "LabelAbility";
             this.LabelAbility.Size = new System.Drawing.Size(44, 15);
             this.LabelAbility.TabIndex = 109;
