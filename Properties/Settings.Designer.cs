@@ -12,7 +12,7 @@ namespace RaidCrawler.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.1.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.3.0.0")]
     public sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -260,6 +260,79 @@ namespace RaidCrawler.Properties {
             }
             set {
                 this["TeraEnabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool CfgFocusWindow {
+            get {
+                return ((bool)(this["CfgFocusWindow"]));
+            }
+            set {
+                this["CfgFocusWindow"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool CfgPlaySound {
+            get {
+                return ((bool)(this["CfgPlaySound"]));
+            }
+            set {
+                this["CfgPlaySound"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool CfgEnableAlertWindow {
+            get {
+                return ((bool)(this["CfgEnableAlertWindow"]));
+            }
+            set {
+                this["CfgEnableAlertWindow"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Match found! Hold Shift and click one of the arrow keys to jump to the matching r" +
+            "esult.")]
+        public string CfgAlertWindowMessage {
+            get {
+                return ((string)(this["CfgAlertWindowMessage"]));
+            }
+            set {
+                this["CfgAlertWindowMessage"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public decimal CfgBaseDelay {
+            get {
+                return ((decimal)(this["CfgBaseDelay"]));
+            }
+            set {
+                this["CfgBaseDelay"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("40")]
+        public decimal CfgSystemDDownPresses {
+            get {
+                return ((decimal)(this["CfgSystemDDownPresses"]));
+            }
+            set {
+                this["CfgSystemDDownPresses"] = value;
             }
         }
     }

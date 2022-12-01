@@ -81,6 +81,7 @@
             this.LabelAbility = new System.Windows.Forms.Label();
             this.GemIcon = new System.Windows.Forms.PictureBox();
             this.ButtonDumpRaid = new System.Windows.Forms.Button();
+            this.ConfigSettings = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.Sprite)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GemIcon)).BeginInit();
             this.SuspendLayout();
@@ -556,7 +557,7 @@
             // 
             // StopFilter
             // 
-            this.StopFilter.Location = new System.Drawing.Point(13, 279);
+            this.StopFilter.Location = new System.Drawing.Point(13, 250);
             this.StopFilter.Name = "StopFilter";
             this.StopFilter.Size = new System.Drawing.Size(199, 23);
             this.StopFilter.TabIndex = 107;
@@ -612,11 +613,22 @@
             this.ButtonDumpRaid.UseVisualStyleBackColor = true;
             this.ButtonDumpRaid.Click += new System.EventHandler(this.ButtonDumpRaid_Click);
             // 
+            // ConfigSettings
+            // 
+            this.ConfigSettings.Location = new System.Drawing.Point(13, 279);
+            this.ConfigSettings.Name = "ConfigSettings";
+            this.ConfigSettings.Size = new System.Drawing.Size(199, 23);
+            this.ConfigSettings.TabIndex = 115;
+            this.ConfigSettings.Text = "Open Settings";
+            this.ConfigSettings.UseVisualStyleBackColor = true;
+            this.ConfigSettings.Click += new System.EventHandler(this.ConfigSettings_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(640, 314);
+            this.Controls.Add(this.ConfigSettings);
             this.Controls.Add(this.ButtonDumpRaid);
             this.Controls.Add(this.GemIcon);
             this.Controls.Add(this.Ability);
@@ -737,5 +749,6 @@
         private Label LabelAbility;
         private PictureBox GemIcon;
         private Button ButtonDumpRaid;
+        private Button ConfigSettings;
     }
 }

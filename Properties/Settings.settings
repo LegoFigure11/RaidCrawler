@@ -62,5 +62,23 @@
     <Setting Name="TeraEnabled" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="CfgFocusWindow" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="CfgPlaySound" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="CfgEnableAlertWindow" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="CfgAlertWindowMessage" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Match found! Hold Shift and click one of the arrow keys to jump to the matching result.</Value>
+    </Setting>
+    <Setting Name="CfgBaseDelay" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="CfgSystemDDownPresses" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">40</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
