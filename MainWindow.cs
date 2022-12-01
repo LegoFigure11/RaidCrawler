@@ -27,6 +27,7 @@ namespace RaidCrawler
         private bool HideSeed = false;
 
         private Color DefaultColor;
+        private FormWindowState _WindowState;
 
         public MainWindow()
         {
@@ -114,7 +115,7 @@ namespace RaidCrawler
             }
         }
 
-        private async void Disconnect()
+        private static async void Disconnect()
         {
             if (SwitchConnection.Connected)
             {
@@ -296,24 +297,29 @@ namespace RaidCrawler
         private async Task AdvanceDate(CancellationToken token)
         {
             ConnectionStatusText.Text = "Changing date...";
-            await Click(LSTICK, 0_050, token).ConfigureAwait(false); // Sometimes it seems like the first command doesn't go through so send this just in case
+            int BaseDelay = (int)Settings.Default.CfgBaseDelay;
+            await Click(LSTICK, 0_050 + BaseDelay, token).ConfigureAwait(false); // Sometimes it seems like the first command doesn't go through so send this just in case
             // HOME Menu
-            await Click(HOME, 1_800, token).ConfigureAwait(false);
-            await Click(DDOWN, 0_200, token).ConfigureAwait(false);
-            for (int i = 0; i < 5; i++) await Click(DRIGHT, 0_100, token).ConfigureAwait(false);
-            await Click(A, 1_000, token).ConfigureAwait(false);
+            await Click(HOME, 1_800 + BaseDelay, token).ConfigureAwait(false);
+            await Click(DDOWN, 0_200 + BaseDelay, token).ConfigureAwait(false);
+            for (int i = 0; i < 5; i++) await Click(DRIGHT, 0_100 + BaseDelay, token).ConfigureAwait(false);
+            await Click(A, 1_000 + BaseDelay, token).ConfigureAwait(false);
             // Scroll to bottom
-            await PressAndHold(DDOWN, 1_700, 0, token).ConfigureAwait(false);
-            await Click(DRIGHT, 0_200, token).ConfigureAwait(false);
-            for (int i = 0; i < 40; i++) await Click(DDOWN, 0_100, token).ConfigureAwait(false);
-            await Click(A, 0_800, token).ConfigureAwait(false);
-            for (int i = 0; i < 2; i++) await Click(DDOWN, 0_200, token).ConfigureAwait(false);
-            await Click(A, 0_500, token).ConfigureAwait(false);
-            await Click(DUP, 0_200, token).ConfigureAwait(false);
-            for (int i = 0; i < 6; i++) await Click(DRIGHT, 0_100, token).ConfigureAwait(false);
-            await Click(A, 0_500, token).ConfigureAwait(false);
-            await Click(HOME, 2_500, token).ConfigureAwait(false);
-            await Click(HOME, 4_000, token).ConfigureAwait(false);
+            await PressAndHold(DDOWN, 1_700, BaseDelay, token).ConfigureAwait(false);
+            // Navigate to "Date and Time"
+            await Click(DRIGHT, 0_200 + BaseDelay, token).ConfigureAwait(false);
+            for (int i = 0; i < Settings.Default.CfgSystemDDownPresses; i++) await Click(DDOWN, 0_100 + BaseDelay, token).ConfigureAwait(false);
+            await Click(A, 0_800 + BaseDelay, token).ConfigureAwait(false);
+            // Navigate to Change Date/Time
+            for (int i = 0; i < 2; i++) await Click(DDOWN, 0_200 + BaseDelay, token).ConfigureAwait(false);
+            await Click(A, 0_500 + BaseDelay, token).ConfigureAwait(false);
+            // Change the date
+            await Click(DUP, 0_200 + BaseDelay, token).ConfigureAwait(false);
+            for (int i = 0; i < 6; i++) await Click(DRIGHT, 0_100 + BaseDelay, token).ConfigureAwait(false);
+            await Click(A, 0_500 + BaseDelay, token).ConfigureAwait(false);
+            // Return to game
+            await Click(HOME, 2_500 + BaseDelay, token).ConfigureAwait(false);
+            await Click(HOME, 4_000 + BaseDelay, token).ConfigureAwait(false);
         }
 
         private async void ButtonAdvanceDate_Click(object sender, EventArgs e)
@@ -322,11 +328,20 @@ namespace RaidCrawler
             {
                 ButtonReadRaids.Enabled = false;
                 ButtonAdvanceDate.Enabled = false;
+                _WindowState = WindowState;
                 do
                 {
                     await AdvanceDate(CancellationToken.None);
                     await ReadRaids(CancellationToken.None);
                 } while (!RaidFilters.FilterSatisfied(Raids, Progress.SelectedIndex, EventProgress.SelectedIndex));
+                if (Settings.Default.CfgPlaySound) System.Media.SystemSounds.Asterisk.Play();
+                if (Settings.Default.CfgFocusWindow)
+                {
+                    WindowState = _WindowState;
+                    Activate();
+                }
+                if (Settings.Default.CfgEnableAlertWindow) MessageBox.Show(Settings.Default.CfgAlertWindowMessage, "Result found!", MessageBoxButtons.OK);
+
                 ButtonReadRaids.Enabled = true;
                 ButtonAdvanceDate.Enabled = true;
             }
@@ -375,20 +390,14 @@ namespace RaidCrawler
             {
                 ButtonPrevious.Enabled = true;
                 ButtonNext.Enabled = true;
+                DisplayRaid(index);
             }
             else
             {
                 ButtonPrevious.Enabled = false;
                 ButtonNext.Enabled = false;
-            }
+                if (Raids.Count > RaidBlock.MAX_COUNT || Raids.Count == 0) MessageBox.Show("Bad read, ensure there are no cheats running or anything else that might shift RAM (Edizon, overlays, etc.), then reboot your console and try again.");
 
-            if (Raids.Count > 0)
-            {
-                DisplayRaid(index);
-            }
-            else if (Raids.Count > RaidBlock.MAX_COUNT || Raids.Count == 0)
-            {
-                MessageBox.Show("Bad read, ensure there are no cheats running or anything else that might shift RAM (Edizon, overlays, etc.), then reboot your console and try again.");
             }
         }
 
@@ -459,9 +468,15 @@ namespace RaidCrawler
                 return;
             if (Raids.Count <= index)
                 return;
-            Seed.Text = HideSeed ? $"{ Raids[index].Seed:X8}" : "Hidden";
+            Seed.Text = HideSeed ? $"{Raids[index].Seed:X8}" : "Hidden";
             HideSeed = !HideSeed;
             ActiveControl = null;
+        }
+
+        private void ConfigSettings_Click(object sender, EventArgs e)
+        {
+            var form = new ConfigWindow();
+            form.ShowDialog();
         }
     }
 }
