@@ -134,9 +134,9 @@ namespace RaidCrawler
             if (Raids.Count > index)
             {
                 Raid raid = Raids[index];
-                Seed.Text = HideSeed ? "Hidden" : $"{raid.Seed:X8}";
-                EC.Text = $"{raid.EC:X8}";
-                PID.Text = $"{raid.PID:X8}{(raid.IsShiny ? " (☆)" : string.Empty)}";
+                Seed.Text = !HideSeed ? $"{raid.Seed:X8}" : "Hidden";
+                EC.Text = !HideSeed ? $"{raid.EC:X8}" : "Hidden";
+                PID.Text = (!HideSeed ? $"{raid.PID:X8}" : "Hidden") + $"{(raid.IsShiny ? " (☆)" : string.Empty)}";
                 TeraType.Text = $"{Raid.strings.types[raid.TeraType]} ({raid.TeraType})";
                 Area.Text = $"{Areas.Area[raid.Area - 1]} - Den {raid.Den}";
                 IsEvent.Checked = raid.IsEvent;
@@ -459,7 +459,10 @@ namespace RaidCrawler
                 return;
             if (Raids.Count <= index)
                 return;
-            Seed.Text = HideSeed ? $"{ Raids[index].Seed:X8}" : "Hidden";
+            var raid = Raids[index];
+            Seed.Text = HideSeed ? $"{raid.Seed:X8}" : "Hidden";
+            EC.Text = HideSeed ? $"{raid.EC:X8}" : "Hidden";
+            PID.Text = (HideSeed ? $"{raid.PID:X8}" : "Hidden") + $"{(raid.IsShiny ? " (☆)" : string.Empty)}";
             HideSeed = !HideSeed;
             ActiveControl = null;
         }

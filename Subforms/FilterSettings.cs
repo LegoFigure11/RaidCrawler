@@ -50,6 +50,22 @@ namespace RaidCrawler.Subforms
             IVSPA.Value = (ivvals >> 15) & 31;
             IVSPD.Value = (ivvals >> 20) & 31;
             IVSPE.Value = (ivvals >> 25) & 31;
+
+            IVHP.Enabled = HP.Checked;
+            IVATK.Enabled = Atk.Checked;
+            IVDEF.Enabled = Def.Checked;
+            IVSPA.Enabled = Spe.Checked;
+            IVSPD.Enabled = SpD.Checked;
+            IVSPE.Enabled = Spe.Checked;
+
+            Species.Enabled = SpeciesCheck.Checked;
+            SpeciesFixed.Enabled = SpeciesCheck.Checked;
+            Nature.Enabled = NatureCheck.Checked;
+            NatureFixed.Enabled = NatureCheck.Checked;
+            Stars.Enabled = StarCheck.Checked;
+            StarFixed.Enabled = StarCheck.Checked;
+            TeraType.Enabled = TeraCheck.Checked;
+            TeraFixed.Enabled = TeraCheck.Checked;
         }
 
         private void Save_Click(object sender, EventArgs e)
@@ -113,6 +129,60 @@ namespace RaidCrawler.Subforms
         private void TeraFixed_CheckedChanged(object sender, EventArgs e)
         {
             TeraType.BackColor = TeraFixed.Checked ? Highlight : DefaultColor;
+        }
+
+        private void SpeciesCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            Species.Enabled = SpeciesCheck.Checked;
+            SpeciesFixed.Enabled = SpeciesCheck.Checked;
+        }
+
+        private void NatureCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            Nature.Enabled = NatureCheck.Checked;
+            NatureFixed.Enabled = NatureCheck.Checked;
+        }
+
+        private void StarCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            Stars.Enabled = StarCheck.Checked;
+            StarFixed.Enabled = StarCheck.Checked;
+        }
+
+        private void TeraCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            TeraType.Enabled = TeraCheck.Checked;
+            TeraFixed.Enabled = TeraCheck.Checked;
+        }
+
+        private void HP_CheckedChanged(object sender, EventArgs e)
+        {
+            IVHP.Enabled = HP.Checked;
+        }
+
+        private void Atk_CheckedChanged(object sender, EventArgs e)
+        {
+            IVATK.Enabled = Atk.Checked;
+        }
+
+        private void Def_CheckedChanged(object sender, EventArgs e)
+        {
+            IVDEF.Enabled = Def.Checked;
+        }
+
+        private void SpA_CheckedChanged(object sender, EventArgs e)
+        {
+            IVSPA.Enabled = SpA.Checked;
+        }
+
+        private void SpD_CheckedChanged(object sender, EventArgs e)
+        {
+            IVSPD.Enabled = SpD.Checked;
+        }
+
+        private void Spe_CheckedChanged(object sender, EventArgs e)
+        {
+            IVSPE.Enabled = Spe.Checked;
         }
     }
 }

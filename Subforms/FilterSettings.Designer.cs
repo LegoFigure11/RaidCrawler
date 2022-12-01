@@ -84,6 +84,7 @@
             this.SpeciesCheck.TabIndex = 1;
             this.SpeciesCheck.Text = "Species";
             this.SpeciesCheck.UseVisualStyleBackColor = true;
+            this.SpeciesCheck.CheckedChanged += new System.EventHandler(this.SpeciesCheck_CheckedChanged);
             // 
             // NatureCheck
             // 
@@ -94,6 +95,7 @@
             this.NatureCheck.TabIndex = 3;
             this.NatureCheck.Text = "Nature";
             this.NatureCheck.UseVisualStyleBackColor = true;
+            this.NatureCheck.CheckedChanged += new System.EventHandler(this.NatureCheck_CheckedChanged);
             // 
             // Nature
             // 
@@ -112,6 +114,7 @@
             this.StarCheck.TabIndex = 5;
             this.StarCheck.Text = "Stars";
             this.StarCheck.UseVisualStyleBackColor = true;
+            this.StarCheck.CheckedChanged += new System.EventHandler(this.StarCheck_CheckedChanged);
             // 
             // Stars
             // 
@@ -283,6 +286,7 @@
             this.Spe.Text = "Spe";
             this.Spe.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.Spe.UseVisualStyleBackColor = true;
+            this.Spe.CheckedChanged += new System.EventHandler(this.Spe_CheckedChanged);
             // 
             // SpD
             // 
@@ -295,6 +299,7 @@
             this.SpD.Text = "SpD";
             this.SpD.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.SpD.UseVisualStyleBackColor = true;
+            this.SpD.CheckedChanged += new System.EventHandler(this.SpD_CheckedChanged);
             // 
             // SpA
             // 
@@ -307,6 +312,7 @@
             this.SpA.Text = "SpA";
             this.SpA.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.SpA.UseVisualStyleBackColor = true;
+            this.SpA.CheckedChanged += new System.EventHandler(this.SpA_CheckedChanged);
             // 
             // Def
             // 
@@ -319,6 +325,7 @@
             this.Def.Text = "Def";
             this.Def.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.Def.UseVisualStyleBackColor = true;
+            this.Def.CheckedChanged += new System.EventHandler(this.Def_CheckedChanged);
             // 
             // Atk
             // 
@@ -331,6 +338,7 @@
             this.Atk.Text = "Atk";
             this.Atk.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.Atk.UseVisualStyleBackColor = true;
+            this.Atk.CheckedChanged += new System.EventHandler(this.Atk_CheckedChanged);
             // 
             // HP
             // 
@@ -343,6 +351,7 @@
             this.HP.Text = "HP";
             this.HP.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.HP.UseVisualStyleBackColor = true;
+            this.HP.CheckedChanged += new System.EventHandler(this.HP_CheckedChanged);
             // 
             // SatisfyAny
             // 
@@ -421,6 +430,7 @@
             this.TeraCheck.TabIndex = 18;
             this.TeraCheck.Text = "Tera Type";
             this.TeraCheck.UseVisualStyleBackColor = true;
+            this.TeraCheck.CheckedChanged += new System.EventHandler(this.TeraCheck_CheckedChanged);
             // 
             // TeraType
             // 
