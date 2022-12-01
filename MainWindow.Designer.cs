@@ -353,7 +353,7 @@
             this.Difficulty.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Difficulty.Name = "Difficulty";
             this.Difficulty.ReadOnly = true;
-            this.Difficulty.Size = new System.Drawing.Size(83, 22);
+            this.Difficulty.Size = new System.Drawing.Size(88, 22);
             this.Difficulty.TabIndex = 86;
             // 
             // LabelDifficulty
