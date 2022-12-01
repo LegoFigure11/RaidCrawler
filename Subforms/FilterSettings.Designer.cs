@@ -55,6 +55,9 @@
             this.StarFixed = new System.Windows.Forms.CheckBox();
             this.LabelFix = new System.Windows.Forms.Label();
             this.LabelEnabled = new System.Windows.Forms.Label();
+            this.TeraFixed = new System.Windows.Forms.CheckBox();
+            this.TeraCheck = new System.Windows.Forms.CheckBox();
+            this.TeraType = new System.Windows.Forms.ComboBox();
             this.PerfectIVFilterGroup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.IVSPE)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.IVSPD)).BeginInit();
@@ -129,7 +132,7 @@
             // ShinyCheck
             // 
             this.ShinyCheck.AutoSize = true;
-            this.ShinyCheck.Location = new System.Drawing.Point(15, 119);
+            this.ShinyCheck.Location = new System.Drawing.Point(15, 145);
             this.ShinyCheck.Name = "ShinyCheck";
             this.ShinyCheck.Size = new System.Drawing.Size(119, 19);
             this.ShinyCheck.TabIndex = 6;
@@ -138,7 +141,7 @@
             // 
             // Save
             // 
-            this.Save.Location = new System.Drawing.Point(12, 263);
+            this.Save.Location = new System.Drawing.Point(12, 289);
             this.Save.Name = "Save";
             this.Save.Size = new System.Drawing.Size(228, 23);
             this.Save.TabIndex = 9;
@@ -160,7 +163,7 @@
             this.PerfectIVFilterGroup.Controls.Add(this.Def);
             this.PerfectIVFilterGroup.Controls.Add(this.Atk);
             this.PerfectIVFilterGroup.Controls.Add(this.HP);
-            this.PerfectIVFilterGroup.Location = new System.Drawing.Point(9, 144);
+            this.PerfectIVFilterGroup.Location = new System.Drawing.Point(9, 170);
             this.PerfectIVFilterGroup.Name = "PerfectIVFilterGroup";
             this.PerfectIVFilterGroup.Size = new System.Drawing.Size(231, 90);
             this.PerfectIVFilterGroup.TabIndex = 10;
@@ -344,7 +347,7 @@
             // SatisfyAny
             // 
             this.SatisfyAny.AutoSize = true;
-            this.SatisfyAny.Location = new System.Drawing.Point(15, 240);
+            this.SatisfyAny.Location = new System.Drawing.Point(15, 266);
             this.SatisfyAny.Name = "SatisfyAny";
             this.SatisfyAny.Size = new System.Drawing.Size(226, 19);
             this.SatisfyAny.TabIndex = 11;
@@ -399,11 +402,50 @@
             this.LabelEnabled.TabIndex = 16;
             this.LabelEnabled.Text = "Enable";
             // 
+            // TeraFixed
+            // 
+            this.TeraFixed.AutoSize = true;
+            this.TeraFixed.Location = new System.Drawing.Point(231, 114);
+            this.TeraFixed.Name = "TeraFixed";
+            this.TeraFixed.Size = new System.Drawing.Size(15, 14);
+            this.TeraFixed.TabIndex = 19;
+            this.TeraFixed.UseVisualStyleBackColor = true;
+            this.TeraFixed.CheckedChanged += new System.EventHandler(this.TeraFixed_CheckedChanged);
+            // 
+            // TeraCheck
+            // 
+            this.TeraCheck.AutoSize = true;
+            this.TeraCheck.Location = new System.Drawing.Point(15, 112);
+            this.TeraCheck.Name = "TeraCheck";
+            this.TeraCheck.Size = new System.Drawing.Size(74, 19);
+            this.TeraCheck.TabIndex = 18;
+            this.TeraCheck.Text = "Tera Type";
+            this.TeraCheck.UseVisualStyleBackColor = true;
+            // 
+            // TeraType
+            // 
+            this.TeraType.FormattingEnabled = true;
+            this.TeraType.Items.AddRange(new object[] {
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7"});
+            this.TeraType.Location = new System.Drawing.Point(104, 110);
+            this.TeraType.Name = "TeraType";
+            this.TeraType.Size = new System.Drawing.Size(121, 23);
+            this.TeraType.TabIndex = 17;
+            // 
             // FilterSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(252, 295);
+            this.ClientSize = new System.Drawing.Size(252, 320);
+            this.Controls.Add(this.TeraFixed);
+            this.Controls.Add(this.TeraCheck);
+            this.Controls.Add(this.TeraType);
             this.Controls.Add(this.LabelEnabled);
             this.Controls.Add(this.LabelFix);
             this.Controls.Add(this.StarFixed);
@@ -467,5 +509,8 @@
         private CheckBox StarFixed;
         private Label LabelFix;
         private Label LabelEnabled;
+        private CheckBox TeraFixed;
+        private CheckBox TeraCheck;
+        private ComboBox TeraType;
     }
 }

@@ -13,22 +13,27 @@ namespace RaidCrawler.Subforms
             var settings = Properties.Settings.Default;
             Species.DataSource = Enum.GetValues(typeof(Species)).Cast<Species>().Where(z => z != PKHeX.Core.Species.MAX_COUNT).ToArray();
             Nature.DataSource = Enum.GetValues(typeof(Nature));
+            TeraType.DataSource = Enum.GetValues(typeof(MoveType)).Cast<MoveType>().Where(z => z != MoveType.Any).ToArray();
             Species.SelectedIndex = settings.SpeciesFilter;
             Nature.SelectedIndex = settings.NatureFilter;
             Stars.SelectedIndex = settings.StarsFilter;
+            TeraType.SelectedIndex = settings.TeraFilter;
             SpeciesCheck.Checked = settings.SpeciesEnabled;
             NatureCheck.Checked = settings.NatureEnabled;
             StarCheck.Checked = settings.StarsEnabled;
+            TeraCheck.Checked = settings.TeraEnabled;
             ShinyCheck.Checked = settings.SearchTillShiny;
             SatisfyAny.Checked = settings.SatisfyAny;
             SpeciesFixed.Checked = settings.SpeciesFixed;
             NatureFixed.Checked = settings.NatureFixed;
             StarFixed.Checked = settings.StarFixed;
+            TeraFixed.Checked = settings.TeraFixed;
 
             // highlight fixed components
             Species.BackColor = settings.SpeciesFixed ? Highlight : DefaultColor;
             Nature.BackColor = settings.NatureFixed ? Highlight : DefaultColor;
-            StarFixed.BackColor = settings.StarFixed ? Highlight : DefaultColor;
+            Stars.BackColor = settings.StarFixed ? Highlight : DefaultColor;
+            TeraType.BackColor = settings.TeraFixed ? Highlight : DefaultColor;
 
             var ivbin = settings.IVBin;
             HP.Checked = (ivbin & 1) == 1;
@@ -57,14 +62,17 @@ namespace RaidCrawler.Subforms
             Properties.Settings.Default.SpeciesFilter = Species.SelectedIndex;
             Properties.Settings.Default.NatureFilter = Nature.SelectedIndex;
             Properties.Settings.Default.StarsFilter = Stars.SelectedIndex;
+            Properties.Settings.Default.TeraFilter = TeraType.SelectedIndex;
             Properties.Settings.Default.SpeciesEnabled = SpeciesCheck.Checked;
             Properties.Settings.Default.NatureEnabled = NatureCheck.Checked;
             Properties.Settings.Default.StarsEnabled = StarCheck.Checked;
+            Properties.Settings.Default.TeraEnabled = TeraCheck.Checked;
             Properties.Settings.Default.SearchTillShiny = ShinyCheck.Checked;
             Properties.Settings.Default.SatisfyAny = SatisfyAny.Checked;
             Properties.Settings.Default.SpeciesFixed = SpeciesFixed.Checked;
             Properties.Settings.Default.NatureFixed = NatureFixed.Checked;
             Properties.Settings.Default.StarFixed = StarFixed.Checked;
+            Properties.Settings.Default.TeraFixed = TeraFixed.Checked;
             Properties.Settings.Default.IVBin = ivbin;
             Properties.Settings.Default.IVVals = ivvals;
             Properties.Settings.Default.Save();
@@ -72,11 +80,13 @@ namespace RaidCrawler.Subforms
             RaidFilters.Species = SpeciesCheck.Checked ? (Species)Species.SelectedIndex : null;
             RaidFilters.Nature = NatureCheck.Checked ? (Nature)Nature.SelectedIndex : null;
             RaidFilters.Stars = StarCheck.Checked ? Stars.SelectedIndex + 1 : null;
+            RaidFilters.TeraType = TeraCheck.Checked ? (MoveType)TeraType.SelectedIndex : null;
             RaidFilters.Shiny = ShinyCheck.Checked;
             RaidFilters.SatisfyAny = SatisfyAny.Checked;
             RaidFilters.SpeciesFixed = SpeciesFixed.Checked;
             RaidFilters.NatureFixed = NatureFixed.Checked;
             RaidFilters.StarFixed = StarFixed.Checked;
+            RaidFilters.TeraFixed = TeraFixed.Checked;
             RaidFilters.IVBin = ivbin;
             RaidFilters.IVVals = ivvals;
 
@@ -97,7 +107,12 @@ namespace RaidCrawler.Subforms
 
         private void StarFixed_CheckedChanged(object sender, EventArgs e)
         {
-            StarFixed.BackColor = StarFixed.Checked ? Highlight : DefaultColor;
+            Stars.BackColor = StarFixed.Checked ? Highlight : DefaultColor;
+        }
+
+        private void TeraFixed_CheckedChanged(object sender, EventArgs e)
+        {
+            TeraType.BackColor = TeraFixed.Checked ? Highlight : DefaultColor;
         }
     }
 }

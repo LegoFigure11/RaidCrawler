@@ -224,6 +224,7 @@
             this.Seed.ReadOnly = true;
             this.Seed.Size = new System.Drawing.Size(95, 22);
             this.Seed.TabIndex = 43;
+            this.Seed.Click += new System.EventHandler(this.Seed_Clicked);
             // 
             // LabelSeed
             // 

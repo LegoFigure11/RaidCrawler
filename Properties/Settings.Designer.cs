@@ -226,5 +226,41 @@ namespace RaidCrawler.Properties {
                 this["StarFixed"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool TeraFixed {
+            get {
+                return ((bool)(this["TeraFixed"]));
+            }
+            set {
+                this["TeraFixed"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int TeraFilter {
+            get {
+                return ((int)(this["TeraFilter"]));
+            }
+            set {
+                this["TeraFilter"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool TeraEnabled {
+            get {
+                return ((bool)(this["TeraEnabled"]));
+            }
+            set {
+                this["TeraEnabled"] = value;
+            }
+        }
     }
 }

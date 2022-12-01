@@ -24,6 +24,7 @@ namespace RaidCrawler
         private int index = 0;
         private ulong offset;
         private bool IsReading = false;
+        private bool HideSeed = false;
 
         private Color DefaultColor;
 
@@ -130,10 +131,10 @@ namespace RaidCrawler
         private void DisplayRaid(int index)
         {
             LabelIndex.Text = $"{index + 1:D2} / {Raids.Count:D2}";
-            if (Raids.Count >= index)
+            if (Raids.Count > index)
             {
                 Raid raid = Raids[index];
-                Seed.Text = $"{raid.Seed:X8}";
+                Seed.Text = HideSeed ? "Hidden" : $"{raid.Seed:X8}";
                 EC.Text = $"{raid.EC:X8}";
                 PID.Text = $"{raid.PID:X8}{(raid.IsShiny ? " (☆)" : string.Empty)}";
                 TeraType.Text = $"{Raid.strings.types[raid.TeraType]} ({raid.TeraType})";
@@ -450,6 +451,17 @@ namespace RaidCrawler
                 RaidBlockViewer BlockViewerWindow = new(Raids[index].Data, offset);
                 BlockViewerWindow.ShowDialog();
             }
+        }
+
+        private void Seed_Clicked(object sender, EventArgs e)
+        {
+            if (ModifierKeys != Keys.Shift)
+                return;
+            if (Raids.Count <= index)
+                return;
+            Seed.Text = HideSeed ? $"{ Raids[index].Seed:X8}" : "Hidden";
+            HideSeed = !HideSeed;
+            ActiveControl = null;
         }
     }
 }

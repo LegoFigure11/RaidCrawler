@@ -8,12 +8,14 @@ namespace RaidCrawler.Structures
         public static int? Stars = Settings.Default.StarsEnabled ? Settings.Default.StarsFilter : null;
         public static bool Shiny = Settings.Default.SearchTillShiny;
         public static Nature? Nature = Settings.Default.NatureEnabled ? (Nature)Settings.Default.NatureFilter : null;
+        public static MoveType? TeraType = Settings.Default.TeraEnabled ? (MoveType)Settings.Default.TeraFilter : null;
         public static int IVBin = Settings.Default.IVBin;
         public static int IVVals = Settings.Default.IVVals;
         public static bool SatisfyAny = Settings.Default.SatisfyAny;
         public static bool SpeciesFixed = Settings.Default.SpeciesFixed;
         public static bool NatureFixed = Settings.Default.NatureFixed;
         public static bool StarFixed = Settings.Default.StarFixed;
+        public static bool TeraFixed = Settings.Default.TeraFixed;
 
         public static bool IsFilterSet()
         {
@@ -45,6 +47,13 @@ namespace RaidCrawler.Structures
             if (Shiny == false)
                 return SatisfyAny ? false : true;
             return raid.IsShiny == true;
+        }
+
+        public static bool IsTeraTypeSatisfied(Raid raid)
+        {
+            if (TeraType == null)
+                return SatisfyAny ? false : true;
+            return raid.TeraType == (int)TeraType;
         }
 
         public static bool IsNatureSatisfied(Raid raid, int StoryProgress, int EventProgress)
@@ -87,7 +96,8 @@ namespace RaidCrawler.Structures
             var speciessatisfied = Species != null && SpeciesFixed ? IsSpeciesSatisfied(raid, StoryProgress, EventProgress) : true;
             var naturesatisfied = Nature != null && NatureFixed ? IsNatureSatisfied(raid, StoryProgress, EventProgress) : true;
             var starsatisfied = Stars != null && StarFixed ? IsStarsSatisfied(raid, StoryProgress) : true;
-            var fixedsatisfied = speciessatisfied && naturesatisfied && starsatisfied;
+            var terasatisfied = TeraType != null && TeraFixed ? IsTeraTypeSatisfied(raid) : true;
+            var fixedsatisfied = speciessatisfied && naturesatisfied && starsatisfied && terasatisfied;
             if (!fixedsatisfied)
                 return false;
             var satisfied = false;
@@ -100,6 +110,8 @@ namespace RaidCrawler.Structures
                     satisfied = satisfied || IsNatureSatisfied(raid, StoryProgress, EventProgress);
                 if (!StarFixed)
                     satisfied = satisfied || IsStarsSatisfied(raid, StoryProgress);
+                if (!TeraFixed)
+                    satisfied = satisfied || IsTeraTypeSatisfied(raid);
 
             }
             else
@@ -111,6 +123,8 @@ namespace RaidCrawler.Structures
                     satisfied = satisfied && IsNatureSatisfied(raid, StoryProgress, EventProgress);
                 if (!StarFixed)
                     satisfied = satisfied && IsStarsSatisfied(raid, StoryProgress);
+                if (!TeraFixed)
+                    satisfied = satisfied && IsTeraTypeSatisfied(raid);
             }
             return satisfied;
         }
