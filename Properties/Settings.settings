@@ -93,7 +93,7 @@
       <Value Profile="(Default)">1700</Value>
     </Setting>
     <Setting Name="CfgSubmenu" Type="System.Decimal" Scope="User">
-      <Value Profile="(Default)">800</Value>
+      <Value Profile="(Default)">2200</Value>
     </Setting>
     <Setting Name="CfgDateChange" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">500</Value>

@@ -112,7 +112,7 @@
             // 
             this.AlertMessage.Location = new System.Drawing.Point(12, 102);
             this.AlertMessage.Name = "AlertMessage";
-            this.AlertMessage.Size = new System.Drawing.Size(297, 23);
+            this.AlertMessage.Size = new System.Drawing.Size(327, 23);
             this.AlertMessage.TabIndex = 4;
             // 
             // label2
@@ -136,7 +136,7 @@
             // 
             // BaseDelay
             // 
-            this.BaseDelay.Location = new System.Drawing.Point(241, 163);
+            this.BaseDelay.Location = new System.Drawing.Point(271, 163);
             this.BaseDelay.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -148,7 +148,7 @@
             // 
             // SystemDDownPresses
             // 
-            this.SystemDDownPresses.Location = new System.Drawing.Point(241, 308);
+            this.SystemDDownPresses.Location = new System.Drawing.Point(271, 308);
             this.SystemDDownPresses.Maximum = new decimal(new int[] {
             99,
             0,
@@ -176,7 +176,7 @@
             // 
             this.Save.Location = new System.Drawing.Point(12, 464);
             this.Save.Name = "Save";
-            this.Save.Size = new System.Drawing.Size(297, 23);
+            this.Save.Size = new System.Drawing.Size(327, 23);
             this.Save.TabIndex = 12;
             this.Save.Text = "Save";
             this.Save.UseVisualStyleBackColor = true;
@@ -184,7 +184,7 @@
             // 
             // NavigateToSettings
             // 
-            this.NavigateToSettings.Location = new System.Drawing.Point(241, 221);
+            this.NavigateToSettings.Location = new System.Drawing.Point(271, 221);
             this.NavigateToSettings.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -201,7 +201,7 @@
             // 
             // OpenSettings
             // 
-            this.OpenSettings.Location = new System.Drawing.Point(241, 250);
+            this.OpenSettings.Location = new System.Drawing.Point(271, 250);
             this.OpenSettings.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -218,7 +218,7 @@
             // 
             // OpenHome
             // 
-            this.OpenHome.Location = new System.Drawing.Point(241, 192);
+            this.OpenHome.Location = new System.Drawing.Point(271, 192);
             this.OpenHome.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -271,7 +271,7 @@
             // 
             // Hold
             // 
-            this.Hold.Location = new System.Drawing.Point(241, 279);
+            this.Hold.Location = new System.Drawing.Point(271, 279);
             this.Hold.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -297,7 +297,7 @@
             // 
             // Submenu
             // 
-            this.Submenu.Location = new System.Drawing.Point(241, 337);
+            this.Submenu.Location = new System.Drawing.Point(271, 337);
             this.Submenu.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -323,7 +323,7 @@
             // 
             // DateChange
             // 
-            this.DateChange.Location = new System.Drawing.Point(241, 366);
+            this.DateChange.Location = new System.Drawing.Point(271, 366);
             this.DateChange.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -349,7 +349,7 @@
             // 
             // ReturnHome
             // 
-            this.ReturnHome.Location = new System.Drawing.Point(241, 395);
+            this.ReturnHome.Location = new System.Drawing.Point(271, 395);
             this.ReturnHome.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -375,7 +375,7 @@
             // 
             // ReturnGame
             // 
-            this.ReturnGame.Location = new System.Drawing.Point(241, 424);
+            this.ReturnGame.Location = new System.Drawing.Point(271, 424);
             this.ReturnGame.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -394,7 +394,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(321, 499);
+            this.ClientSize = new System.Drawing.Size(351, 499);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.ReturnGame);
             this.Controls.Add(this.label9);
