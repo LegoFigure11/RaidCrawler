@@ -71,6 +71,25 @@ public class RaidEnemyInfo
         bw.Write(star);
         bw.Write(rate);
     }
+
+    public void SerializeType3(BinaryWriter bw)
+    {
+        // Fixed Nature, fixed IVs, fixed Scale
+        var b = BossPokePara;
+        if (b.TalentType > 2)
+            throw new InvalidDataException("Invalid talent type for Type 3 serialization.");
+
+        bw.Write(b.Seikaku == 0 ? (byte)25 : (byte)(b.Seikaku - 1));
+        bw.Write((byte)b.TalentValue.HP);
+        bw.Write((byte)b.TalentValue.ATK);
+        bw.Write((byte)b.TalentValue.DEF);
+        bw.Write((byte)b.TalentValue.SPE);
+        bw.Write((byte)b.TalentValue.SPA);
+        bw.Write((byte)b.TalentValue.SPD);
+        bw.Write((byte)(b.TalentType == 0 ? 0 : 1));
+        bw.Write((byte)b.ScaleValue);
+        bw.Write((byte)0);
+    }
 }
 
 [FlatBufferTable, TypeConverter(typeof(ExpandableObjectConverter))]

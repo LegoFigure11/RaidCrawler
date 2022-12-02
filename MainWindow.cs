@@ -143,16 +143,14 @@ namespace RaidCrawler
 
                 var progress = raid.IsEvent ? EventProgress.SelectedIndex : Progress.SelectedIndex;
                 ITeraRaid? encounter = raid.Encounter(progress);
-                var IsFixed = encounter is TeraDistribution td && raid.Flags == 3;
-                var teratype = IsFixed ? ((TeraDistribution)encounter).BossData.GemType - 2 : raid.TeraType;
+                var teratype = GetTeraType(encounter, raid);
                 TeraType.Text = $"{Raid.strings.types[teratype]} ({teratype})";
-                int StarCount = IsFixed ? encounter.Stars : Raid.GetStarCount(raid.Difficulty, Progress.SelectedIndex, raid.IsBlack);
+                int StarCount = encounter is TeraDistribution ? encounter.Stars : Raid.GetStarCount(raid.Difficulty, Progress.SelectedIndex, raid.IsBlack);
                 Difficulty.Text = raid.IsEvent ? string.Concat(Enumerable.Repeat("☆", StarCount)) : string.Concat(Enumerable.Repeat("☆", StarCount)) + $" ({raid.Difficulty})";
 
                 if (encounter != null)
                 {
-                    var pi = PersonalTable.SV.GetFormEntry(encounter.Species, encounter.Form);
-                    var param = new GenerateParam9((byte)pi.Gender, encounter.FlawlessIVCount, 1, 0, 0, 0, encounter.Ability, encounter.Shiny);
+                    var param = GetParam(encounter);
                     var blank = new PK9();
                     blank.Species = encounter.Species;
                     blank.Form = encounter.Form;
@@ -163,16 +161,14 @@ namespace RaidCrawler
                     Sprite.Image = img;
                     GemIcon.Image = PKHeX.Drawing.Misc.TypeSpriteUtil.GetTypeSpriteGem((byte)teratype);
                     Gender.Text = $"{(Gender)blank.Gender}";
-                    var nature = IsFixed ? ((TeraDistribution)encounter).BossData.Seikaku - 1 : blank.Nature;
+                    var nature = blank.Nature;
                     Nature.Text = $"{Raid.strings.Natures[nature]}";
                     Ability.Text = $"{Raid.strings.Ability[blank.Ability]}";
                     Move1.Text = Raid.strings.Move[encounter.Move1];
                     Move2.Text = Raid.strings.Move[encounter.Move2];
                     Move3.Text = Raid.strings.Move[encounter.Move3];
                     Move4.Text = Raid.strings.Move[encounter.Move4];
-                    var tv = IsFixed && ((TeraDistribution)encounter).BossData.TalentType == 2 ? ((TeraDistribution)encounter).BossData.TalentValue : null;
-                    var ivs = tv != null ? new[] { tv.HP, tv.ATK, tv.DEF, tv.SPA, tv.SPD, tv.SPE } : raid.GetIVs(raid.Seed, encounter.FlawlessIVCount);
-                    IVs.Text = IVsString(ivs);
+                    IVs.Text = IVsString(ToSpeedLast(blank.IVs));
                 }
                 else
                 {
@@ -206,6 +202,50 @@ namespace RaidCrawler
                     s += "/";
             }
             return s;
+        }
+
+        private static byte GetGender(ITeraRaid enc)
+        {
+            if (enc is not TeraDistribution td || td.Entity is EncounterDist9)
+                return (byte)PersonalTable.SV.GetFormEntry(enc.Species, enc.Form).Gender;
+            if (td.Entity is EncounterMight9 em)
+                return em.Gender switch
+                {
+                    0 => PersonalInfo.RatioMagicMale,
+                    1 => PersonalInfo.RatioMagicFemale,
+                    2 => PersonalInfo.RatioMagicGenderless,
+                    _ => (byte)PersonalTable.SV.GetFormEntry(enc.Species, enc.Form).Gender,
+                };
+            return (byte)PersonalTable.SV.GetFormEntry(enc.Species, enc.Form).Gender;
+        }
+
+        private static GenerateParam9 GetParam(ITeraRaid encounter)
+        {
+            var gender = GetGender(encounter);
+            if (encounter is TeraDistribution td && td.Entity is EncounterMight9 em)
+                return new GenerateParam9(gender, em.FlawlessIVCount, 1, 0, 0, em.Scale, em.Ability, em.Shiny, em.Nature, em.IVs);
+            return new GenerateParam9(gender, encounter.FlawlessIVCount, 1, 0, 0, 0, encounter.Ability, encounter.Shiny);
+        }
+
+        private static int[] ToSpeedLast(int[] ivs)
+        {
+            var res = new int[6];
+            res[0] = ivs[0];
+            res[1] = ivs[1];
+            res[2] = ivs[2];
+            res[3] = ivs[4];
+            res[4] = ivs[5];
+            res[5] = ivs[3];
+            return res;
+        }
+
+        private int GetTeraType(ITeraRaid? encounter, Raid raid)
+        {
+            if (encounter == null)
+                return raid.TeraType;
+            if (encounter is TeraDistribution td && td.Entity is EncounterMight9 em)
+                return (int)em.TeraType > 1 ? (int)em.TeraType - 2 : raid.TeraType;
+            return raid.TeraType;
         }
 
         private static Image ApplyTeraColor(byte elementalType, Image img, SpriteBackgroundType type)

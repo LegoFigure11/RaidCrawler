@@ -3,26 +3,47 @@ using System.Buffers.Binary;
 
 namespace RaidCrawler.Structures
 {
+
     public static class FlatbufferDumper
     {
-        public static byte[] DumpDistributionRaids(string path, out List<PokeDataBattle> data)
+        public static byte[][] DumpDistributionRaids(string path)
         {
-            var list = new List<byte[]>();
-            data = new List<PokeDataBattle>();
+            var type2 = new List<byte[]>();
+            var type3 = new List<byte[]>();
 
             var encounters = Utils.GetBinaryResource(path);
             if (encounters.Length == 0)
-                return encounters;
+                return new byte[0][];
             var tableEncounters = FlatBufferSerializer.Default.Parse<DeliveryRaidEnemyTableArray>(encounters);
+            var byGroupID = tableEncounters.Table
+            .Where(z => z.RaidEnemyInfo.Rate != 0)
+            .GroupBy(z => z.RaidEnemyInfo.DeliveryGroupID);
 
-            AddToList(tableEncounters.Table, list, data);
-            var ordered = list
+            foreach (var group in byGroupID)
+            {
+                var items = group.ToArray();
+                if (items.Any(z => z.RaidEnemyInfo.Difficulty > 7))
+                    continue;
+                if (items.All(z => z.RaidEnemyInfo.Difficulty == 7))
+                    AddToList(items, type3, RaidSerializationFormat.Type3);
+                else if (items.Any(z => z.RaidEnemyInfo.Difficulty == 7))
+                    throw new Exception($"Mixed difficulty {items.First(z => z.RaidEnemyInfo.Difficulty > 7).RaidEnemyInfo.Difficulty}");
+                else AddToList(items, type2, RaidSerializationFormat.Type2);
+            }
+
+            var ordered2 = type2
                     .OrderBy(z => BinaryPrimitives.ReadUInt16LittleEndian(z)) // Species
                     .ThenBy(z => z[2]) // Form
                     .ThenBy(z => z[3]) // Level
                     .ThenBy(z => z[0x11]) // Distribution Index
                 ;
-            return ordered.SelectMany(z => z).ToArray();
+            var ordered3 = type3
+                .OrderBy(z => BinaryPrimitives.ReadUInt16LittleEndian(z)) // Species
+                    .ThenBy(z => z[2]) // Form
+                    .ThenBy(z => z[3]) // Level
+                    .ThenBy(z => z[0x11]) // Distribution Index
+                ;
+            return new[] { ordered2.SelectMany(z => z).ToArray(), ordered3.SelectMany(z => z).ToArray() };
         }
 
         private static readonly int[][] StageStars =
@@ -33,7 +54,7 @@ namespace RaidCrawler.Structures
             new [] { 3, 4, 5 },
         };
 
-        private static void AddToList(IReadOnlyCollection<DeliveryRaidEnemyTable> table, List<byte[]> list, List<PokeDataBattle> data)
+        private static void AddToList(IReadOnlyCollection<DeliveryRaidEnemyTable> table, List<byte[]> list, RaidSerializationFormat format)
         {
             // Get the total weight for each stage of star count
             Span<ushort> weightTotalS = stackalloc ushort[StageStars.Length];
@@ -63,8 +84,7 @@ namespace RaidCrawler.Structures
                 if (info.Rate == 0)
                     continue;
                 var difficulty = info.Difficulty;
-                TryAddToPickle(info, list, weightTotalS, weightTotalV, weightMinS, weightMinV);
-                data.Add(enc.RaidEnemyInfo.BossPokePara);
+                TryAddToPickle(info, list, format, weightTotalS, weightTotalV, weightMinS, weightMinV);
                 for (int stage = 0; stage < StageStars.Length; stage++)
                 {
                     if (!StageStars[stage].Contains(difficulty))
@@ -77,7 +97,7 @@ namespace RaidCrawler.Structures
             }
         }
 
-        private static void TryAddToPickle(RaidEnemyInfo enc, ICollection<byte[]> list, ReadOnlySpan<ushort> totalS, ReadOnlySpan<ushort> totalV, ReadOnlySpan<ushort> minS, ReadOnlySpan<ushort> minV)
+        private static void TryAddToPickle(RaidEnemyInfo enc, ICollection<byte[]> list, RaidSerializationFormat format, ReadOnlySpan<ushort> totalS, ReadOnlySpan<ushort> totalV, ReadOnlySpan<ushort> minS, ReadOnlySpan<ushort> minV)
         {
             using var ms = new MemoryStream();
             using var bw = new BinaryWriter(ms);
@@ -93,6 +113,8 @@ namespace RaidCrawler.Structures
                 bw.Write(noTotal ? (ushort)0 : totalS[stage]);
                 bw.Write(noTotal ? (ushort)0 : totalV[stage]);
             }
+            if (format == RaidSerializationFormat.Type3)
+                enc.SerializeType3(bw);
 
             var bin = ms.ToArray();
             if (!list.Any(z => z.SequenceEqual(bin)))
