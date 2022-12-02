@@ -15,7 +15,15 @@ namespace RaidCrawler.Subforms
             AlertMessage.Enabled = EnableAlert.Checked;
 
             BaseDelay.Value = Settings.Default.CfgBaseDelay;
+            OpenHome.Value = Settings.Default.CfgOpenHome;
+            NavigateToSettings.Value = Settings.Default.CfgNavigateToSettings;
+            OpenSettings.Value = Settings.Default.CfgOpenSettings;
+            Hold.Value = Settings.Default.CfgHold;
             SystemDDownPresses.Value = Settings.Default.CfgSystemDDownPresses;
+            Submenu.Value = Settings.Default.CfgSubmenu;
+            DateChange.Value = Settings.Default.CfgDateChange;
+            ReturnHome.Value = Settings.Default.CfgReturnHome;
+            ReturnGame.Value = Settings.Default.CfgReturnGame;
         }
 
         private void EnableAlert_CheckedChanged(object sender, EventArgs e)
@@ -31,7 +39,15 @@ namespace RaidCrawler.Subforms
             Settings.Default.CfgAlertWindowMessage = AlertMessage.Text;
 
             Settings.Default.CfgBaseDelay = BaseDelay.Value;
+            Settings.Default.CfgOpenHome = OpenHome.Value;
+            Settings.Default.CfgNavigateToSettings = NavigateToSettings.Value;
+            Settings.Default.CfgOpenSettings = OpenSettings.Value;
+            Settings.Default.CfgHold = Hold.Value;
             Settings.Default.CfgSystemDDownPresses = SystemDDownPresses.Value;
+            Settings.Default.CfgSubmenu = Submenu.Value;
+            Settings.Default.CfgDateChange = DateChange.Value;
+            Settings.Default.CfgReturnHome = ReturnHome.Value;
+            Settings.Default.CfgReturnGame = ReturnGame.Value;
 
             Settings.Default.Save();
 

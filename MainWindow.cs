@@ -344,26 +344,26 @@ namespace RaidCrawler
             int BaseDelay = (int)Settings.Default.CfgBaseDelay;
             await Click(LSTICK, 0_050 + BaseDelay, token).ConfigureAwait(false); // Sometimes it seems like the first command doesn't go through so send this just in case
             // HOME Menu
-            await Click(HOME, 1_800 + BaseDelay, token).ConfigureAwait(false);
-            await Click(DDOWN, 0_200 + BaseDelay, token).ConfigureAwait(false);
-            for (int i = 0; i < 5; i++) await Click(DRIGHT, 0_100 + BaseDelay, token).ConfigureAwait(false);
-            await Click(A, 1_000 + BaseDelay, token).ConfigureAwait(false);
+            await Click(HOME, (int)Settings.Default.CfgOpenHome + BaseDelay, token).ConfigureAwait(false);
+            await Click(DDOWN, (int)Settings.Default.CfgNavigateToSettings + 0_100 + BaseDelay, token).ConfigureAwait(false);
+            for (int i = 0; i < 5; i++) await Click(DRIGHT, (int)Settings.Default.CfgNavigateToSettings + BaseDelay, token).ConfigureAwait(false);
+            await Click(A, (int)Settings.Default.CfgOpenSettings + BaseDelay, token).ConfigureAwait(false);
             // Scroll to bottom
-            await PressAndHold(DDOWN, 1_700, BaseDelay, token).ConfigureAwait(false);
+            await PressAndHold(DDOWN, (int)Settings.Default.CfgHold, BaseDelay, token).ConfigureAwait(false);
             // Navigate to "Date and Time"
             await Click(DRIGHT, 0_200 + BaseDelay, token).ConfigureAwait(false);
-            for (int i = 0; i < Settings.Default.CfgSystemDDownPresses; i++) await Click(DDOWN, 0_100 + BaseDelay, token).ConfigureAwait(false);
-            await Click(A, 0_800 + BaseDelay, token).ConfigureAwait(false);
+            for (int i = 0; i < Settings.Default.CfgSystemDDownPresses; i++) await Click(DDOWN, 0_050 + BaseDelay, token).ConfigureAwait(false);
+            await Click(A, (int)Settings.Default.CfgSubmenu + BaseDelay, token).ConfigureAwait(false);
             // Navigate to Change Date/Time
             for (int i = 0; i < 2; i++) await Click(DDOWN, 0_200 + BaseDelay, token).ConfigureAwait(false);
-            await Click(A, 0_500 + BaseDelay, token).ConfigureAwait(false);
+            await Click(A, (int)Settings.Default.CfgDateChange + BaseDelay, token).ConfigureAwait(false);
             // Change the date
             await Click(DUP, 0_200 + BaseDelay, token).ConfigureAwait(false);
             for (int i = 0; i < 6; i++) await Click(DRIGHT, 0_100 + BaseDelay, token).ConfigureAwait(false);
             await Click(A, 0_500 + BaseDelay, token).ConfigureAwait(false);
             // Return to game
-            await Click(HOME, 2_500 + BaseDelay, token).ConfigureAwait(false);
-            await Click(HOME, 4_000 + BaseDelay, token).ConfigureAwait(false);
+            await Click(HOME, (int)Settings.Default.CfgReturnHome + BaseDelay, token).ConfigureAwait(false);
+            await Click(HOME, (int)Settings.Default.CfgReturnGame + BaseDelay, token).ConfigureAwait(false);
         }
 
         private async void ButtonAdvanceDate_Click(object sender, EventArgs e)

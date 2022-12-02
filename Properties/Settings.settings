@@ -78,7 +78,31 @@
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="CfgSystemDDownPresses" Type="System.Decimal" Scope="User">
-      <Value Profile="(Default)">40</Value>
+      <Value Profile="(Default)">38</Value>
+    </Setting>
+    <Setting Name="CfgOpenHome" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">1800</Value>
+    </Setting>
+    <Setting Name="CfgNavigateToSettings" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">100</Value>
+    </Setting>
+    <Setting Name="CfgOpenSettings" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">1000</Value>
+    </Setting>
+    <Setting Name="CfgHold" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">1700</Value>
+    </Setting>
+    <Setting Name="CfgSubmenu" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">800</Value>
+    </Setting>
+    <Setting Name="CfgDateChange" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">500</Value>
+    </Setting>
+    <Setting Name="CfgReturnHome" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">2500</Value>
+    </Setting>
+    <Setting Name="CfgReturnGame" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">4000</Value>
     </Setting>
   </Settings>
 </SettingsFile>

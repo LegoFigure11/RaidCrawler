@@ -326,13 +326,109 @@ namespace RaidCrawler.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("40")]
+        [global::System.Configuration.DefaultSettingValueAttribute("38")]
         public decimal CfgSystemDDownPresses {
             get {
                 return ((decimal)(this["CfgSystemDDownPresses"]));
             }
             set {
                 this["CfgSystemDDownPresses"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1800")]
+        public decimal CfgOpenHome {
+            get {
+                return ((decimal)(this["CfgOpenHome"]));
+            }
+            set {
+                this["CfgOpenHome"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public decimal CfgNavigateToSettings {
+            get {
+                return ((decimal)(this["CfgNavigateToSettings"]));
+            }
+            set {
+                this["CfgNavigateToSettings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1000")]
+        public decimal CfgOpenSettings {
+            get {
+                return ((decimal)(this["CfgOpenSettings"]));
+            }
+            set {
+                this["CfgOpenSettings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1700")]
+        public decimal CfgHold {
+            get {
+                return ((decimal)(this["CfgHold"]));
+            }
+            set {
+                this["CfgHold"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("800")]
+        public decimal CfgSubmenu {
+            get {
+                return ((decimal)(this["CfgSubmenu"]));
+            }
+            set {
+                this["CfgSubmenu"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("500")]
+        public decimal CfgDateChange {
+            get {
+                return ((decimal)(this["CfgDateChange"]));
+            }
+            set {
+                this["CfgDateChange"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2500")]
+        public decimal CfgReturnHome {
+            get {
+                return ((decimal)(this["CfgReturnHome"]));
+            }
+            set {
+                this["CfgReturnHome"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("4000")]
+        public decimal CfgReturnGame {
+            get {
+                return ((decimal)(this["CfgReturnGame"]));
+            }
+            set {
+                this["CfgReturnGame"] = value;
             }
         }
     }
