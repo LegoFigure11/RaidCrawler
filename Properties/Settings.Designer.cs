@@ -386,7 +386,7 @@ namespace RaidCrawler.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("800")]
+        [global::System.Configuration.DefaultSettingValueAttribute("2200")]
         public decimal CfgSubmenu {
             get {
                 return ((decimal)(this["CfgSubmenu"]));
