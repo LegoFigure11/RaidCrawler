@@ -8,6 +8,6 @@ Supports viewing Species, Tera Type, Difficulty, Location, Shininess, and IVs of
 
 **Basic usage guide:** [Click here](https://billo-guides.github.io/cfw/sv/raidcrawler) (thanks [Billo](https://github.com/Billo-PS)!)
 
-![](https://i.imgur.com/3Gjv6Rj.png)
+![](https://i.imgur.com/J524iay.png)
 
 Leverages SysBot.Base.dll from [kwsch/SysBot.NET](https://github.com/kwsch/SysBot.NET)
