@@ -14,7 +14,13 @@ namespace RaidCrawler.Subforms
             Species.DataSource = Enum.GetValues(typeof(Species)).Cast<Species>().Where(z => z != PKHeX.Core.Species.MAX_COUNT).ToArray();
             Nature.DataSource = Enum.GetValues(typeof(Nature));
             TeraType.DataSource = Enum.GetValues(typeof(MoveType)).Cast<MoveType>().Where(z => z != MoveType.Any).ToArray();
-            Species.SelectedIndex = settings.SpeciesFilter;
+            if (settings.SpeciesFilter != null)
+            {
+                foreach (int speciesIndex in settings.SpeciesFilter)
+                {
+                    Species.SetItemChecked(speciesIndex, true);
+                }
+            }
             Nature.SelectedIndex = settings.NatureFilter;
             Stars.SelectedIndex = settings.StarsFilter;
             TeraType.SelectedIndex = settings.TeraFilter;
@@ -75,7 +81,7 @@ namespace RaidCrawler.Subforms
             var ivvals = (int)IVHP.Value << 0 | (int)IVATK.Value << 5 | (int)IVDEF.Value << 10 |
                          (int)IVSPA.Value << 15 | (int)IVSPD.Value << 20 | (int)IVSPE.Value << 25;
 
-            Properties.Settings.Default.SpeciesFilter = Species.SelectedIndex;
+            Properties.Settings.Default.SpeciesFilter = Species.CheckedIndices.Cast<int>().ToArray();
             Properties.Settings.Default.NatureFilter = Nature.SelectedIndex;
             Properties.Settings.Default.StarsFilter = Stars.SelectedIndex;
             Properties.Settings.Default.TeraFilter = TeraType.SelectedIndex;
@@ -93,7 +99,7 @@ namespace RaidCrawler.Subforms
             Properties.Settings.Default.IVVals = ivvals;
             Properties.Settings.Default.Save();
 
-            RaidFilters.Species = SpeciesCheck.Checked ? (Species)Species.SelectedIndex : null;
+            RaidFilters.Species = SpeciesCheck.Checked ? Array.ConvertAll(Species.CheckedIndices.Cast<int>().ToArray(), species => (Species) species) : null;
             RaidFilters.Nature = NatureCheck.Checked ? (Nature)Nature.SelectedIndex : null;
             RaidFilters.Stars = StarCheck.Checked ? Stars.SelectedIndex + 1 : null;
             RaidFilters.TeraType = TeraCheck.Checked ? (MoveType)TeraType.SelectedIndex : null;

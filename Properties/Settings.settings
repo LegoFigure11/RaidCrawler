@@ -14,8 +14,8 @@
     <Setting Name="EventProgress" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="SpeciesFilter" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">25</Value>
+    <Setting Name="SpeciesFilter" Type="System.Int32[]" Scope="User">
+      <Value Profile="(Default)"></Value>
     </Setting>
     <Setting Name="SpeciesEnabled" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>

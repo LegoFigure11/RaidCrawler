@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.Species = new System.Windows.Forms.ComboBox();
             this.SpeciesCheck = new System.Windows.Forms.CheckBox();
             this.NatureCheck = new System.Windows.Forms.CheckBox();
             this.Nature = new System.Windows.Forms.ComboBox();
@@ -58,6 +57,7 @@
             this.TeraFixed = new System.Windows.Forms.CheckBox();
             this.TeraCheck = new System.Windows.Forms.CheckBox();
             this.TeraType = new System.Windows.Forms.ComboBox();
+            this.Species = new System.Windows.Forms.CheckedListBox();
             this.PerfectIVFilterGroup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.IVSPE)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.IVSPD)).BeginInit();
@@ -66,14 +66,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.IVATK)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.IVHP)).BeginInit();
             this.SuspendLayout();
-            // 
-            // Species
-            // 
-            this.Species.FormattingEnabled = true;
-            this.Species.Location = new System.Drawing.Point(104, 23);
-            this.Species.Name = "Species";
-            this.Species.Size = new System.Drawing.Size(121, 23);
-            this.Species.TabIndex = 0;
             // 
             // SpeciesCheck
             // 
@@ -89,7 +81,7 @@
             // NatureCheck
             // 
             this.NatureCheck.AutoSize = true;
-            this.NatureCheck.Location = new System.Drawing.Point(15, 54);
+            this.NatureCheck.Location = new System.Drawing.Point(15, 184);
             this.NatureCheck.Name = "NatureCheck";
             this.NatureCheck.Size = new System.Drawing.Size(62, 19);
             this.NatureCheck.TabIndex = 3;
@@ -100,7 +92,7 @@
             // Nature
             // 
             this.Nature.FormattingEnabled = true;
-            this.Nature.Location = new System.Drawing.Point(104, 52);
+            this.Nature.Location = new System.Drawing.Point(104, 182);
             this.Nature.Name = "Nature";
             this.Nature.Size = new System.Drawing.Size(121, 23);
             this.Nature.TabIndex = 2;
@@ -108,7 +100,7 @@
             // StarCheck
             // 
             this.StarCheck.AutoSize = true;
-            this.StarCheck.Location = new System.Drawing.Point(15, 83);
+            this.StarCheck.Location = new System.Drawing.Point(15, 213);
             this.StarCheck.Name = "StarCheck";
             this.StarCheck.Size = new System.Drawing.Size(51, 19);
             this.StarCheck.TabIndex = 5;
@@ -127,7 +119,7 @@
             "5",
             "6",
             "7"});
-            this.Stars.Location = new System.Drawing.Point(104, 81);
+            this.Stars.Location = new System.Drawing.Point(104, 211);
             this.Stars.Name = "Stars";
             this.Stars.Size = new System.Drawing.Size(121, 23);
             this.Stars.TabIndex = 4;
@@ -135,7 +127,7 @@
             // ShinyCheck
             // 
             this.ShinyCheck.AutoSize = true;
-            this.ShinyCheck.Location = new System.Drawing.Point(15, 145);
+            this.ShinyCheck.Location = new System.Drawing.Point(15, 275);
             this.ShinyCheck.Name = "ShinyCheck";
             this.ShinyCheck.Size = new System.Drawing.Size(119, 19);
             this.ShinyCheck.TabIndex = 6;
@@ -144,7 +136,7 @@
             // 
             // Save
             // 
-            this.Save.Location = new System.Drawing.Point(12, 289);
+            this.Save.Location = new System.Drawing.Point(12, 419);
             this.Save.Name = "Save";
             this.Save.Size = new System.Drawing.Size(228, 23);
             this.Save.TabIndex = 9;
@@ -166,7 +158,7 @@
             this.PerfectIVFilterGroup.Controls.Add(this.Def);
             this.PerfectIVFilterGroup.Controls.Add(this.Atk);
             this.PerfectIVFilterGroup.Controls.Add(this.HP);
-            this.PerfectIVFilterGroup.Location = new System.Drawing.Point(9, 170);
+            this.PerfectIVFilterGroup.Location = new System.Drawing.Point(9, 300);
             this.PerfectIVFilterGroup.Name = "PerfectIVFilterGroup";
             this.PerfectIVFilterGroup.Size = new System.Drawing.Size(231, 90);
             this.PerfectIVFilterGroup.TabIndex = 10;
@@ -356,7 +348,7 @@
             // SatisfyAny
             // 
             this.SatisfyAny.AutoSize = true;
-            this.SatisfyAny.Location = new System.Drawing.Point(15, 266);
+            this.SatisfyAny.Location = new System.Drawing.Point(15, 396);
             this.SatisfyAny.Name = "SatisfyAny";
             this.SatisfyAny.Size = new System.Drawing.Size(226, 19);
             this.SatisfyAny.TabIndex = 11;
@@ -376,7 +368,7 @@
             // NatureFixed
             // 
             this.NatureFixed.AutoSize = true;
-            this.NatureFixed.Location = new System.Drawing.Point(231, 56);
+            this.NatureFixed.Location = new System.Drawing.Point(231, 186);
             this.NatureFixed.Name = "NatureFixed";
             this.NatureFixed.Size = new System.Drawing.Size(15, 14);
             this.NatureFixed.TabIndex = 13;
@@ -386,7 +378,7 @@
             // StarFixed
             // 
             this.StarFixed.AutoSize = true;
-            this.StarFixed.Location = new System.Drawing.Point(231, 85);
+            this.StarFixed.Location = new System.Drawing.Point(231, 215);
             this.StarFixed.Name = "StarFixed";
             this.StarFixed.Size = new System.Drawing.Size(15, 14);
             this.StarFixed.TabIndex = 14;
@@ -414,7 +406,7 @@
             // TeraFixed
             // 
             this.TeraFixed.AutoSize = true;
-            this.TeraFixed.Location = new System.Drawing.Point(231, 114);
+            this.TeraFixed.Location = new System.Drawing.Point(231, 244);
             this.TeraFixed.Name = "TeraFixed";
             this.TeraFixed.Size = new System.Drawing.Size(15, 14);
             this.TeraFixed.TabIndex = 19;
@@ -424,7 +416,7 @@
             // TeraCheck
             // 
             this.TeraCheck.AutoSize = true;
-            this.TeraCheck.Location = new System.Drawing.Point(15, 112);
+            this.TeraCheck.Location = new System.Drawing.Point(15, 242);
             this.TeraCheck.Name = "TeraCheck";
             this.TeraCheck.Size = new System.Drawing.Size(74, 19);
             this.TeraCheck.TabIndex = 18;
@@ -443,16 +435,25 @@
             "5",
             "6",
             "7"});
-            this.TeraType.Location = new System.Drawing.Point(104, 110);
+            this.TeraType.Location = new System.Drawing.Point(104, 240);
             this.TeraType.Name = "TeraType";
             this.TeraType.Size = new System.Drawing.Size(121, 23);
             this.TeraType.TabIndex = 17;
+            // 
+            // Species
+            // 
+            this.Species.FormattingEnabled = true;
+            this.Species.Location = new System.Drawing.Point(104, 27);
+            this.Species.Name = "Species";
+            this.Species.Size = new System.Drawing.Size(120, 148);
+            this.Species.TabIndex = 20;
             // 
             // FilterSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(252, 320);
+            this.ClientSize = new System.Drawing.Size(270, 472);
+            this.Controls.Add(this.Species);
             this.Controls.Add(this.TeraFixed);
             this.Controls.Add(this.TeraCheck);
             this.Controls.Add(this.TeraType);
@@ -470,7 +471,6 @@
             this.Controls.Add(this.NatureCheck);
             this.Controls.Add(this.Nature);
             this.Controls.Add(this.SpeciesCheck);
-            this.Controls.Add(this.Species);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -491,8 +491,6 @@
         }
 
         #endregion
-
-        private ComboBox Species;
         private CheckBox SpeciesCheck;
         private CheckBox NatureCheck;
         private ComboBox Nature;
@@ -522,5 +520,6 @@
         private CheckBox TeraFixed;
         private CheckBox TeraCheck;
         private ComboBox TeraType;
+        private CheckedListBox Species;
     }
 }

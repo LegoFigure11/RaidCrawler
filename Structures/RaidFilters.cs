@@ -4,7 +4,7 @@ namespace RaidCrawler.Structures
 {
     public static class RaidFilters
     {
-        public static Species? Species = Settings.Default.SpeciesEnabled ? (Species)Settings.Default.SpeciesFilter : null;
+        public static Species[]? Species = Settings.Default.SpeciesEnabled ? Array.ConvertAll(Settings.Default.SpeciesFilter, species => (Species) species) : null;
         public static int? Stars = Settings.Default.StarsEnabled ? Settings.Default.StarsFilter : null;
         public static bool Shiny = Settings.Default.SearchTillShiny;
         public static Nature? Nature = Settings.Default.NatureEnabled ? (Nature)Settings.Default.NatureFilter : null;
@@ -32,7 +32,7 @@ namespace RaidCrawler.Structures
             ITeraRaid? encounter = raid.Encounter(progress);
             if (encounter == null)
                 return false;
-            return encounter.Species == (int)Species;
+            return Array.Exists(Species, species => encounter.Species == (int)species);
         }
 
         public static bool IsStarsSatisfied(Raid raid, int StoryProgress)
