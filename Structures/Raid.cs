@@ -29,12 +29,12 @@ namespace RaidCrawler.Structures
         public virtual uint Seed => ReadUInt32LittleEndian(Data.AsSpan(0x10));
         public virtual uint Flags => ReadUInt32LittleEndian(Data.AsSpan(0x18));
         public virtual bool IsBlack => Flags == 1;
-        public virtual bool IsEvent => Flags == 2;
+        public virtual bool IsEvent => Flags >= 2;
 
         // Derived Values
         public virtual int TeraType => GetTeraType(Seed);
         public virtual uint Difficulty => GetDifficulty(Seed);
-        public ITeraRaid? Encounter(int Stage) => IsEvent ? TeraDistribution.GetEncounter(Seed, Stage) : TeraEncounter.GetEncounter(Seed, Stage, IsBlack);
+        public ITeraRaid? Encounter(int Stage) => IsEvent ? TeraDistribution.GetEncounter(Seed, Stage, Flags == 3) : TeraEncounter.GetEncounter(Seed, Stage, IsBlack);
 
         public virtual uint EC => GenericRaidData[0];
         /* public virtual uint TIDSID => GenericRaidData[1]; */ // Unneeded

@@ -52,13 +52,13 @@ public class PokeDataBattle
 
     public void SerializePKHeX(BinaryWriter bw, sbyte captureLv)
     {
-        if (TalentType != 1)
-            throw new ArgumentOutOfRangeException(nameof(TalentType), TalentType, "No min flawless IVs?");
-        if (TalentVnum == 0 && DevId != 417 && Level != 35) // DEV_PATIRISU = 417
-            throw new ArgumentOutOfRangeException(nameof(TalentVnum), TalentVnum, "No min flawless IVs?");
+        //if (TalentType != 1)
+        //    throw new ArgumentOutOfRangeException(nameof(TalentType), TalentType, "No min flawless IVs?");
+        //if (TalentVnum == 0 && DevId != 417 && Level != 35) // DEV_PATIRISU = 417
+        //    throw new ArgumentOutOfRangeException(nameof(TalentVnum), TalentVnum, "No min flawless IVs?");
 
-        if (Seikaku != 0)
-            throw new ArgumentOutOfRangeException($"No {Seikaku} allowed!");
+        //if (Seikaku != 0)
+        //    throw new ArgumentOutOfRangeException($"No {Seikaku} allowed!");
 
         // If any PointUp for a move is nonzero, throw an exception.
         if (Waza1.PointUp != 0 || Waza2.PointUp != 0 || Waza3.PointUp != 0 || Waza4.PointUp != 0)

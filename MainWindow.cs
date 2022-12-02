@@ -138,15 +138,16 @@ namespace RaidCrawler
                 Seed.Text = !HideSeed ? $"{raid.Seed:X8}" : "Hidden";
                 EC.Text = !HideSeed ? $"{raid.EC:X8}" : "Hidden";
                 PID.Text = (!HideSeed ? $"{raid.PID:X8}" : "Hidden") + $"{(raid.IsShiny ? " (☆)" : string.Empty)}";
-                TeraType.Text = $"{Raid.strings.types[raid.TeraType]} ({raid.TeraType})";
                 Area.Text = $"{Areas.Area[raid.Area - 1]} - Den {raid.Den}";
                 IsEvent.Checked = raid.IsEvent;
 
-                int StarCount = Raid.GetStarCount(raid.Difficulty, Progress.SelectedIndex, raid.IsBlack);
-                Difficulty.Text = raid.IsEvent ? string.Concat(Enumerable.Repeat("☆", StarCount)) : string.Concat(Enumerable.Repeat("☆", StarCount)) + $" ({raid.Difficulty})";
-
                 var progress = raid.IsEvent ? EventProgress.SelectedIndex : Progress.SelectedIndex;
                 ITeraRaid? encounter = raid.Encounter(progress);
+                var IsFixed = encounter is TeraDistribution td && raid.Flags == 3;
+                var teratype = IsFixed ? ((TeraDistribution)encounter).BossData.GemType - 2 : raid.TeraType;
+                TeraType.Text = $"{Raid.strings.types[teratype]} ({teratype})";
+                int StarCount = IsFixed ? encounter.Stars : Raid.GetStarCount(raid.Difficulty, Progress.SelectedIndex, raid.IsBlack);
+                Difficulty.Text = raid.IsEvent ? string.Concat(Enumerable.Repeat("☆", StarCount)) : string.Concat(Enumerable.Repeat("☆", StarCount)) + $" ({raid.Difficulty})";
 
                 if (encounter != null)
                 {
@@ -157,18 +158,21 @@ namespace RaidCrawler
                     blank.Form = encounter.Form;
                     Encounter9RNG.GenerateData(blank, param, EncounterCriteria.Unrestricted, raid.Seed);
                     var img = blank.Sprite(SpriteBuilderTweak.None);
-                    img = ApplyTeraColor((byte)raid.TeraType, img, SpriteBackgroundType.BottomStripe);
+                    img = ApplyTeraColor((byte)teratype, img, SpriteBackgroundType.BottomStripe);
                     Species.Text = $"{Raid.strings.Species[encounter.Species]} ({encounter.Species})";
                     Sprite.Image = img;
-                    GemIcon.Image = PKHeX.Drawing.Misc.TypeSpriteUtil.GetTypeSpriteGem((byte)raid.TeraType);
+                    GemIcon.Image = PKHeX.Drawing.Misc.TypeSpriteUtil.GetTypeSpriteGem((byte)teratype);
                     Gender.Text = $"{(Gender)blank.Gender}";
-                    Nature.Text = $"{Raid.strings.Natures[blank.Nature]}";
+                    var nature = IsFixed ? ((TeraDistribution)encounter).BossData.Seikaku - 1 : blank.Nature;
+                    Nature.Text = $"{Raid.strings.Natures[nature]}";
                     Ability.Text = $"{Raid.strings.Ability[blank.Ability]}";
                     Move1.Text = Raid.strings.Move[encounter.Move1];
                     Move2.Text = Raid.strings.Move[encounter.Move2];
                     Move3.Text = Raid.strings.Move[encounter.Move3];
                     Move4.Text = Raid.strings.Move[encounter.Move4];
-                    IVs.Text = IVsString(raid.GetIVs(raid.Seed, encounter.FlawlessIVCount));
+                    var tv = IsFixed && ((TeraDistribution)encounter).BossData.TalentType == 2 ? ((TeraDistribution)encounter).BossData.TalentValue : null;
+                    var ivs = tv != null ? new[] { tv.HP, tv.ATK, tv.DEF, tv.SPA, tv.SPD, tv.SPE } : raid.GetIVs(raid.Seed, encounter.FlawlessIVCount);
+                    IVs.Text = IVsString(ivs);
                 }
                 else
                 {

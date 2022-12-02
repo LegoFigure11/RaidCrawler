@@ -5,15 +5,17 @@ namespace RaidCrawler.Structures
 {
     public static class FlatbufferDumper
     {
-        public static byte[] DumpDistributionRaids(string path)
+        public static byte[] DumpDistributionRaids(string path, out List<PokeDataBattle> data)
         {
             var list = new List<byte[]>();
+            data = new List<PokeDataBattle>();
 
             var encounters = Utils.GetBinaryResource(path);
             if (encounters.Length == 0)
                 return encounters;
             var tableEncounters = FlatBufferSerializer.Default.Parse<DeliveryRaidEnemyTableArray>(encounters);
-            AddToList(tableEncounters.Table, list);
+
+            AddToList(tableEncounters.Table, list, data);
             var ordered = list
                     .OrderBy(z => BinaryPrimitives.ReadUInt16LittleEndian(z)) // Species
                     .ThenBy(z => z[2]) // Form
@@ -31,7 +33,7 @@ namespace RaidCrawler.Structures
             new [] { 3, 4, 5 },
         };
 
-        private static void AddToList(IReadOnlyCollection<DeliveryRaidEnemyTable> table, List<byte[]> list)
+        private static void AddToList(IReadOnlyCollection<DeliveryRaidEnemyTable> table, List<byte[]> list, List<PokeDataBattle> data)
         {
             // Get the total weight for each stage of star count
             Span<ushort> weightTotalS = stackalloc ushort[StageStars.Length];
@@ -62,6 +64,7 @@ namespace RaidCrawler.Structures
                     continue;
                 var difficulty = info.Difficulty;
                 TryAddToPickle(info, list, weightTotalS, weightTotalV, weightMinS, weightMinV);
+                data.Add(enc.RaidEnemyInfo.BossPokePara);
                 for (int stage = 0; stage < StageStars.Length; stage++)
                 {
                     if (!StageStars[stage].Contains(difficulty))

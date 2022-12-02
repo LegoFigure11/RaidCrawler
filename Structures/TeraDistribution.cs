@@ -19,27 +19,34 @@ namespace RaidCrawler.Structures
         public ushort Move4 => Entity.Moves.Move4;
         public byte Stars => Entity.Stars;
         public byte RandRate => Entity.RandRate;
+        public PokeDataBattle BossData;
 
-        public TeraDistribution(EncounterDist9 enc) => Entity = enc;
+        public TeraDistribution(EncounterDist9 enc, PokeDataBattle data)
+        {
+            Entity = enc;
+            BossData = data;
+        }
 
         public static ITeraRaid[] GetAllEncounters(string resource)
         {
-            var encs = EncounterDist9.GetArray(FlatbufferDumper.DumpDistributionRaids(resource));
+            var encs = EncounterDist9.GetArray(FlatbufferDumper.DumpDistributionRaids(resource, out List<PokeDataBattle> data));
             var result = new TeraDistribution[encs.Length];
             for (int i = 0; i < encs.Length; i++)
-                result[i] = new TeraDistribution(encs[i]);
+                result[i] = new TeraDistribution(encs[i], data[i]);
             return result;
         }
 
-        public static ITeraRaid? GetEncounter(uint Seed, int stage)
+        public static ITeraRaid? GetEncounter(uint Seed, int stage, bool isFixed)
         {
             if (stage < 0)
                 return null;
             foreach (TeraDistribution enc in Raid.DistTeraRaids)
             {
                 var total = Raid.Game == "Scarlet" ? enc.Entity.GetRandRateTotalScarlet(stage) : enc.Entity.GetRandRateTotalViolet(stage);
-                if (total != 0)
+                if (total != 0 || isFixed)
                 {
+                    if (isFixed)
+                        return enc;
                     var rand = new Xoroshiro128Plus(Seed);
                     _ = rand.NextInt(100);
                     var val = rand.NextInt(total);

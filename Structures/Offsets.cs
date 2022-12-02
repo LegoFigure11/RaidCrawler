@@ -5,7 +5,7 @@ namespace RaidCrawler.Structures
 {
     internal class Offsets
     {
-        public const string RaidBlockPointer = "[[main+42FD560]+160]+40";
+        public const string RaidBlockPointer = "[[main+4384B18]+180]+40";
     }
 
     internal class OffsetUtil
