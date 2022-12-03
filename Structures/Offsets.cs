@@ -5,6 +5,9 @@ namespace RaidCrawler.Structures
 {
     internal class Offsets
     {
+        public const string ScarletID = "0100A3D008C5C000";
+        public const string VioletID = "01008F6008C5E000";
+
         public const string RaidBlockPointer = "[[main+4384B18]+180]+40";
     }
 

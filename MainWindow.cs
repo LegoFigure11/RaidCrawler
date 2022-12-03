@@ -7,6 +7,7 @@ using RaidCrawler.Subforms;
 using SysBot.Base;
 using System.Data;
 using System.Net.Sockets;
+using static RaidCrawler.Structures.Offsets;
 using static SysBot.Base.SwitchButton;
 
 namespace RaidCrawler
@@ -93,6 +94,22 @@ namespace RaidCrawler
                     SwitchConnection.Connect();
                     ConnectionStatusText.Text = "Connected!";
                     IsReading = true;
+                    string id = await GetGameID(CancellationToken.None);
+                    if (id is ScarletID)
+                    {
+                        Game.SelectedIndex = Game.FindString("Scarlet");
+                    }
+                    else if (id is VioletID)
+                    {
+                        Game.SelectedIndex = Game.FindString("Violet");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Unable to detect Pokémon Scarlet or Pokémon Violet running on your switch!");
+                        Disconnect();
+                        IsReading = false;
+                    }
+
                     await ReadRaids(CancellationToken.None);
                     IsReading = false;
                     ButtonAdvanceDate.Enabled = true;
@@ -338,6 +355,8 @@ namespace RaidCrawler
             await Task.Delay(delay, token).ConfigureAwait(false);
         }
 
+        private static async Task<string> GetGameID(CancellationToken token) => await SwitchConnection.GetTitleID(token).ConfigureAwait(false);
+
         private async Task AdvanceDate(CancellationToken token)
         {
             ConnectionStatusText.Text = "Changing date...";
@@ -413,7 +432,7 @@ namespace RaidCrawler
         private async Task ReadRaids(CancellationToken token)
         {
             ConnectionStatusText.Text = "Parsing pointer...";
-            offset = await OffsetUtil.GetPointerAddress(Offsets.RaidBlockPointer, CancellationToken.None);
+            offset = await OffsetUtil.GetPointerAddress(RaidBlockPointer, CancellationToken.None);
 
             Raids.Clear();
             index = 0;
