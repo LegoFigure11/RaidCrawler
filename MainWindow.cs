@@ -168,13 +168,15 @@ namespace RaidCrawler
                 if (encounter != null)
                 {
                     var param = GetParam(encounter);
-                    var blank = new PK9();
-                    blank.Species = encounter.Species;
-                    blank.Form = encounter.Form;
+                    var blank = new PK9
+                    {
+                        Species = encounter.Species,
+                        Form = encounter.Form
+                    };
                     Encounter9RNG.GenerateData(blank, param, EncounterCriteria.Unrestricted, raid.Seed);
                     var img = blank.Sprite(SpriteBuilderTweak.None);
                     img = ApplyTeraColor((byte)teratype, img, SpriteBackgroundType.BottomStripe);
-                    Species.Text = $"{Raid.strings.Species[encounter.Species]} ({encounter.Species})";
+                    Species.Text = $"{Raid.strings.Species[encounter.Species]}{(encounter.Form != 0 ? $"-{encounter.Form}" : "")}";
                     Sprite.Image = img;
                     GemIcon.Image = PKHeX.Drawing.Misc.TypeSpriteUtil.GetTypeSpriteGem((byte)teratype);
                     Gender.Text = $"{(Gender)blank.Gender}";
@@ -256,7 +258,7 @@ namespace RaidCrawler
             return res;
         }
 
-        private int GetTeraType(ITeraRaid? encounter, Raid raid)
+        private static int GetTeraType(ITeraRaid? encounter, Raid raid)
         {
             if (encounter == null)
                 return raid.TeraType;

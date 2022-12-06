@@ -5,8 +5,8 @@ namespace RaidCrawler.Subforms
 {
     public partial class FilterSettings : Form
     {
-        private static Color Highlight = Color.YellowGreen;
-        private static Color DefaultColor;
+        private static readonly Color Highlight = Color.YellowGreen;
+        private static readonly Color DefaultColor;
         public FilterSettings()
         {
             InitializeComponent();

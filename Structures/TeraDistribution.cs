@@ -32,7 +32,7 @@ namespace RaidCrawler.Structures
             var type3 = EncounterMight9.GetArray(all[1]);
             var result = new TeraDistribution[type2.Length + type3.Length];
             for (int i = 0; i < result.Length; i++)
-                result[i] = i < type2.Length ? new TeraDistribution(type2[i]) : new TeraDistribution(type3[i-type2.Length]);
+                result[i] = i < type2.Length ? new TeraDistribution(type2[i]) : new TeraDistribution(type3[i - type2.Length]);
             return result;
         }
 
