@@ -431,5 +431,17 @@ namespace RaidCrawler.Properties {
                 this["CfgReturnGame"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public decimal CfgDaysToSkip {
+            get {
+                return ((decimal)(this["CfgDaysToSkip"]));
+            }
+            set {
+                this["CfgDaysToSkip"] = value;
+            }
+        }
     }
 }

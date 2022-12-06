@@ -55,6 +55,8 @@
             this.ReturnHome = new System.Windows.Forms.NumericUpDown();
             this.label10 = new System.Windows.Forms.Label();
             this.ReturnGame = new System.Windows.Forms.NumericUpDown();
+            this.label11 = new System.Windows.Forms.Label();
+            this.DaysToSkip = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.BaseDelay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SystemDDownPresses)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NavigateToSettings)).BeginInit();
@@ -65,6 +67,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.DateChange)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ReturnHome)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ReturnGame)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DaysToSkip)).BeginInit();
             this.SuspendLayout();
             // 
             // FocusWindow
@@ -174,7 +177,7 @@
             // 
             // Save
             // 
-            this.Save.Location = new System.Drawing.Point(12, 464);
+            this.Save.Location = new System.Drawing.Point(12, 482);
             this.Save.Name = "Save";
             this.Save.Size = new System.Drawing.Size(327, 23);
             this.Save.TabIndex = 12;
@@ -341,7 +344,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(12, 397);
+            this.label9.Location = new System.Drawing.Point(12, 426);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(160, 15);
             this.label9.TabIndex = 29;
@@ -349,7 +352,7 @@
             // 
             // ReturnHome
             // 
-            this.ReturnHome.Location = new System.Drawing.Point(271, 395);
+            this.ReturnHome.Location = new System.Drawing.Point(271, 424);
             this.ReturnHome.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -367,7 +370,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(12, 426);
+            this.label10.Location = new System.Drawing.Point(12, 455);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(119, 15);
             this.label10.TabIndex = 31;
@@ -375,7 +378,7 @@
             // 
             // ReturnGame
             // 
-            this.ReturnGame.Location = new System.Drawing.Point(271, 424);
+            this.ReturnGame.Location = new System.Drawing.Point(271, 453);
             this.ReturnGame.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -390,11 +393,34 @@
             0,
             0});
             // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(12, 397);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(179, 15);
+            this.label11.TabIndex = 33;
+            this.label11.Text = "Number of days/months to skip:";
+            // 
+            // DaysToSkip
+            // 
+            this.DaysToSkip.Location = new System.Drawing.Point(271, 395);
+            this.DaysToSkip.Maximum = new decimal(new int[] {
+            99,
+            0,
+            0,
+            0});
+            this.DaysToSkip.Name = "DaysToSkip";
+            this.DaysToSkip.Size = new System.Drawing.Size(68, 23);
+            this.DaysToSkip.TabIndex = 32;
+            // 
             // ConfigWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(351, 499);
+            this.ClientSize = new System.Drawing.Size(351, 517);
+            this.Controls.Add(this.label11);
+            this.Controls.Add(this.DaysToSkip);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.ReturnGame);
             this.Controls.Add(this.label9);
@@ -435,6 +461,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.DateChange)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ReturnHome)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ReturnGame)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DaysToSkip)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -469,5 +496,7 @@
         private NumericUpDown ReturnHome;
         private Label label10;
         private NumericUpDown ReturnGame;
+        private Label label11;
+        private NumericUpDown DaysToSkip;
     }
 }

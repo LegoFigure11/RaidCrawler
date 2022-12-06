@@ -379,7 +379,7 @@ namespace RaidCrawler
             for (int i = 0; i < 2; i++) await Click(DDOWN, 0_200 + BaseDelay, token).ConfigureAwait(false);
             await Click(A, (int)Settings.Default.CfgDateChange + BaseDelay, token).ConfigureAwait(false);
             // Change the date
-            await Click(DUP, 0_200 + BaseDelay, token).ConfigureAwait(false);
+            for (int i = 0; i < Settings.Default.CfgDaysToSkip; i++) await Click(DUP, 0_200 + BaseDelay, token).ConfigureAwait(false); // Not actually necessary, so we default to 0 as per #29
             for (int i = 0; i < 6; i++) await Click(DRIGHT, 0_100 + BaseDelay, token).ConfigureAwait(false);
             await Click(A, 0_500 + BaseDelay, token).ConfigureAwait(false);
             // Return to game

@@ -22,6 +22,7 @@ namespace RaidCrawler.Subforms
             SystemDDownPresses.Value = Settings.Default.CfgSystemDDownPresses;
             Submenu.Value = Settings.Default.CfgSubmenu;
             DateChange.Value = Settings.Default.CfgDateChange;
+            DaysToSkip.Value = Settings.Default.CfgDaysToSkip;
             ReturnHome.Value = Settings.Default.CfgReturnHome;
             ReturnGame.Value = Settings.Default.CfgReturnGame;
         }
@@ -46,6 +47,7 @@ namespace RaidCrawler.Subforms
             Settings.Default.CfgSystemDDownPresses = SystemDDownPresses.Value;
             Settings.Default.CfgSubmenu = Submenu.Value;
             Settings.Default.CfgDateChange = DateChange.Value;
+            Settings.Default.CfgDaysToSkip = DaysToSkip.Value;
             Settings.Default.CfgReturnHome = ReturnHome.Value;
             Settings.Default.CfgReturnGame = ReturnGame.Value;
 
