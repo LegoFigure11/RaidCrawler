@@ -9,6 +9,8 @@ namespace RaidCrawler.Structures
         public const string VioletID = "01008F6008C5E000";
 
         public const string RaidBlockPointer = "[[main+4384B18]+180]+40";
+        public const string SaveBlockPointer = "[[[main+4385F30]+80]+8]"; // Thanks Lincoln-LM!
+        public static int[] DifficultyFlags = { 0x2BF20, 0x1F400, 0x1B640, 0x13EC0 }; // Thanks Lincoln-LM!
     }
 
     internal class OffsetUtil

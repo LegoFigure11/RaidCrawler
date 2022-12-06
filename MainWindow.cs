@@ -9,6 +9,7 @@ using System.Data;
 using System.Net.Sockets;
 using static RaidCrawler.Structures.Offsets;
 using static SysBot.Base.SwitchButton;
+using static System.Buffers.Binary.BinaryPrimitives;
 
 namespace RaidCrawler
 {
@@ -94,6 +95,7 @@ namespace RaidCrawler
                     SwitchConnection.Connect();
                     ConnectionStatusText.Text = "Connected!";
                     IsReading = true;
+                    ConnectionStatusText.Text = "Detecting game version...";
                     string id = await GetGameID(CancellationToken.None);
                     if (id is ScarletID)
                     {
@@ -110,7 +112,12 @@ namespace RaidCrawler
                         IsReading = false;
                     }
 
+                    ConnectionStatusText.Text = "Reading story progress...";
+                    Progress.SelectedIndex = await GetStoryProgress(CancellationToken.None);
+
+                    ConnectionStatusText.Text = "Reading raids...";
                     await ReadRaids(CancellationToken.None);
+
                     IsReading = false;
                     ButtonAdvanceDate.Enabled = true;
                     ButtonReadRaids.Enabled = true;
@@ -139,6 +146,28 @@ namespace RaidCrawler
                 await SwitchConnection.SendAsync(SwitchCommand.DetachController(true), CancellationToken.None).ConfigureAwait(false);
                 SwitchConnection.Disconnect();
             }
+        }
+
+        private static async Task<int> GetStoryProgress(CancellationToken token)
+        {
+            int progress = 0;
+            for (int i = DifficultyFlags.Length - 1; i > 0 && progress == 0; i--)
+            {
+                // See https://github.com/Lincoln-LM/sv-live-map/blob/da93e0edd2fb9b89d76ec0027826c9e89acdcda5/sv_live_map_core/raid_reader.py#L59
+                var address = await OffsetUtil.GetPointerAddress($"{SaveBlockPointer}+{DifficultyFlags[i]:X}", token);
+                var key = ReadUInt32LittleEndian(await SwitchConnection.ReadBytesAbsoluteAsync(address, 4, token));
+                var decryptedKey = DecryptStoryProgressKey(key);
+                address = await OffsetUtil.GetPointerAddress($"[{SaveBlockPointer}+{DifficultyFlags[i] + 8:X}]", token);
+                var val = await SwitchConnection.ReadBytesAbsoluteAsync(address, 1, token);
+                if ((decryptedKey ^ val[0]) == 2) progress = i + 1;
+            }
+            return progress;
+        }
+
+        private static uint DecryptStoryProgressKey(uint key)
+        {
+            var rng = new SCXorShift32(key);
+            return rng.Next();
         }
 
         private void ButtonConnect_Click(object sender, EventArgs e)
