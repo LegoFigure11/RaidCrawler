@@ -82,6 +82,12 @@
             this.GemIcon = new System.Windows.Forms.PictureBox();
             this.ButtonDumpRaid = new System.Windows.Forms.Button();
             this.ConfigSettings = new System.Windows.Forms.Button();
+            this.HeightSize = new System.Windows.Forms.TextBox();
+            this.LabelHeight = new System.Windows.Forms.Label();
+            this.WeightSize = new System.Windows.Forms.TextBox();
+            this.LabelWeight = new System.Windows.Forms.Label();
+            this.ScaleSize = new System.Windows.Forms.TextBox();
+            this.LabelScale = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.Sprite)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GemIcon)).BeginInit();
             this.SuspendLayout();
@@ -225,7 +231,6 @@
             this.Seed.ReadOnly = true;
             this.Seed.Size = new System.Drawing.Size(95, 22);
             this.Seed.TabIndex = 43;
-            this.Seed.Click += new System.EventHandler(this.Seed_Clicked);
             // 
             // LabelSeed
             // 
@@ -623,11 +628,74 @@
             this.ConfigSettings.UseVisualStyleBackColor = true;
             this.ConfigSettings.Click += new System.EventHandler(this.ConfigSettings_Click);
             // 
+            // Height
+            // 
+            this.HeightSize.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.HeightSize.Location = new System.Drawing.Point(357, 312);
+            this.HeightSize.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.HeightSize.Name = "Height";
+            this.HeightSize.ReadOnly = true;
+            this.HeightSize.Size = new System.Drawing.Size(46, 22);
+            this.HeightSize.TabIndex = 117;
+            // 
+            // LabelHeight
+            // 
+            this.LabelHeight.AutoSize = true;
+            this.LabelHeight.Location = new System.Drawing.Point(303, 314);
+            this.LabelHeight.Name = "LabelHeight";
+            this.LabelHeight.Size = new System.Drawing.Size(46, 15);
+            this.LabelHeight.TabIndex = 116;
+            this.LabelHeight.Text = "Height:";
+            // 
+            // Weight
+            // 
+            this.WeightSize.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.WeightSize.Location = new System.Drawing.Point(465, 311);
+            this.WeightSize.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.WeightSize.Name = "Weight";
+            this.WeightSize.ReadOnly = true;
+            this.WeightSize.Size = new System.Drawing.Size(46, 22);
+            this.WeightSize.TabIndex = 119;
+            // 
+            // LabelWeight
+            // 
+            this.LabelWeight.AutoSize = true;
+            this.LabelWeight.Location = new System.Drawing.Point(410, 314);
+            this.LabelWeight.Name = "LabelWeight";
+            this.LabelWeight.Size = new System.Drawing.Size(48, 15);
+            this.LabelWeight.TabIndex = 118;
+            this.LabelWeight.Text = "Weight:";
+            // 
+            // ScaleSize
+            // 
+            this.ScaleSize.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ScaleSize.Location = new System.Drawing.Point(562, 311);
+            this.ScaleSize.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.ScaleSize.Name = "ScaleSize";
+            this.ScaleSize.ReadOnly = true;
+            this.ScaleSize.Size = new System.Drawing.Size(46, 22);
+            this.ScaleSize.TabIndex = 121;
+            // 
+            // LabelScale
+            // 
+            this.LabelScale.AutoSize = true;
+            this.LabelScale.Location = new System.Drawing.Point(518, 314);
+            this.LabelScale.Name = "LabelScale";
+            this.LabelScale.Size = new System.Drawing.Size(37, 15);
+            this.LabelScale.TabIndex = 120;
+            this.LabelScale.Text = "Scale:";
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(640, 314);
+            this.ClientSize = new System.Drawing.Size(640, 344);
+            this.Controls.Add(this.ScaleSize);
+            this.Controls.Add(this.LabelScale);
+            this.Controls.Add(this.WeightSize);
+            this.Controls.Add(this.LabelWeight);
+            this.Controls.Add(this.HeightSize);
+            this.Controls.Add(this.LabelHeight);
             this.Controls.Add(this.ConfigSettings);
             this.Controls.Add(this.ButtonDumpRaid);
             this.Controls.Add(this.GemIcon);
@@ -749,5 +817,11 @@
         private PictureBox GemIcon;
         private Button ButtonDumpRaid;
         private Button ConfigSettings;
+        private TextBox HeightSize;
+        private Label LabelHeight;
+        private TextBox WeightSize;
+        private Label LabelWeight;
+        private TextBox ScaleSize;
+        private Label LabelScale;
     }
 }

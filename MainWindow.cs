@@ -217,6 +217,12 @@ namespace RaidCrawler
                     Move3.Text = Raid.strings.Move[encounter.Move3];
                     Move4.Text = Raid.strings.Move[encounter.Move4];
                     IVs.Text = IVsString(ToSpeedLast(blank.IVs));
+                    var scale = blank.Scale;
+                    var height = blank.HeightScalar;
+                    var weight = blank.WeightScalar;
+                    HeightSize.Text = $"{height}";
+                    WeightSize.Text = $"{weight}";
+                    ScaleSize.Text = $"{scale}";
                 }
                 else
                 {
