@@ -1,14 +1,12 @@
-﻿using PKHeX.Core;
+﻿using Newtonsoft.Json;
+using PKHeX.Core;
 using RaidCrawler.Structures;
-using Newtonsoft.Json;
 
 namespace RaidCrawler.Subforms
 {
     public partial class FilterSettings : Form
     {
-        private static readonly Color Highlight = Color.YellowGreen;
-        private static readonly Color DefaultColor;
-        private List<RaidFilter> filters;
+        private readonly List<RaidFilter> filters;
         public FilterSettings(ref List<RaidFilter> filters)
         {
             InitializeComponent();
@@ -18,7 +16,8 @@ namespace RaidCrawler.Subforms
             Nature.DataSource = Enum.GetValues(typeof(Nature));
             TeraType.DataSource = Enum.GetValues(typeof(MoveType)).Cast<MoveType>().Where(z => z != MoveType.Any).ToArray();
             ActiveFilters.DisplayMember = "Name";
-            foreach(var filter in filters)
+            Stars.SelectedIndex = 0;
+            foreach (var filter in filters)
                 ActiveFilters.Items.Add(filter);
             if (ActiveFilters.Items.Count > 0)
                 ActiveFilters.SelectedIndex = 0;
@@ -38,6 +37,7 @@ namespace RaidCrawler.Subforms
             StarCheck.Checked = settings.Stars != null;
             TeraCheck.Checked = settings.TeraType != null;
             ShinyCheck.Checked = settings.Shiny;
+            DisableFilter.Checked = !settings.Enabled;
 
             var ivbin = settings.IVBin;
             HP.Checked = (ivbin & 1) == 1;
@@ -90,16 +90,26 @@ namespace RaidCrawler.Subforms
             filter.Shiny = ShinyCheck.Checked;
             filter.IVBin = ivbin;
             filter.IVVals = ivvals;
+            filter.Enabled = !DisableFilter.Checked;
 
             if (filter.IsFilterSet())
             {
+                for (int i = 0; i < ActiveFilters.Items.Count; i++)
+                {
+                    var f = filters.ElementAt(i);
+                    if (f.Name == filter.Name)
+                    {
+                        filters.RemoveAt(i);
+                        break;
+                    }
+                }
                 filters.Add(filter);
-                ActiveFilters.Items.Add(filter);
+                ActiveFilters.DataSource = filters;
                 ActiveFilters.SelectedIndex = ActiveFilters.Items.Count - 1;
             }
             else
             {
-                MessageBox.Show("You have set no stop condition. Not adding any filter.");
+                MessageBox.Show("You have not set any stop conditions. No filter will be added.");
             }
         }
 
@@ -158,10 +168,8 @@ namespace RaidCrawler.Subforms
         private void Save_Click(object sender, EventArgs e)
         {
             string output = JsonConvert.SerializeObject(filters);
-            using (StreamWriter sw = new StreamWriter(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "filters.json")))
-            {
-                sw.Write(output);
-            }
+            using StreamWriter sw = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "filters.json"));
+            sw.Write(output);
         }
 
         private void Remove_Click(object sender, EventArgs e)
@@ -181,6 +189,18 @@ namespace RaidCrawler.Subforms
             if (ActiveFilters.SelectedIndex < 0)
                 return;
             SelectFilter(filters[ActiveFilters.SelectedIndex]);
+        }
+
+        private void FilterName_TextChanged(object sender, EventArgs e)
+        {
+            if (ActiveFilters.SelectedIndex > -1 && FilterName.Text == filters[ActiveFilters.SelectedIndex].Name)
+            {
+                Add.Text = "Update Filter";
+            }
+            else
+            {
+                Add.Text = "Add Filter";
+            }
         }
     }
 }

@@ -1,10 +1,9 @@
 ﻿using PKHeX.Core;
-using RaidCrawler.Properties;
 namespace RaidCrawler.Structures
 {
     public class RaidFilter
     {
-        public string Name { get; set; }
+        public string? Name { get; set; }
         public int? Species { get; set; }
         public int? Stars { get; set; }
         public bool Shiny { get; set; }
@@ -12,6 +11,7 @@ namespace RaidCrawler.Structures
         public int? TeraType { get; set; }
         public int IVBin { get; set; }
         public int IVVals { get; set; }
+        public bool Enabled { get; set; }
 
         public bool IsFilterSet()
         {
@@ -89,7 +89,7 @@ namespace RaidCrawler.Structures
 
         public bool FilterSatisfied(Raid raid, int StoryProgress, int EventProgress)
         {
-            return IsIVsSatisfied(raid, StoryProgress, EventProgress) && IsShinySatisfied(raid) && IsSpeciesSatisfied(raid, StoryProgress, EventProgress)
+            return Enabled && IsIVsSatisfied(raid, StoryProgress, EventProgress) && IsShinySatisfied(raid) && IsSpeciesSatisfied(raid, StoryProgress, EventProgress)
                 && IsNatureSatisfied(raid, StoryProgress, EventProgress) && IsStarsSatisfied(raid, StoryProgress) && IsTeraTypeSatisfied(raid);
         }
 

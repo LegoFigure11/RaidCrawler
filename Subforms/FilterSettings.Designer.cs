@@ -55,6 +55,7 @@
             this.FilterName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.Remove = new System.Windows.Forms.Button();
+            this.DisableFilter = new System.Windows.Forms.CheckBox();
             this.PerfectIVFilterGroup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.IVSPE)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.IVSPD)).BeginInit();
@@ -134,9 +135,9 @@
             this.ShinyCheck.AutoSize = true;
             this.ShinyCheck.Location = new System.Drawing.Point(15, 177);
             this.ShinyCheck.Name = "ShinyCheck";
-            this.ShinyCheck.Size = new System.Drawing.Size(119, 19);
+            this.ShinyCheck.Size = new System.Drawing.Size(60, 19);
             this.ShinyCheck.TabIndex = 6;
-            this.ShinyCheck.Text = "Search until shiny";
+            this.ShinyCheck.Text = "Shiny?";
             this.ShinyCheck.UseVisualStyleBackColor = true;
             // 
             // Add
@@ -393,6 +394,7 @@
             this.FilterName.Name = "FilterName";
             this.FilterName.Size = new System.Drawing.Size(168, 23);
             this.FilterName.TabIndex = 21;
+            this.FilterName.TextChanged += new System.EventHandler(this.FilterName_TextChanged);
             // 
             // label1
             // 
@@ -413,11 +415,22 @@
             this.Remove.UseVisualStyleBackColor = true;
             this.Remove.Click += new System.EventHandler(this.Remove_Click);
             // 
+            // DisableFilter
+            // 
+            this.DisableFilter.AutoSize = true;
+            this.DisableFilter.Location = new System.Drawing.Point(135, 177);
+            this.DisableFilter.Name = "DisableFilter";
+            this.DisableFilter.Size = new System.Drawing.Size(98, 19);
+            this.DisableFilter.TabIndex = 24;
+            this.DisableFilter.Text = "Disable Filter?";
+            this.DisableFilter.UseVisualStyleBackColor = true;
+            // 
             // FilterSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(454, 331);
+            this.Controls.Add(this.DisableFilter);
             this.Controls.Add(this.Remove);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.FilterName);
@@ -482,5 +495,6 @@
         private TextBox FilterName;
         private Label label1;
         private Button Remove;
+        private CheckBox DisableFilter;
     }
 }
