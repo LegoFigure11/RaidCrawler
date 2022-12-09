@@ -1,5 +1,6 @@
 ﻿using PKHeX.Core;
 using RaidCrawler.Structures;
+using Newtonsoft.Json;
 
 namespace RaidCrawler.Subforms
 {
@@ -7,33 +8,36 @@ namespace RaidCrawler.Subforms
     {
         private static readonly Color Highlight = Color.YellowGreen;
         private static readonly Color DefaultColor;
-        public FilterSettings()
+        private List<RaidFilter> filters;
+        public FilterSettings(ref List<RaidFilter> filters)
         {
             InitializeComponent();
+            this.filters = filters;
             var settings = Properties.Settings.Default;
             Species.DataSource = Enum.GetValues(typeof(Species)).Cast<Species>().Where(z => z != PKHeX.Core.Species.MAX_COUNT).ToArray();
             Nature.DataSource = Enum.GetValues(typeof(Nature));
             TeraType.DataSource = Enum.GetValues(typeof(MoveType)).Cast<MoveType>().Where(z => z != MoveType.Any).ToArray();
-            Species.SelectedIndex = settings.SpeciesFilter;
-            Nature.SelectedIndex = settings.NatureFilter;
-            Stars.SelectedIndex = settings.StarsFilter;
-            TeraType.SelectedIndex = settings.TeraFilter;
-            SpeciesCheck.Checked = settings.SpeciesEnabled;
-            NatureCheck.Checked = settings.NatureEnabled;
-            StarCheck.Checked = settings.StarsEnabled;
-            TeraCheck.Checked = settings.TeraEnabled;
-            ShinyCheck.Checked = settings.SearchTillShiny;
-            SatisfyAny.Checked = settings.SatisfyAny;
-            SpeciesFixed.Checked = settings.SpeciesFixed;
-            NatureFixed.Checked = settings.NatureFixed;
-            StarFixed.Checked = settings.StarFixed;
-            TeraFixed.Checked = settings.TeraFixed;
+            ActiveFilters.DisplayMember = "Name";
+            foreach(var filter in filters)
+                ActiveFilters.Items.Add(filter);
+            if (ActiveFilters.Items.Count > 0)
+                ActiveFilters.SelectedIndex = 0;
+            if (ActiveFilters.SelectedIndex == -1)
+                Remove.Enabled = false;
+        }
 
-            // highlight fixed components
-            Species.BackColor = settings.SpeciesFixed ? Highlight : DefaultColor;
-            Nature.BackColor = settings.NatureFixed ? Highlight : DefaultColor;
-            Stars.BackColor = settings.StarFixed ? Highlight : DefaultColor;
-            TeraType.BackColor = settings.TeraFixed ? Highlight : DefaultColor;
+        public void SelectFilter(RaidFilter settings)
+        {
+            FilterName.Text = settings.Name;
+            Species.SelectedIndex = settings.Species != null ? (int)settings.Species : 0;
+            Nature.SelectedIndex = settings.Nature != null ? (int)settings.Nature : 0;
+            Stars.SelectedIndex = settings.Stars != null ? (int)settings.Stars - 1 : 0;
+            TeraType.SelectedIndex = settings.TeraType != null ? (int)settings.TeraType : 0;
+            SpeciesCheck.Checked = settings.Species != null;
+            NatureCheck.Checked = settings.Nature != null;
+            StarCheck.Checked = settings.Stars != null;
+            TeraCheck.Checked = settings.TeraType != null;
+            ShinyCheck.Checked = settings.Shiny;
 
             var ivbin = settings.IVBin;
             HP.Checked = (ivbin & 1) == 1;
@@ -59,100 +63,66 @@ namespace RaidCrawler.Subforms
             IVSPE.Enabled = Spe.Checked;
 
             Species.Enabled = SpeciesCheck.Checked;
-            SpeciesFixed.Enabled = SpeciesCheck.Checked;
             Nature.Enabled = NatureCheck.Checked;
-            NatureFixed.Enabled = NatureCheck.Checked;
             Stars.Enabled = StarCheck.Checked;
-            StarFixed.Enabled = StarCheck.Checked;
             TeraType.Enabled = TeraCheck.Checked;
-            TeraFixed.Enabled = TeraCheck.Checked;
         }
 
-        private void Save_Click(object sender, EventArgs e)
+        private void Add_Filter_Click(object sender, EventArgs e)
         {
+            if (FilterName.Text.Trim() == string.Empty)
+            {
+                MessageBox.Show("Name is a required field!");
+                return;
+            }
+
+            RaidFilter filter = new RaidFilter();
             var ivbin = ToInt(HP.Checked) << 0 | ToInt(Atk.Checked) << 1 | ToInt(Def.Checked) << 2 |
                         ToInt(SpA.Checked) << 3 | ToInt(SpD.Checked) << 4 | ToInt(Spe.Checked) << 5;
             var ivvals = (int)IVHP.Value << 0 | (int)IVATK.Value << 5 | (int)IVDEF.Value << 10 |
                          (int)IVSPA.Value << 15 | (int)IVSPD.Value << 20 | (int)IVSPE.Value << 25;
 
-            Properties.Settings.Default.SpeciesFilter = Species.SelectedIndex;
-            Properties.Settings.Default.NatureFilter = Nature.SelectedIndex;
-            Properties.Settings.Default.StarsFilter = Stars.SelectedIndex;
-            Properties.Settings.Default.TeraFilter = TeraType.SelectedIndex;
-            Properties.Settings.Default.SpeciesEnabled = SpeciesCheck.Checked;
-            Properties.Settings.Default.NatureEnabled = NatureCheck.Checked;
-            Properties.Settings.Default.StarsEnabled = StarCheck.Checked;
-            Properties.Settings.Default.TeraEnabled = TeraCheck.Checked;
-            Properties.Settings.Default.SearchTillShiny = ShinyCheck.Checked;
-            Properties.Settings.Default.SatisfyAny = SatisfyAny.Checked;
-            Properties.Settings.Default.SpeciesFixed = SpeciesFixed.Checked;
-            Properties.Settings.Default.NatureFixed = NatureFixed.Checked;
-            Properties.Settings.Default.StarFixed = StarFixed.Checked;
-            Properties.Settings.Default.TeraFixed = TeraFixed.Checked;
-            Properties.Settings.Default.IVBin = ivbin;
-            Properties.Settings.Default.IVVals = ivvals;
-            Properties.Settings.Default.Save();
+            filter.Name = FilterName.Text.Trim();
+            filter.Species = SpeciesCheck.Checked ? Species.SelectedIndex : null;
+            filter.Nature = NatureCheck.Checked ? Nature.SelectedIndex : null;
+            filter.Stars = StarCheck.Checked ? Stars.SelectedIndex + 1 : null;
+            filter.TeraType = TeraCheck.Checked ? TeraType.SelectedIndex : null;
+            filter.Shiny = ShinyCheck.Checked;
+            filter.IVBin = ivbin;
+            filter.IVVals = ivvals;
 
-            RaidFilters.Species = SpeciesCheck.Checked ? (Species)Species.SelectedIndex : null;
-            RaidFilters.Nature = NatureCheck.Checked ? (Nature)Nature.SelectedIndex : null;
-            RaidFilters.Stars = StarCheck.Checked ? Stars.SelectedIndex + 1 : null;
-            RaidFilters.TeraType = TeraCheck.Checked ? (MoveType)TeraType.SelectedIndex : null;
-            RaidFilters.Shiny = ShinyCheck.Checked;
-            RaidFilters.SatisfyAny = SatisfyAny.Checked;
-            RaidFilters.SpeciesFixed = SpeciesFixed.Checked;
-            RaidFilters.NatureFixed = NatureFixed.Checked;
-            RaidFilters.StarFixed = StarFixed.Checked;
-            RaidFilters.TeraFixed = TeraFixed.Checked;
-            RaidFilters.IVBin = ivbin;
-            RaidFilters.IVVals = ivvals;
-
-            this.Close();
+            if (filter.IsFilterSet())
+            {
+                filters.Add(filter);
+                ActiveFilters.Items.Add(filter);
+                ActiveFilters.SelectedIndex = ActiveFilters.Items.Count - 1;
+            }
+            else
+            {
+                MessageBox.Show("You have set no stop condition. Not adding any filter.");
+            }
         }
 
         private static int ToInt(bool b) => b ? 1 : 0;
 
-        private void SpeciesFixed_CheckedChanged(object sender, EventArgs e)
-        {
-            Species.BackColor = SpeciesFixed.Checked ? Highlight : DefaultColor;
-        }
-
-        private void NatureFixed_CheckedChanged(object sender, EventArgs e)
-        {
-            Nature.BackColor = NatureFixed.Checked ? Highlight : DefaultColor;
-        }
-
-        private void StarFixed_CheckedChanged(object sender, EventArgs e)
-        {
-            Stars.BackColor = StarFixed.Checked ? Highlight : DefaultColor;
-        }
-
-        private void TeraFixed_CheckedChanged(object sender, EventArgs e)
-        {
-            TeraType.BackColor = TeraFixed.Checked ? Highlight : DefaultColor;
-        }
-
         private void SpeciesCheck_CheckedChanged(object sender, EventArgs e)
         {
             Species.Enabled = SpeciesCheck.Checked;
-            SpeciesFixed.Enabled = SpeciesCheck.Checked;
         }
 
         private void NatureCheck_CheckedChanged(object sender, EventArgs e)
         {
             Nature.Enabled = NatureCheck.Checked;
-            NatureFixed.Enabled = NatureCheck.Checked;
         }
 
         private void StarCheck_CheckedChanged(object sender, EventArgs e)
         {
             Stars.Enabled = StarCheck.Checked;
-            StarFixed.Enabled = StarCheck.Checked;
         }
 
         private void TeraCheck_CheckedChanged(object sender, EventArgs e)
         {
             TeraType.Enabled = TeraCheck.Checked;
-            TeraFixed.Enabled = TeraCheck.Checked;
         }
 
         private void HP_CheckedChanged(object sender, EventArgs e)
@@ -183,6 +153,34 @@ namespace RaidCrawler.Subforms
         private void Spe_CheckedChanged(object sender, EventArgs e)
         {
             IVSPE.Enabled = Spe.Checked;
+        }
+
+        private void Save_Click(object sender, EventArgs e)
+        {
+            string output = JsonConvert.SerializeObject(filters);
+            using (StreamWriter sw = new StreamWriter(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "filters.json")))
+            {
+                sw.Write(output);
+            }
+        }
+
+        private void Remove_Click(object sender, EventArgs e)
+        {
+            if (ActiveFilters.Items.Count == 0)
+                return;
+            if (ActiveFilters.SelectedIndex == -1)
+                return;
+            var idx = ActiveFilters.SelectedIndex;
+            ActiveFilters.Items.RemoveAt(idx);
+            filters.RemoveAt(idx);
+        }
+
+        private void ActiveFilters_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Remove.Enabled = ActiveFilters.SelectedIndex >= 0;
+            if (ActiveFilters.SelectedIndex < 0)
+                return;
+            SelectFilter(filters[ActiveFilters.SelectedIndex]);
         }
     }
 }

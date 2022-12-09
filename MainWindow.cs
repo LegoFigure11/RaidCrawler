@@ -7,6 +7,7 @@ using RaidCrawler.Subforms;
 using SysBot.Base;
 using System.Data;
 using System.Net.Sockets;
+using Newtonsoft.Json;
 using static RaidCrawler.Structures.Offsets;
 using static SysBot.Base.SwitchButton;
 using static System.Buffers.Binary.BinaryPrimitives;
@@ -22,6 +23,7 @@ namespace RaidCrawler
         private readonly static OffsetUtil OffsetUtil = new(SwitchConnection);
 
         private readonly List<Raid> Raids = new();
+        private List<RaidFilter> RaidFilters = new();
 
         private int index = 0;
         private ulong offset;
@@ -43,6 +45,9 @@ namespace RaidCrawler
 
             Raid.GemTeraRaids = TeraEncounter.GetAllEncounters("encounter_gem_paldea.pkl");
             Raid.DistTeraRaids = TeraDistribution.GetAllEncounters("raid_enemy_array");
+            var filterpath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "filters.json");
+            if (File.Exists(filterpath))
+                RaidFilters = JsonConvert.DeserializeObject<List<RaidFilter>>(File.ReadAllText(filterpath)) ?? new List<RaidFilter>();
             Raid.Game = Settings.Default.Game;
             SpriteBuilder.ShowTeraThicknessStripe = 0x4;
             SpriteBuilder.ShowTeraOpacityStripe = 0xAF;
@@ -340,7 +345,7 @@ namespace RaidCrawler
                     for (int i = 0; i < Raids.Count; i++)
                     {
                         var chk = (index + Raids.Count - i) % Raids.Count;
-                        if (RaidFilters.FilterSatisfied(Raids[chk], Progress.SelectedIndex, EventProgress.SelectedIndex))
+                        if (RaidFilters.Count == 0 || RaidFilters.Any(z => z.FilterSatisfied(Raids[chk], Progress.SelectedIndex, EventProgress.SelectedIndex)))
                         {
                             index = chk;
                             break;
@@ -361,7 +366,7 @@ namespace RaidCrawler
                     for (int i = 0; i < Raids.Count; i++)
                     {
                         var chk = (index + Raids.Count + i) % Raids.Count;
-                        if (RaidFilters.FilterSatisfied(Raids[chk], Progress.SelectedIndex, EventProgress.SelectedIndex))
+                        if (RaidFilters.Count == 0 || RaidFilters.Any(z => z.FilterSatisfied(Raids[chk], Progress.SelectedIndex, EventProgress.SelectedIndex)))
                         {
                             index = chk;
                             break;
@@ -427,7 +432,7 @@ namespace RaidCrawler
                 {
                     await AdvanceDate(CancellationToken.None);
                     await ReadRaids(CancellationToken.None);
-                } while (!RaidFilters.FilterSatisfied(Raids, Progress.SelectedIndex, EventProgress.SelectedIndex));
+                } while (!(RaidFilters.Count == 0 || RaidFilters.Any(z => z.FilterSatisfied(Raids, Progress.SelectedIndex, EventProgress.SelectedIndex))));
                 if (Settings.Default.CfgPlaySound) System.Media.SystemSounds.Asterisk.Play();
                 if (Settings.Default.CfgFocusWindow)
                 {
@@ -538,7 +543,7 @@ namespace RaidCrawler
 
         private void StopFilter_Click(object sender, EventArgs e)
         {
-            var form = new FilterSettings();
+            var form = new FilterSettings(ref RaidFilters);
             form.ShowDialog();
         }
 
