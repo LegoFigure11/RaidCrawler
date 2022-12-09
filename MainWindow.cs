@@ -345,7 +345,7 @@ namespace RaidCrawler
                     for (int i = 0; i < Raids.Count; i++)
                     {
                         var chk = (index + Raids.Count - i) % Raids.Count;
-                        if (RaidFilters.Count == 0 || RaidFilters.Any(z => z.FilterSatisfied(Raids[chk], Progress.SelectedIndex, EventProgress.SelectedIndex)))
+                        if (StopAdvances || RaidFilters.Any(z => z.FilterSatisfied(Raids[chk], Progress.SelectedIndex, EventProgress.SelectedIndex)))
                         {
                             index = chk;
                             break;
@@ -366,7 +366,7 @@ namespace RaidCrawler
                     for (int i = 0; i < Raids.Count; i++)
                     {
                         var chk = (index + Raids.Count + i) % Raids.Count;
-                        if (RaidFilters.Count == 0 || RaidFilters.Any(z => z.FilterSatisfied(Raids[chk], Progress.SelectedIndex, EventProgress.SelectedIndex)))
+                        if (StopAdvances || RaidFilters.Any(z => z.FilterSatisfied(Raids[chk], Progress.SelectedIndex, EventProgress.SelectedIndex)))
                         {
                             index = chk;
                             break;
@@ -392,6 +392,7 @@ namespace RaidCrawler
         }
 
         private static async Task<string> GetGameID(CancellationToken token) => await SwitchConnection.GetTitleID(token).ConfigureAwait(false);
+        private bool StopAdvances => RaidFilters.Count == 0 || RaidFilters.All(x => x.Enabled == false);
 
         private async Task AdvanceDate(CancellationToken token)
         {
@@ -432,7 +433,7 @@ namespace RaidCrawler
                 {
                     await AdvanceDate(CancellationToken.None);
                     await ReadRaids(CancellationToken.None);
-                } while (!(RaidFilters.Count == 0 || RaidFilters.Any(z => z.FilterSatisfied(Raids, Progress.SelectedIndex, EventProgress.SelectedIndex))));
+                } while (!(StopAdvances || RaidFilters.Any(z => z.FilterSatisfied(Raids, Progress.SelectedIndex, EventProgress.SelectedIndex))));
                 if (Settings.Default.CfgPlaySound) System.Media.SystemSounds.Asterisk.Play();
                 if (Settings.Default.CfgFocusWindow)
                 {
