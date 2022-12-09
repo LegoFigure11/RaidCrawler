@@ -291,8 +291,8 @@ namespace RaidCrawler
         {
             if (encounter == null)
                 return raid.TeraType;
-            if (encounter is TeraDistribution td && td.Entity is EncounterMight9 em)
-                return (int)em.TeraType > 1 ? (int)em.TeraType - 2 : raid.TeraType;
+            if (encounter is TeraDistribution td && td.Entity is ITeraRaid9 gem)
+                return (int)gem.TeraType > 1 ? (int)gem.TeraType - 2 : raid.TeraType;
             return raid.TeraType;
         }
 

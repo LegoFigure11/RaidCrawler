@@ -51,7 +51,7 @@ namespace RaidCrawler.Structures
             new [] { 1, 2 },
             new [] { 1, 2, 3 },
             new [] { 1, 2, 3, 4 },
-            new [] { 3, 4, 5 },
+            new [] { 3, 4, 5, 6, 7 },
         };
 
         private static void AddToList(IReadOnlyCollection<DeliveryRaidEnemyTable> table, List<byte[]> list, RaidSerializationFormat format)
@@ -110,8 +110,8 @@ namespace RaidCrawler.Structures
                 ushort mV = minV[stage];
                 bw.Write(noTotal ? (ushort)0 : mS);
                 bw.Write(noTotal ? (ushort)0 : mV);
-                bw.Write(noTotal ? (ushort)0 : totalS[stage]);
-                bw.Write(noTotal ? (ushort)0 : totalV[stage]);
+                bw.Write(noTotal || enc.RomVer == RaidRomType.TYPE_B ? (ushort)0 : totalS[stage]);
+                bw.Write(noTotal || enc.RomVer == RaidRomType.TYPE_A ? (ushort)0 : totalV[stage]);
             }
             if (format == RaidSerializationFormat.Type3)
                 enc.SerializeType3(bw);
