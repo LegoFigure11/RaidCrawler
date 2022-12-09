@@ -7,6 +7,7 @@ namespace RaidCrawler.Subforms
     public partial class FilterSettings : Form
     {
         private readonly List<RaidFilter> filters;
+        private readonly BindingSource bs = new();
         public FilterSettings(ref List<RaidFilter> filters)
         {
             InitializeComponent();
@@ -23,6 +24,9 @@ namespace RaidCrawler.Subforms
                 ActiveFilters.SelectedIndex = 0;
             if (ActiveFilters.SelectedIndex == -1)
                 Remove.Enabled = false;
+
+            bs.DataSource = filters;
+            ActiveFilters.DataSource = bs;
         }
 
         public void SelectFilter(RaidFilter settings)
@@ -76,7 +80,7 @@ namespace RaidCrawler.Subforms
                 return;
             }
 
-            RaidFilter filter = new RaidFilter();
+            RaidFilter filter = new();
             var ivbin = ToInt(HP.Checked) << 0 | ToInt(Atk.Checked) << 1 | ToInt(Def.Checked) << 2 |
                         ToInt(SpA.Checked) << 3 | ToInt(SpD.Checked) << 4 | ToInt(Spe.Checked) << 5;
             var ivvals = (int)IVHP.Value << 0 | (int)IVATK.Value << 5 | (int)IVDEF.Value << 10 |
@@ -104,7 +108,7 @@ namespace RaidCrawler.Subforms
                     }
                 }
                 filters.Add(filter);
-                ActiveFilters.DataSource = filters;
+                bs.ResetBindings(false);
                 ActiveFilters.SelectedIndex = ActiveFilters.Items.Count - 1;
             }
             else
@@ -179,8 +183,8 @@ namespace RaidCrawler.Subforms
             if (ActiveFilters.SelectedIndex == -1)
                 return;
             var idx = ActiveFilters.SelectedIndex;
-            ActiveFilters.Items.RemoveAt(idx);
             filters.RemoveAt(idx);
+            bs.ResetBindings(false);
         }
 
         private void ActiveFilters_SelectedIndexChanged(object sender, EventArgs e)
