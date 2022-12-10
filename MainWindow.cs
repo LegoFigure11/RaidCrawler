@@ -418,13 +418,6 @@ namespace RaidCrawler
             await Task.Delay(delay, token).ConfigureAwait(false);
         }
 
-        private static async Task HoldStick(SwitchStick stick, short x, short y, int hold, CancellationToken token, bool usecrlf = true)
-        {
-            await SwitchConnection.SendAsync(SwitchCommand.SetStick(stick, x, y, usecrlf), token).ConfigureAwait(false);
-            await Task.Delay(hold, token).ConfigureAwait(false);
-            await SwitchConnection.SendAsync(SwitchCommand.ResetStick(stick, usecrlf), token).ConfigureAwait(false);
-        }
-
         private static async Task<string> GetGameID(CancellationToken token) => await SwitchConnection.GetTitleID(token).ConfigureAwait(false);
         private bool StopAdvances => RaidFilters.Count == 0 || RaidFilters.All(x => x.Enabled == false);
 
@@ -470,7 +463,7 @@ namespace RaidCrawler
 
             // Change the date
             for (int i = 0; i < Settings.Default.CfgDaysToSkip; i++) await Click(DUP, 0_200 + BaseDelay, token).ConfigureAwait(false); // Not actually necessary, so we default to 0 as per #29
-            
+
             if (Settings.Default.CfgUseTouch)
             {
                 await Click(DRIGHT, 0_100 + BaseDelay, token).ConfigureAwait(false);
