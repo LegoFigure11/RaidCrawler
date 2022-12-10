@@ -14,6 +14,7 @@ namespace RaidCrawler.Subforms
             AlertMessage.Text = Settings.Default.CfgAlertWindowMessage;
             AlertMessage.Enabled = EnableAlert.Checked;
 
+            UseTouch.Checked = Settings.Default.CfgUseTouch;
             BaseDelay.Value = Settings.Default.CfgBaseDelay;
             OpenHome.Value = Settings.Default.CfgOpenHome;
             NavigateToSettings.Value = Settings.Default.CfgNavigateToSettings;
@@ -39,6 +40,7 @@ namespace RaidCrawler.Subforms
             Settings.Default.CfgEnableAlertWindow = EnableAlert.Checked;
             Settings.Default.CfgAlertWindowMessage = AlertMessage.Text;
 
+            Settings.Default.CfgUseTouch = UseTouch.Checked;
             Settings.Default.CfgBaseDelay = BaseDelay.Value;
             Settings.Default.CfgOpenHome = OpenHome.Value;
             Settings.Default.CfgNavigateToSettings = NavigateToSettings.Value;
