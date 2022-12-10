@@ -276,6 +276,7 @@
             this.Area.ReadOnly = true;
             this.Area.Size = new System.Drawing.Size(270, 22);
             this.Area.TabIndex = 61;
+            this.Area.Click += new System.EventHandler(this.DisplayMap);
             // 
             // LabelUNK_2
             // 

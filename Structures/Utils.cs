@@ -21,7 +21,7 @@ namespace RaidCrawler.Structures
 
         private static string GetFileName(string resName)
         {
-            var period = resName.LastIndexOf('.', resName.Length - 5);
+            var period = resName.LastIndexOf('.', resName.Length - 6);
             var start = period + 1;
             System.Diagnostics.Debug.Assert(start != 0);
 
@@ -41,6 +41,18 @@ namespace RaidCrawler.Structures
             var buffer = new byte[resource.Length];
             _ = resource.Read(buffer, 0, (int)resource.Length);
             return buffer;
+        }
+
+        public static string? GetStringResource(string name)
+        {
+            if (!resourceNameMap.TryGetValue(name.ToLowerInvariant(), out var resourceName))
+                return null;
+
+            using var resource = thisAssembly.GetManifestResourceStream(resourceName);
+            if (resource is null)
+                return null;
+            using var reader = new StreamReader(resource);
+            return reader.ReadToEnd();
         }
     }
 }

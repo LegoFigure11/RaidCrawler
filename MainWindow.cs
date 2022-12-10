@@ -24,6 +24,8 @@ namespace RaidCrawler
 
         private readonly List<Raid> Raids = new();
         private List<RaidFilter> RaidFilters = new();
+        private static Image map = Image.FromStream(new MemoryStream(Utils.GetBinaryResource("paldea.png")));
+        private static Dictionary<string, float[]>? den_locations;
 
         private int index = 0;
         private ulong offset;
@@ -48,6 +50,7 @@ namespace RaidCrawler
             var filterpath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "filters.json");
             if (File.Exists(filterpath))
                 RaidFilters = JsonConvert.DeserializeObject<List<RaidFilter>>(File.ReadAllText(filterpath)) ?? new List<RaidFilter>();
+            den_locations = JsonConvert.DeserializeObject<Dictionary<string, float[]>>(Utils.GetStringResource("den_locations.json") ?? "{}");
             Raid.Game = Settings.Default.Game;
             SpriteBuilder.ShowTeraThicknessStripe = 0x4;
             SpriteBuilder.ShowTeraOpacityStripe = 0xAF;
@@ -335,6 +338,23 @@ namespace RaidCrawler
             return img;
         }
 
+        private static Image? GenerateMap(Raid raid, int teratype)
+        {
+            var original = PKHeX.Drawing.Misc.TypeSpriteUtil.GetTypeSpriteGem((byte)teratype);
+            if (original == null)
+                return null;
+            var gem = (Image)new Bitmap(original, new Size(30, 30));
+            if (den_locations == null || den_locations.Count == 0)
+                return null;
+            try
+            {
+                var x = (den_locations[$"{raid.Area}-{raid.Den}"][0] + 2.072021484) * 512 / 5000;
+                var y = (den_locations[$"{raid.Area}-{raid.Den}"][2] + 5255.240018) * 512 / 5000;
+                return ImageUtil.LayerImage(map, gem, (int)x, (int)y);
+            }
+            catch { return null; }
+        }
+
         private void ButtonPrevious_Click(object sender, EventArgs e)
         {
             if (Raids.Count > 0)
@@ -579,6 +599,27 @@ namespace RaidCrawler
         private void ConfigSettings_Click(object sender, EventArgs e)
         {
             var form = new ConfigWindow();
+            form.ShowDialog();
+        }
+
+        private void DisplayMap(object sender, EventArgs e)
+        {
+            if (Raids.Count == 0)
+            {
+                MessageBox.Show("Raids not loaded.");
+                return;
+            }
+            var raid = Raids[index];
+            var progress = raid.IsEvent ? EventProgress.SelectedIndex : Progress.SelectedIndex;
+            ITeraRaid? encounter = raid.Encounter(progress);
+            var teratype = GetTeraType(encounter, raid);
+            var map = GenerateMap(raid, teratype);
+            if (map == null)
+            {
+                MessageBox.Show("Error generating map.");
+                return;
+            }
+            var form = new MapView(map);
             form.ShowDialog();
         }
     }
