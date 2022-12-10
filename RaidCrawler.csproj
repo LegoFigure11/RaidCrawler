@@ -12,7 +12,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\den_locations.json" />
     <None Remove="Resources\encounter_gem_paldea.pkl" />
+    <None Remove="Resources\paldea.png" />
     <None Remove="Resources\raid_enemy_array" />
   </ItemGroup>
 
@@ -21,7 +23,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Resources\den_locations.json" />
     <EmbeddedResource Include="Resources\encounter_gem_paldea.pkl" />
+    <EmbeddedResource Include="Resources\paldea.png" />
     <EmbeddedResource Include="Resources\raid_enemy_array" />
   </ItemGroup>
 
