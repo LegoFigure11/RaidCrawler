@@ -35,7 +35,7 @@
             this.StarCheck = new System.Windows.Forms.CheckBox();
             this.Stars = new System.Windows.Forms.ComboBox();
             this.ShinyCheck = new System.Windows.Forms.CheckBox();
-            this.Save = new System.Windows.Forms.Button();
+            this.Add = new System.Windows.Forms.Button();
             this.PerfectIVFilterGroup = new System.Windows.Forms.GroupBox();
             this.IVSPE = new System.Windows.Forms.NumericUpDown();
             this.IVSPD = new System.Windows.Forms.NumericUpDown();
@@ -49,15 +49,13 @@
             this.Def = new System.Windows.Forms.CheckBox();
             this.Atk = new System.Windows.Forms.CheckBox();
             this.HP = new System.Windows.Forms.CheckBox();
-            this.SatisfyAny = new System.Windows.Forms.CheckBox();
-            this.SpeciesFixed = new System.Windows.Forms.CheckBox();
-            this.NatureFixed = new System.Windows.Forms.CheckBox();
-            this.StarFixed = new System.Windows.Forms.CheckBox();
-            this.LabelFix = new System.Windows.Forms.Label();
-            this.LabelEnabled = new System.Windows.Forms.Label();
-            this.TeraFixed = new System.Windows.Forms.CheckBox();
             this.TeraCheck = new System.Windows.Forms.CheckBox();
             this.TeraType = new System.Windows.Forms.ComboBox();
+            this.ActiveFilters = new System.Windows.Forms.ListBox();
+            this.FilterName = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.Remove = new System.Windows.Forms.Button();
+            this.DisableFilter = new System.Windows.Forms.CheckBox();
             this.PerfectIVFilterGroup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.IVSPE)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.IVSPD)).BeginInit();
@@ -70,7 +68,7 @@
             // Species
             // 
             this.Species.FormattingEnabled = true;
-            this.Species.Location = new System.Drawing.Point(104, 23);
+            this.Species.Location = new System.Drawing.Point(104, 55);
             this.Species.Name = "Species";
             this.Species.Size = new System.Drawing.Size(121, 23);
             this.Species.TabIndex = 0;
@@ -78,7 +76,7 @@
             // SpeciesCheck
             // 
             this.SpeciesCheck.AutoSize = true;
-            this.SpeciesCheck.Location = new System.Drawing.Point(15, 25);
+            this.SpeciesCheck.Location = new System.Drawing.Point(15, 57);
             this.SpeciesCheck.Name = "SpeciesCheck";
             this.SpeciesCheck.Size = new System.Drawing.Size(65, 19);
             this.SpeciesCheck.TabIndex = 1;
@@ -89,7 +87,7 @@
             // NatureCheck
             // 
             this.NatureCheck.AutoSize = true;
-            this.NatureCheck.Location = new System.Drawing.Point(15, 54);
+            this.NatureCheck.Location = new System.Drawing.Point(15, 86);
             this.NatureCheck.Name = "NatureCheck";
             this.NatureCheck.Size = new System.Drawing.Size(62, 19);
             this.NatureCheck.TabIndex = 3;
@@ -100,7 +98,7 @@
             // Nature
             // 
             this.Nature.FormattingEnabled = true;
-            this.Nature.Location = new System.Drawing.Point(104, 52);
+            this.Nature.Location = new System.Drawing.Point(104, 84);
             this.Nature.Name = "Nature";
             this.Nature.Size = new System.Drawing.Size(121, 23);
             this.Nature.TabIndex = 2;
@@ -108,7 +106,7 @@
             // StarCheck
             // 
             this.StarCheck.AutoSize = true;
-            this.StarCheck.Location = new System.Drawing.Point(15, 83);
+            this.StarCheck.Location = new System.Drawing.Point(15, 115);
             this.StarCheck.Name = "StarCheck";
             this.StarCheck.Size = new System.Drawing.Size(51, 19);
             this.StarCheck.TabIndex = 5;
@@ -127,7 +125,7 @@
             "5",
             "6",
             "7"});
-            this.Stars.Location = new System.Drawing.Point(104, 81);
+            this.Stars.Location = new System.Drawing.Point(104, 113);
             this.Stars.Name = "Stars";
             this.Stars.Size = new System.Drawing.Size(121, 23);
             this.Stars.TabIndex = 4;
@@ -135,22 +133,22 @@
             // ShinyCheck
             // 
             this.ShinyCheck.AutoSize = true;
-            this.ShinyCheck.Location = new System.Drawing.Point(15, 145);
+            this.ShinyCheck.Location = new System.Drawing.Point(15, 177);
             this.ShinyCheck.Name = "ShinyCheck";
-            this.ShinyCheck.Size = new System.Drawing.Size(119, 19);
+            this.ShinyCheck.Size = new System.Drawing.Size(60, 19);
             this.ShinyCheck.TabIndex = 6;
-            this.ShinyCheck.Text = "Search until shiny";
+            this.ShinyCheck.Text = "Shiny?";
             this.ShinyCheck.UseVisualStyleBackColor = true;
             // 
-            // Save
+            // Add
             // 
-            this.Save.Location = new System.Drawing.Point(12, 289);
-            this.Save.Name = "Save";
-            this.Save.Size = new System.Drawing.Size(228, 23);
-            this.Save.TabIndex = 9;
-            this.Save.Text = "Save";
-            this.Save.UseVisualStyleBackColor = true;
-            this.Save.Click += new System.EventHandler(this.Save_Click);
+            this.Add.Location = new System.Drawing.Point(9, 298);
+            this.Add.Name = "Add";
+            this.Add.Size = new System.Drawing.Size(111, 23);
+            this.Add.TabIndex = 9;
+            this.Add.Text = "Add Filter";
+            this.Add.UseVisualStyleBackColor = true;
+            this.Add.Click += new System.EventHandler(this.Add_Filter_Click);
             // 
             // PerfectIVFilterGroup
             // 
@@ -166,7 +164,7 @@
             this.PerfectIVFilterGroup.Controls.Add(this.Def);
             this.PerfectIVFilterGroup.Controls.Add(this.Atk);
             this.PerfectIVFilterGroup.Controls.Add(this.HP);
-            this.PerfectIVFilterGroup.Location = new System.Drawing.Point(9, 170);
+            this.PerfectIVFilterGroup.Location = new System.Drawing.Point(9, 202);
             this.PerfectIVFilterGroup.Name = "PerfectIVFilterGroup";
             this.PerfectIVFilterGroup.Size = new System.Drawing.Size(231, 90);
             this.PerfectIVFilterGroup.TabIndex = 10;
@@ -353,78 +351,10 @@
             this.HP.UseVisualStyleBackColor = true;
             this.HP.CheckedChanged += new System.EventHandler(this.HP_CheckedChanged);
             // 
-            // SatisfyAny
-            // 
-            this.SatisfyAny.AutoSize = true;
-            this.SatisfyAny.Location = new System.Drawing.Point(15, 266);
-            this.SatisfyAny.Name = "SatisfyAny";
-            this.SatisfyAny.Size = new System.Drawing.Size(226, 19);
-            this.SatisfyAny.TabIndex = 11;
-            this.SatisfyAny.Text = "Stop if any optional filters are satisfied";
-            this.SatisfyAny.UseVisualStyleBackColor = true;
-            // 
-            // SpeciesFixed
-            // 
-            this.SpeciesFixed.AutoSize = true;
-            this.SpeciesFixed.Location = new System.Drawing.Point(231, 27);
-            this.SpeciesFixed.Name = "SpeciesFixed";
-            this.SpeciesFixed.Size = new System.Drawing.Size(15, 14);
-            this.SpeciesFixed.TabIndex = 12;
-            this.SpeciesFixed.UseVisualStyleBackColor = true;
-            this.SpeciesFixed.CheckedChanged += new System.EventHandler(this.SpeciesFixed_CheckedChanged);
-            // 
-            // NatureFixed
-            // 
-            this.NatureFixed.AutoSize = true;
-            this.NatureFixed.Location = new System.Drawing.Point(231, 56);
-            this.NatureFixed.Name = "NatureFixed";
-            this.NatureFixed.Size = new System.Drawing.Size(15, 14);
-            this.NatureFixed.TabIndex = 13;
-            this.NatureFixed.UseVisualStyleBackColor = true;
-            this.NatureFixed.CheckedChanged += new System.EventHandler(this.NatureFixed_CheckedChanged);
-            // 
-            // StarFixed
-            // 
-            this.StarFixed.AutoSize = true;
-            this.StarFixed.Location = new System.Drawing.Point(231, 85);
-            this.StarFixed.Name = "StarFixed";
-            this.StarFixed.Size = new System.Drawing.Size(15, 14);
-            this.StarFixed.TabIndex = 14;
-            this.StarFixed.UseVisualStyleBackColor = true;
-            this.StarFixed.CheckedChanged += new System.EventHandler(this.StarFixed_CheckedChanged);
-            // 
-            // LabelFix
-            // 
-            this.LabelFix.AutoSize = true;
-            this.LabelFix.Location = new System.Drawing.Point(212, 5);
-            this.LabelFix.Name = "LabelFix";
-            this.LabelFix.Size = new System.Drawing.Size(35, 15);
-            this.LabelFix.TabIndex = 15;
-            this.LabelFix.Text = "Fixed";
-            // 
-            // LabelEnabled
-            // 
-            this.LabelEnabled.AutoSize = true;
-            this.LabelEnabled.Location = new System.Drawing.Point(12, 5);
-            this.LabelEnabled.Name = "LabelEnabled";
-            this.LabelEnabled.Size = new System.Drawing.Size(42, 15);
-            this.LabelEnabled.TabIndex = 16;
-            this.LabelEnabled.Text = "Enable";
-            // 
-            // TeraFixed
-            // 
-            this.TeraFixed.AutoSize = true;
-            this.TeraFixed.Location = new System.Drawing.Point(231, 114);
-            this.TeraFixed.Name = "TeraFixed";
-            this.TeraFixed.Size = new System.Drawing.Size(15, 14);
-            this.TeraFixed.TabIndex = 19;
-            this.TeraFixed.UseVisualStyleBackColor = true;
-            this.TeraFixed.CheckedChanged += new System.EventHandler(this.TeraFixed_CheckedChanged);
-            // 
             // TeraCheck
             // 
             this.TeraCheck.AutoSize = true;
-            this.TeraCheck.Location = new System.Drawing.Point(15, 112);
+            this.TeraCheck.Location = new System.Drawing.Point(15, 144);
             this.TeraCheck.Name = "TeraCheck";
             this.TeraCheck.Size = new System.Drawing.Size(74, 19);
             this.TeraCheck.TabIndex = 18;
@@ -443,27 +373,72 @@
             "5",
             "6",
             "7"});
-            this.TeraType.Location = new System.Drawing.Point(104, 110);
+            this.TeraType.Location = new System.Drawing.Point(104, 142);
             this.TeraType.Name = "TeraType";
             this.TeraType.Size = new System.Drawing.Size(121, 23);
             this.TeraType.TabIndex = 17;
+            // 
+            // ActiveFilters
+            // 
+            this.ActiveFilters.FormattingEnabled = true;
+            this.ActiveFilters.ItemHeight = 15;
+            this.ActiveFilters.Location = new System.Drawing.Point(257, 23);
+            this.ActiveFilters.Name = "ActiveFilters";
+            this.ActiveFilters.Size = new System.Drawing.Size(185, 289);
+            this.ActiveFilters.TabIndex = 20;
+            this.ActiveFilters.SelectedIndexChanged += new System.EventHandler(this.ActiveFilters_SelectedIndexChanged);
+            // 
+            // FilterName
+            // 
+            this.FilterName.Location = new System.Drawing.Point(57, 23);
+            this.FilterName.Name = "FilterName";
+            this.FilterName.Size = new System.Drawing.Size(168, 23);
+            this.FilterName.TabIndex = 21;
+            this.FilterName.TextChanged += new System.EventHandler(this.FilterName_TextChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 26);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(39, 15);
+            this.label1.TabIndex = 22;
+            this.label1.Text = "Name";
+            // 
+            // Remove
+            // 
+            this.Remove.Location = new System.Drawing.Point(129, 298);
+            this.Remove.Name = "Remove";
+            this.Remove.Size = new System.Drawing.Size(111, 23);
+            this.Remove.TabIndex = 23;
+            this.Remove.Text = "Remove Filter";
+            this.Remove.UseVisualStyleBackColor = true;
+            this.Remove.Click += new System.EventHandler(this.Remove_Click);
+            // 
+            // DisableFilter
+            // 
+            this.DisableFilter.AutoSize = true;
+            this.DisableFilter.Location = new System.Drawing.Point(135, 177);
+            this.DisableFilter.Name = "DisableFilter";
+            this.DisableFilter.Size = new System.Drawing.Size(98, 19);
+            this.DisableFilter.TabIndex = 24;
+            this.DisableFilter.Text = "Disable Filter?";
+            this.DisableFilter.UseVisualStyleBackColor = true;
             // 
             // FilterSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(252, 320);
-            this.Controls.Add(this.TeraFixed);
+            this.ClientSize = new System.Drawing.Size(454, 331);
+            this.Controls.Add(this.DisableFilter);
+            this.Controls.Add(this.Remove);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.FilterName);
+            this.Controls.Add(this.ActiveFilters);
             this.Controls.Add(this.TeraCheck);
             this.Controls.Add(this.TeraType);
-            this.Controls.Add(this.LabelEnabled);
-            this.Controls.Add(this.LabelFix);
-            this.Controls.Add(this.StarFixed);
-            this.Controls.Add(this.NatureFixed);
-            this.Controls.Add(this.SpeciesFixed);
-            this.Controls.Add(this.SatisfyAny);
             this.Controls.Add(this.PerfectIVFilterGroup);
-            this.Controls.Add(this.Save);
+            this.Controls.Add(this.Add);
             this.Controls.Add(this.ShinyCheck);
             this.Controls.Add(this.StarCheck);
             this.Controls.Add(this.Stars);
@@ -477,6 +452,7 @@
             this.Name = "FilterSettings";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "FilterSettings";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Save_Click);
             this.PerfectIVFilterGroup.ResumeLayout(false);
             this.PerfectIVFilterGroup.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.IVSPE)).EndInit();
@@ -499,7 +475,7 @@
         private CheckBox StarCheck;
         private ComboBox Stars;
         private CheckBox ShinyCheck;
-        private Button Save;
+        private Button Add;
         private GroupBox PerfectIVFilterGroup;
         private CheckBox Spe;
         private CheckBox SpD;
@@ -513,14 +489,12 @@
         private NumericUpDown IVDEF;
         private NumericUpDown IVATK;
         private NumericUpDown IVHP;
-        private CheckBox SatisfyAny;
-        private CheckBox SpeciesFixed;
-        private CheckBox NatureFixed;
-        private CheckBox StarFixed;
-        private Label LabelFix;
-        private Label LabelEnabled;
-        private CheckBox TeraFixed;
         private CheckBox TeraCheck;
         private ComboBox TeraType;
+        private ListBox ActiveFilters;
+        private TextBox FilterName;
+        private Label label1;
+        private Button Remove;
+        private CheckBox DisableFilter;
     }
 }

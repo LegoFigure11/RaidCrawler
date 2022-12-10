@@ -7,9 +7,8 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationIcon>MightiestMark.ico</ApplicationIcon>
-    <AssemblyVersion>1.0.6</AssemblyVersion>
-    <FileVersion>1.0.6</FileVersion>
-    <AssemblyName>$(MSBuildProjectName)HWS</AssemblyName>
+    <AssemblyVersion>1.0.7</AssemblyVersion>
+    <FileVersion>1.0.7</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,6 +27,7 @@
 
   <ItemGroup>
     <PackageReference Include="FlatSharp" Version="6.3.5" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <PackageReference Include="NLog" Version="5.1.0" />
     <PackageReference Include="PKHeX.Core" Version="22.12.1" />
   </ItemGroup>
