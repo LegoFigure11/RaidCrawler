@@ -434,13 +434,16 @@ namespace RaidCrawler
                     await AdvanceDate(CancellationToken.None);
                     await ReadRaids(CancellationToken.None);
                 } while (!(StopAdvances || RaidFilters.Any(z => z.FilterSatisfied(Raids, Progress.SelectedIndex, EventProgress.SelectedIndex))));
-                if (Settings.Default.CfgPlaySound) System.Media.SystemSounds.Asterisk.Play();
-                if (Settings.Default.CfgFocusWindow)
+                if (RaidFilters.Any(z => z.FilterSatisfied(Raids, Progress.SelectedIndex, EventProgress.SelectedIndex)))
                 {
-                    WindowState = _WindowState;
-                    Activate();
+                    if (Settings.Default.CfgPlaySound) System.Media.SystemSounds.Asterisk.Play();
+                    if (Settings.Default.CfgFocusWindow)
+                    {
+                        WindowState = _WindowState;
+                        Activate();
+                    }
+                    if (Settings.Default.CfgEnableAlertWindow) MessageBox.Show(Settings.Default.CfgAlertWindowMessage, "Result found!", MessageBoxButtons.OK);
                 }
-                if (Settings.Default.CfgEnableAlertWindow) MessageBox.Show(Settings.Default.CfgAlertWindowMessage, "Result found!", MessageBoxButtons.OK);
 
                 ButtonReadRaids.Enabled = true;
                 ButtonAdvanceDate.Enabled = true;
