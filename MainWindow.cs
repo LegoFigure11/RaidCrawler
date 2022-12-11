@@ -441,6 +441,13 @@ namespace RaidCrawler
             await Task.Delay(delay, token).ConfigureAwait(false);
         }
 
+
+        private static async Task Touch(int x, int y, int hold, int delay, CancellationToken token)
+        {
+            await SwitchConnection.SendAsync(SwitchCommand.Touch(x, y, hold), token).ConfigureAwait(false);
+            await Task.Delay(delay, token).ConfigureAwait(false);
+        }
+
         private static async Task PressAndHold(SwitchButton b, int hold, int delay, CancellationToken token)
         {
             await SwitchConnection.SendAsync(SwitchCommand.Hold(b, true), token).ConfigureAwait(false);
@@ -459,22 +466,52 @@ namespace RaidCrawler
             await Click(LSTICK, 0_050 + BaseDelay, token).ConfigureAwait(false); // Sometimes it seems like the first command doesn't go through so send this just in case
             // HOME Menu
             await Click(HOME, (int)Settings.Default.CfgOpenHome + BaseDelay, token).ConfigureAwait(false);
-            await Click(DDOWN, (int)Settings.Default.CfgNavigateToSettings + 0_100 + BaseDelay, token).ConfigureAwait(false);
-            for (int i = 0; i < 5; i++) await Click(DRIGHT, (int)Settings.Default.CfgNavigateToSettings + BaseDelay, token).ConfigureAwait(false);
+            // Navigate to Settings
+            if (Settings.Default.CfgUseTouch)
+            {
+                await Touch(840, 540, 0_050, BaseDelay, token).ConfigureAwait(false);
+            }
+            else
+            {
+                await Click(DDOWN, (int)Settings.Default.CfgNavigateToSettings + 0_100 + BaseDelay, token).ConfigureAwait(false);
+                for (int i = 0; i < 5; i++) await Click(DRIGHT, (int)Settings.Default.CfgNavigateToSettings + BaseDelay, token).ConfigureAwait(false);
+            }
             await Click(A, (int)Settings.Default.CfgOpenSettings + BaseDelay, token).ConfigureAwait(false);
             // Scroll to bottom
             await PressAndHold(DDOWN, (int)Settings.Default.CfgHold, BaseDelay, token).ConfigureAwait(false);
+
             // Navigate to "Date and Time"
             await Click(DRIGHT, 0_200 + BaseDelay, token).ConfigureAwait(false);
+            // I tried using holds here but could not get the timing consistent
+            // Even if this is slightly slower, it is at least consistent
+            // And not missing any cycles means it's faster overall
             for (int i = 0; i < Settings.Default.CfgSystemDDownPresses; i++) await Click(DDOWN, 0_050 + BaseDelay, token).ConfigureAwait(false);
             await Click(A, (int)Settings.Default.CfgSubmenu + BaseDelay, token).ConfigureAwait(false);
+
             // Navigate to Change Date/Time
-            for (int i = 0; i < 2; i++) await Click(DDOWN, 0_200 + BaseDelay, token).ConfigureAwait(false);
-            await Click(A, (int)Settings.Default.CfgDateChange + BaseDelay, token).ConfigureAwait(false);
+            if (Settings.Default.CfgUseTouch)
+            {
+                await Touch(840, 400, 0_050, 0_300 + BaseDelay, token).ConfigureAwait(false);
+            }
+            else
+            {
+                for (int i = 0; i < 2; i++) await Click(DDOWN, 0_200 + BaseDelay, token).ConfigureAwait(false);
+                await Click(A, (int)Settings.Default.CfgDateChange + BaseDelay, token).ConfigureAwait(false);
+            }
+
             // Change the date
             for (int i = 0; i < Settings.Default.CfgDaysToSkip; i++) await Click(DUP, 0_200 + BaseDelay, token).ConfigureAwait(false); // Not actually necessary, so we default to 0 as per #29
-            for (int i = 0; i < 6; i++) await Click(DRIGHT, 0_100 + BaseDelay, token).ConfigureAwait(false);
-            await Click(A, 0_500 + BaseDelay, token).ConfigureAwait(false);
+
+            if (Settings.Default.CfgUseTouch)
+            {
+                await Click(DRIGHT, 0_100 + BaseDelay, token).ConfigureAwait(false);
+                await Touch(1100, 480, 500, 400, token);
+            }
+            else
+            {
+                for (int i = 0; i < 6; i++) await Click(DRIGHT, 0_050 + BaseDelay, token).ConfigureAwait(false);
+                await Click(A, 0_500 + BaseDelay, token).ConfigureAwait(false);
+            }
             // Return to game
             await Click(HOME, (int)Settings.Default.CfgReturnHome + BaseDelay, token).ConfigureAwait(false);
             await Click(HOME, (int)Settings.Default.CfgReturnGame + BaseDelay, token).ConfigureAwait(false);
@@ -492,13 +529,16 @@ namespace RaidCrawler
                     await AdvanceDate(CancellationToken.None);
                     await ReadRaids(CancellationToken.None);
                 } while (!(StopAdvances || RaidFilters.Any(z => z.FilterSatisfied(Raids, Progress.SelectedIndex, EventProgress.SelectedIndex))));
-                if (Settings.Default.CfgPlaySound) System.Media.SystemSounds.Asterisk.Play();
-                if (Settings.Default.CfgFocusWindow)
+                if (RaidFilters.Any(z => z.FilterSatisfied(Raids, Progress.SelectedIndex, EventProgress.SelectedIndex)))
                 {
-                    WindowState = _WindowState;
-                    Activate();
+                    if (Settings.Default.CfgPlaySound) System.Media.SystemSounds.Asterisk.Play();
+                    if (Settings.Default.CfgFocusWindow)
+                    {
+                        WindowState = _WindowState;
+                        Activate();
+                    }
+                    if (Settings.Default.CfgEnableAlertWindow) MessageBox.Show(Settings.Default.CfgAlertWindowMessage, "Result found!", MessageBoxButtons.OK);
                 }
-                if (Settings.Default.CfgEnableAlertWindow) MessageBox.Show(Settings.Default.CfgAlertWindowMessage, "Result found!", MessageBoxButtons.OK);
 
                 ButtonReadRaids.Enabled = true;
                 ButtonAdvanceDate.Enabled = true;

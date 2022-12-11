@@ -57,6 +57,8 @@
             this.ReturnGame = new System.Windows.Forms.NumericUpDown();
             this.label11 = new System.Windows.Forms.Label();
             this.DaysToSkip = new System.Windows.Forms.NumericUpDown();
+            this.label12 = new System.Windows.Forms.Label();
+            this.UseTouch = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.BaseDelay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SystemDDownPresses)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NavigateToSettings)).BeginInit();
@@ -131,7 +133,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 165);
+            this.label1.Location = new System.Drawing.Point(12, 204);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(196, 15);
             this.label1.TabIndex = 8;
@@ -139,7 +141,7 @@
             // 
             // BaseDelay
             // 
-            this.BaseDelay.Location = new System.Drawing.Point(271, 163);
+            this.BaseDelay.Location = new System.Drawing.Point(271, 202);
             this.BaseDelay.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -151,7 +153,7 @@
             // 
             // SystemDDownPresses
             // 
-            this.SystemDDownPresses.Location = new System.Drawing.Point(271, 308);
+            this.SystemDDownPresses.Location = new System.Drawing.Point(271, 347);
             this.SystemDDownPresses.Maximum = new decimal(new int[] {
             99,
             0,
@@ -169,7 +171,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 310);
+            this.label3.Location = new System.Drawing.Point(12, 349);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(228, 15);
             this.label3.TabIndex = 11;
@@ -177,7 +179,7 @@
             // 
             // Save
             // 
-            this.Save.Location = new System.Drawing.Point(12, 482);
+            this.Save.Location = new System.Drawing.Point(12, 521);
             this.Save.Name = "Save";
             this.Save.Size = new System.Drawing.Size(327, 23);
             this.Save.TabIndex = 12;
@@ -187,7 +189,7 @@
             // 
             // NavigateToSettings
             // 
-            this.NavigateToSettings.Location = new System.Drawing.Point(271, 221);
+            this.NavigateToSettings.Location = new System.Drawing.Point(271, 260);
             this.NavigateToSettings.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -204,7 +206,7 @@
             // 
             // OpenSettings
             // 
-            this.OpenSettings.Location = new System.Drawing.Point(271, 250);
+            this.OpenSettings.Location = new System.Drawing.Point(271, 289);
             this.OpenSettings.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -221,7 +223,7 @@
             // 
             // OpenHome
             // 
-            this.OpenHome.Location = new System.Drawing.Point(271, 192);
+            this.OpenHome.Location = new System.Drawing.Point(271, 231);
             this.OpenHome.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -239,7 +241,7 @@
             // LabelDelayOpenHOME
             // 
             this.LabelDelayOpenHOME.AutoSize = true;
-            this.LabelDelayOpenHOME.Location = new System.Drawing.Point(12, 194);
+            this.LabelDelayOpenHOME.Location = new System.Drawing.Point(12, 233);
             this.LabelDelayOpenHOME.Name = "LabelDelayOpenHOME";
             this.LabelDelayOpenHOME.Size = new System.Drawing.Size(140, 15);
             this.LabelDelayOpenHOME.TabIndex = 19;
@@ -248,7 +250,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 223);
+            this.label4.Location = new System.Drawing.Point(12, 262);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(146, 15);
             this.label4.TabIndex = 20;
@@ -257,7 +259,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(12, 252);
+            this.label5.Location = new System.Drawing.Point(12, 291);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(114, 15);
             this.label5.TabIndex = 21;
@@ -266,7 +268,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(12, 281);
+            this.label6.Location = new System.Drawing.Point(12, 320);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(187, 15);
             this.label6.TabIndex = 23;
@@ -274,7 +276,7 @@
             // 
             // Hold
             // 
-            this.Hold.Location = new System.Drawing.Point(271, 279);
+            this.Hold.Location = new System.Drawing.Point(271, 318);
             this.Hold.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -292,7 +294,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(12, 339);
+            this.label7.Location = new System.Drawing.Point(12, 378);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(123, 15);
             this.label7.TabIndex = 25;
@@ -300,7 +302,7 @@
             // 
             // Submenu
             // 
-            this.Submenu.Location = new System.Drawing.Point(271, 337);
+            this.Submenu.Location = new System.Drawing.Point(271, 376);
             this.Submenu.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -318,7 +320,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(12, 368);
+            this.label8.Location = new System.Drawing.Point(12, 407);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(138, 15);
             this.label8.TabIndex = 27;
@@ -326,7 +328,7 @@
             // 
             // DateChange
             // 
-            this.DateChange.Location = new System.Drawing.Point(271, 366);
+            this.DateChange.Location = new System.Drawing.Point(271, 405);
             this.DateChange.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -344,7 +346,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(12, 426);
+            this.label9.Location = new System.Drawing.Point(12, 465);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(160, 15);
             this.label9.TabIndex = 29;
@@ -352,7 +354,7 @@
             // 
             // ReturnHome
             // 
-            this.ReturnHome.Location = new System.Drawing.Point(271, 424);
+            this.ReturnHome.Location = new System.Drawing.Point(271, 463);
             this.ReturnHome.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -370,7 +372,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(12, 455);
+            this.label10.Location = new System.Drawing.Point(12, 494);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(119, 15);
             this.label10.TabIndex = 31;
@@ -378,7 +380,7 @@
             // 
             // ReturnGame
             // 
-            this.ReturnGame.Location = new System.Drawing.Point(271, 453);
+            this.ReturnGame.Location = new System.Drawing.Point(271, 492);
             this.ReturnGame.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -396,7 +398,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(12, 397);
+            this.label11.Location = new System.Drawing.Point(12, 436);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(179, 15);
             this.label11.TabIndex = 33;
@@ -404,7 +406,7 @@
             // 
             // DaysToSkip
             // 
-            this.DaysToSkip.Location = new System.Drawing.Point(271, 395);
+            this.DaysToSkip.Location = new System.Drawing.Point(271, 434);
             this.DaysToSkip.Maximum = new decimal(new int[] {
             99,
             0,
@@ -414,11 +416,31 @@
             this.DaysToSkip.Size = new System.Drawing.Size(68, 23);
             this.DaysToSkip.TabIndex = 32;
             // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(12, 175);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(251, 15);
+            this.label12.TabIndex = 34;
+            this.label12.Text = "Use touch screen inputs (faster, experimental):";
+            // 
+            // UseTouch
+            // 
+            this.UseTouch.AutoSize = true;
+            this.UseTouch.Location = new System.Drawing.Point(297, 176);
+            this.UseTouch.Name = "UseTouch";
+            this.UseTouch.Size = new System.Drawing.Size(15, 14);
+            this.UseTouch.TabIndex = 36;
+            this.UseTouch.UseVisualStyleBackColor = true;
+            // 
             // ConfigWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(351, 517);
+            this.ClientSize = new System.Drawing.Size(351, 556);
+            this.Controls.Add(this.UseTouch);
+            this.Controls.Add(this.label12);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.DaysToSkip);
             this.Controls.Add(this.label10);
@@ -499,5 +521,7 @@
         private NumericUpDown ReturnGame;
         private Label label11;
         private NumericUpDown DaysToSkip;
+        private Label label12;
+        private CheckBox UseTouch;
     }
 }
