@@ -43,7 +43,7 @@ namespace RaidCrawler.Structures
                     .ThenBy(z => z[3]) // Level
                     .ThenBy(z => z[0x11]) // Distribution Index
                 ;
-            return new[] { ordered2.SelectMany(z => z.SkipLast(16)).ToArray(), ordered3.SelectMany(z => z.SkipLast(16)).ToArray(), 
+            return new[] { ordered2.SelectMany(z => z.SkipLast(16)).ToArray(), ordered3.SelectMany(z => z.SkipLast(16)).ToArray(),
                            ordered2.SelectMany(z => z.TakeLast(16)).ToArray(), ordered3.SelectMany(z => z.TakeLast(16)).ToArray() };
         }
 

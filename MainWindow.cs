@@ -279,9 +279,10 @@ namespace RaidCrawler
             var result = string.Empty;
             if (rewards == null)
                 return result;
-            foreach(var reward in rewards)
+            foreach (var reward in rewards)
             {
-                var item = reward.Item1 switch {
+                var item = reward.Item1 switch
+                {
                     10000 => "Material",
                     20000 => "Tera Shard",
                     _ => Raid.strings.Item[reward.Item1]

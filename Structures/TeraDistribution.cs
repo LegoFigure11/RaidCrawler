@@ -39,7 +39,7 @@ namespace RaidCrawler.Structures
             var rewards3 = GetRewardTables(all[3]);
             var result = new TeraDistribution[type2.Length + type3.Length];
             for (int i = 0; i < result.Length; i++)
-                result[i] = i < type2.Length ? new TeraDistribution(type2[i], rewards2[i].Item1, rewards2[i].Item2) 
+                result[i] = i < type2.Length ? new TeraDistribution(type2[i], rewards2[i].Item1, rewards2[i].Item2)
                                              : new TeraDistribution(type3[i - type2.Length], rewards3[i].Item1, rewards3[i].Item2);
             return result;
         }

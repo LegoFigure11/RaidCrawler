@@ -1,5 +1,5 @@
-﻿using System.ComponentModel;
-using FlatSharp.Attributes;
+﻿using FlatSharp.Attributes;
+using System.ComponentModel;
 #nullable disable
 
 namespace RaidCrawler.Structures;
