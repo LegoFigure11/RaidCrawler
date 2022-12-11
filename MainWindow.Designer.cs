@@ -82,6 +82,9 @@
             this.GemIcon = new System.Windows.Forms.PictureBox();
             this.ButtonDumpRaid = new System.Windows.Forms.Button();
             this.ConfigSettings = new System.Windows.Forms.Button();
+            this.Rewards = new System.Windows.Forms.Button();
+            this.LabelSandwichBonus = new System.Windows.Forms.Label();
+            this.RaidBoost = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.Sprite)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GemIcon)).BeginInit();
             this.SuspendLayout();
@@ -624,11 +627,47 @@
             this.ConfigSettings.UseVisualStyleBackColor = true;
             this.ConfigSettings.Click += new System.EventHandler(this.ConfigSettings_Click);
             // 
+            // Rewards
+            // 
+            this.Rewards.Location = new System.Drawing.Point(220, 278);
+            this.Rewards.Name = "Rewards";
+            this.Rewards.Size = new System.Drawing.Size(76, 23);
+            this.Rewards.TabIndex = 116;
+            this.Rewards.Text = "Rewards";
+            this.Rewards.UseVisualStyleBackColor = true;
+            this.Rewards.Click += new System.EventHandler(this.Rewards_Click);
+            // 
+            // LabelSandwichBonus
+            // 
+            this.LabelSandwichBonus.AutoSize = true;
+            this.LabelSandwichBonus.Location = new System.Drawing.Point(12, 227);
+            this.LabelSandwichBonus.Name = "LabelSandwichBonus";
+            this.LabelSandwichBonus.Size = new System.Drawing.Size(120, 15);
+            this.LabelSandwichBonus.TabIndex = 118;
+            this.LabelSandwichBonus.Text = "Raid Sandwich Boost:";
+            // 
+            // RaidBoost
+            // 
+            this.RaidBoost.FormattingEnabled = true;
+            this.RaidBoost.Items.AddRange(new object[] {
+            "0",
+            "1",
+            "2",
+            "3"});
+            this.RaidBoost.Location = new System.Drawing.Point(164, 224);
+            this.RaidBoost.Name = "RaidBoost";
+            this.RaidBoost.Size = new System.Drawing.Size(48, 23);
+            this.RaidBoost.TabIndex = 117;
+            this.RaidBoost.Text = "w";
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(640, 314);
+            this.Controls.Add(this.LabelSandwichBonus);
+            this.Controls.Add(this.RaidBoost);
+            this.Controls.Add(this.Rewards);
             this.Controls.Add(this.ConfigSettings);
             this.Controls.Add(this.ButtonDumpRaid);
             this.Controls.Add(this.GemIcon);
@@ -750,5 +789,8 @@
         private PictureBox GemIcon;
         private Button ButtonDumpRaid;
         private Button ConfigSettings;
+        private Button Rewards;
+        private Label LabelSandwichBonus;
+        private ComboBox RaidBoost;
     }
 }

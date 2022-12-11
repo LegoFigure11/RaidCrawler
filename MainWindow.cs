@@ -27,6 +27,12 @@ namespace RaidCrawler
         private static Image map = Image.FromStream(new MemoryStream(Utils.GetBinaryResource("paldea.png")));
         private static Dictionary<string, float[]>? den_locations;
 
+        // rewards
+        private List<RaidFixedRewards>? BaseFixedRewards = new();
+        private List<RaidLotteryRewards>? BaseLotteryRewards = new();
+        private static List<DeliveryRaidFixedRewardItem>? DeliveryRaidFixedRewards = new();
+        private static List<DeliveryRaidLotteryRewardItem>? DeliveryRaidLotteryRewards = new();
+
         private int index = 0;
         private ulong offset;
         private bool IsReading = false;
@@ -51,6 +57,13 @@ namespace RaidCrawler
             if (File.Exists(filterpath))
                 RaidFilters = JsonConvert.DeserializeObject<List<RaidFilter>>(File.ReadAllText(filterpath)) ?? new List<RaidFilter>();
             den_locations = JsonConvert.DeserializeObject<Dictionary<string, float[]>>(Utils.GetStringResource("den_locations.json") ?? "{}");
+
+            // load rewards
+            BaseFixedRewards = JsonConvert.DeserializeObject<List<RaidFixedRewards>>(Utils.GetStringResource("raid_fixed_reward_item_array.json") ?? "[]");
+            BaseLotteryRewards = JsonConvert.DeserializeObject<List<RaidLotteryRewards>>(Utils.GetStringResource("raid_lottery_reward_item_array.json") ?? "[]");
+            DeliveryRaidFixedRewards = FlatbufferDumper.DumpFixedRewards("fixed_reward_item_array");
+            DeliveryRaidLotteryRewards = FlatbufferDumper.DumpLotteryRewards("lottery_reward_item_array");
+
             Raid.Game = Settings.Default.Game;
             SpriteBuilder.ShowTeraThicknessStripe = 0x4;
             SpriteBuilder.ShowTeraOpacityStripe = 0xAF;
@@ -68,6 +81,7 @@ namespace RaidCrawler
             Progress.SelectedIndex = Settings.Default.Progress;
             EventProgress.SelectedIndex = Settings.Default.EventProgress;
             Game.SelectedIndex = Game.FindString(Settings.Default.Game);
+            RaidBoost.SelectedIndex = 0;
         }
 
         private void InputSwitchIP_Changed(object sender, EventArgs e)
@@ -258,6 +272,30 @@ namespace RaidCrawler
                     s += "/";
             }
             return s;
+        }
+
+        private static string GetRewardString(List<(int, int, int)>? rewards)
+        {
+            var result = string.Empty;
+            if (rewards == null)
+                return result;
+            foreach(var reward in rewards)
+            {
+                var item = reward.Item1 switch {
+                    10000 => "Material",
+                    20000 => "Tera Shard",
+                    _ => Raid.strings.Item[reward.Item1]
+                };
+                var subject = reward.Item3 switch
+                {
+                    1 => "(Host)",
+                    2 => "(Client)",
+                    3 => "(Once)",
+                    _ => string.Empty
+                };
+                result += $"{item} x{reward.Item2} {subject}\n";
+            }
+            return result.TrimEnd();
         }
 
         private static byte GetGender(ITeraRaid enc)
@@ -620,6 +658,34 @@ namespace RaidCrawler
                 return;
             }
             var form = new MapView(map);
+            form.ShowDialog();
+        }
+
+        private void Rewards_Click(object sender, EventArgs e)
+        {
+            if (Raids.Count == 0)
+            {
+                MessageBox.Show("Raids not loaded.");
+                return;
+            }
+            Raid raid = Raids[index];
+            var progress = raid.IsEvent ? EventProgress.SelectedIndex : Progress.SelectedIndex;
+            ITeraRaid? encounter = raid.Encounter(progress);
+
+            var rewards = encounter switch
+            {
+                TeraDistribution => TeraDistribution.GetRewards((TeraDistribution)encounter, raid.Seed, DeliveryRaidFixedRewards, DeliveryRaidLotteryRewards, RaidBoost.SelectedIndex),
+                TeraEncounter => TeraEncounter.GetRewards((TeraEncounter)encounter, raid.Seed, BaseFixedRewards, BaseLotteryRewards, RaidBoost.SelectedIndex),
+                _ => null,
+            };
+
+            if (rewards == null)
+            {
+                MessageBox.Show("Error while displaying rewards.");
+                return;
+            }
+
+            var form = new RewardsView(rewards);
             form.ShowDialog();
         }
     }

@@ -43,7 +43,22 @@ namespace RaidCrawler.Structures
                     .ThenBy(z => z[3]) // Level
                     .ThenBy(z => z[0x11]) // Distribution Index
                 ;
-            return new[] { ordered2.SelectMany(z => z).ToArray(), ordered3.SelectMany(z => z).ToArray() };
+            return new[] { ordered2.SelectMany(z => z.SkipLast(16)).ToArray(), ordered3.SelectMany(z => z.SkipLast(16)).ToArray(), 
+                           ordered2.SelectMany(z => z.TakeLast(16)).ToArray(), ordered3.SelectMany(z => z.TakeLast(16)).ToArray() };
+        }
+
+        public static List<DeliveryRaidLotteryRewardItem> DumpLotteryRewards(string path)
+        {
+            var rewards = Utils.GetBinaryResource(path);
+            var tableRewards = FlatBufferSerializer.Default.Parse<DeliveryRaidLotteryRewardItemArray>(rewards);
+            return tableRewards.Table.ToList();
+        }
+
+        public static List<DeliveryRaidFixedRewardItem> DumpFixedRewards(string path)
+        {
+            var rewards = Utils.GetBinaryResource(path);
+            var tableRewards = FlatBufferSerializer.Default.Parse<DeliveryRaidFixedRewardItemArray>(rewards);
+            return tableRewards.Table.ToList();
         }
 
         private static readonly int[][] StageStars =
@@ -115,6 +130,10 @@ namespace RaidCrawler.Structures
             }
             if (format == RaidSerializationFormat.Type3)
                 enc.SerializeType3(bw);
+
+            // drop table reference
+            bw.Write(enc.DropTableFix);
+            bw.Write(enc.DropTableRandom);
 
             var bin = ms.ToArray();
             if (!list.Any(z => z.SequenceEqual(bin)))

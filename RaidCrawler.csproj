@@ -12,10 +12,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Base\raid_fixed_reward_item_array.json" />
+    <None Remove="Resources\Base\raid_lottery_reward_item_array.json" />
+    <None Remove="Resources\Base\reward_map" />
+    <None Remove="Resources\Delivery\fixed_reward_item_array" />
     <None Remove="Resources\den_locations.json" />
     <None Remove="Resources\encounter_gem_paldea.pkl" />
+    <None Remove="Resources\lottery_reward_item_array" />
+    <None Remove="Resources\material.png" />
     <None Remove="Resources\paldea.png" />
     <None Remove="Resources\raid_enemy_array" />
+    <None Remove="Resources\shard.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,10 +30,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Resources\den_locations.json" />
-    <EmbeddedResource Include="Resources\encounter_gem_paldea.pkl" />
-    <EmbeddedResource Include="Resources\paldea.png" />
-    <EmbeddedResource Include="Resources\raid_enemy_array" />
+    <EmbeddedResource Include="Resources\Base\den_locations.json" />
+    <EmbeddedResource Include="Resources\Base\encounter_gem_paldea.pkl" />
+    <EmbeddedResource Include="Resources\Base\raid_fixed_reward_item_array.json" />
+    <EmbeddedResource Include="Resources\Base\raid_lottery_reward_item_array.json" />
+    <EmbeddedResource Include="Resources\Base\reward_map" />
+    <EmbeddedResource Include="Resources\Delivery\fixed_reward_item_array" />
+    <EmbeddedResource Include="Resources\Delivery\lottery_reward_item_array" />
+    <EmbeddedResource Include="Resources\Base\paldea.png" />
+    <EmbeddedResource Include="Resources\Delivery\raid_enemy_array" />
+    <EmbeddedResource Include="Resources\material.png" />
+    <EmbeddedResource Include="Resources\shard.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -52,11 +66,23 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Update="Properties\Settings.Designer.cs">
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
