@@ -629,7 +629,7 @@
             // 
             // Rewards
             // 
-            this.Rewards.Location = new System.Drawing.Point(220, 278);
+            this.Rewards.Location = new System.Drawing.Point(220, 279);
             this.Rewards.Name = "Rewards";
             this.Rewards.Size = new System.Drawing.Size(76, 23);
             this.Rewards.TabIndex = 116;
