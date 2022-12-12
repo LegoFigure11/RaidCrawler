@@ -659,6 +659,7 @@
             this.RaidBoost.Size = new System.Drawing.Size(48, 23);
             this.RaidBoost.TabIndex = 117;
             this.RaidBoost.Text = "w";
+            this.RaidBoost.SelectedIndexChanged += new System.EventHandler(this.RaidBoost_SelectedIndexChanged);
             // 
             // MainWindow
             // 

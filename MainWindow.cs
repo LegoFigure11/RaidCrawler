@@ -32,6 +32,7 @@ namespace RaidCrawler
         private readonly List<RaidLotteryRewards>? BaseLotteryRewards = new();
         private static List<DeliveryRaidFixedRewardItem>? DeliveryRaidFixedRewards = new();
         private static List<DeliveryRaidLotteryRewardItem>? DeliveryRaidLotteryRewards = new();
+        private readonly List<List<(int, int, int)>?> RewardsList = new();
 
         private int index = 0;
         private ulong offset;
@@ -540,6 +541,7 @@ namespace RaidCrawler
             offset = await OffsetUtil.GetPointerAddress(RaidBlockPointer, CancellationToken.None);
 
             Raids.Clear();
+            RewardsList.Clear();
             index = 0;
 
             ConnectionStatusText.Text = "Reading raid block...";
@@ -550,7 +552,10 @@ namespace RaidCrawler
             {
                 raid = new Raid(Data.Skip(i * Raid.SIZE).Take(Raid.SIZE).ToArray());
                 if (raid.IsValid)
+                {
                     Raids.Add(raid);
+                    RewardsList.Add(GetRewards(raid));
+                }
             }
 
             ConnectionStatusText.Text = "Completed!";
@@ -679,16 +684,8 @@ namespace RaidCrawler
                 MessageBox.Show("Raids not loaded.");
                 return;
             }
-            Raid raid = Raids[index];
-            var progress = raid.IsEvent ? EventProgress.SelectedIndex : Progress.SelectedIndex;
-            ITeraRaid? encounter = raid.Encounter(progress);
 
-            var rewards = encounter switch
-            {
-                TeraDistribution => TeraDistribution.GetRewards((TeraDistribution)encounter, raid.Seed, DeliveryRaidFixedRewards, DeliveryRaidLotteryRewards, RaidBoost.SelectedIndex),
-                TeraEncounter => TeraEncounter.GetRewards((TeraEncounter)encounter, raid.Seed, BaseFixedRewards, BaseLotteryRewards, RaidBoost.SelectedIndex),
-                _ => null,
-            };
+            var rewards = RewardsList[index];
 
             if (rewards == null)
             {
@@ -698,6 +695,26 @@ namespace RaidCrawler
 
             var form = new RewardsView(rewards);
             form.ShowDialog();
+        }
+
+        private List<(int, int, int)>? GetRewards(Raid raid)
+        {
+            var progress = raid.IsEvent ? EventProgress.SelectedIndex : Progress.SelectedIndex;
+            ITeraRaid? encounter = raid.Encounter(progress);
+
+            var rewards = encounter switch
+            {
+                TeraDistribution => TeraDistribution.GetRewards((TeraDistribution)encounter, raid.Seed, DeliveryRaidFixedRewards, DeliveryRaidLotteryRewards, RaidBoost.SelectedIndex),
+                TeraEncounter => TeraEncounter.GetRewards((TeraEncounter)encounter, raid.Seed, BaseFixedRewards, BaseLotteryRewards, RaidBoost.SelectedIndex),
+                _ => null,
+            };
+            return rewards;
+        }
+
+        private void RaidBoost_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            RewardsList.Clear();
+            foreach (Raid raid in Raids) RewardsList.Add(GetRewards(raid));
         }
     }
 }
