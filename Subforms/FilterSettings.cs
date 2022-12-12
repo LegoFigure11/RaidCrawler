@@ -18,6 +18,13 @@ namespace RaidCrawler.Subforms
             TeraType.DataSource = Enum.GetValues(typeof(MoveType)).Cast<MoveType>().Where(z => z != MoveType.Any).ToArray();
             ActiveFilters.DisplayMember = "Name";
             Stars.SelectedIndex = 0;
+            StarsComp.SelectedIndex = 0;
+            HPComp.SelectedIndex = 0;
+            AtkComp.SelectedIndex = 0;
+            DefComp.SelectedIndex = 0;
+            SpaComp.SelectedIndex = 0;
+            SpdComp.SelectedIndex = 0;
+            SpeComp.SelectedIndex = 0;
             foreach (var filter in filters)
                 ActiveFilters.Items.Add(filter);
             if (ActiveFilters.Items.Count > 0)
@@ -35,6 +42,7 @@ namespace RaidCrawler.Subforms
             Species.SelectedIndex = settings.Species != null ? (int)settings.Species : 0;
             Nature.SelectedIndex = settings.Nature != null ? (int)settings.Nature : 0;
             Stars.SelectedIndex = settings.Stars != null ? (int)settings.Stars - 1 : 0;
+            StarsComp.SelectedIndex = settings.StarsComp;
             TeraType.SelectedIndex = settings.TeraType != null ? (int)settings.TeraType : 0;
             SpeciesCheck.Checked = settings.Species != null;
             NatureCheck.Checked = settings.Nature != null;
@@ -59,16 +67,32 @@ namespace RaidCrawler.Subforms
             IVSPD.Value = (ivvals >> 20) & 31;
             IVSPE.Value = (ivvals >> 25) & 31;
 
+            var ivcomp = settings.IVComps;
+            HPComp.SelectedIndex = (ivcomp & 7);
+            AtkComp.SelectedIndex = (ivcomp >> 3) & 7;
+            DefComp.SelectedIndex = (ivcomp >> 6) & 7;
+            SpaComp.SelectedIndex = (ivcomp >> 9) & 7;
+            SpdComp.SelectedIndex = (ivcomp >> 12) & 7;
+            SpeComp.SelectedIndex = (ivcomp >> 15) & 7;
+
             IVHP.Enabled = HP.Checked;
             IVATK.Enabled = Atk.Checked;
             IVDEF.Enabled = Def.Checked;
-            IVSPA.Enabled = Spe.Checked;
+            IVSPA.Enabled = SpA.Checked;
             IVSPD.Enabled = SpD.Checked;
             IVSPE.Enabled = Spe.Checked;
+
+            HPComp.Enabled = HP.Checked;
+            AtkComp.Enabled = Atk.Checked;
+            DefComp.Enabled = Def.Checked;
+            SpaComp.Enabled = SpA.Checked;
+            SpdComp.Enabled = SpD.Checked;
+            SpeComp.Enabled = Spe.Checked;
 
             Species.Enabled = SpeciesCheck.Checked;
             Nature.Enabled = NatureCheck.Checked;
             Stars.Enabled = StarCheck.Checked;
+            StarsComp.Enabled = StarCheck.Checked;
             TeraType.Enabled = TeraCheck.Checked;
         }
 
@@ -83,6 +107,8 @@ namespace RaidCrawler.Subforms
             RaidFilter filter = new();
             var ivbin = ToInt(HP.Checked) << 0 | ToInt(Atk.Checked) << 1 | ToInt(Def.Checked) << 2 |
                         ToInt(SpA.Checked) << 3 | ToInt(SpD.Checked) << 4 | ToInt(Spe.Checked) << 5;
+            var ivcomps = (int)HPComp.SelectedIndex << 0 | (int)AtkComp.SelectedIndex << 3 | (int)DefComp.SelectedIndex << 6 |
+                          (int)SpaComp.SelectedIndex << 9 | (int)SpdComp.SelectedIndex << 12 | (int)SpeComp.SelectedIndex << 15;
             var ivvals = (int)IVHP.Value << 0 | (int)IVATK.Value << 5 | (int)IVDEF.Value << 10 |
                          (int)IVSPA.Value << 15 | (int)IVSPD.Value << 20 | (int)IVSPE.Value << 25;
 
@@ -90,10 +116,12 @@ namespace RaidCrawler.Subforms
             filter.Species = SpeciesCheck.Checked ? Species.SelectedIndex : null;
             filter.Nature = NatureCheck.Checked ? Nature.SelectedIndex : null;
             filter.Stars = StarCheck.Checked ? Stars.SelectedIndex + 1 : null;
+            filter.StarsComp = StarsComp.SelectedIndex;
             filter.TeraType = TeraCheck.Checked ? TeraType.SelectedIndex : null;
             filter.Shiny = ShinyCheck.Checked;
             filter.IVBin = ivbin;
             filter.IVVals = ivvals;
+            filter.IVComps = ivcomps;
             filter.Enabled = !DisableFilter.Checked;
 
             if (filter.IsFilterSet())
@@ -132,6 +160,7 @@ namespace RaidCrawler.Subforms
         private void StarCheck_CheckedChanged(object sender, EventArgs e)
         {
             Stars.Enabled = StarCheck.Checked;
+            StarsComp.Enabled = StarCheck.Checked;
         }
 
         private void TeraCheck_CheckedChanged(object sender, EventArgs e)
@@ -142,31 +171,37 @@ namespace RaidCrawler.Subforms
         private void HP_CheckedChanged(object sender, EventArgs e)
         {
             IVHP.Enabled = HP.Checked;
+            HPComp.Enabled = HP.Checked;
         }
 
         private void Atk_CheckedChanged(object sender, EventArgs e)
         {
             IVATK.Enabled = Atk.Checked;
+            AtkComp.Enabled = Atk.Checked;
         }
 
         private void Def_CheckedChanged(object sender, EventArgs e)
         {
             IVDEF.Enabled = Def.Checked;
+            DefComp.Enabled = Def.Checked;
         }
 
         private void SpA_CheckedChanged(object sender, EventArgs e)
         {
             IVSPA.Enabled = SpA.Checked;
+            SpaComp.Enabled = SpA.Checked;
         }
 
         private void SpD_CheckedChanged(object sender, EventArgs e)
         {
             IVSPD.Enabled = SpD.Checked;
+            SpdComp.Enabled = SpD.Checked;
         }
 
         private void Spe_CheckedChanged(object sender, EventArgs e)
         {
             IVSPE.Enabled = Spe.Checked;
+            SpeComp.Enabled = Spe.Checked;
         }
 
         private void Save_Click(object sender, EventArgs e)

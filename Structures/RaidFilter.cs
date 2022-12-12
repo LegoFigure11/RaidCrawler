@@ -6,10 +6,12 @@ namespace RaidCrawler.Structures
         public string? Name { get; set; }
         public int? Species { get; set; }
         public int? Stars { get; set; }
+        public int StarsComp { get; set; }
         public bool Shiny { get; set; }
         public int? Nature { get; set; }
         public int? TeraType { get; set; }
         public int IVBin { get; set; }
+        public int IVComps { get; set; }
         public int IVVals { get; set; }
         public bool Enabled { get; set; }
 
@@ -35,7 +37,19 @@ namespace RaidCrawler.Structures
         {
             if (Stars == null)
                 return true;
-            return (int)Stars == Raid.GetStarCount(raid.Difficulty, StoryProgress, raid.IsBlack);
+            switch (StarsComp) {
+                case 0:
+                    return (int)Stars == Raid.GetStarCount(raid.Difficulty, StoryProgress, raid.IsBlack);
+                case 1:
+                    return (int)Stars < Raid.GetStarCount(raid.Difficulty, StoryProgress, raid.IsBlack);
+                case 2:
+                    return (int)Stars <= Raid.GetStarCount(raid.Difficulty, StoryProgress, raid.IsBlack);
+                case 3:
+                    return (int)Stars >= Raid.GetStarCount(raid.Difficulty, StoryProgress, raid.IsBlack);
+                case 4:
+                    return (int)Stars > Raid.GetStarCount(raid.Difficulty, StoryProgress, raid.IsBlack);
+                default: return false;
+            }
         }
 
         public bool IsShinySatisfied(Raid raid)
@@ -81,8 +95,35 @@ namespace RaidCrawler.Structures
             var ivs = raid.GetIVs(raid.Seed, encounter.FlawlessIVCount);
             for (int i = 0; i < 6; i++)
             {
-                if (ivs[i] != ((IVVals >> (i * 5)) & 31) && ((IVBin >> i) & 1) == 1)
-                    return false;
+                var iv = IVVals >> i * 5 & 31;
+                var ivbin = IVBin >> i & 1;
+                var ivcomp = IVComps >> i * 3 & 7;
+                if (ivbin == 1)
+                {
+                    switch (ivcomp)
+                    {
+                        case 0:
+                            if (ivs[i] != iv)
+                                return false;
+                            break;
+                        case 1:
+                            if (ivs[i] <= iv)
+                                return false;
+                            break;
+                        case 2:
+                            if (ivs[i] < iv)
+                                return false;
+                            break;
+                        case 3:
+                            if (ivs[i] > iv)
+                                return false;
+                            break;
+                        case 4:
+                            if (ivs[i] >= iv)
+                                return false;
+                            break;
+                    }
+                }
             }
             return true;
         }

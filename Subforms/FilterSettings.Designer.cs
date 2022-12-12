@@ -37,6 +37,12 @@
             this.ShinyCheck = new System.Windows.Forms.CheckBox();
             this.Add = new System.Windows.Forms.Button();
             this.PerfectIVFilterGroup = new System.Windows.Forms.GroupBox();
+            this.SpeComp = new System.Windows.Forms.ComboBox();
+            this.SpaComp = new System.Windows.Forms.ComboBox();
+            this.SpdComp = new System.Windows.Forms.ComboBox();
+            this.DefComp = new System.Windows.Forms.ComboBox();
+            this.AtkComp = new System.Windows.Forms.ComboBox();
+            this.HPComp = new System.Windows.Forms.ComboBox();
             this.IVSPE = new System.Windows.Forms.NumericUpDown();
             this.IVSPD = new System.Windows.Forms.NumericUpDown();
             this.IVSPA = new System.Windows.Forms.NumericUpDown();
@@ -56,6 +62,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.Remove = new System.Windows.Forms.Button();
             this.DisableFilter = new System.Windows.Forms.CheckBox();
+            this.StarsComp = new System.Windows.Forms.ComboBox();
             this.PerfectIVFilterGroup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.IVSPE)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.IVSPD)).BeginInit();
@@ -127,7 +134,7 @@
             "7"});
             this.Stars.Location = new System.Drawing.Point(104, 113);
             this.Stars.Name = "Stars";
-            this.Stars.Size = new System.Drawing.Size(121, 23);
+            this.Stars.Size = new System.Drawing.Size(62, 23);
             this.Stars.TabIndex = 4;
             // 
             // ShinyCheck
@@ -142,7 +149,7 @@
             // 
             // Add
             // 
-            this.Add.Location = new System.Drawing.Point(9, 298);
+            this.Add.Location = new System.Drawing.Point(9, 332);
             this.Add.Name = "Add";
             this.Add.Size = new System.Drawing.Size(111, 23);
             this.Add.TabIndex = 9;
@@ -152,6 +159,12 @@
             // 
             // PerfectIVFilterGroup
             // 
+            this.PerfectIVFilterGroup.Controls.Add(this.SpeComp);
+            this.PerfectIVFilterGroup.Controls.Add(this.SpaComp);
+            this.PerfectIVFilterGroup.Controls.Add(this.SpdComp);
+            this.PerfectIVFilterGroup.Controls.Add(this.DefComp);
+            this.PerfectIVFilterGroup.Controls.Add(this.AtkComp);
+            this.PerfectIVFilterGroup.Controls.Add(this.HPComp);
             this.PerfectIVFilterGroup.Controls.Add(this.IVSPE);
             this.PerfectIVFilterGroup.Controls.Add(this.IVSPD);
             this.PerfectIVFilterGroup.Controls.Add(this.IVSPA);
@@ -166,10 +179,100 @@
             this.PerfectIVFilterGroup.Controls.Add(this.HP);
             this.PerfectIVFilterGroup.Location = new System.Drawing.Point(9, 202);
             this.PerfectIVFilterGroup.Name = "PerfectIVFilterGroup";
-            this.PerfectIVFilterGroup.Size = new System.Drawing.Size(231, 90);
+            this.PerfectIVFilterGroup.Size = new System.Drawing.Size(231, 124);
             this.PerfectIVFilterGroup.TabIndex = 10;
             this.PerfectIVFilterGroup.TabStop = false;
             this.PerfectIVFilterGroup.Text = "IV Filters";
+            // 
+            // SpeComp
+            // 
+            this.SpeComp.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.SpeComp.FormattingEnabled = true;
+            this.SpeComp.Items.AddRange(new object[] {
+            "=",
+            ">",
+            ">=",
+            "<=",
+            "<"});
+            this.SpeComp.Location = new System.Drawing.Point(193, 54);
+            this.SpeComp.Name = "SpeComp";
+            this.SpeComp.Size = new System.Drawing.Size(32, 23);
+            this.SpeComp.TabIndex = 17;
+            // 
+            // SpaComp
+            // 
+            this.SpaComp.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.SpaComp.FormattingEnabled = true;
+            this.SpaComp.Items.AddRange(new object[] {
+            "=",
+            ">",
+            ">=",
+            "<=",
+            "<"});
+            this.SpaComp.Location = new System.Drawing.Point(117, 54);
+            this.SpaComp.Name = "SpaComp";
+            this.SpaComp.Size = new System.Drawing.Size(32, 23);
+            this.SpaComp.TabIndex = 15;
+            // 
+            // SpdComp
+            // 
+            this.SpdComp.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.SpdComp.FormattingEnabled = true;
+            this.SpdComp.Items.AddRange(new object[] {
+            "=",
+            ">",
+            ">=",
+            "<=",
+            "<"});
+            this.SpdComp.Location = new System.Drawing.Point(155, 54);
+            this.SpdComp.Name = "SpdComp";
+            this.SpdComp.Size = new System.Drawing.Size(32, 23);
+            this.SpdComp.TabIndex = 16;
+            // 
+            // DefComp
+            // 
+            this.DefComp.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.DefComp.FormattingEnabled = true;
+            this.DefComp.Items.AddRange(new object[] {
+            "=",
+            ">",
+            ">=",
+            "<=",
+            "<"});
+            this.DefComp.Location = new System.Drawing.Point(79, 55);
+            this.DefComp.Name = "DefComp";
+            this.DefComp.Size = new System.Drawing.Size(32, 23);
+            this.DefComp.TabIndex = 14;
+            // 
+            // AtkComp
+            // 
+            this.AtkComp.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.AtkComp.FormattingEnabled = true;
+            this.AtkComp.Items.AddRange(new object[] {
+            "=",
+            ">",
+            ">=",
+            "<=",
+            "<"});
+            this.AtkComp.Location = new System.Drawing.Point(41, 54);
+            this.AtkComp.Name = "AtkComp";
+            this.AtkComp.Size = new System.Drawing.Size(32, 23);
+            this.AtkComp.TabIndex = 13;
+            // 
+            // HPComp
+            // 
+            this.HPComp.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.HPComp.FormattingEnabled = true;
+            this.HPComp.Items.AddRange(new object[] {
+            "=",
+            ">",
+            ">=",
+            "<=",
+            "<"});
+            this.HPComp.Location = new System.Drawing.Point(3, 54);
+            this.HPComp.Name = "HPComp";
+            this.HPComp.Size = new System.Drawing.Size(32, 23);
+            this.HPComp.TabIndex = 12;
             // 
             // IVSPE
             // 
@@ -277,7 +380,7 @@
             // 
             this.Spe.AutoSize = true;
             this.Spe.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.Spe.Location = new System.Drawing.Point(194, 51);
+            this.Spe.Location = new System.Drawing.Point(194, 84);
             this.Spe.Name = "Spe";
             this.Spe.Size = new System.Drawing.Size(30, 33);
             this.Spe.TabIndex = 5;
@@ -290,7 +393,7 @@
             // 
             this.SpD.AutoSize = true;
             this.SpD.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.SpD.Location = new System.Drawing.Point(154, 51);
+            this.SpD.Location = new System.Drawing.Point(154, 84);
             this.SpD.Name = "SpD";
             this.SpD.Size = new System.Drawing.Size(32, 33);
             this.SpD.TabIndex = 4;
@@ -303,7 +406,7 @@
             // 
             this.SpA.AutoSize = true;
             this.SpA.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.SpA.Location = new System.Drawing.Point(115, 51);
+            this.SpA.Location = new System.Drawing.Point(115, 84);
             this.SpA.Name = "SpA";
             this.SpA.Size = new System.Drawing.Size(32, 33);
             this.SpA.TabIndex = 3;
@@ -316,7 +419,7 @@
             // 
             this.Def.AutoSize = true;
             this.Def.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.Def.Location = new System.Drawing.Point(79, 51);
+            this.Def.Location = new System.Drawing.Point(79, 84);
             this.Def.Name = "Def";
             this.Def.Size = new System.Drawing.Size(29, 33);
             this.Def.TabIndex = 2;
@@ -329,7 +432,7 @@
             // 
             this.Atk.AutoSize = true;
             this.Atk.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.Atk.Location = new System.Drawing.Point(41, 51);
+            this.Atk.Location = new System.Drawing.Point(41, 84);
             this.Atk.Name = "Atk";
             this.Atk.Size = new System.Drawing.Size(29, 33);
             this.Atk.TabIndex = 1;
@@ -342,7 +445,7 @@
             // 
             this.HP.AutoSize = true;
             this.HP.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.HP.Location = new System.Drawing.Point(3, 51);
+            this.HP.Location = new System.Drawing.Point(3, 84);
             this.HP.Name = "HP";
             this.HP.Size = new System.Drawing.Size(27, 33);
             this.HP.TabIndex = 0;
@@ -384,7 +487,7 @@
             this.ActiveFilters.ItemHeight = 15;
             this.ActiveFilters.Location = new System.Drawing.Point(257, 23);
             this.ActiveFilters.Name = "ActiveFilters";
-            this.ActiveFilters.Size = new System.Drawing.Size(185, 289);
+            this.ActiveFilters.Size = new System.Drawing.Size(185, 334);
             this.ActiveFilters.TabIndex = 20;
             this.ActiveFilters.SelectedIndexChanged += new System.EventHandler(this.ActiveFilters_SelectedIndexChanged);
             // 
@@ -407,7 +510,7 @@
             // 
             // Remove
             // 
-            this.Remove.Location = new System.Drawing.Point(129, 298);
+            this.Remove.Location = new System.Drawing.Point(129, 332);
             this.Remove.Name = "Remove";
             this.Remove.Size = new System.Drawing.Size(111, 23);
             this.Remove.TabIndex = 23;
@@ -425,11 +528,27 @@
             this.DisableFilter.Text = "Disable Filter?";
             this.DisableFilter.UseVisualStyleBackColor = true;
             // 
+            // StarsComp
+            // 
+            this.StarsComp.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.StarsComp.FormattingEnabled = true;
+            this.StarsComp.Items.AddRange(new object[] {
+            "=",
+            ">",
+            ">=",
+            "<=",
+            "<"});
+            this.StarsComp.Location = new System.Drawing.Point(172, 113);
+            this.StarsComp.Name = "StarsComp";
+            this.StarsComp.Size = new System.Drawing.Size(53, 23);
+            this.StarsComp.TabIndex = 18;
+            // 
             // FilterSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(454, 331);
+            this.ClientSize = new System.Drawing.Size(454, 367);
+            this.Controls.Add(this.StarsComp);
             this.Controls.Add(this.DisableFilter);
             this.Controls.Add(this.Remove);
             this.Controls.Add(this.label1);
@@ -496,5 +615,12 @@
         private Label label1;
         private Button Remove;
         private CheckBox DisableFilter;
+        private ComboBox HPComp;
+        private ComboBox SpeComp;
+        private ComboBox SpaComp;
+        private ComboBox SpdComp;
+        private ComboBox DefComp;
+        private ComboBox AtkComp;
+        private ComboBox StarsComp;
     }
 }
