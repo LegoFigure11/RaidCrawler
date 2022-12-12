@@ -481,7 +481,7 @@ namespace RaidCrawler
 
             for (int i = 0; i < 6; i++) await Click(DRIGHT, 0_050 + BaseDelay, token).ConfigureAwait(false);
             await Click(A, 0_500 + BaseDelay, token).ConfigureAwait(false);
-            
+
             // Return to game
             await Click(HOME, (int)Settings.Default.CfgReturnHome + BaseDelay, token).ConfigureAwait(false);
             await Click(HOME, (int)Settings.Default.CfgReturnGame + BaseDelay, token).ConfigureAwait(false);
