@@ -499,7 +499,7 @@ namespace RaidCrawler
                 {
                     await AdvanceDate(CancellationToken.None);
                     await ReadRaids(CancellationToken.None);
-                } while (!(StopAdvances || RaidFilters.Any(z => z.FilterSatisfied(Raids, Progress.SelectedIndex, EventProgress.SelectedIndex))));
+                } while (!CheckDisable.Checked && !(StopAdvances || RaidFilters.Any(z => z.FilterSatisfied(Raids, Progress.SelectedIndex, EventProgress.SelectedIndex))));
                 if (RaidFilters.Any(z => z.FilterSatisfied(Raids, Progress.SelectedIndex, EventProgress.SelectedIndex)))
                 {
                     if (Settings.Default.CfgPlaySound) System.Media.SystemSounds.Asterisk.Play();

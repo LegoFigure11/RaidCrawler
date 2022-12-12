@@ -85,6 +85,7 @@
             this.Rewards = new System.Windows.Forms.Button();
             this.LabelSandwichBonus = new System.Windows.Forms.Label();
             this.RaidBoost = new System.Windows.Forms.ComboBox();
+            this.CheckDisable = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.Sprite)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GemIcon)).BeginInit();
             this.SuspendLayout();
@@ -661,11 +662,22 @@
             this.RaidBoost.Text = "w";
             this.RaidBoost.SelectedIndexChanged += new System.EventHandler(this.RaidBoost_SelectedIndexChanged);
             // 
+            // CheckDisable
+            // 
+            this.CheckDisable.AutoSize = true;
+            this.CheckDisable.Location = new System.Drawing.Point(222, 253);
+            this.CheckDisable.Name = "CheckDisable";
+            this.CheckDisable.Size = new System.Drawing.Size(69, 19);
+            this.CheckDisable.TabIndex = 119;
+            this.CheckDisable.Text = "Disable?";
+            this.CheckDisable.UseVisualStyleBackColor = true;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(640, 314);
+            this.Controls.Add(this.CheckDisable);
             this.Controls.Add(this.LabelSandwichBonus);
             this.Controls.Add(this.RaidBoost);
             this.Controls.Add(this.Rewards);
@@ -793,5 +805,6 @@
         private Button Rewards;
         private Label LabelSandwichBonus;
         private ComboBox RaidBoost;
+        private CheckBox CheckDisable;
     }
 }
