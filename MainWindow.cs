@@ -503,16 +503,10 @@ namespace RaidCrawler
             // Change the date
             for (int i = 0; i < Settings.Default.CfgDaysToSkip; i++) await Click(DUP, 0_200 + BaseDelay, token).ConfigureAwait(false); // Not actually necessary, so we default to 0 as per #29
 
-            if (Settings.Default.CfgUseTouch)
-            {
-                await Click(DRIGHT, 0_100 + BaseDelay, token).ConfigureAwait(false);
-                await Touch(1100, 480, 500, 400, token);
-            }
-            else
-            {
-                for (int i = 0; i < 6; i++) await Click(DRIGHT, 0_050 + BaseDelay, token).ConfigureAwait(false);
-                await Click(A, 0_500 + BaseDelay, token).ConfigureAwait(false);
-            }
+
+            for (int i = 0; i < 6; i++) await Click(DRIGHT, 0_050 + BaseDelay, token).ConfigureAwait(false);
+            await Click(A, 0_500 + BaseDelay, token).ConfigureAwait(false);
+            
             // Return to game
             await Click(HOME, (int)Settings.Default.CfgReturnHome + BaseDelay, token).ConfigureAwait(false);
             await Click(HOME, (int)Settings.Default.CfgReturnGame + BaseDelay, token).ConfigureAwait(false);
@@ -574,13 +568,14 @@ namespace RaidCrawler
             index = 0;
 
             ConnectionStatusText.Text = "Reading raid block...";
+            var Data = await SwitchConnection.ReadBytesAbsoluteAsync(offset + RaidBlock.HEADER_SIZE, (int)(RaidBlock.SIZE - RaidBlock.HEADER_SIZE), token);
             Raid raid;
-            for (uint i = RaidBlock.HEADER_SIZE; i < RaidBlock.SIZE; i += Raid.SIZE)
+            var count = Data.Length / Raid.SIZE;
+            for (int i = 0; i < count; i++)
             {
-                ConnectionStatusText.Text = $"Reading raid block... {(int)((float)((float)i / RaidBlock.SIZE) * 100)}%";
-                var Data = await SwitchConnection.ReadBytesAbsoluteAsync(offset + i, Raid.SIZE, token);
-                raid = new Raid(Data);
-                if (raid.IsValid) Raids.Add(raid);
+                raid = new Raid(Data.Skip(i * Raid.SIZE).Take(Raid.SIZE).ToArray());
+                if (raid.IsValid)
+                    Raids.Add(raid);
             }
 
             ConnectionStatusText.Text = "Completed!";
