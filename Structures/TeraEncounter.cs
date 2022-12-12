@@ -44,13 +44,16 @@ namespace RaidCrawler.Structures
             var starcount = black ? 6 : Raid.GetStarCount((uint)clone.NextInt(100), stage, false);
             var total = Raid.Game == "Scarlet" ? GetRateTotalBaseSL(starcount) : GetRateTotalBaseVL(starcount);
             var speciesroll = clone.NextInt((ulong)total);
-            foreach (TeraEncounter enc in Raid.GemTeraRaids)
+            if (Raid.GemTeraRaids != null)
             {
-                if (enc.Stars != starcount)
-                    continue;
-                var minimum = Raid.Game == "Scarlet" ? enc.Entity.RandRateMinScarlet : enc.Entity.RandRateMinViolet;
-                if (minimum >= 0 && (uint)((int)speciesroll - minimum) < enc.Entity.RandRate)
-                    return enc;
+                foreach (TeraEncounter enc in (TeraEncounter[])Raid.GemTeraRaids)
+                {
+                    if (enc.Stars != starcount)
+                        continue;
+                    var minimum = Raid.Game == "Scarlet" ? enc.Entity.RandRateMinScarlet : enc.Entity.RandRateMinViolet;
+                    if (minimum >= 0 && (uint)((int)speciesroll - minimum) < enc.Entity.RandRate)
+                        return enc;
+                }
             }
             return null;
         }

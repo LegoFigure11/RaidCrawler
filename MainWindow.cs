@@ -24,12 +24,12 @@ namespace RaidCrawler
 
         private readonly List<Raid> Raids = new();
         private List<RaidFilter> RaidFilters = new();
-        private static Image map = Image.FromStream(new MemoryStream(Utils.GetBinaryResource("paldea.png")));
+        private static readonly Image map = Image.FromStream(new MemoryStream(Utils.GetBinaryResource("paldea.png")));
         private static Dictionary<string, float[]>? den_locations;
 
         // rewards
-        private List<RaidFixedRewards>? BaseFixedRewards = new();
-        private List<RaidLotteryRewards>? BaseLotteryRewards = new();
+        private readonly List<RaidFixedRewards>? BaseFixedRewards = new();
+        private readonly List<RaidLotteryRewards>? BaseLotteryRewards = new();
         private static List<DeliveryRaidFixedRewardItem>? DeliveryRaidFixedRewards = new();
         private static List<DeliveryRaidLotteryRewardItem>? DeliveryRaidLotteryRewards = new();
 
@@ -272,31 +272,6 @@ namespace RaidCrawler
                     s += "/";
             }
             return s;
-        }
-
-        private static string GetRewardString(List<(int, int, int)>? rewards)
-        {
-            var result = string.Empty;
-            if (rewards == null)
-                return result;
-            foreach (var reward in rewards)
-            {
-                var item = reward.Item1 switch
-                {
-                    10000 => "Material",
-                    20000 => "Tera Shard",
-                    _ => Raid.strings.Item[reward.Item1]
-                };
-                var subject = reward.Item3 switch
-                {
-                    1 => "(Host)",
-                    2 => "(Client)",
-                    3 => "(Once)",
-                    _ => string.Empty
-                };
-                result += $"{item} x{reward.Item2} {subject}\n";
-            }
-            return result.TrimEnd();
         }
 
         private static byte GetGender(ITeraRaid enc)
