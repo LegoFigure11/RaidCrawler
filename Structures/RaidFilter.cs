@@ -37,7 +37,8 @@ namespace RaidCrawler.Structures
         {
             if (Stars == null)
                 return true;
-            switch (StarsComp) {
+            switch (StarsComp)
+            {
                 case 0:
                     return (int)Stars == Raid.GetStarCount(raid.Difficulty, StoryProgress, raid.IsBlack);
                 case 1:
