@@ -14,6 +14,10 @@ namespace RaidCrawler.Structures
 
         public static ITeraRaid[]? GemTeraRaids;
         public static ITeraRaid[]? DistTeraRaids;
+        public static List<RaidFixedRewards>? BaseFixedRewards = new();
+        public static List<RaidLotteryRewards>? BaseLotteryRewards = new();
+        public static List<DeliveryRaidFixedRewardItem>? DeliveryRaidFixedRewards = new();
+        public static List<DeliveryRaidLotteryRewardItem>? DeliveryRaidLotteryRewards = new();
 
         public readonly byte[] Data; // Raw data
 

@@ -45,6 +45,20 @@ namespace RaidCrawler.Structures
             rares.AddRange(commons);
             return rares;
         }
+
+        public static List<(int, int, int)>? GetRewards(Raid raid, int story_progress, int event_progress, int sandwich_boost)
+        {
+            var progress = raid.IsEvent ? event_progress : story_progress;
+            var encounter = raid.Encounter(progress);
+
+            var rewards = encounter switch
+            {
+                TeraDistribution => TeraDistribution.GetRewards((TeraDistribution)encounter, raid.Seed, Raid.DeliveryRaidFixedRewards, Raid.DeliveryRaidLotteryRewards, sandwich_boost),
+                TeraEncounter => TeraEncounter.GetRewards((TeraEncounter)encounter, raid.Seed, Raid.BaseFixedRewards, Raid.BaseLotteryRewards, sandwich_boost),
+                _ => null,
+            };
+            return rewards;
+        }
     }
 
     public class RaidFixedRewards

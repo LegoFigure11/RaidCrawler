@@ -49,6 +49,11 @@ namespace RaidCrawler.Subforms
             StarCheck.Checked = settings.Stars != null;
             TeraCheck.Checked = settings.TeraType != null;
             ShinyCheck.Checked = settings.Shiny;
+            CheckRewards.Checked = settings.RewardItems != null && settings.RewardsCount > 0;
+            Rewards.Text = settings.RewardItems != null ? string.Join(",", settings.RewardItems.Select(x => x.ToString()).ToArray()) 
+                                                        : "645,795,1606,1904,1905,1906,1907,1908";
+            RewardsComp.SelectedIndex = settings.RewardsComp;
+            RewardsCount.Value = settings.RewardsCount;
             DisableFilter.Checked = !settings.Enabled;
 
             var ivbin = settings.IVBin;
@@ -93,6 +98,9 @@ namespace RaidCrawler.Subforms
             Nature.Enabled = NatureCheck.Checked;
             Stars.Enabled = StarCheck.Checked;
             StarsComp.Enabled = StarCheck.Checked;
+            Rewards.Enabled = CheckRewards.Checked;
+            RewardsCount.Enabled = CheckRewards.Checked;
+            RewardsComp.Enabled = CheckRewards.Checked;
             TeraType.Enabled = TeraCheck.Checked;
         }
 
@@ -107,8 +115,8 @@ namespace RaidCrawler.Subforms
             RaidFilter filter = new();
             var ivbin = ToInt(HP.Checked) << 0 | ToInt(Atk.Checked) << 1 | ToInt(Def.Checked) << 2 |
                         ToInt(SpA.Checked) << 3 | ToInt(SpD.Checked) << 4 | ToInt(Spe.Checked) << 5;
-            var ivcomps = (int)HPComp.SelectedIndex << 0 | (int)AtkComp.SelectedIndex << 3 | (int)DefComp.SelectedIndex << 6 |
-                          (int)SpaComp.SelectedIndex << 9 | (int)SpdComp.SelectedIndex << 12 | (int)SpeComp.SelectedIndex << 15;
+            var ivcomps = HPComp.SelectedIndex << 0 | AtkComp.SelectedIndex << 3 | DefComp.SelectedIndex << 6 |
+                          SpaComp.SelectedIndex << 9 | SpdComp.SelectedIndex << 12 | SpeComp.SelectedIndex << 15;
             var ivvals = (int)IVHP.Value << 0 | (int)IVATK.Value << 5 | (int)IVDEF.Value << 10 |
                          (int)IVSPA.Value << 15 | (int)IVSPD.Value << 20 | (int)IVSPE.Value << 25;
 
@@ -122,6 +130,9 @@ namespace RaidCrawler.Subforms
             filter.IVBin = ivbin;
             filter.IVVals = ivvals;
             filter.IVComps = ivcomps;
+            filter.RewardItems = CheckRewards.Checked ? Rewards.Text.Split(',').Where(z => int.TryParse(z.Trim(), out _) == true).Select(z => int.Parse(z.Trim())).ToArray() : null;
+            filter.RewardsCount = (int)RewardsCount.Value;
+            filter.RewardsComp = RewardsComp.SelectedIndex;
             filter.Enabled = !DisableFilter.Checked;
 
             if (filter.IsFilterSet())

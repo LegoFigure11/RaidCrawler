@@ -14,6 +14,9 @@ namespace RaidCrawler.Structures
         public int IVComps { get; set; }
         public int IVVals { get; set; }
         public bool Enabled { get; set; }
+        public int[]? RewardItems { get; set; }
+        public int RewardsComp { get; set; }
+        public int RewardsCount { get; set; }
 
         public bool IsFilterSet()
         {
@@ -49,6 +52,29 @@ namespace RaidCrawler.Structures
                     return (int)Stars >= Raid.GetStarCount(raid.Difficulty, StoryProgress, raid.IsBlack);
                 case 4:
                     return (int)Stars > Raid.GetStarCount(raid.Difficulty, StoryProgress, raid.IsBlack);
+                default: return false;
+            }
+        }
+
+        public bool IsRewardsSatisfied(Raid raid, int StoryProgress, int EventProgress, int SandwichBoost)
+        {
+            if (RewardItems == null || RewardsCount == 0)
+                return true;
+            var rewards = Rewards.GetRewards(raid, StoryProgress, EventProgress, SandwichBoost);
+            if (rewards == null)
+                return false;
+            switch (RewardsComp)
+            {
+                case 0:
+                    return rewards.Where(z => RewardItems.Contains(z.Item1)).Count() == RewardsCount;
+                case 1:
+                    return rewards.Where(z => RewardItems.Contains(z.Item1)).Count() > RewardsCount;
+                case 2:
+                    return rewards.Where(z => RewardItems.Contains(z.Item1)).Count() >= RewardsCount;
+                case 3:
+                    return rewards.Where(z => RewardItems.Contains(z.Item1)).Count() <= RewardsCount;
+                case 4:
+                    return rewards.Where(z => RewardItems.Contains(z.Item1)).Count() < RewardsCount;
                 default: return false;
             }
         }
@@ -129,17 +155,17 @@ namespace RaidCrawler.Structures
             return true;
         }
 
-        public bool FilterSatisfied(Raid raid, int StoryProgress, int EventProgress)
+        public bool FilterSatisfied(Raid raid, int StoryProgress, int EventProgress, int SandwichBoost)
         {
             return Enabled && IsIVsSatisfied(raid, StoryProgress, EventProgress) && IsShinySatisfied(raid) && IsSpeciesSatisfied(raid, StoryProgress, EventProgress)
-                && IsNatureSatisfied(raid, StoryProgress, EventProgress) && IsStarsSatisfied(raid, StoryProgress) && IsTeraTypeSatisfied(raid);
+                && IsNatureSatisfied(raid, StoryProgress, EventProgress) && IsStarsSatisfied(raid, StoryProgress) && IsTeraTypeSatisfied(raid) && IsRewardsSatisfied(raid, StoryProgress, EventProgress, SandwichBoost);
         }
 
-        public bool FilterSatisfied(List<Raid> Raids, int StoryProgress, int EventProgress)
+        public bool FilterSatisfied(List<Raid> Raids, int StoryProgress, int EventProgress, int SandwichBoost)
         {
             foreach (Raid raid in Raids)
             {
-                if (FilterSatisfied(raid, StoryProgress, EventProgress))
+                if (FilterSatisfied(raid, StoryProgress, EventProgress, SandwichBoost))
                     return true;
             }
             return false;

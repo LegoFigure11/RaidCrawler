@@ -28,10 +28,6 @@ namespace RaidCrawler
         private static Dictionary<string, float[]>? den_locations;
 
         // rewards
-        private readonly List<RaidFixedRewards>? BaseFixedRewards = new();
-        private readonly List<RaidLotteryRewards>? BaseLotteryRewards = new();
-        private static List<DeliveryRaidFixedRewardItem>? DeliveryRaidFixedRewards = new();
-        private static List<DeliveryRaidLotteryRewardItem>? DeliveryRaidLotteryRewards = new();
         private readonly List<List<(int, int, int)>?> RewardsList = new();
 
         private int index = 0;
@@ -60,10 +56,10 @@ namespace RaidCrawler
             den_locations = JsonConvert.DeserializeObject<Dictionary<string, float[]>>(Utils.GetStringResource("den_locations.json") ?? "{}");
 
             // load rewards
-            BaseFixedRewards = JsonConvert.DeserializeObject<List<RaidFixedRewards>>(Utils.GetStringResource("raid_fixed_reward_item_array.json") ?? "[]");
-            BaseLotteryRewards = JsonConvert.DeserializeObject<List<RaidLotteryRewards>>(Utils.GetStringResource("raid_lottery_reward_item_array.json") ?? "[]");
-            DeliveryRaidFixedRewards = FlatbufferDumper.DumpFixedRewards("fixed_reward_item_array");
-            DeliveryRaidLotteryRewards = FlatbufferDumper.DumpLotteryRewards("lottery_reward_item_array");
+            Raid.BaseFixedRewards = JsonConvert.DeserializeObject<List<RaidFixedRewards>>(Utils.GetStringResource("raid_fixed_reward_item_array.json") ?? "[]");
+            Raid.BaseLotteryRewards = JsonConvert.DeserializeObject<List<RaidLotteryRewards>>(Utils.GetStringResource("raid_lottery_reward_item_array.json") ?? "[]");
+            Raid.DeliveryRaidFixedRewards = FlatbufferDumper.DumpFixedRewards("fixed_reward_item_array");
+            Raid.DeliveryRaidLotteryRewards = FlatbufferDumper.DumpLotteryRewards("lottery_reward_item_array");
 
             Raid.Game = Settings.Default.Game;
             SpriteBuilder.ShowTeraThicknessStripe = 0x4;
@@ -380,7 +376,7 @@ namespace RaidCrawler
                     for (int i = 0; i < Raids.Count; i++)
                     {
                         var chk = (index + Raids.Count - i) % Raids.Count;
-                        if (StopAdvances || RaidFilters.Any(z => z.FilterSatisfied(Raids[chk], Progress.SelectedIndex, EventProgress.SelectedIndex)))
+                        if (StopAdvances || RaidFilters.Any(z => z.FilterSatisfied(Raids[chk], Progress.SelectedIndex, EventProgress.SelectedIndex, RaidBoost.SelectedIndex)))
                         {
                             index = chk;
                             break;
@@ -401,7 +397,7 @@ namespace RaidCrawler
                     for (int i = 0; i < Raids.Count; i++)
                     {
                         var chk = (index + Raids.Count + i) % Raids.Count;
-                        if (StopAdvances || RaidFilters.Any(z => z.FilterSatisfied(Raids[chk], Progress.SelectedIndex, EventProgress.SelectedIndex)))
+                        if (StopAdvances || RaidFilters.Any(z => z.FilterSatisfied(Raids[chk], Progress.SelectedIndex, EventProgress.SelectedIndex, RaidBoost.SelectedIndex)))
                         {
                             index = chk;
                             break;
@@ -499,8 +495,8 @@ namespace RaidCrawler
                 {
                     await AdvanceDate(CancellationToken.None);
                     await ReadRaids(CancellationToken.None);
-                } while (!CheckDisable.Checked && !(StopAdvances || RaidFilters.Any(z => z.FilterSatisfied(Raids, Progress.SelectedIndex, EventProgress.SelectedIndex))));
-                if (RaidFilters.Any(z => z.FilterSatisfied(Raids, Progress.SelectedIndex, EventProgress.SelectedIndex)))
+                } while (!CheckDisable.Checked && !(StopAdvances || RaidFilters.Any(z => z.FilterSatisfied(Raids, Progress.SelectedIndex, EventProgress.SelectedIndex, RaidBoost.SelectedIndex))));
+                if (RaidFilters.Any(z => z.FilterSatisfied(Raids, Progress.SelectedIndex, EventProgress.SelectedIndex, RaidBoost.SelectedIndex)))
                 {
                     if (Settings.Default.CfgPlaySound) System.Media.SystemSounds.Asterisk.Play();
                     if (Settings.Default.CfgFocusWindow)
@@ -697,19 +693,7 @@ namespace RaidCrawler
             form.ShowDialog();
         }
 
-        private List<(int, int, int)>? GetRewards(Raid raid)
-        {
-            var progress = raid.IsEvent ? EventProgress.SelectedIndex : Progress.SelectedIndex;
-            ITeraRaid? encounter = raid.Encounter(progress);
-
-            var rewards = encounter switch
-            {
-                TeraDistribution => TeraDistribution.GetRewards((TeraDistribution)encounter, raid.Seed, DeliveryRaidFixedRewards, DeliveryRaidLotteryRewards, RaidBoost.SelectedIndex),
-                TeraEncounter => TeraEncounter.GetRewards((TeraEncounter)encounter, raid.Seed, BaseFixedRewards, BaseLotteryRewards, RaidBoost.SelectedIndex),
-                _ => null,
-            };
-            return rewards;
-        }
+        private List<(int, int, int)>? GetRewards(Raid raid) => Structures.Rewards.GetRewards(raid, Progress.SelectedIndex, EventProgress.SelectedIndex, RaidBoost.SelectedIndex);
 
         private void RaidBoost_SelectedIndexChanged(object sender, EventArgs e)
         {
