@@ -18,6 +18,8 @@ namespace RaidCrawler.Structures
             new [] { 7, 8, 9, 10, 11 },
         };
 
+        public static readonly int[] RareRewards = { 4, 645, 1606, 1904, 1905, 1906, 1907, 1908, 795 };
+
         public static int GetRewardCount(int random, int stars)
         {
             return random switch
@@ -28,6 +30,20 @@ namespace RaidCrawler.Structures
                 < 90 => RewardSlots[stars][3],
                 _ => RewardSlots[stars][4],
             };
+        }
+
+        public static List<(int, int, int)> ReorderRewards(List<(int, int, int)> rewards)
+        {
+            var rares = new List<(int, int, int)>();
+            var commons = new List<(int, int, int)>();
+            for (int i = 0; i < rewards.Count; i++)
+            {
+                if (RareRewards.Contains(rewards[i].Item1))
+                    rares.Add(rewards[i]);
+                else commons.Add(rewards[i]);
+            }
+            rares.AddRange(commons);
+            return rares;
         }
     }
 

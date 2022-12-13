@@ -102,7 +102,7 @@ namespace RaidCrawler.Structures
                     roll -= item.Rate;
                 }
             }
-            return result;
+            return Rewards.ReorderRewards(result);
         }
 
         public static ITeraRaid? GetEncounter(uint Seed, int stage, bool isFixed)

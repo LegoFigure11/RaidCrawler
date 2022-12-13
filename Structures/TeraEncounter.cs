@@ -107,7 +107,7 @@ namespace RaidCrawler.Structures
                     roll -= item.Rate;
                 }
             }
-            return result;
+            return Rewards.ReorderRewards(result);
         }
 
         private static short GetRateTotalBaseSL(int star) => star switch
