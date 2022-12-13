@@ -63,6 +63,11 @@
             this.Remove = new System.Windows.Forms.Button();
             this.DisableFilter = new System.Windows.Forms.CheckBox();
             this.StarsComp = new System.Windows.Forms.ComboBox();
+            this.RewardsComp = new System.Windows.Forms.ComboBox();
+            this.CheckRewards = new System.Windows.Forms.CheckBox();
+            this.Rewards = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.RewardsCount = new System.Windows.Forms.NumericUpDown();
             this.PerfectIVFilterGroup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.IVSPE)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.IVSPD)).BeginInit();
@@ -70,10 +75,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.IVDEF)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.IVATK)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.IVHP)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.RewardsCount)).BeginInit();
             this.SuspendLayout();
             // 
             // Species
             // 
+            this.Species.Enabled = false;
             this.Species.FormattingEnabled = true;
             this.Species.Location = new System.Drawing.Point(104, 55);
             this.Species.Name = "Species";
@@ -104,6 +111,7 @@
             // 
             // Nature
             // 
+            this.Nature.Enabled = false;
             this.Nature.FormattingEnabled = true;
             this.Nature.Location = new System.Drawing.Point(104, 84);
             this.Nature.Name = "Nature";
@@ -123,6 +131,7 @@
             // 
             // Stars
             // 
+            this.Stars.Enabled = false;
             this.Stars.FormattingEnabled = true;
             this.Stars.Items.AddRange(new object[] {
             "1",
@@ -140,7 +149,7 @@
             // ShinyCheck
             // 
             this.ShinyCheck.AutoSize = true;
-            this.ShinyCheck.Location = new System.Drawing.Point(15, 177);
+            this.ShinyCheck.Location = new System.Drawing.Point(15, 229);
             this.ShinyCheck.Name = "ShinyCheck";
             this.ShinyCheck.Size = new System.Drawing.Size(60, 19);
             this.ShinyCheck.TabIndex = 6;
@@ -149,7 +158,7 @@
             // 
             // Add
             // 
-            this.Add.Location = new System.Drawing.Point(9, 332);
+            this.Add.Location = new System.Drawing.Point(12, 384);
             this.Add.Name = "Add";
             this.Add.Size = new System.Drawing.Size(111, 23);
             this.Add.TabIndex = 9;
@@ -177,7 +186,7 @@
             this.PerfectIVFilterGroup.Controls.Add(this.Def);
             this.PerfectIVFilterGroup.Controls.Add(this.Atk);
             this.PerfectIVFilterGroup.Controls.Add(this.HP);
-            this.PerfectIVFilterGroup.Location = new System.Drawing.Point(9, 202);
+            this.PerfectIVFilterGroup.Location = new System.Drawing.Point(12, 254);
             this.PerfectIVFilterGroup.Name = "PerfectIVFilterGroup";
             this.PerfectIVFilterGroup.Size = new System.Drawing.Size(231, 124);
             this.PerfectIVFilterGroup.TabIndex = 10;
@@ -187,6 +196,7 @@
             // SpeComp
             // 
             this.SpeComp.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.SpeComp.Enabled = false;
             this.SpeComp.FormattingEnabled = true;
             this.SpeComp.Items.AddRange(new object[] {
             "=",
@@ -202,6 +212,7 @@
             // SpaComp
             // 
             this.SpaComp.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.SpaComp.Enabled = false;
             this.SpaComp.FormattingEnabled = true;
             this.SpaComp.Items.AddRange(new object[] {
             "=",
@@ -217,6 +228,7 @@
             // SpdComp
             // 
             this.SpdComp.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.SpdComp.Enabled = false;
             this.SpdComp.FormattingEnabled = true;
             this.SpdComp.Items.AddRange(new object[] {
             "=",
@@ -232,6 +244,7 @@
             // DefComp
             // 
             this.DefComp.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.DefComp.Enabled = false;
             this.DefComp.FormattingEnabled = true;
             this.DefComp.Items.AddRange(new object[] {
             "=",
@@ -247,6 +260,7 @@
             // AtkComp
             // 
             this.AtkComp.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.AtkComp.Enabled = false;
             this.AtkComp.FormattingEnabled = true;
             this.AtkComp.Items.AddRange(new object[] {
             "=",
@@ -262,6 +276,7 @@
             // HPComp
             // 
             this.HPComp.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.HPComp.Enabled = false;
             this.HPComp.FormattingEnabled = true;
             this.HPComp.Items.AddRange(new object[] {
             "=",
@@ -276,6 +291,7 @@
             // 
             // IVSPE
             // 
+            this.IVSPE.Enabled = false;
             this.IVSPE.Location = new System.Drawing.Point(193, 22);
             this.IVSPE.Maximum = new decimal(new int[] {
             31,
@@ -293,6 +309,7 @@
             // 
             // IVSPD
             // 
+            this.IVSPD.Enabled = false;
             this.IVSPD.Location = new System.Drawing.Point(155, 22);
             this.IVSPD.Maximum = new decimal(new int[] {
             31,
@@ -310,6 +327,7 @@
             // 
             // IVSPA
             // 
+            this.IVSPA.Enabled = false;
             this.IVSPA.Location = new System.Drawing.Point(117, 22);
             this.IVSPA.Maximum = new decimal(new int[] {
             31,
@@ -327,6 +345,7 @@
             // 
             // IVDEF
             // 
+            this.IVDEF.Enabled = false;
             this.IVDEF.Location = new System.Drawing.Point(79, 22);
             this.IVDEF.Maximum = new decimal(new int[] {
             31,
@@ -344,6 +363,7 @@
             // 
             // IVATK
             // 
+            this.IVATK.Enabled = false;
             this.IVATK.Location = new System.Drawing.Point(41, 22);
             this.IVATK.Maximum = new decimal(new int[] {
             31,
@@ -361,6 +381,7 @@
             // 
             // IVHP
             // 
+            this.IVHP.Enabled = false;
             this.IVHP.Location = new System.Drawing.Point(3, 22);
             this.IVHP.Maximum = new decimal(new int[] {
             31,
@@ -467,6 +488,7 @@
             // 
             // TeraType
             // 
+            this.TeraType.Enabled = false;
             this.TeraType.FormattingEnabled = true;
             this.TeraType.Items.AddRange(new object[] {
             "1",
@@ -487,7 +509,7 @@
             this.ActiveFilters.ItemHeight = 15;
             this.ActiveFilters.Location = new System.Drawing.Point(257, 23);
             this.ActiveFilters.Name = "ActiveFilters";
-            this.ActiveFilters.Size = new System.Drawing.Size(185, 334);
+            this.ActiveFilters.Size = new System.Drawing.Size(185, 379);
             this.ActiveFilters.TabIndex = 20;
             this.ActiveFilters.SelectedIndexChanged += new System.EventHandler(this.ActiveFilters_SelectedIndexChanged);
             // 
@@ -510,7 +532,7 @@
             // 
             // Remove
             // 
-            this.Remove.Location = new System.Drawing.Point(129, 332);
+            this.Remove.Location = new System.Drawing.Point(132, 384);
             this.Remove.Name = "Remove";
             this.Remove.Size = new System.Drawing.Size(111, 23);
             this.Remove.TabIndex = 23;
@@ -521,7 +543,7 @@
             // DisableFilter
             // 
             this.DisableFilter.AutoSize = true;
-            this.DisableFilter.Location = new System.Drawing.Point(135, 177);
+            this.DisableFilter.Location = new System.Drawing.Point(135, 229);
             this.DisableFilter.Name = "DisableFilter";
             this.DisableFilter.Size = new System.Drawing.Size(98, 19);
             this.DisableFilter.TabIndex = 24;
@@ -531,6 +553,7 @@
             // StarsComp
             // 
             this.StarsComp.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.StarsComp.Enabled = false;
             this.StarsComp.FormattingEnabled = true;
             this.StarsComp.Items.AddRange(new object[] {
             "=",
@@ -543,11 +566,75 @@
             this.StarsComp.Size = new System.Drawing.Size(53, 23);
             this.StarsComp.TabIndex = 18;
             // 
+            // RewardsComp
+            // 
+            this.RewardsComp.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.RewardsComp.Enabled = false;
+            this.RewardsComp.FormattingEnabled = true;
+            this.RewardsComp.IntegralHeight = false;
+            this.RewardsComp.Items.AddRange(new object[] {
+            "=",
+            ">",
+            ">=",
+            "<=",
+            "<"});
+            this.RewardsComp.Location = new System.Drawing.Point(172, 200);
+            this.RewardsComp.Name = "RewardsComp";
+            this.RewardsComp.Size = new System.Drawing.Size(53, 23);
+            this.RewardsComp.TabIndex = 27;
+            // 
+            // CheckRewards
+            // 
+            this.CheckRewards.AutoSize = true;
+            this.CheckRewards.Location = new System.Drawing.Point(15, 173);
+            this.CheckRewards.Name = "CheckRewards";
+            this.CheckRewards.Size = new System.Drawing.Size(70, 19);
+            this.CheckRewards.TabIndex = 26;
+            this.CheckRewards.Text = "Rewards";
+            this.CheckRewards.UseVisualStyleBackColor = true;
+            this.CheckRewards.CheckedChanged += new System.EventHandler(this.CheckRewards_CheckedChanged);
+            // 
+            // Rewards
+            // 
+            this.Rewards.Enabled = false;
+            this.Rewards.Location = new System.Drawing.Point(104, 171);
+            this.Rewards.Name = "Rewards";
+            this.Rewards.Size = new System.Drawing.Size(121, 23);
+            this.Rewards.TabIndex = 28;
+            this.Rewards.Text = "645,795,1606,1904,1905,1906,1907,1908";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(14, 203);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(82, 15);
+            this.label2.TabIndex = 29;
+            this.label2.Text = "Reward Count";
+            // 
+            // RewardsCount
+            // 
+            this.RewardsCount.Enabled = false;
+            this.RewardsCount.Location = new System.Drawing.Point(104, 200);
+            this.RewardsCount.Maximum = new decimal(new int[] {
+            12,
+            0,
+            0,
+            0});
+            this.RewardsCount.Name = "RewardsCount";
+            this.RewardsCount.Size = new System.Drawing.Size(62, 23);
+            this.RewardsCount.TabIndex = 30;
+            // 
             // FilterSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(454, 367);
+            this.ClientSize = new System.Drawing.Size(454, 413);
+            this.Controls.Add(this.RewardsCount);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.Rewards);
+            this.Controls.Add(this.RewardsComp);
+            this.Controls.Add(this.CheckRewards);
             this.Controls.Add(this.StarsComp);
             this.Controls.Add(this.DisableFilter);
             this.Controls.Add(this.Remove);
@@ -580,6 +667,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.IVDEF)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.IVATK)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.IVHP)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.RewardsCount)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -622,5 +710,10 @@
         private ComboBox DefComp;
         private ComboBox AtkComp;
         private ComboBox StarsComp;
+        private ComboBox RewardsComp;
+        private CheckBox CheckRewards;
+        private TextBox Rewards;
+        private Label label2;
+        private NumericUpDown RewardsCount;
     }
 }

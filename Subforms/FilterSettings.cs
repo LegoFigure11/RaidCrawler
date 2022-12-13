@@ -241,5 +241,12 @@ namespace RaidCrawler.Subforms
                 Add.Text = "Add Filter";
             }
         }
+
+        private void CheckRewards_CheckedChanged(object sender, EventArgs e)
+        {
+            Rewards.Enabled = CheckRewards.Checked;
+            RewardsComp.Enabled = CheckRewards.Checked;
+            RewardsCount.Enabled = CheckRewards.Checked;
+        }
     }
 }
