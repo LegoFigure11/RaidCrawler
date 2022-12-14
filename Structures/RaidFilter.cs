@@ -20,7 +20,7 @@ namespace RaidCrawler.Structures
 
         public bool IsFilterSet()
         {
-            if (Species == null && Stars == null && Shiny == false && Nature == null && TeraType == null && IVBin == 0)
+            if (Species == null && Stars == null && Shiny == false && Nature == null && TeraType == null && IVBin == 0 && (RewardItems == null || RewardsCount == 0))
                 return false;
             return true;
         }
