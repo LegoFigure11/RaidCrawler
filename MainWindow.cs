@@ -179,7 +179,7 @@ namespace RaidCrawler
                 var decryptedKey = DecryptStoryProgressKey(key);
                 address = await OffsetUtil.GetPointerAddress($"[{SaveBlockPointer}+{DifficultyFlags[i] + 8:X}]", token);
                 var val = await SwitchConnection.ReadBytesAbsoluteAsync(address, 1, token);
-                if ((decryptedKey ^ val[0]) == 2) progress = i + 1;
+                if ((decryptedKey ^ val[0]) == 2) return i + 1;
             }
             return progress;
         }
