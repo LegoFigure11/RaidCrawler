@@ -133,6 +133,7 @@ namespace RaidCrawler
 
                     ConnectionStatusText.Text = "Reading story progress...";
                     Progress.SelectedIndex = await GetStoryProgress(CancellationToken.None);
+                    EventProgress.SelectedIndex = Math.Min(Progress.SelectedIndex, 3);
 
                     ConnectionStatusText.Text = "Reading raids...";
                     await ReadRaids(CancellationToken.None);
