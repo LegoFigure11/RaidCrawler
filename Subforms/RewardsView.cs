@@ -1,5 +1,5 @@
-﻿using RaidCrawler.Structures;
-using PKHeX.Drawing;
+﻿using PKHeX.Drawing;
+using RaidCrawler.Structures;
 
 namespace RaidCrawler.Subforms
 {

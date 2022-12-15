@@ -24,11 +24,11 @@ namespace RaidCrawler.Structures
         {
             return random switch
             {
-                < 10 => RewardSlots[stars-1][0],
-                < 40 => RewardSlots[stars-1][1],
-                < 70 => RewardSlots[stars-1][2],
-                < 90 => RewardSlots[stars-1][3],
-                _ => RewardSlots[stars-1][4],
+                < 10 => RewardSlots[stars - 1][0],
+                < 40 => RewardSlots[stars - 1][1],
+                < 70 => RewardSlots[stars - 1][2],
+                < 90 => RewardSlots[stars - 1][3],
+                _ => RewardSlots[stars - 1][4],
             };
         }
 

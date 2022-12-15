@@ -50,7 +50,7 @@ namespace RaidCrawler.Subforms
             TeraCheck.Checked = settings.TeraType != null;
             ShinyCheck.Checked = settings.Shiny;
             CheckRewards.Checked = settings.RewardItems != null && settings.RewardsCount > 0;
-            Rewards.Text = settings.RewardItems != null ? string.Join(",", settings.RewardItems.Select(x => x.ToString()).ToArray()) 
+            Rewards.Text = settings.RewardItems != null ? string.Join(",", settings.RewardItems.Select(x => x.ToString()).ToArray())
                                                         : "645,795,1606,1904,1905,1906,1907,1908";
             RewardsComp.SelectedIndex = settings.RewardsComp;
             RewardsCount.Value = settings.RewardsCount;
@@ -99,6 +99,7 @@ namespace RaidCrawler.Subforms
             Stars.Enabled = StarCheck.Checked;
             StarsComp.Enabled = StarCheck.Checked;
             Rewards.Enabled = CheckRewards.Checked;
+            ButtonOpenRewardsList.Enabled = CheckRewards.Checked;
             RewardsCount.Enabled = CheckRewards.Checked;
             RewardsComp.Enabled = CheckRewards.Checked;
             TeraType.Enabled = TeraCheck.Checked;
@@ -256,8 +257,29 @@ namespace RaidCrawler.Subforms
         private void CheckRewards_CheckedChanged(object sender, EventArgs e)
         {
             Rewards.Enabled = CheckRewards.Checked;
+            ButtonOpenRewardsList.Enabled = CheckRewards.Checked;
             RewardsComp.Enabled = CheckRewards.Checked;
             RewardsCount.Enabled = CheckRewards.Checked;
+        }
+
+        private void ButtonOpenRewardsList_Click(object sender, EventArgs e)
+        {
+            List<int> IDs = Rewards.Text.Split(',').Select(int.Parse).ToList();
+            using ItemIDs form = new(IDs);
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                List<int> s = new();
+                if (form.CheckAbilityCapsule.Checked) s.Add(645);
+                if (form.CheckBottleCap.Checked) s.Add(795);
+                if (form.CheckAbilityPatch.Checked) s.Add(1606);
+                if (form.CheckSweet.Checked) s.Add(1904);
+                if (form.CheckSalty.Checked) s.Add(1905);
+                if (form.CheckSour.Checked) s.Add(1906);
+                if (form.CheckBitter.Checked) s.Add(1907);
+                if (form.CheckSpicy.Checked) s.Add(1908);
+
+                Rewards.Text = string.Join(",", s);
+            }
         }
     }
 }

@@ -68,6 +68,7 @@
             this.Rewards = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.RewardsCount = new System.Windows.Forms.NumericUpDown();
+            this.ButtonOpenRewardsList = new System.Windows.Forms.Button();
             this.PerfectIVFilterGroup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.IVSPE)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.IVSPD)).BeginInit();
@@ -599,7 +600,7 @@
             this.Rewards.Enabled = false;
             this.Rewards.Location = new System.Drawing.Point(104, 171);
             this.Rewards.Name = "Rewards";
-            this.Rewards.Size = new System.Drawing.Size(121, 23);
+            this.Rewards.Size = new System.Drawing.Size(96, 23);
             this.Rewards.TabIndex = 28;
             this.Rewards.Text = "645,795,1606,1904,1905,1906,1907,1908";
             // 
@@ -625,11 +626,22 @@
             this.RewardsCount.Size = new System.Drawing.Size(62, 23);
             this.RewardsCount.TabIndex = 30;
             // 
+            // ButtonOpenRewardsList
+            // 
+            this.ButtonOpenRewardsList.Location = new System.Drawing.Point(206, 171);
+            this.ButtonOpenRewardsList.Name = "ButtonOpenRewardsList";
+            this.ButtonOpenRewardsList.Size = new System.Drawing.Size(19, 23);
+            this.ButtonOpenRewardsList.TabIndex = 31;
+            this.ButtonOpenRewardsList.Text = "?";
+            this.ButtonOpenRewardsList.UseVisualStyleBackColor = true;
+            this.ButtonOpenRewardsList.Click += new System.EventHandler(this.ButtonOpenRewardsList_Click);
+            // 
             // FilterSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(454, 413);
+            this.Controls.Add(this.ButtonOpenRewardsList);
             this.Controls.Add(this.RewardsCount);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.Rewards);
@@ -715,5 +727,6 @@
         private TextBox Rewards;
         private Label label2;
         private NumericUpDown RewardsCount;
+        private Button ButtonOpenRewardsList;
     }
 }
