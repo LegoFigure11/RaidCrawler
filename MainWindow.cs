@@ -362,7 +362,14 @@ namespace RaidCrawler
             {
                 var x = (den_locations[$"{raid.Area}-{raid.Den}"][0] + 2.072021484) * 512 / 5000;
                 var y = (den_locations[$"{raid.Area}-{raid.Den}"][2] + 5255.240018) * 512 / 5000;
-                return ImageUtil.LayerImage(map, gem, (int)x, (int)y);
+                var mapimg = ImageUtil.LayerImage(map, gem, (int)x, (int)y);
+                if (den_locations.ContainsKey($"{raid.Area}-{raid.Den}_"))
+                {
+                    x = (den_locations[$"{raid.Area}-{raid.Den}_"][0] + 2.072021484) * 512 / 5000;
+                    x = (den_locations[$"{raid.Area}-{raid.Den}_"][0] + 2.072021484) * 512 / 5000;
+                    mapimg = ImageUtil.LayerImage(mapimg, gem, (int)x, (int)y);
+                }
+                return mapimg;
             }
             catch { return null; }
         }

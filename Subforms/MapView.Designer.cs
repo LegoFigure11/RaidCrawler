@@ -49,7 +49,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "MapView";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "MapView";
+            this.Text = "Possible Den Location(s)";
             ((System.ComponentModel.ISupportInitialize)(this.Map)).EndInit();
             this.ResumeLayout(false);
 
