@@ -44,10 +44,12 @@ namespace RaidCrawler.Subforms
             Stars.SelectedIndex = settings.Stars != null ? (int)settings.Stars - 1 : 0;
             StarsComp.SelectedIndex = settings.StarsComp;
             TeraType.SelectedIndex = settings.TeraType != null ? (int)settings.TeraType : 0;
+            Gender.SelectedIndex = settings.Gender != null ? (int)settings.Gender : 0;
             SpeciesCheck.Checked = settings.Species != null;
             NatureCheck.Checked = settings.Nature != null;
             StarCheck.Checked = settings.Stars != null;
             TeraCheck.Checked = settings.TeraType != null;
+            GenderCheck.Checked = settings.Gender != null;
             ShinyCheck.Checked = settings.Shiny;
             CheckRewards.Checked = settings.RewardItems != null && settings.RewardsCount > 0;
             Rewards.Text = settings.RewardItems != null ? string.Join(",", settings.RewardItems.Select(x => x.ToString()).ToArray())
@@ -103,6 +105,7 @@ namespace RaidCrawler.Subforms
             RewardsCount.Enabled = CheckRewards.Checked;
             RewardsComp.Enabled = CheckRewards.Checked;
             TeraType.Enabled = TeraCheck.Checked;
+            Gender.Enabled = GenderCheck.Checked;
         }
 
         private void Add_Filter_Click(object sender, EventArgs e)
@@ -127,6 +130,7 @@ namespace RaidCrawler.Subforms
             filter.Stars = StarCheck.Checked ? Stars.SelectedIndex + 1 : null;
             filter.StarsComp = StarsComp.SelectedIndex;
             filter.TeraType = TeraCheck.Checked ? TeraType.SelectedIndex : null;
+            filter.Gender = GenderCheck.Checked ? Gender.SelectedIndex : null;
             filter.Shiny = ShinyCheck.Checked;
             filter.IVBin = ivbin;
             filter.IVVals = ivvals;
@@ -178,6 +182,11 @@ namespace RaidCrawler.Subforms
         private void TeraCheck_CheckedChanged(object sender, EventArgs e)
         {
             TeraType.Enabled = TeraCheck.Checked;
+        }
+
+        private void GenderCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            Gender.Enabled = GenderCheck.Checked;
         }
 
         private void HP_CheckedChanged(object sender, EventArgs e)

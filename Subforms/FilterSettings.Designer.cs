@@ -69,6 +69,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.RewardsCount = new System.Windows.Forms.NumericUpDown();
             this.ButtonOpenRewardsList = new System.Windows.Forms.Button();
+            this.GenderCheck = new System.Windows.Forms.CheckBox();
+            this.Gender = new System.Windows.Forms.ComboBox();
             this.PerfectIVFilterGroup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.IVSPE)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.IVSPD)).BeginInit();
@@ -150,7 +152,7 @@
             // ShinyCheck
             // 
             this.ShinyCheck.AutoSize = true;
-            this.ShinyCheck.Location = new System.Drawing.Point(15, 229);
+            this.ShinyCheck.Location = new System.Drawing.Point(15, 258);
             this.ShinyCheck.Name = "ShinyCheck";
             this.ShinyCheck.Size = new System.Drawing.Size(60, 19);
             this.ShinyCheck.TabIndex = 6;
@@ -159,7 +161,7 @@
             // 
             // Add
             // 
-            this.Add.Location = new System.Drawing.Point(12, 384);
+            this.Add.Location = new System.Drawing.Point(12, 413);
             this.Add.Name = "Add";
             this.Add.Size = new System.Drawing.Size(111, 23);
             this.Add.TabIndex = 9;
@@ -187,7 +189,7 @@
             this.PerfectIVFilterGroup.Controls.Add(this.Def);
             this.PerfectIVFilterGroup.Controls.Add(this.Atk);
             this.PerfectIVFilterGroup.Controls.Add(this.HP);
-            this.PerfectIVFilterGroup.Location = new System.Drawing.Point(12, 254);
+            this.PerfectIVFilterGroup.Location = new System.Drawing.Point(12, 283);
             this.PerfectIVFilterGroup.Name = "PerfectIVFilterGroup";
             this.PerfectIVFilterGroup.Size = new System.Drawing.Size(231, 124);
             this.PerfectIVFilterGroup.TabIndex = 10;
@@ -510,7 +512,7 @@
             this.ActiveFilters.ItemHeight = 15;
             this.ActiveFilters.Location = new System.Drawing.Point(257, 23);
             this.ActiveFilters.Name = "ActiveFilters";
-            this.ActiveFilters.Size = new System.Drawing.Size(185, 379);
+            this.ActiveFilters.Size = new System.Drawing.Size(185, 409);
             this.ActiveFilters.TabIndex = 20;
             this.ActiveFilters.SelectedIndexChanged += new System.EventHandler(this.ActiveFilters_SelectedIndexChanged);
             // 
@@ -533,7 +535,7 @@
             // 
             // Remove
             // 
-            this.Remove.Location = new System.Drawing.Point(132, 384);
+            this.Remove.Location = new System.Drawing.Point(132, 413);
             this.Remove.Name = "Remove";
             this.Remove.Size = new System.Drawing.Size(111, 23);
             this.Remove.TabIndex = 23;
@@ -544,7 +546,7 @@
             // DisableFilter
             // 
             this.DisableFilter.AutoSize = true;
-            this.DisableFilter.Location = new System.Drawing.Point(135, 229);
+            this.DisableFilter.Location = new System.Drawing.Point(135, 258);
             this.DisableFilter.Name = "DisableFilter";
             this.DisableFilter.Size = new System.Drawing.Size(98, 19);
             this.DisableFilter.TabIndex = 24;
@@ -579,7 +581,7 @@
             ">=",
             "<=",
             "<"});
-            this.RewardsComp.Location = new System.Drawing.Point(172, 200);
+            this.RewardsComp.Location = new System.Drawing.Point(172, 229);
             this.RewardsComp.Name = "RewardsComp";
             this.RewardsComp.Size = new System.Drawing.Size(53, 23);
             this.RewardsComp.TabIndex = 27;
@@ -587,7 +589,7 @@
             // CheckRewards
             // 
             this.CheckRewards.AutoSize = true;
-            this.CheckRewards.Location = new System.Drawing.Point(15, 173);
+            this.CheckRewards.Location = new System.Drawing.Point(15, 202);
             this.CheckRewards.Name = "CheckRewards";
             this.CheckRewards.Size = new System.Drawing.Size(70, 19);
             this.CheckRewards.TabIndex = 26;
@@ -598,7 +600,7 @@
             // Rewards
             // 
             this.Rewards.Enabled = false;
-            this.Rewards.Location = new System.Drawing.Point(104, 171);
+            this.Rewards.Location = new System.Drawing.Point(104, 200);
             this.Rewards.Name = "Rewards";
             this.Rewards.Size = new System.Drawing.Size(96, 23);
             this.Rewards.TabIndex = 28;
@@ -607,7 +609,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(14, 203);
+            this.label2.Location = new System.Drawing.Point(14, 232);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(82, 15);
             this.label2.TabIndex = 29;
@@ -616,7 +618,7 @@
             // RewardsCount
             // 
             this.RewardsCount.Enabled = false;
-            this.RewardsCount.Location = new System.Drawing.Point(104, 200);
+            this.RewardsCount.Location = new System.Drawing.Point(104, 229);
             this.RewardsCount.Maximum = new decimal(new int[] {
             12,
             0,
@@ -628,7 +630,7 @@
             // 
             // ButtonOpenRewardsList
             // 
-            this.ButtonOpenRewardsList.Location = new System.Drawing.Point(206, 171);
+            this.ButtonOpenRewardsList.Location = new System.Drawing.Point(206, 200);
             this.ButtonOpenRewardsList.Name = "ButtonOpenRewardsList";
             this.ButtonOpenRewardsList.Size = new System.Drawing.Size(19, 23);
             this.ButtonOpenRewardsList.TabIndex = 31;
@@ -636,11 +638,37 @@
             this.ButtonOpenRewardsList.UseVisualStyleBackColor = true;
             this.ButtonOpenRewardsList.Click += new System.EventHandler(this.ButtonOpenRewardsList_Click);
             // 
+            // GenderCheck
+            // 
+            this.GenderCheck.AutoSize = true;
+            this.GenderCheck.Location = new System.Drawing.Point(15, 173);
+            this.GenderCheck.Name = "GenderCheck";
+            this.GenderCheck.Size = new System.Drawing.Size(64, 19);
+            this.GenderCheck.TabIndex = 33;
+            this.GenderCheck.Text = "Gender";
+            this.GenderCheck.UseVisualStyleBackColor = true;
+            this.GenderCheck.CheckedChanged += new System.EventHandler(this.GenderCheck_CheckedChanged);
+            // 
+            // Gender
+            // 
+            this.Gender.Enabled = false;
+            this.Gender.FormattingEnabled = true;
+            this.Gender.Items.AddRange(new object[] {
+            "Male",
+            "Female",
+            "Genderless"});
+            this.Gender.Location = new System.Drawing.Point(104, 171);
+            this.Gender.Name = "Gender";
+            this.Gender.Size = new System.Drawing.Size(121, 23);
+            this.Gender.TabIndex = 32;
+            // 
             // FilterSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(454, 413);
+            this.ClientSize = new System.Drawing.Size(454, 447);
+            this.Controls.Add(this.GenderCheck);
+            this.Controls.Add(this.Gender);
             this.Controls.Add(this.ButtonOpenRewardsList);
             this.Controls.Add(this.RewardsCount);
             this.Controls.Add(this.label2);
@@ -728,5 +756,7 @@
         private Label label2;
         private NumericUpDown RewardsCount;
         private Button ButtonOpenRewardsList;
+        private CheckBox GenderCheck;
+        private ComboBox Gender;
     }
 }
