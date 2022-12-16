@@ -31,7 +31,7 @@ namespace RaidCrawler.Structures
             Entity = enc;
             DropTableFix = fixedrewards;
             DropTableRandom = lotteryrewards;
-            ExtraMoves = extras.Where(z => z != 0).ToArray();
+            ExtraMoves = extras.Where(z => z != 0 && !Entity.Moves.Contains(z)).Distinct().ToArray();
             if (ExtraMoves.Length > 4)
                 Debug.WriteLine(ExtraMoves);
         }

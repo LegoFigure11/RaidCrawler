@@ -29,7 +29,7 @@ namespace RaidCrawler.Structures
             Entity = enc;
             DropTableFix = fixedrewards;
             DropTableRandom = lotteryrewards;
-            ExtraMoves = extras.Where(z => z != 0).ToArray();
+            ExtraMoves = extras.Where(z => z != 0 && !Entity.Moves.Contains(z)).Distinct().ToArray();
             if (ExtraMoves.Length > 4)
                 Debug.WriteLine(ExtraMoves);
         }
@@ -38,11 +38,11 @@ namespace RaidCrawler.Structures
         {
             var data = FlatbufferDumper.DumpBaseROMRaids(resources);
             var encs = EncounterTera9.GetArray(data[0]);
-            var extras = TeraDistribution.GetExtraMoves(data[1]);
+            var extras = data[1];
             var rewards = TeraDistribution.GetRewardTables(Utils.GetBinaryResource("reward_map"));
             var result = new TeraEncounter[encs.Length];
             for (int i = 0; i < encs.Length; i++)
-                result[i] = new TeraEncounter(encs[i], rewards[i].Item1, rewards[i].Item2, extras);
+                result[i] = new TeraEncounter(encs[i], rewards[i].Item1, rewards[i].Item2, TeraDistribution.GetExtraMoves(extras[(12 * i)..]));
             return result;
         }
 
