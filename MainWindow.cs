@@ -23,6 +23,7 @@ namespace RaidCrawler
         private readonly static OffsetUtil OffsetUtil = new(SwitchConnection);
 
         private readonly List<Raid> Raids = new();
+        private readonly List<ITeraRaid?> Encounters = new();
         private List<uint> prev = new();
         private List<RaidFilter> RaidFilters = new();
         private static readonly Image map = Image.FromStream(new MemoryStream(Utils.GetBinaryResource("paldea.png")));
@@ -208,8 +209,7 @@ namespace RaidCrawler
                 Area.Text = $"{Areas.Area[raid.Area - 1]} - Den {raid.Den}";
                 IsEvent.Checked = raid.IsEvent;
 
-                var progress = raid.IsEvent ? EventProgress.SelectedIndex : Progress.SelectedIndex;
-                ITeraRaid? encounter = raid.Encounter(progress);
+                var encounter = Encounters[index];
                 var teratype = GetTeraType(encounter, raid);
                 TeraType.Text = $"{Raid.strings.types[teratype]} ({teratype})";
                 int StarCount = encounter is TeraDistribution ? encounter.Stars : Raid.GetStarCount(raid.Difficulty, Progress.SelectedIndex, raid.IsBlack);
@@ -217,7 +217,7 @@ namespace RaidCrawler
 
                 if (encounter != null)
                 {
-                    var param = GetParam(encounter);
+                    var param = Raid.GetParam(encounter);
                     var blank = new PK9
                     {
                         Species = encounter.Species,
@@ -271,29 +271,6 @@ namespace RaidCrawler
                     s += "/";
             }
             return s;
-        }
-
-        private static byte GetGender(ITeraRaid enc)
-        {
-            if (enc is not TeraDistribution td || td.Entity is EncounterDist9)
-                return (byte)PersonalTable.SV.GetFormEntry(enc.Species, enc.Form).Gender;
-            if (td.Entity is EncounterMight9 em)
-                return em.Gender switch
-                {
-                    0 => PersonalInfo.RatioMagicMale,
-                    1 => PersonalInfo.RatioMagicFemale,
-                    2 => PersonalInfo.RatioMagicGenderless,
-                    _ => (byte)PersonalTable.SV.GetFormEntry(enc.Species, enc.Form).Gender,
-                };
-            return (byte)PersonalTable.SV.GetFormEntry(enc.Species, enc.Form).Gender;
-        }
-
-        private static GenerateParam9 GetParam(ITeraRaid encounter)
-        {
-            var gender = GetGender(encounter);
-            if (encounter is TeraDistribution td && td.Entity is EncounterMight9 em)
-                return new GenerateParam9(gender, em.FlawlessIVCount, 1, 0, 0, em.Scale, em.Ability, em.Shiny, em.Nature, em.IVs);
-            return new GenerateParam9(gender, encounter.FlawlessIVCount, 1, 0, 0, 0, encounter.Ability, encounter.Shiny);
         }
 
         private static int[] ToSpeedLast(int[] ivs)
@@ -385,7 +362,7 @@ namespace RaidCrawler
                     for (int i = 0; i < Raids.Count; i++)
                     {
                         var chk = (index + Raids.Count - i) % Raids.Count;
-                        if (StopAdvances || RaidFilters.Any(z => z.FilterSatisfied(Raids[chk], Progress.SelectedIndex, EventProgress.SelectedIndex, RaidBoost.SelectedIndex)))
+                        if (StopAdvances || RaidFilters.Any(z => z.FilterSatisfied(Encounters[chk], Raids[chk], RaidBoost.SelectedIndex)))
                         {
                             index = chk;
                             break;
@@ -406,7 +383,7 @@ namespace RaidCrawler
                     for (int i = 0; i < Raids.Count; i++)
                     {
                         var chk = (index + Raids.Count + i) % Raids.Count;
-                        if (StopAdvances || RaidFilters.Any(z => z.FilterSatisfied(Raids[chk], Progress.SelectedIndex, EventProgress.SelectedIndex, RaidBoost.SelectedIndex)))
+                        if (StopAdvances || RaidFilters.Any(z => z.FilterSatisfied(Encounters[chk], Raids[chk], RaidBoost.SelectedIndex)))
                         {
                             index = chk;
                             break;
@@ -500,13 +477,14 @@ namespace RaidCrawler
                 ButtonReadRaids.Enabled = false;
                 ButtonAdvanceDate.Enabled = false;
                 _WindowState = WindowState;
+                var prompt = false;
                 do
                 {
                     prev = Raids.Select(z => z.Seed).ToList();
                     await AdvanceDate(CancellationToken.None);
                     await ReadRaids(CancellationToken.None);
-                } while (CheckAdvanceDate());
-                if (RaidFilters.Any(z => z.FilterSatisfied(Raids, Progress.SelectedIndex, EventProgress.SelectedIndex, RaidBoost.SelectedIndex)))
+                } while (CheckAdvanceDate(out prompt));
+                if (prompt)
                 {
                     if (Settings.Default.CfgPlaySound) System.Media.SystemSounds.Asterisk.Play();
                     if (Settings.Default.CfgFocusWindow)
@@ -522,8 +500,9 @@ namespace RaidCrawler
             }
         }
 
-        private bool CheckAdvanceDate()
+        private bool CheckAdvanceDate(out bool prompt)
         {
+            prompt = false;
             if (CheckDisable.Checked)
                 return false;
             if (prev.Count != Raids.Count)
@@ -536,7 +515,9 @@ namespace RaidCrawler
             }
             if (sameraids)
                 return true;
-            if (StopAdvances || RaidFilters.Any(z => z.FilterSatisfied(Raids, Progress.SelectedIndex, EventProgress.SelectedIndex, RaidBoost.SelectedIndex)))
+            if (RaidFilters.Any(z => z.FilterSatisfied(Encounters, Raids, RaidBoost.SelectedIndex)))
+                prompt = true;
+            if (StopAdvances || prompt == true)
                 return false;
             return true;
         }
@@ -566,6 +547,7 @@ namespace RaidCrawler
             offset = await OffsetUtil.GetPointerAddress(RaidBlockPointer, CancellationToken.None);
 
             Raids.Clear();
+            Encounters.Clear();
             RewardsList.Clear();
             index = 0;
 
@@ -579,7 +561,10 @@ namespace RaidCrawler
                 if (raid.IsValid)
                 {
                     Raids.Add(raid);
-                    RewardsList.Add(GetRewards(raid));
+                    var progress = raid.IsEvent ? EventProgress.SelectedIndex : Progress.SelectedIndex;
+                    var encounter = raid.Encounter(progress);
+                    Encounters.Add(encounter);
+                    RewardsList.Add(Structures.Rewards.GetRewards(encounter, raid.Seed, RaidBoost.SelectedIndex));
                 }
             }
 
@@ -689,8 +674,7 @@ namespace RaidCrawler
                 return;
             }
             var raid = Raids[index];
-            var progress = raid.IsEvent ? EventProgress.SelectedIndex : Progress.SelectedIndex;
-            ITeraRaid? encounter = raid.Encounter(progress);
+            var encounter = Encounters[index];
             var teratype = GetTeraType(encounter, raid);
             var map = GenerateMap(raid, teratype);
             if (map == null)
@@ -722,12 +706,15 @@ namespace RaidCrawler
             form.ShowDialog();
         }
 
-        private List<(int, int, int)>? GetRewards(Raid raid) => Structures.Rewards.GetRewards(raid, Progress.SelectedIndex, EventProgress.SelectedIndex, RaidBoost.SelectedIndex);
-
         private void RaidBoost_SelectedIndexChanged(object sender, EventArgs e)
         {
             RewardsList.Clear();
-            foreach (Raid raid in Raids) RewardsList.Add(GetRewards(raid));
+            for (int i = 0; i < Raids.Count; i++)
+            {
+                var raid = Raids[i];
+                var encounter = Encounters[i];
+                RewardsList.Add(Structures.Rewards.GetRewards(encounter, raid.Seed, RaidBoost.SelectedIndex));
+            }
         }
     }
 }

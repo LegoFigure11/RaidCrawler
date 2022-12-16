@@ -74,7 +74,7 @@ namespace RaidCrawler.Structures
             return new uint[] { EC, TIDSID, PID, (uint)Shiny };
         }
 
-        public int[] GetIVs(uint Seed, int FlawlessIVs)
+        public static int[] GetIVs(uint Seed, int FlawlessIVs)
         {
             var rng = new Xoroshiro128Plus(Seed);
             // Dummy calls
@@ -145,6 +145,29 @@ namespace RaidCrawler.Structures
         {
             var rng = new Xoroshiro128Plus(Seed);
             return (uint)rng.NextInt(100);
+        }
+
+        public static GenerateParam9 GetParam(ITeraRaid encounter)
+        {
+            var gender = GetGender(encounter);
+            if (encounter is TeraDistribution td && td.Entity is EncounterMight9 em)
+                return new GenerateParam9(gender, em.FlawlessIVCount, 1, 0, 0, em.Scale, em.Ability, em.Shiny, em.Nature, em.IVs);
+            return new GenerateParam9(gender, encounter.FlawlessIVCount, 1, 0, 0, 0, encounter.Ability, encounter.Shiny);
+        }
+
+        private static byte GetGender(ITeraRaid enc)
+        {
+            if (enc is not TeraDistribution td || td.Entity is EncounterDist9)
+                return (byte)PersonalTable.SV.GetFormEntry(enc.Species, enc.Form).Gender;
+            if (td.Entity is EncounterMight9 em)
+                return em.Gender switch
+                {
+                    0 => PersonalInfo.RatioMagicMale,
+                    1 => PersonalInfo.RatioMagicFemale,
+                    2 => PersonalInfo.RatioMagicGenderless,
+                    _ => (byte)PersonalTable.SV.GetFormEntry(enc.Species, enc.Form).Gender,
+                };
+            return (byte)PersonalTable.SV.GetFormEntry(enc.Species, enc.Form).Gender;
         }
     }
 }

@@ -25,58 +25,48 @@ namespace RaidCrawler.Structures
             return true;
         }
 
-        public bool IsSpeciesSatisfied(Raid raid, int StoryProgress, int EventProgress)
+        public bool IsSpeciesSatisfied(ITeraRaid? enc)
         {
             if (Species == null)
                 return true;
-            var progress = raid.IsEvent ? EventProgress : StoryProgress;
-            ITeraRaid? encounter = raid.Encounter(progress);
-            if (encounter == null)
+            if (enc == null)
                 return false;
-            return encounter.Species == (int)Species;
+            return enc.Species == (int)Species;
         }
 
-        public bool IsStarsSatisfied(Raid raid, int StoryProgress)
+        public bool IsStarsSatisfied(ITeraRaid? enc)
         {
             if (Stars == null)
                 return true;
-            switch (StarsComp)
+            if (enc == null)
+                return false;
+            return StarsComp switch
             {
-                case 0:
-                    return (int)Stars == Raid.GetStarCount(raid.Difficulty, StoryProgress, raid.IsBlack);
-                case 1:
-                    return (int)Stars < Raid.GetStarCount(raid.Difficulty, StoryProgress, raid.IsBlack);
-                case 2:
-                    return (int)Stars <= Raid.GetStarCount(raid.Difficulty, StoryProgress, raid.IsBlack);
-                case 3:
-                    return (int)Stars >= Raid.GetStarCount(raid.Difficulty, StoryProgress, raid.IsBlack);
-                case 4:
-                    return (int)Stars > Raid.GetStarCount(raid.Difficulty, StoryProgress, raid.IsBlack);
-                default: return false;
-            }
+                0 => enc.Stars == (int)Stars,
+                1 => enc.Stars >  (int)Stars,
+                2 => enc.Stars >= (int)Stars,
+                3 => enc.Stars <= (int)Stars,
+                4 => enc.Stars <  (int)Stars,
+                _ => false
+            };
         }
 
-        public bool IsRewardsSatisfied(Raid raid, int StoryProgress, int EventProgress, int SandwichBoost)
+        public bool IsRewardsSatisfied(ITeraRaid? enc, Raid raid, int SandwichBoost)
         {
             if (RewardItems == null || RewardsCount == 0)
                 return true;
-            var rewards = Rewards.GetRewards(raid, StoryProgress, EventProgress, SandwichBoost);
+            var rewards = Rewards.GetRewards(enc, raid.Seed, SandwichBoost);
             if (rewards == null)
                 return false;
-            switch (RewardsComp)
-            {
-                case 0:
-                    return rewards.Where(z => RewardItems.Contains(z.Item1)).Count() == RewardsCount;
-                case 1:
-                    return rewards.Where(z => RewardItems.Contains(z.Item1)).Count() > RewardsCount;
-                case 2:
-                    return rewards.Where(z => RewardItems.Contains(z.Item1)).Count() >= RewardsCount;
-                case 3:
-                    return rewards.Where(z => RewardItems.Contains(z.Item1)).Count() <= RewardsCount;
-                case 4:
-                    return rewards.Where(z => RewardItems.Contains(z.Item1)).Count() < RewardsCount;
-                default: return false;
-            }
+            var count = rewards.Where(z => RewardItems.Contains(z.Item1)).Count();
+            return RewardsComp switch {
+                0 => count == RewardsCount,
+                1 => count >  RewardsCount,
+                2 => count >= RewardsCount,
+                3 => count <= RewardsCount,
+                4 => count <  RewardsCount,
+                _ => false
+            };
         }
 
         public bool IsShinySatisfied(Raid raid)
@@ -93,17 +83,14 @@ namespace RaidCrawler.Structures
             return raid.TeraType == (int)TeraType;
         }
 
-        public bool IsNatureSatisfied(Raid raid, int StoryProgress, int EventProgress)
+        public bool IsNatureSatisfied(ITeraRaid? encounter, Raid raid)
         {
             if (Nature == null)
                 return true;
-            var progress = raid.IsEvent ? EventProgress : StoryProgress;
-            ITeraRaid? encounter = raid.Encounter(progress);
             if (encounter == null)
                 return false;
             var pi = PersonalTable.SV.GetFormEntry(encounter.Species, encounter.Form);
-            var StarCount = Raid.GetStarCount(raid.Difficulty, StoryProgress, raid.IsBlack);
-            var param = new GenerateParam9((byte)pi.Gender, (byte)(StarCount - 1), 1, 0, 0, 0, encounter.Ability, encounter.Shiny);
+            var param = Raid.GetParam(encounter);
             var blank = new PK9();
             blank.Species = encounter.Species;
             blank.Form = encounter.Form;
@@ -111,61 +98,60 @@ namespace RaidCrawler.Structures
             return blank.Nature == (int)Nature;
         }
 
-        public bool IsIVsSatisfied(Raid raid, int StoryProgress, int EventProgress)
+        public bool IsIVsSatisfied(ITeraRaid? encounter, Raid raid)
         {
             if (IVBin == 0)
                 return true;
-            var progress = raid.IsEvent ? EventProgress : StoryProgress;
-            ITeraRaid? encounter = raid.Encounter(progress);
             if (encounter == null)
                 return false;
-            var ivs = raid.GetIVs(raid.Seed, encounter.FlawlessIVCount);
+            var ivs = Raid.GetIVs(raid.Seed, encounter.FlawlessIVCount);
             for (int i = 0; i < 6; i++)
             {
                 var iv = IVVals >> i * 5 & 31;
                 var ivbin = IVBin >> i & 1;
                 var ivcomp = IVComps >> i * 3 & 7;
-                if (ivbin == 1)
+                if (ivbin != 1)
+                    continue;
+                switch (ivcomp)
                 {
-                    switch (ivcomp)
-                    {
-                        case 0:
-                            if (ivs[i] != iv)
-                                return false;
-                            break;
-                        case 1:
-                            if (ivs[i] <= iv)
-                                return false;
-                            break;
-                        case 2:
-                            if (ivs[i] < iv)
-                                return false;
-                            break;
-                        case 3:
-                            if (ivs[i] > iv)
-                                return false;
-                            break;
-                        case 4:
-                            if (ivs[i] >= iv)
-                                return false;
-                            break;
-                    }
+                    case 0:
+                        if (ivs[i] != iv)
+                            return false;
+                        break;
+                    case 1:
+                        if (ivs[i] <= iv)
+                            return false;
+                        break;
+                    case 2:
+                        if (ivs[i] < iv)
+                            return false;
+                        break;
+                    case 3:
+                        if (ivs[i] > iv)
+                            return false;
+                        break;
+                    case 4:
+                        if (ivs[i] >= iv)
+                            return false;
+                        break;
                 }
             }
             return true;
         }
 
-        public bool FilterSatisfied(Raid raid, int StoryProgress, int EventProgress, int SandwichBoost)
+        public bool FilterSatisfied(ITeraRaid? encounter, Raid raid, int SandwichBoost)
         {
-            return Enabled && IsIVsSatisfied(raid, StoryProgress, EventProgress) && IsShinySatisfied(raid) && IsSpeciesSatisfied(raid, StoryProgress, EventProgress)
-                && IsNatureSatisfied(raid, StoryProgress, EventProgress) && IsStarsSatisfied(raid, StoryProgress) && IsTeraTypeSatisfied(raid) && IsRewardsSatisfied(raid, StoryProgress, EventProgress, SandwichBoost);
+            return Enabled && IsIVsSatisfied(encounter, raid) && IsShinySatisfied(raid) && IsSpeciesSatisfied(encounter)
+                && IsNatureSatisfied(encounter, raid) && IsStarsSatisfied(encounter) && IsTeraTypeSatisfied(raid) && IsRewardsSatisfied(encounter, raid, SandwichBoost);
         }
 
-        public bool FilterSatisfied(List<Raid> Raids, int StoryProgress, int EventProgress, int SandwichBoost)
+        public bool FilterSatisfied(List<ITeraRaid?> Encounters, List<Raid> Raids, int SandwichBoost)
         {
-            foreach (Raid raid in Raids)
+            if (Raids.Count != Encounters.Count)
+                throw new ArgumentOutOfRangeException("Raid Count does not match Encounter count");
+            for (int i = 0; i < Raids.Count; i++)
             {
-                if (FilterSatisfied(raid, StoryProgress, EventProgress, SandwichBoost))
+                if (FilterSatisfied(Encounters[i], Raids[i], SandwichBoost))
                     return true;
             }
             return false;
