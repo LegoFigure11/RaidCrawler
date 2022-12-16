@@ -21,6 +21,18 @@ public enum RaidRomType : short
 }
 
 [FlatBufferTable, TypeConverter(typeof(ExpandableObjectConverter))]
+public class RaidEnemyTableArray : IFlatBufferArchive<RaidEnemyTable>
+{
+    [FlatBufferItem(0)] public RaidEnemyTable[] Table { get; set; }
+}
+
+[FlatBufferTable, TypeConverter(typeof(ExpandableObjectConverter))]
+public class RaidEnemyTable
+{
+    [FlatBufferItem(0)] public RaidEnemyInfo RaidEnemyInfo { get; set; }
+}
+
+[FlatBufferTable, TypeConverter(typeof(ExpandableObjectConverter))]
 public class DeliveryRaidEnemyTableArray : IFlatBufferArchive<DeliveryRaidEnemyTable>
 {
     [FlatBufferItem(0)] public DeliveryRaidEnemyTable[] Table { get; set; }
@@ -141,4 +153,14 @@ public class RaidBossData
     [FlatBufferItem(16)] public sbyte DoubleActionTriggerHp { get; set; }
     [FlatBufferItem(17)] public sbyte DoubleActionTriggerTime { get; set; }
     [FlatBufferItem(18)] public sbyte DoubleActionRate { get; set; }
+
+    public void SerializePKHeX(BinaryWriter bw)
+    {
+        bw.Write(ExtraAction1.Wazano);
+        bw.Write(ExtraAction2.Wazano);
+        bw.Write(ExtraAction3.Wazano);
+        bw.Write(ExtraAction4.Wazano);
+        bw.Write(ExtraAction5.Wazano);
+        bw.Write(ExtraAction6.Wazano);
+    }
 }

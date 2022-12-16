@@ -6,6 +6,62 @@ namespace RaidCrawler.Structures
 
     public static class FlatbufferDumper
     {
+        public static byte[][] DumpBaseROMRaids(string[] paths)
+        {
+            var list = new List<RaidStorage>();
+            var rateTotal = new (int Scarlet, int Violet)[8];
+            for (int i = 0; i < paths.Length; i++)
+            {
+                var path = paths[i];
+                var data = Utils.GetBinaryResource(path);
+                var fb = FlatBufferSerializer.Default.Parse<RaidEnemyTableArray>(data);
+                var table = fb.Table;
+                int totalRateScarlet = 0;
+                int totalRateViolet = 0;
+                foreach (var enc in table)
+                {
+                    var wrap = new RaidStorage(enc, i);
+                    if (enc.RaidEnemyInfo.RomVer != RaidRomType.TYPE_B)
+                    {
+                        wrap.RandRateStartScarlet = totalRateScarlet;
+                        totalRateScarlet += enc.RaidEnemyInfo.Rate;
+                    }
+
+                    if (enc.RaidEnemyInfo.RomVer != RaidRomType.TYPE_A)
+                    {
+                        wrap.RandRateStartViolet = totalRateViolet;
+                        totalRateViolet += enc.RaidEnemyInfo.Rate;
+                    }
+                    list.Add(wrap);
+                }
+                rateTotal[i + 1] = (totalRateScarlet, totalRateViolet);
+            }
+
+            var all = list
+            .OrderBy(z => z.Species)
+            .ThenBy(z => z.Form)
+            .ThenByDescending(z => z.Stars)
+            .ThenByDescending(z => z.Delivery)
+            .ToList();
+
+            using var ms = new MemoryStream();
+            using var bw = new BinaryWriter(ms);
+            using var ms2 = new MemoryStream();
+            using var bw2 = new BinaryWriter(ms2);
+            foreach (var enc in list)
+            {
+                var rmS = enc.GetScarletRandMinScarlet();
+                var rmV = enc.GetVioletRandMinViolet();
+                enc.Enemy.RaidEnemyInfo.SerializePKHeX(bw, (byte)enc.Stars, enc.Rate);
+                bw.Write(rmS);
+                bw.Write(rmV);
+                enc.Enemy.RaidEnemyInfo.BossDesc.SerializePKHeX(bw2);
+            }
+            var pickle = ms.ToArray();
+            var extra_moves = ms2.ToArray();
+            return new[] {pickle, extra_moves};
+        }
+
         public static byte[][] DumpDistributionRaids(string path)
         {
             var type2 = new List<byte[]>();
@@ -43,8 +99,9 @@ namespace RaidCrawler.Structures
                     .ThenBy(z => z[3]) // Level
                     .ThenBy(z => z[0x11]) // Distribution Index
                 ;
-            return new[] { ordered2.SelectMany(z => z.SkipLast(16)).ToArray(), ordered3.SelectMany(z => z.SkipLast(16)).ToArray(),
-                           ordered2.SelectMany(z => z.TakeLast(16)).ToArray(), ordered3.SelectMany(z => z.TakeLast(16)).ToArray() };
+            return new[] { ordered2.SelectMany(z => z.SkipLast(16 + 12)).ToArray(), ordered3.SelectMany(z => z.SkipLast(16 + 12)).ToArray(),
+                           ordered2.SelectMany(z => z.TakeLast(16 + 12).Take(16)).ToArray(), ordered3.SelectMany(z => z.TakeLast(16 + 12).Take(16)).ToArray(),
+                           ordered2.SelectMany(z => z.TakeLast(12)).ToArray(), ordered3.SelectMany(z => z.TakeLast(12)).ToArray() };
         }
 
         public static List<DeliveryRaidLotteryRewardItem> DumpLotteryRewards(string path)
@@ -135,9 +192,40 @@ namespace RaidCrawler.Structures
             bw.Write(enc.DropTableFix);
             bw.Write(enc.DropTableRandom);
 
+            // extra moves reference
+            enc.BossDesc.SerializePKHeX(bw);
+
             var bin = ms.ToArray();
             if (!list.Any(z => z.SequenceEqual(bin)))
                 list.Add(bin);
+        }
+
+        private record RaidStorage(RaidEnemyTable Enemy, int File)
+        {
+            private PokeDataBattle Poke => Enemy.RaidEnemyInfo.BossPokePara;
+
+            public int Stars => Enemy.RaidEnemyInfo.Difficulty == 0 ? File + 1 : Enemy.RaidEnemyInfo.Difficulty;
+            public ushort Species => Poke.DevId;
+            public short Form => Poke.FormId;
+            public int Delivery => Enemy.RaidEnemyInfo.DeliveryGroupID;
+            public sbyte Rate => Enemy.RaidEnemyInfo.Rate;
+
+            public int RandRateStartScarlet { get; set; }
+            public int RandRateStartViolet { get; set; }
+
+            public short GetScarletRandMinScarlet()
+            {
+                if (Enemy.RaidEnemyInfo.RomVer == RaidRomType.TYPE_B)
+                    return -1;
+                return (short)RandRateStartScarlet;
+            }
+
+            public short GetVioletRandMinViolet()
+            {
+                if (Enemy.RaidEnemyInfo.RomVer == RaidRomType.TYPE_A)
+                    return -1;
+                return (short)RandRateStartViolet;
+            }
         }
     }
 }

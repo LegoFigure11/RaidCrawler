@@ -1,4 +1,5 @@
 ﻿using PKHeX.Core;
+using System.Diagnostics;
 using static System.Buffers.Binary.BinaryPrimitives;
 
 namespace RaidCrawler.Structures
@@ -8,6 +9,7 @@ namespace RaidCrawler.Structures
         public readonly EncounterStatic Entity; // Raw data
         public readonly ulong DropTableFix;
         public readonly ulong DropTableRandom;
+        public readonly ushort[] ExtraMoves;
 
         public ushort Species => Entity.Species;
         public byte Form => Entity.Form;
@@ -22,12 +24,16 @@ namespace RaidCrawler.Structures
         public ushort Move4 => Entity.Moves.Move4;
         public byte Stars => Entity is ITeraRaid9 t9 ? t9.Stars : (byte)0;
         public byte RandRate => Entity is ITeraRaid9 t9 ? t9.RandRate : (byte)0;
+        ushort[] ITeraRaid.ExtraMoves => ExtraMoves;
 
-        public TeraDistribution(EncounterStatic enc, ulong fixedrewards, ulong lotteryrewards)
+        public TeraDistribution(EncounterStatic enc, ulong fixedrewards, ulong lotteryrewards, ushort[] extras)
         {
             Entity = enc;
             DropTableFix = fixedrewards;
             DropTableRandom = lotteryrewards;
+            ExtraMoves = extras.Where(z => z != 0).ToArray();
+            if (ExtraMoves.Length > 4)
+                Debug.WriteLine(ExtraMoves);
         }
 
         public static ITeraRaid[] GetAllEncounters(string resource)
@@ -37,10 +43,12 @@ namespace RaidCrawler.Structures
             var type3 = EncounterMight9.GetArray(all[1]);
             var rewards2 = GetRewardTables(all[2]);
             var rewards3 = GetRewardTables(all[3]);
+            var extra2 = GetExtraMoves(all[4]);
+            var extra3 = GetExtraMoves(all[5]);
             var result = new TeraDistribution[type2.Length + type3.Length];
             for (int i = 0; i < result.Length; i++)
-                result[i] = i < type2.Length ? new TeraDistribution(type2[i], rewards2[i].Item1, rewards2[i].Item2)
-                                             : new TeraDistribution(type3[i - type2.Length], rewards3[i - type2.Length].Item1, rewards3[i - type2.Length].Item2);
+                result[i] = i < type2.Length ? new TeraDistribution(type2[i], rewards2[i].Item1, rewards2[i].Item2, extra2)
+                                             : new TeraDistribution(type3[i - type2.Length], rewards3[i - type2.Length].Item1, rewards3[i - type2.Length].Item2, extra3);
             return result;
         }
 
@@ -50,6 +58,14 @@ namespace RaidCrawler.Structures
             var result = new (ulong, ulong)[count];
             for (int i = 0; i < result.Length; i++)
                 result[i] = (ReadUInt64LittleEndian(rewards[(0x10 * i)..]), ReadUInt64LittleEndian(rewards[(0x10 * i + 0x8)..]));
+            return result;
+        }
+
+        public static ushort[] GetExtraMoves(byte[] extra)
+        {
+            var result = new ushort[6];
+            for (int i = 0; i < result.Length; i++)
+                result[i] = ReadUInt16LittleEndian(extra[(0x2 * i)..]);
             return result;
         }
 

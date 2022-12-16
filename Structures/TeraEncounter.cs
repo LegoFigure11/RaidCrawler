@@ -1,4 +1,5 @@
 ﻿using PKHeX.Core;
+using System.Diagnostics;
 
 namespace RaidCrawler.Structures
 {
@@ -7,6 +8,7 @@ namespace RaidCrawler.Structures
         public readonly EncounterTera9 Entity; // Raw data
         public readonly ulong DropTableFix;
         public readonly ulong DropTableRandom;
+        public readonly ushort[] ExtraMoves;
         public ushort Species => Entity.Species;
         public byte Form => Entity.Form;
         public sbyte Gender => Entity.Gender;
@@ -20,21 +22,27 @@ namespace RaidCrawler.Structures
         public ushort Move4 => Entity.Moves.Move4;
         public byte Stars => Entity.Stars;
         public byte RandRate => Entity.RandRate;
+        ushort[] ITeraRaid.ExtraMoves => ExtraMoves;
 
-        public TeraEncounter(EncounterTera9 enc, ulong fixedrewards, ulong lotteryrewards)
+        public TeraEncounter(EncounterTera9 enc, ulong fixedrewards, ulong lotteryrewards, ushort[] extras)
         {
             Entity = enc;
             DropTableFix = fixedrewards;
             DropTableRandom = lotteryrewards;
+            ExtraMoves = extras.Where(z => z != 0).ToArray();
+            if (ExtraMoves.Length > 4)
+                Debug.WriteLine(ExtraMoves);
         }
 
-        public static ITeraRaid[] GetAllEncounters(string resource)
+        public static ITeraRaid[] GetAllEncounters(string[] resources)
         {
-            var encs = EncounterTera9.GetArray(Utils.GetBinaryResource(resource));
+            var data = FlatbufferDumper.DumpBaseROMRaids(resources);
+            var encs = EncounterTera9.GetArray(data[0]);
+            var extras = TeraDistribution.GetExtraMoves(data[1]);
             var rewards = TeraDistribution.GetRewardTables(Utils.GetBinaryResource("reward_map"));
             var result = new TeraEncounter[encs.Length];
             for (int i = 0; i < encs.Length; i++)
-                result[i] = new TeraEncounter(encs[i], rewards[i].Item1, rewards[i].Item2);
+                result[i] = new TeraEncounter(encs[i], rewards[i].Item1, rewards[i].Item2, extras);
             return result;
         }
 

@@ -3,6 +3,7 @@ namespace RaidCrawler.Structures
 {
     public interface ITeraRaid
     {
+        ushort[] ExtraMoves { get; }
         ushort Species { get; }
         byte Form { get; }
         sbyte Gender { get; }

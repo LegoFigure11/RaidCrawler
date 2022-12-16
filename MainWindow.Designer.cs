@@ -445,6 +445,7 @@
             this.Move1.ReadOnly = true;
             this.Move1.Size = new System.Drawing.Size(133, 22);
             this.Move1.TabIndex = 95;
+            this.Move1.Click += new System.EventHandler(this.Move_Clicked);
             // 
             // Move2
             // 
@@ -455,6 +456,7 @@
             this.Move2.ReadOnly = true;
             this.Move2.Size = new System.Drawing.Size(133, 22);
             this.Move2.TabIndex = 96;
+            this.Move2.Click += new System.EventHandler(this.Move_Clicked);
             // 
             // Move4
             // 
@@ -465,6 +467,7 @@
             this.Move4.ReadOnly = true;
             this.Move4.Size = new System.Drawing.Size(133, 22);
             this.Move4.TabIndex = 98;
+            this.Move4.Click += new System.EventHandler(this.Move_Clicked);
             // 
             // Move3
             // 
@@ -475,6 +478,7 @@
             this.Move3.ReadOnly = true;
             this.Move3.Size = new System.Drawing.Size(133, 22);
             this.Move3.TabIndex = 97;
+            this.Move3.Click += new System.EventHandler(this.Move_Clicked);
             // 
             // LabelGame
             // 

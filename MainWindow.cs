@@ -36,6 +36,7 @@ namespace RaidCrawler
         private ulong offset;
         private bool IsReading = false;
         private bool HideSeed = false;
+        private bool ShowExtraMoves = false;
 
         private Color DefaultColor;
         private FormWindowState _WindowState;
@@ -50,7 +51,17 @@ namespace RaidCrawler
             var v = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version!;
             Text = "RaidCrawler v" + v.Major + "." + v.Minor + "." + v.Build + build;
 
-            Raid.GemTeraRaids = TeraEncounter.GetAllEncounters("encounter_gem_paldea.pkl");
+            var raid_data = new[]
+            {
+                "raid_enemy_01_array.bin",
+                "raid_enemy_02_array.bin",
+                "raid_enemy_03_array.bin",
+                "raid_enemy_04_array.bin",
+                "raid_enemy_05_array.bin",
+                "raid_enemy_06_array.bin",
+            };
+
+            Raid.GemTeraRaids = TeraEncounter.GetAllEncounters(raid_data);
             Raid.DistTeraRaids = TeraDistribution.GetAllEncounters("raid_enemy_array");
             var filterpath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "filters.json");
             if (File.Exists(filterpath))
@@ -233,10 +244,13 @@ namespace RaidCrawler
                     var nature = blank.Nature;
                     Nature.Text = $"{Raid.strings.Natures[nature]}";
                     Ability.Text = $"{Raid.strings.Ability[blank.Ability]}";
-                    Move1.Text = Raid.strings.Move[encounter.Move1];
-                    Move2.Text = Raid.strings.Move[encounter.Move2];
-                    Move3.Text = Raid.strings.Move[encounter.Move3];
-                    Move4.Text = Raid.strings.Move[encounter.Move4];
+                    var extra_moves = new ushort[] { 0, 0, 0, 0 };
+                    for (int i = 0; i < encounter.ExtraMoves.Length; i++)
+                        if (i < extra_moves.Count()) extra_moves[i] = encounter.ExtraMoves[i];
+                    Move1.Text = ShowExtraMoves ? Raid.strings.Move[extra_moves[0]] : Raid.strings.Move[encounter.Move1];
+                    Move2.Text = ShowExtraMoves ? Raid.strings.Move[extra_moves[1]] : Raid.strings.Move[encounter.Move2];
+                    Move3.Text = ShowExtraMoves ? Raid.strings.Move[extra_moves[2]] : Raid.strings.Move[encounter.Move3];
+                    Move4.Text = ShowExtraMoves ? Raid.strings.Move[extra_moves[3]] : Raid.strings.Move[encounter.Move4];
                     IVs.Text = IVsString(ToSpeedLast(blank.IVs));
                 }
                 else
@@ -715,6 +729,22 @@ namespace RaidCrawler
                 var encounter = Encounters[i];
                 RewardsList.Add(Structures.Rewards.GetRewards(encounter, raid.Seed, RaidBoost.SelectedIndex));
             }
+        }
+
+        private void Move_Clicked(object sender, EventArgs e)
+        {
+            var encounter = Encounters[index];
+            if (encounter == null)
+                return;
+            ShowExtraMoves = !ShowExtraMoves;
+            LabelMoves.Text = ShowExtraMoves ? "Extra:" : "Moves:";
+            var extra_moves = new ushort[] { 0, 0, 0, 0 };
+            for (int i = 0; i < encounter.ExtraMoves.Length; i++)
+                if (i < extra_moves.Count()) extra_moves[i] = encounter.ExtraMoves[i];
+            Move1.Text = ShowExtraMoves ? Raid.strings.Move[extra_moves[0]] : Raid.strings.Move[encounter.Move1];
+            Move2.Text = ShowExtraMoves ? Raid.strings.Move[extra_moves[1]] : Raid.strings.Move[encounter.Move2];
+            Move3.Text = ShowExtraMoves ? Raid.strings.Move[extra_moves[2]] : Raid.strings.Move[encounter.Move3];
+            Move4.Text = ShowExtraMoves ? Raid.strings.Move[extra_moves[3]] : Raid.strings.Move[encounter.Move4];
         }
     }
 }
