@@ -214,13 +214,14 @@ namespace RaidCrawler
             if (Raids.Count > index)
             {
                 Raid raid = Raids[index];
+                var encounter = Encounters[index];
+
                 Seed.Text = !HideSeed ? $"{raid.Seed:X8}" : "Hidden";
                 EC.Text = !HideSeed ? $"{raid.EC:X8}" : "Hidden";
-                PID.Text = (!HideSeed ? $"{raid.PID:X8}" : "Hidden") + $"{(raid.IsShiny ? " (☆)" : string.Empty)}";
+                PID.Text = GetPIDString(raid, encounter);
                 Area.Text = $"{Areas.Area[raid.Area - 1]} - Den {raid.Den}";
                 IsEvent.Checked = raid.IsEvent;
 
-                var encounter = Encounters[index];
                 var teratype = GetTeraType(encounter, raid);
                 TeraType.Text = $"{Raid.strings.types[teratype]} ({teratype})";
                 int StarCount = encounter is TeraDistribution ? encounter.Stars : Raid.GetStarCount(raid.Difficulty, Progress.SelectedIndex, raid.IsBlack);
@@ -266,13 +267,33 @@ namespace RaidCrawler
                     Ability.Text = string.Empty;
                 }
 
-                PID.BackColor = raid.IsShiny ? Color.Gold : DefaultColor;
+                PID.BackColor = IsShiny(raid, encounter) ? Color.Gold : DefaultColor;
                 IVs.BackColor = IVs.Text is "31/31/31/31/31/31" ? Color.YellowGreen : DefaultColor;
             }
             else
             {
                 MessageBox.Show($"Unable to display raid at index {index}. Ensure there are no cheats running or anything else that might shift RAM (Edizon, overlays, etc.), then reboot your console and try again.");
             }
+        }
+
+        private string GetPIDString(Raid raid, ITeraRaid? enc)
+        {
+            var shiny_mark = " (☆)";
+            if (HideSeed) 
+                return "Hidden";
+            var pid = $"{raid.PID:X8}";
+            return IsShiny(raid, enc) ? pid + shiny_mark : pid;
+        }
+
+        private static bool IsShiny(Raid raid, ITeraRaid? enc)
+        {
+            if (enc == null)
+                return raid.IsShiny;
+            if (enc.Shiny == Shiny.Never)
+                return false;
+            if (enc.Shiny.IsShiny())
+                return true;
+            return raid.IsShiny;
         }
 
         private static string IVsString(int[] ivs)
@@ -583,7 +604,7 @@ namespace RaidCrawler
             }
 
             ConnectionStatusText.Text = "Completed!";
-            LabelLoadedRaids.Text = $"Raids: {Raids.Count} | Shiny: {Raids.Where(raid => raid.IsShiny).Count()}";
+            LabelLoadedRaids.Text = $"Raids: {Raids.Count} | Shiny: {Enumerable.Range(0, Raids.Count).Where(i => IsShiny(Raids[i], Encounters[i])).Count()}";
             if (Raids.Count > 0)
             {
                 ButtonPrevious.Enabled = true;
