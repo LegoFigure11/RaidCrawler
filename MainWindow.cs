@@ -85,6 +85,9 @@ namespace RaidCrawler
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
+            Location = Settings.Default.CfgLocation;
+            if (Location.X == 0 && Location.Y == 0)
+                CenterToScreen();
             InputSwitchIP.Text = Settings.Default.SwitchIP;
             LabelIndex.Text = string.Empty;
             DefaultColor = IVs.BackColor;
@@ -669,6 +672,8 @@ namespace RaidCrawler
 
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
+            Settings.Default.CfgLocation = Location;
+            Settings.Default.Save();
             Disconnect();
         }
 
