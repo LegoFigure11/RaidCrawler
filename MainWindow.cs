@@ -23,6 +23,7 @@ namespace RaidCrawler
         private readonly static OffsetUtil OffsetUtil = new(SwitchConnection);
 
         private readonly List<Raid> Raids = new();
+        private List<uint> prev = new();
         private List<RaidFilter> RaidFilters = new();
         private static readonly Image map = Image.FromStream(new MemoryStream(Utils.GetBinaryResource("paldea.png")));
         private static Dictionary<string, float[]>? den_locations;
@@ -501,9 +502,10 @@ namespace RaidCrawler
                 _WindowState = WindowState;
                 do
                 {
+                    prev = Raids.Select(z => z.Seed).ToList();
                     await AdvanceDate(CancellationToken.None);
                     await ReadRaids(CancellationToken.None);
-                } while (!CheckDisable.Checked && !(StopAdvances || RaidFilters.Any(z => z.FilterSatisfied(Raids, Progress.SelectedIndex, EventProgress.SelectedIndex, RaidBoost.SelectedIndex))));
+                } while (CheckAdvanceDate());
                 if (RaidFilters.Any(z => z.FilterSatisfied(Raids, Progress.SelectedIndex, EventProgress.SelectedIndex, RaidBoost.SelectedIndex)))
                 {
                     if (Settings.Default.CfgPlaySound) System.Media.SystemSounds.Asterisk.Play();
@@ -518,6 +520,25 @@ namespace RaidCrawler
                 ButtonReadRaids.Enabled = true;
                 ButtonAdvanceDate.Enabled = true;
             }
+        }
+
+        private bool CheckAdvanceDate()
+        {
+            if (CheckDisable.Checked)
+                return false;
+            if (prev.Count != Raids.Count)
+                return true;
+            var sameraids = true;
+            for (int i = 0; i < prev.Count; i++)
+            {
+                if (Raids[i].Seed != prev[i])
+                    sameraids = false;
+            }
+            if (sameraids)
+                return true;
+            if (StopAdvances || RaidFilters.Any(z => z.FilterSatisfied(Raids, Progress.SelectedIndex, EventProgress.SelectedIndex, RaidBoost.SelectedIndex)))
+                return false;
+            return true;
         }
 
         private async void ButtonReadRaids_Click(object sender, EventArgs e)
