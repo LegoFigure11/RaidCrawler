@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
+            this.toolTip = new System.Windows.Forms.ToolTip();
             this.ButtonDisconnect = new System.Windows.Forms.Button();
             this.ButtonConnect = new System.Windows.Forms.Button();
             this.ConnectionStatusText = new System.Windows.Forms.Label();
@@ -753,6 +754,7 @@
 
         #endregion
 
+        private ToolTip toolTip;
         private Button ButtonDisconnect;
         private Button ButtonConnect;
         private Label ConnectionStatusText;

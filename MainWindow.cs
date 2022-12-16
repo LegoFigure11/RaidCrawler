@@ -256,6 +256,7 @@ namespace RaidCrawler
                     Move3.Text = ShowExtraMoves ? Raid.strings.Move[extra_moves[2]] : Raid.strings.Move[encounter.Move3];
                     Move4.Text = ShowExtraMoves ? Raid.strings.Move[extra_moves[3]] : Raid.strings.Move[encounter.Move4];
                     IVs.Text = IVsString(ToSpeedLast(blank.IVs));
+                    toolTip.SetToolTip(IVs, IVsString(ToSpeedLast(blank.IVs), true));
                 }
                 else
                 {
@@ -299,12 +300,13 @@ namespace RaidCrawler
             return raid.IsShiny;
         }
 
-        private static string IVsString(int[] ivs)
+        private static string IVsString(int[] ivs, bool verbose = false)
         {
             string s = string.Empty;
+            var stats = new[] { "HP", "Atk", "Def", "SpA", "SpD", "Spe" };
             for (int i = 0; i < ivs.Length; i++)
             {
-                s += $"{ivs[i]:D2}";
+                s += $"{ivs[i]:D2}{(verbose ? " " + stats[i] : string.Empty)}";
                 if (i < 5)
                     s += "/";
             }
