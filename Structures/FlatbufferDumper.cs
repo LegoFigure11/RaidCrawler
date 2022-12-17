@@ -86,27 +86,16 @@ namespace RaidCrawler.Structures
                 if (items.Any(z => z.RaidEnemyInfo.Difficulty > 7))
                     continue;
                 if (items.All(z => z.RaidEnemyInfo.Difficulty == 7))
-                    AddToList(items, type3, RaidSerializationFormat.Type3);
+                    AddToList(items, type3, RaidSerializationFormat.Type3, group.Key);
                 else if (items.Any(z => z.RaidEnemyInfo.Difficulty == 7))
                     throw new Exception($"Mixed difficulty {items.First(z => z.RaidEnemyInfo.Difficulty > 7).RaidEnemyInfo.Difficulty}");
-                else AddToList(items, type2, RaidSerializationFormat.Type2);
+                else AddToList(items, type2, RaidSerializationFormat.Type2, group.Key);
             }
 
-            var ordered2 = type2
-                    .OrderBy(z => BinaryPrimitives.ReadUInt16LittleEndian(z)) // Species
-                    .ThenBy(z => z[2]) // Form
-                    .ThenBy(z => z[3]) // Level
-                    .ThenBy(z => z[0x11]) // Distribution Index
-                ;
-            var ordered3 = type3
-                .OrderBy(z => BinaryPrimitives.ReadUInt16LittleEndian(z)) // Species
-                    .ThenBy(z => z[2]) // Form
-                    .ThenBy(z => z[3]) // Level
-                    .ThenBy(z => z[0x11]) // Distribution Index
-                ;
-            return new[] { ordered2.SelectMany(z => z.SkipLast(16 + 12)).ToArray(), ordered3.SelectMany(z => z.SkipLast(16 + 12)).ToArray(),
-                           ordered2.SelectMany(z => z.TakeLast(16 + 12).Take(16)).ToArray(), ordered3.SelectMany(z => z.TakeLast(16 + 12).Take(16)).ToArray(),
-                           ordered2.SelectMany(z => z.TakeLast(12)).ToArray(), ordered3.SelectMany(z => z.TakeLast(12)).ToArray() };
+            return new[] { type2.SelectMany(z => z.SkipLast(16 + 12 + 1)).ToArray(), type3.SelectMany(z => z.SkipLast(16 + 12 + 1)).ToArray(),
+                           type2.SelectMany(z => z.TakeLast(16 + 12 + 1).Take(16)).ToArray(), type3.SelectMany(z => z.TakeLast(16 + 12 + 1).Take(16)).ToArray(),
+                           type2.SelectMany(z => z.TakeLast(12 + 1).Take(12)).ToArray(), type3.SelectMany(z => z.TakeLast(12 + 1).Take(12)).ToArray(),
+                           type2.SelectMany(z => z.TakeLast(1)).ToArray(), type3.SelectMany(z => z.TakeLast(1)).ToArray() };
         }
 
         public static List<DeliveryRaidLotteryRewardItem> DumpLotteryRewards(string path)
@@ -123,6 +112,12 @@ namespace RaidCrawler.Structures
             return tableRewards.Table.ToList();
         }
 
+        public static DeliveryGroupID DumpDeliveryPriorities(string path)
+        {
+            var prios = FlatBufferSerializer.Default.Parse<DeliveryRaidPriorityArray>(Utils.GetBinaryResource(path));
+            return prios.Table[0].DeliveryGroupID;
+        }
+
         private static readonly int[][] StageStars =
         {
             new [] { 1, 2 },
@@ -131,7 +126,7 @@ namespace RaidCrawler.Structures
             new [] { 3, 4, 5, 6, 7 },
         };
 
-        private static void AddToList(IReadOnlyCollection<DeliveryRaidEnemyTable> table, List<byte[]> list, RaidSerializationFormat format)
+        private static void AddToList(IReadOnlyCollection<DeliveryRaidEnemyTable> table, List<byte[]> list, RaidSerializationFormat format, sbyte group)
         {
             // Get the total weight for each stage of star count
             Span<ushort> weightTotalS = stackalloc ushort[StageStars.Length];
@@ -161,7 +156,7 @@ namespace RaidCrawler.Structures
                 if (info.Rate == 0)
                     continue;
                 var difficulty = info.Difficulty;
-                TryAddToPickle(info, list, format, weightTotalS, weightTotalV, weightMinS, weightMinV);
+                TryAddToPickle(info, list, format, weightTotalS, weightTotalV, weightMinS, weightMinV, group);
                 for (int stage = 0; stage < StageStars.Length; stage++)
                 {
                     if (!StageStars[stage].Contains(difficulty))
@@ -174,7 +169,7 @@ namespace RaidCrawler.Structures
             }
         }
 
-        private static void TryAddToPickle(RaidEnemyInfo enc, ICollection<byte[]> list, RaidSerializationFormat format, ReadOnlySpan<ushort> totalS, ReadOnlySpan<ushort> totalV, ReadOnlySpan<ushort> minS, ReadOnlySpan<ushort> minV)
+        private static void TryAddToPickle(RaidEnemyInfo enc, ICollection<byte[]> list, RaidSerializationFormat format, ReadOnlySpan<ushort> totalS, ReadOnlySpan<ushort> totalV, ReadOnlySpan<ushort> minS, ReadOnlySpan<ushort> minV, sbyte group)
         {
             using var ms = new MemoryStream();
             using var bw = new BinaryWriter(ms);
@@ -199,6 +194,9 @@ namespace RaidCrawler.Structures
 
             // extra moves reference
             enc.BossDesc.SerializePKHeX(bw);
+
+            // group id reference
+            bw.Write(group);
 
             var bin = ms.ToArray();
             if (!list.Any(z => z.SequenceEqual(bin)))

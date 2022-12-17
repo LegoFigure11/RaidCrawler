@@ -1,5 +1,6 @@
 ﻿using PKHeX.Core;
 using System.Diagnostics;
+using FlatSharp;
 using static System.Buffers.Binary.BinaryPrimitives;
 
 namespace RaidCrawler.Structures
@@ -10,6 +11,7 @@ namespace RaidCrawler.Structures
         public readonly ulong DropTableFix;
         public readonly ulong DropTableRandom;
         public readonly ushort[] ExtraMoves;
+        public readonly sbyte DeliveryGroupID;
 
         public ushort Species => Entity.Species;
         public byte Form => Entity.Form;
@@ -26,12 +28,13 @@ namespace RaidCrawler.Structures
         public byte RandRate => Entity is ITeraRaid9 t9 ? t9.RandRate : (byte)0;
         ushort[] ITeraRaid.ExtraMoves => ExtraMoves;
 
-        public TeraDistribution(EncounterStatic enc, ulong fixedrewards, ulong lotteryrewards, ushort[] extras)
+        public TeraDistribution(EncounterStatic enc, ulong fixedrewards, ulong lotteryrewards, ushort[] extras, sbyte group)
         {
             Entity = enc;
             DropTableFix = fixedrewards;
             DropTableRandom = lotteryrewards;
             ExtraMoves = extras.Where(z => z != 0 && !Entity.Moves.Contains(z)).Distinct().ToArray();
+            DeliveryGroupID = group;
             if (ExtraMoves.Length > 4)
                 Debug.WriteLine(ExtraMoves);
         }
@@ -45,10 +48,12 @@ namespace RaidCrawler.Structures
             var rewards3 = GetRewardTables(all[3]);
             var extra2 = GetExtraMoves(all[4]);
             var extra3 = GetExtraMoves(all[5]);
+            var group2 = all[6];
+            var group3 = all[7];
             var result = new TeraDistribution[type2.Length + type3.Length];
             for (int i = 0; i < result.Length; i++)
-                result[i] = i < type2.Length ? new TeraDistribution(type2[i], rewards2[i].Item1, rewards2[i].Item2, extra2)
-                                             : new TeraDistribution(type3[i - type2.Length], rewards3[i - type2.Length].Item1, rewards3[i - type2.Length].Item2, extra3);
+                result[i] = i < type2.Length ? new TeraDistribution(type2[i], rewards2[i].Item1, rewards2[i].Item2, extra2, (sbyte)group2[i])
+                                             : new TeraDistribution(type3[i - type2.Length], rewards3[i - type2.Length].Item1, rewards3[i - type2.Length].Item2, extra3, (sbyte)group3[i - type2.Length]);
             return result;
         }
 
@@ -121,7 +126,21 @@ namespace RaidCrawler.Structures
             return Rewards.ReorderRewards(result);
         }
 
-        public static ITeraRaid? GetEncounter(uint Seed, int stage, bool isFixed)
+        public static int GetDeliveryGroupID(int eventct, DeliveryGroupID ids)
+        {
+            int[] cts = new int[10] { ids.GroupID01, ids.GroupID02, ids.GroupID03, ids.GroupID04, ids.GroupID05, 
+                                      ids.GroupID06, ids.GroupID07, ids.GroupID08, ids.GroupID09, ids.GroupID10 };
+            for (int i=0; i < cts.Length; i++)
+            {
+                var ct = cts[i];
+                if (eventct < ct)
+                    return i + 1;
+                eventct -= ct;
+            }
+            throw new ArgumentOutOfRangeException("Found event out of priority range");
+        }
+
+        public static ITeraRaid? GetEncounter(uint Seed, int stage, bool isFixed, int groupid)
         {
             if (stage < 0)
                 return null;
@@ -130,6 +149,8 @@ namespace RaidCrawler.Structures
                 foreach (TeraDistribution enc in Raid.DistTeraRaids)
                 {
                     if (enc.Entity is not EncounterDist9 encd)
+                        continue;
+                    if (enc.DeliveryGroupID != groupid)
                         continue;
                     var total = Raid.Game == "Scarlet" ? encd.GetRandRateTotalScarlet(stage) : encd.GetRandRateTotalViolet(stage);
                     if (total != 0 || isFixed)
@@ -150,6 +171,8 @@ namespace RaidCrawler.Structures
                 foreach (TeraDistribution enc in Raid.DistTeraRaids)
                 {
                     if (enc.Entity is not EncounterMight9 encm)
+                        continue;
+                    if (enc.DeliveryGroupID != groupid)
                         continue;
                     var total = Raid.Game == "Scarlet" ? encm.GetRandRateTotalScarlet(stage) : encm.GetRandRateTotalViolet(stage);
                     if (total != 0 || isFixed)

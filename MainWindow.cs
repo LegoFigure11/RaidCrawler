@@ -73,6 +73,7 @@ namespace RaidCrawler
             Raid.BaseLotteryRewards = JsonConvert.DeserializeObject<List<RaidLotteryRewards>>(Utils.GetStringResource("raid_lottery_reward_item_array.json") ?? "[]");
             Raid.DeliveryRaidFixedRewards = FlatbufferDumper.DumpFixedRewards("fixed_reward_item_array");
             Raid.DeliveryRaidLotteryRewards = FlatbufferDumper.DumpLotteryRewards("lottery_reward_item_array");
+            Raid.DeliveryRaidPriority = FlatbufferDumper.DumpDeliveryPriorities("raid_priority_array");
 
             Raid.Game = Settings.Default.Game;
             SpriteBuilder.ShowTeraThicknessStripe = 0x4;
@@ -595,17 +596,21 @@ namespace RaidCrawler
             var Data = await SwitchConnection.ReadBytesAbsoluteAsync(offset + RaidBlock.HEADER_SIZE, (int)(RaidBlock.SIZE - RaidBlock.HEADER_SIZE), token);
             Raid raid;
             var count = Data.Length / Raid.SIZE;
+            var eventct = 0;
             for (int i = 0; i < count; i++)
             {
                 raid = new Raid(Data.Skip(i * Raid.SIZE).Take(Raid.SIZE).ToArray());
+                var progress = raid.IsEvent ? EventProgress.SelectedIndex : Progress.SelectedIndex;
+                var raid_delivery_group_id = raid.IsEvent ? TeraDistribution.GetDeliveryGroupID(eventct, Raid.DeliveryRaidPriority) : -1;
+                var encounter = raid.Encounter(progress, raid_delivery_group_id);
                 if (raid.IsValid)
                 {
                     Raids.Add(raid);
-                    var progress = raid.IsEvent ? EventProgress.SelectedIndex : Progress.SelectedIndex;
-                    var encounter = raid.Encounter(progress);
                     Encounters.Add(encounter);
                     RewardsList.Add(Structures.Rewards.GetRewards(encounter, raid.Seed, RaidBoost.SelectedIndex));
                 }
+                if (raid.IsEvent)
+                    eventct++;
             }
 
             ConnectionStatusText.Text = "Completed!";

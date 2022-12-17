@@ -18,6 +18,7 @@ namespace RaidCrawler.Structures
         public static List<RaidLotteryRewards>? BaseLotteryRewards = new();
         public static List<DeliveryRaidFixedRewardItem>? DeliveryRaidFixedRewards = new();
         public static List<DeliveryRaidLotteryRewardItem>? DeliveryRaidLotteryRewards = new();
+        public static DeliveryGroupID DeliveryRaidPriority = new();
 
         public readonly byte[] Data; // Raw data
 
@@ -38,7 +39,7 @@ namespace RaidCrawler.Structures
         // Derived Values
         public virtual int TeraType => GetTeraType(Seed);
         public virtual uint Difficulty => GetDifficulty(Seed);
-        public ITeraRaid? Encounter(int Stage) => IsEvent ? TeraDistribution.GetEncounter(Seed, Stage, Flags == 3) : TeraEncounter.GetEncounter(Seed, Stage, IsBlack);
+        public ITeraRaid? Encounter(int Stage, int id) => IsEvent ? TeraDistribution.GetEncounter(Seed, Stage, Flags == 3, id) : TeraEncounter.GetEncounter(Seed, Stage, IsBlack);
 
         public virtual uint EC => GenericRaidData[0];
         /* public virtual uint TIDSID => GenericRaidData[1]; */ // Unneeded
