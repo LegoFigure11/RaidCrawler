@@ -48,6 +48,8 @@ namespace RaidCrawler.Structures
             using var bw = new BinaryWriter(ms);
             using var ms2 = new MemoryStream();
             using var bw2 = new BinaryWriter(ms2);
+            using var ms3 = new MemoryStream();
+            using var bw3 = new BinaryWriter(ms3);
             foreach (var enc in list)
             {
                 var rmS = enc.GetScarletRandMinScarlet();
@@ -56,10 +58,13 @@ namespace RaidCrawler.Structures
                 bw.Write(rmS);
                 bw.Write(rmV);
                 enc.Enemy.RaidEnemyInfo.BossDesc.SerializePKHeX(bw2);
+                bw3.Write(enc.Enemy.RaidEnemyInfo.DropTableFix);
+                bw3.Write(enc.Enemy.RaidEnemyInfo.DropTableRandom);
             }
             var pickle = ms.ToArray();
             var extra_moves = ms2.ToArray();
-            return new[] {pickle, extra_moves};
+            var rewards = ms3.ToArray();
+            return new[] {pickle, extra_moves, rewards};
         }
 
         public static byte[][] DumpDistributionRaids(string path)

@@ -39,7 +39,7 @@ namespace RaidCrawler.Structures
             var data = FlatbufferDumper.DumpBaseROMRaids(resources);
             var encs = EncounterTera9.GetArray(data[0]);
             var extras = data[1];
-            var rewards = TeraDistribution.GetRewardTables(Utils.GetBinaryResource("reward_map"));
+            var rewards = TeraDistribution.GetRewardTables(data[2]);
             var result = new TeraEncounter[encs.Length];
             for (int i = 0; i < encs.Length; i++)
                 result[i] = new TeraEncounter(encs[i], rewards[i].Item1, rewards[i].Item2, TeraDistribution.GetExtraMoves(extras[(12 * i)..]));
