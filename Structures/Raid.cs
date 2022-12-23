@@ -148,6 +148,26 @@ namespace RaidCrawler.Structures
             return (uint)rng.NextInt(100);
         }
 
+        public static bool CheckIsShiny(Raid raid, ITeraRaid? enc)
+        {
+            if (enc == null)
+                return raid.IsShiny;
+            if (enc.Shiny == Shiny.Never)
+                return false;
+            if (enc.Shiny.IsShiny())
+                return true;
+            return raid.IsShiny;
+        }
+
+        public static int GetTeraType(ITeraRaid? encounter, Raid raid)
+        {
+            if (encounter == null)
+                return raid.TeraType;
+            if (encounter is TeraDistribution td && td.Entity is ITeraRaid9 gem)
+                return (int)gem.TeraType > 1 ? (int)gem.TeraType - 2 : raid.TeraType;
+            return raid.TeraType;
+        }
+
         public static GenerateParam9 GetParam(ITeraRaid encounter)
         {
             var gender = GetGender(encounter);

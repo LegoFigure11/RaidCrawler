@@ -226,7 +226,7 @@ namespace RaidCrawler
                 Area.Text = $"{Areas.Area[raid.Area - 1]} - Den {raid.Den}";
                 IsEvent.Checked = raid.IsEvent;
 
-                var teratype = GetTeraType(encounter, raid);
+                var teratype = Raid.GetTeraType(encounter, raid);
                 TeraType.Text = $"{Raid.strings.types[teratype]} ({teratype})";
                 int StarCount = encounter is TeraDistribution ? encounter.Stars : Raid.GetStarCount(raid.Difficulty, Progress.SelectedIndex, raid.IsBlack);
                 Difficulty.Text = raid.IsEvent ? string.Concat(Enumerable.Repeat("☆", StarCount)) : string.Concat(Enumerable.Repeat("☆", StarCount)) + $" ({raid.Difficulty})";
@@ -272,7 +272,7 @@ namespace RaidCrawler
                     Ability.Text = string.Empty;
                 }
 
-                PID.BackColor = IsShiny(raid, encounter) ? Color.Gold : DefaultColor;
+                PID.BackColor = Raid.CheckIsShiny(raid, encounter) ? Color.Gold : DefaultColor;
                 IVs.BackColor = IVs.Text is "31/31/31/31/31/31" ? Color.YellowGreen : DefaultColor;
             }
             else
@@ -287,18 +287,7 @@ namespace RaidCrawler
             if (HideSeed) 
                 return "Hidden";
             var pid = $"{raid.PID:X8}";
-            return IsShiny(raid, enc) ? pid + shiny_mark : pid;
-        }
-
-        private static bool IsShiny(Raid raid, ITeraRaid? enc)
-        {
-            if (enc == null)
-                return raid.IsShiny;
-            if (enc.Shiny == Shiny.Never)
-                return false;
-            if (enc.Shiny.IsShiny())
-                return true;
-            return raid.IsShiny;
+            return Raid.CheckIsShiny(raid, enc) ? pid + shiny_mark : pid;
         }
 
         private static string IVsString(int[] ivs, bool verbose = false)
@@ -324,15 +313,6 @@ namespace RaidCrawler
             res[4] = ivs[5];
             res[5] = ivs[3];
             return res;
-        }
-
-        private static int GetTeraType(ITeraRaid? encounter, Raid raid)
-        {
-            if (encounter == null)
-                return raid.TeraType;
-            if (encounter is TeraDistribution td && td.Entity is ITeraRaid9 gem)
-                return (int)gem.TeraType > 1 ? (int)gem.TeraType - 2 : raid.TeraType;
-            return raid.TeraType;
         }
 
         private static Image ApplyTeraColor(byte elementalType, Image img, SpriteBackgroundType type)
@@ -533,6 +513,16 @@ namespace RaidCrawler
                         WindowState = _WindowState;
                         Activate();
                     }
+                    for (int i = 0; i < Raids.Count; i++)
+                    {
+                        foreach (var filter in RaidFilters)
+                        {
+                            if (filter == null)
+                                continue;
+                            if (filter.FilterSatisfied(Encounters[i], Raids[i], RaidBoost.SelectedIndex))
+                                NotificationHandler.SendNotifications(Encounters[i], Raids[i], filter);
+                        }
+                    }
                     if (Settings.Default.CfgEnableAlertWindow) MessageBox.Show(Settings.Default.CfgAlertWindowMessage, "Result found!", MessageBoxButtons.OK);
                 }
 
@@ -614,7 +604,7 @@ namespace RaidCrawler
             }
 
             ConnectionStatusText.Text = "Completed!";
-            LabelLoadedRaids.Text = $"Raids: {Raids.Count} | Shiny: {Enumerable.Range(0, Raids.Count).Where(i => IsShiny(Raids[i], Encounters[i])).Count()}";
+            LabelLoadedRaids.Text = $"Raids: {Raids.Count} | Shiny: {Enumerable.Range(0, Raids.Count).Where(i => Raid.CheckIsShiny(Raids[i], Encounters[i])).Count()}";
             if (Raids.Count > 0)
             {
                 ButtonPrevious.Enabled = true;
@@ -722,7 +712,7 @@ namespace RaidCrawler
             }
             var raid = Raids[index];
             var encounter = Encounters[index];
-            var teratype = GetTeraType(encounter, raid);
+            var teratype = Raid.GetTeraType(encounter, raid);
             var map = GenerateMap(raid, teratype);
             if (map == null)
             {
