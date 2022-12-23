@@ -48,6 +48,7 @@ namespace RaidCrawler.Subforms
                 pictures[i].Image = img;
                 labels[i].Text = $"{item} x{rewards[i].Item2} {subject}".TrimEnd();
                 labels[i].Location = new Point(60, 12 + i * (pictures[i].Size.Height + 12));
+                labels[i].Size = new Size(ClientSize.Width - 60 - 10, labels[i].Height);
                 Controls.Add(pictures[i]);
                 Controls.Add(labels[i]);
             }
