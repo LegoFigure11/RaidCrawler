@@ -46,14 +46,14 @@ namespace RaidCrawler.Structures
             var type3 = EncounterMight9.GetArray(all[1]);
             var rewards2 = GetRewardTables(all[2]);
             var rewards3 = GetRewardTables(all[3]);
-            var extra2 = GetExtraMoves(all[4]);
-            var extra3 = GetExtraMoves(all[5]);
+            var extra2 = all[4];
+            var extra3 = all[5];
             var group2 = all[6];
             var group3 = all[7];
             var result = new TeraDistribution[type2.Length + type3.Length];
             for (int i = 0; i < result.Length; i++)
-                result[i] = i < type2.Length ? new TeraDistribution(type2[i], rewards2[i].Item1, rewards2[i].Item2, extra2, (sbyte)group2[i])
-                                             : new TeraDistribution(type3[i - type2.Length], rewards3[i - type2.Length].Item1, rewards3[i - type2.Length].Item2, extra3, (sbyte)group3[i - type2.Length]);
+                result[i] = i < type2.Length ? new TeraDistribution(type2[i], rewards2[i].Item1, rewards2[i].Item2, GetExtraMoves(extra2[(12 * i)..]), (sbyte)group2[i])
+                                             : new TeraDistribution(type3[i - type2.Length], rewards3[i - type2.Length].Item1, rewards3[i - type2.Length].Item2, GetExtraMoves(extra3[(12 * (i - type2.Length))..]), (sbyte)group3[i - type2.Length]);
             return result;
         }
 
