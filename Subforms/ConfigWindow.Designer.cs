@@ -493,6 +493,7 @@
             this.Controls.Add(this.EnableAlert);
             this.Controls.Add(this.FocusWindow);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
             this.Name = "ConfigWindow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "RaidCrawler Settings";
