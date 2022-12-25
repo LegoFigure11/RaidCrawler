@@ -17,17 +17,18 @@ namespace RaidCrawler.Structures
             }
         }
 
-        public static string? DiscordWebhook = Properties.Settings.Default.CfgEnableNotification ? Properties.Settings.Default.CfgDiscordWebhook : null;
+        public static string[]? DiscordWebhooks = Properties.Settings.Default.CfgEnableNotification ? Properties.Settings.Default.CfgDiscordWebhook.Split(',') : null;
 
         public static void SendNotifications(ITeraRaid? encounter, Raid raid, RaidFilter filter)
         {
             if (encounter == null)
                 return;
-            if (DiscordWebhook == null || DiscordWebhook.Trim() == string.Empty)
+            if (DiscordWebhooks == null)
                 return;
             var webhook = GenerateWebhook(encounter, raid, filter);
             var content = new StringContent(JsonConvert.SerializeObject(webhook), Encoding.UTF8, "application/json");
-            Client.PostAsync(DiscordWebhook.Trim(), content).Wait();
+            foreach (var url in DiscordWebhooks)
+                Client.PostAsync(url.Trim(), content).Wait();
         }
 
         public static object GenerateWebhook(ITeraRaid encounter, Raid raid, RaidFilter filter)

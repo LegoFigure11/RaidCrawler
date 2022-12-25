@@ -448,9 +448,9 @@
             this.EnableDiscordNotifications.AutoSize = true;
             this.EnableDiscordNotifications.Location = new System.Drawing.Point(12, 130);
             this.EnableDiscordNotifications.Name = "EnableDiscordNotifications";
-            this.EnableDiscordNotifications.Size = new System.Drawing.Size(242, 19);
+            this.EnableDiscordNotifications.Size = new System.Drawing.Size(303, 19);
             this.EnableDiscordNotifications.TabIndex = 38;
-            this.EnableDiscordNotifications.Text = "Send a notification to Discord (webhook)";
+            this.EnableDiscordNotifications.Text = "Send alerts to Discord webhooks (comma separated)";
             this.EnableDiscordNotifications.UseVisualStyleBackColor = true;
             this.EnableDiscordNotifications.CheckedChanged += new System.EventHandler(this.EnableDiscordNotifications_CheckedChanged);
             // 
