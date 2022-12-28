@@ -8,7 +8,6 @@ using RaidCrawler.Subforms;
 using SysBot.Base;
 using System.Data;
 using System.Net.Sockets;
-using System.Runtime.CompilerServices;
 using static RaidCrawler.Structures.Offsets;
 using static SysBot.Base.SwitchButton;
 using static System.Buffers.Binary.BinaryPrimitives;
@@ -190,21 +189,46 @@ namespace RaidCrawler
             int progress = 0;
             for (int i = DifficultyFlags.Length - 1; i > 0 && progress == 0; i--)
             {
-                // See https://github.com/Lincoln-LM/sv-live-map/blob/da93e0edd2fb9b89d76ec0027826c9e89acdcda5/sv_live_map_core/raid_reader.py#L59
-                var address = await OffsetUtil.GetPointerAddress($"{SaveBlockPointer}+{DifficultyFlags[i]:X}", token);
-                var key = ReadUInt32LittleEndian(await SwitchConnection.ReadBytesAbsoluteAsync(address, 4, token));
-                var decryptedKey = DecryptStoryProgressKey(key);
-                address = await OffsetUtil.GetPointerAddress($"[{SaveBlockPointer}+{DifficultyFlags[i] + 8:X}]", token);
-                var val = await SwitchConnection.ReadBytesAbsoluteAsync(address, 1, token);
-                if ((decryptedKey ^ val[0]) == 2) return i + 1;
+                // See https://github.com/Lincoln-LM/sv-live-map/pull/43
+                var block = await ReadSaveBlock(DifficultyFlags[i].Item1, 1, DifficultyFlags[i].Item2, token);
+                if (block[0] == 2) return i + 1;
             }
             return progress;
         }
 
-        private static uint DecryptStoryProgressKey(uint key)
+        public static async Task<byte[]> ReadSaveBlock(int offset, int size, uint key, CancellationToken token)
+        {
+            (offset, key) = await SearchSaveBlock(offset, key, token);
+            var block_ofs = await OffsetUtil.GetPointerAddress($"[{SaveBlockPointer}+{offset + 8:X}]", token);
+            var block = await SwitchConnection.ReadBytesAbsoluteAsync(block_ofs, size, token);
+            return DecryptBlock(key, block);
+        }
+
+        public static async Task<(int, uint)> SearchSaveBlock(int base_offset, uint? key, CancellationToken token)
+        {
+            var key_addr = await OffsetUtil.GetPointerAddress($"{SaveBlockPointer}+{base_offset:X}", token);
+            var read_key = ReadUInt32LittleEndian(await SwitchConnection.ReadBytesAbsoluteAsync(key_addr, 4, token));
+            if (key == null)
+                return (base_offset, read_key);
+            if (read_key == key)
+                return (base_offset, read_key);
+            var direction = key > read_key ? 1 : -1;
+            for (int offset = base_offset; offset < base_offset + 0x1000 && offset > base_offset - 0x1000; offset += direction * 0x20)
+            {
+                key_addr = await OffsetUtil.GetPointerAddress($"{SaveBlockPointer}+{offset:X}", token);
+                read_key = ReadUInt32LittleEndian(await SwitchConnection.ReadBytesAbsoluteAsync(key_addr, 4, token));
+                if (read_key == key)
+                    return (offset, read_key);
+            }
+            throw new ArgumentOutOfRangeException("Save block not found in range +- 0x1000");
+        }
+
+        private static byte[] DecryptBlock(uint key, byte[] block)
         {
             var rng = new SCXorShift32(key);
-            return rng.Next();
+            for (int i = 0; i < block.Length; i++)
+                block[i] = (byte)(block[i] ^ rng.Next());
+            return block;
         }
 
         private void ButtonConnect_Click(object sender, EventArgs e)
