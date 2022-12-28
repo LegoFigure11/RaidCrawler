@@ -18,10 +18,11 @@ namespace RaidCrawler.Structures
         public int[]? RewardItems { get; set; }
         public int RewardsComp { get; set; }
         public int RewardsCount { get; set; }
+        public string[]? BatchFilters { get; set; }
 
         public bool IsFilterSet()
         {
-            if (Species == null && Stars == null && Shiny == false && Nature == null && TeraType == null && Gender == null && IVBin == 0 && (RewardItems == null || RewardsCount == 0))
+            if (Species == null && Stars == null && Shiny == false && Nature == null && TeraType == null && Gender == null && IVBin == 0 && (RewardItems == null || RewardsCount == 0) && BatchFilters == null)
                 return false;
             return true;
         }
@@ -156,11 +157,29 @@ namespace RaidCrawler.Structures
             return blank.Gender == Gender;
         }
 
+        public bool IsBatchFilterSatisfied(ITeraRaid? encounter, Raid raid)
+        {
+            if (BatchFilters == null) 
+                return true;
+            if (encounter == null)
+                return false;
+            var filters = StringInstruction.GetFilters(BatchFilters);
+            if (filters.Count() == 0)
+                return true;
+            BatchEditing.ScreenStrings(filters);
+            var param = Raid.GetParam(encounter);
+            var blank = new PK9();
+            blank.Species = encounter.Species;
+            blank.Form = encounter.Form;
+            Encounter9RNG.GenerateData(blank, param, EncounterCriteria.Unrestricted, raid.Seed);
+            return BatchEditing.IsFilterMatch(filters, blank);
+        }
+
         public bool FilterSatisfied(ITeraRaid? encounter, Raid raid, int SandwichBoost)
         {
             return Enabled && IsIVsSatisfied(encounter, raid) && IsShinySatisfied(raid) && IsSpeciesSatisfied(encounter)
                 && IsNatureSatisfied(encounter, raid) && IsStarsSatisfied(encounter) && IsTeraTypeSatisfied(raid) 
-                && IsRewardsSatisfied(encounter, raid, SandwichBoost) && IsGenderSatisfied(encounter, raid);
+                && IsRewardsSatisfied(encounter, raid, SandwichBoost) && IsGenderSatisfied(encounter, raid) && IsBatchFilterSatisfied(encounter, raid);
         }
 
         public bool FilterSatisfied(List<ITeraRaid?> Encounters, List<Raid> Raids, int SandwichBoost)

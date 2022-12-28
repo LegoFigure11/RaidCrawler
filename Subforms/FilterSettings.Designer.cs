@@ -71,6 +71,8 @@
             this.ButtonOpenRewardsList = new System.Windows.Forms.Button();
             this.GenderCheck = new System.Windows.Forms.CheckBox();
             this.Gender = new System.Windows.Forms.ComboBox();
+            this.LabelBatchFilters = new System.Windows.Forms.Label();
+            this.BatchFilters = new System.Windows.Forms.TextBox();
             this.PerfectIVFilterGroup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.IVSPE)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.IVSPD)).BeginInit();
@@ -512,12 +514,13 @@
             this.ActiveFilters.ItemHeight = 15;
             this.ActiveFilters.Location = new System.Drawing.Point(257, 23);
             this.ActiveFilters.Name = "ActiveFilters";
-            this.ActiveFilters.Size = new System.Drawing.Size(185, 409);
+            this.ActiveFilters.Size = new System.Drawing.Size(185, 259);
             this.ActiveFilters.TabIndex = 20;
             this.ActiveFilters.SelectedIndexChanged += new System.EventHandler(this.ActiveFilters_SelectedIndexChanged);
             // 
             // FilterName
             // 
+            this.FilterName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.FilterName.Location = new System.Drawing.Point(57, 23);
             this.FilterName.Name = "FilterName";
             this.FilterName.Size = new System.Drawing.Size(168, 23);
@@ -662,11 +665,31 @@
             this.Gender.Size = new System.Drawing.Size(121, 23);
             this.Gender.TabIndex = 32;
             // 
+            // LabelBatchFilters
+            // 
+            this.LabelBatchFilters.AutoSize = true;
+            this.LabelBatchFilters.Location = new System.Drawing.Point(257, 285);
+            this.LabelBatchFilters.Name = "LabelBatchFilters";
+            this.LabelBatchFilters.Size = new System.Drawing.Size(71, 15);
+            this.LabelBatchFilters.TabIndex = 34;
+            this.LabelBatchFilters.Text = "Batch Filters";
+            // 
+            // BatchFilters
+            // 
+            this.BatchFilters.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.BatchFilters.Location = new System.Drawing.Point(257, 305);
+            this.BatchFilters.Multiline = true;
+            this.BatchFilters.Name = "BatchFilters";
+            this.BatchFilters.Size = new System.Drawing.Size(185, 130);
+            this.BatchFilters.TabIndex = 35;
+            // 
             // FilterSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(454, 447);
+            this.Controls.Add(this.BatchFilters);
+            this.Controls.Add(this.LabelBatchFilters);
             this.Controls.Add(this.GenderCheck);
             this.Controls.Add(this.Gender);
             this.Controls.Add(this.ButtonOpenRewardsList);
@@ -758,5 +781,7 @@
         private Button ButtonOpenRewardsList;
         private CheckBox GenderCheck;
         private ComboBox Gender;
+        private Label LabelBatchFilters;
+        private TextBox BatchFilters;
     }
 }

@@ -36,29 +36,30 @@ namespace RaidCrawler.Subforms
             ActiveFilters.DataSource = bs;
         }
 
-        public void SelectFilter(RaidFilter settings)
+        public void SelectFilter(RaidFilter filter)
         {
-            FilterName.Text = settings.Name;
-            Species.SelectedIndex = settings.Species != null ? (int)settings.Species : 0;
-            Nature.SelectedIndex = settings.Nature != null ? (int)settings.Nature : 0;
-            Stars.SelectedIndex = settings.Stars != null ? (int)settings.Stars - 1 : 0;
-            StarsComp.SelectedIndex = settings.StarsComp;
-            TeraType.SelectedIndex = settings.TeraType != null ? (int)settings.TeraType : 0;
-            Gender.SelectedIndex = settings.Gender != null ? (int)settings.Gender : 0;
-            SpeciesCheck.Checked = settings.Species != null;
-            NatureCheck.Checked = settings.Nature != null;
-            StarCheck.Checked = settings.Stars != null;
-            TeraCheck.Checked = settings.TeraType != null;
-            GenderCheck.Checked = settings.Gender != null;
-            ShinyCheck.Checked = settings.Shiny;
-            CheckRewards.Checked = settings.RewardItems != null && settings.RewardsCount > 0;
-            Rewards.Text = settings.RewardItems != null ? string.Join(",", settings.RewardItems.Select(x => x.ToString()).ToArray())
+            FilterName.Text = filter.Name;
+            Species.SelectedIndex = filter.Species != null ? (int)filter.Species : 0;
+            Nature.SelectedIndex = filter.Nature != null ? (int)filter.Nature : 0;
+            Stars.SelectedIndex = filter.Stars != null ? (int)filter.Stars - 1 : 0;
+            StarsComp.SelectedIndex = filter.StarsComp;
+            TeraType.SelectedIndex = filter.TeraType != null ? (int)filter.TeraType : 0;
+            Gender.SelectedIndex = filter.Gender != null ? (int)filter.Gender : 0;
+            SpeciesCheck.Checked = filter.Species != null;
+            NatureCheck.Checked = filter.Nature != null;
+            StarCheck.Checked = filter.Stars != null;
+            TeraCheck.Checked = filter.TeraType != null;
+            GenderCheck.Checked = filter.Gender != null;
+            ShinyCheck.Checked = filter.Shiny;
+            CheckRewards.Checked = filter.RewardItems != null && filter.RewardsCount > 0;
+            Rewards.Text = filter.RewardItems != null ? string.Join(",", filter.RewardItems.Select(x => x.ToString()).ToArray())
                                                         : "645,795,1606,1904,1905,1906,1907,1908";
-            RewardsComp.SelectedIndex = settings.RewardsComp;
-            RewardsCount.Value = settings.RewardsCount;
-            DisableFilter.Checked = !settings.Enabled;
+            RewardsComp.SelectedIndex = filter.RewardsComp;
+            RewardsCount.Value = filter.RewardsCount;
+            BatchFilters.Text = filter.BatchFilters != null ? string.Join(Environment.NewLine, filter.BatchFilters) : string.Empty;
+            DisableFilter.Checked = !filter.Enabled;
 
-            var ivbin = settings.IVBin;
+            var ivbin = filter.IVBin;
             HP.Checked = (ivbin & 1) == 1;
             Atk.Checked = ((ivbin >> 1) & 1) == 1;
             Def.Checked = ((ivbin >> 2) & 1) == 1;
@@ -66,7 +67,7 @@ namespace RaidCrawler.Subforms
             SpD.Checked = ((ivbin >> 4) & 1) == 1;
             Spe.Checked = ((ivbin >> 5) & 1) == 1;
 
-            var ivvals = settings.IVVals;
+            var ivvals = filter.IVVals;
             IVHP.Value = ivvals & 31;
             IVATK.Value = (ivvals >> 5) & 31;
             IVDEF.Value = (ivvals >> 10) & 31;
@@ -74,7 +75,7 @@ namespace RaidCrawler.Subforms
             IVSPD.Value = (ivvals >> 20) & 31;
             IVSPE.Value = (ivvals >> 25) & 31;
 
-            var ivcomp = settings.IVComps;
+            var ivcomp = filter.IVComps;
             HPComp.SelectedIndex = (ivcomp & 7);
             AtkComp.SelectedIndex = (ivcomp >> 3) & 7;
             DefComp.SelectedIndex = (ivcomp >> 6) & 7;
@@ -138,6 +139,7 @@ namespace RaidCrawler.Subforms
             filter.RewardItems = CheckRewards.Checked ? Rewards.Text.Split(',').Where(z => int.TryParse(z.Trim(), out _) == true).Select(z => int.Parse(z.Trim())).ToArray() : null;
             filter.RewardsCount = (int)RewardsCount.Value;
             filter.RewardsComp = RewardsComp.SelectedIndex;
+            filter.BatchFilters = BatchFilters.Text.Trim() == string.Empty ? null : BatchFilters.Text.Split(Environment.NewLine);
             filter.Enabled = !DisableFilter.Checked;
 
             if (filter.IsFilterSet())
