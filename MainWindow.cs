@@ -8,6 +8,7 @@ using RaidCrawler.Subforms;
 using SysBot.Base;
 using System.Data;
 using System.Net.Sockets;
+using System.Runtime.CompilerServices;
 using static RaidCrawler.Structures.Offsets;
 using static SysBot.Base.SwitchButton;
 using static System.Buffers.Binary.BinaryPrimitives;
@@ -90,7 +91,6 @@ namespace RaidCrawler
             if (Location.X == 0 && Location.Y == 0)
                 CenterToScreen();
             InputSwitchIP.Text = Settings.Default.SwitchIP;
-            LabelIndex.Text = string.Empty;
             DefaultColor = IVs.BackColor;
             Progress.SelectedIndex = Settings.Default.Progress;
             EventProgress.SelectedIndex = Settings.Default.EventProgress;
@@ -214,7 +214,6 @@ namespace RaidCrawler
 
         private void DisplayRaid(int index)
         {
-            LabelIndex.Text = $"{index + 1:D2} / {Raids.Count:D2}";
             if (Raids.Count > index)
             {
                 Raid raid = Raids[index];
@@ -390,7 +389,7 @@ namespace RaidCrawler
                         }
                     }
                 }
-                DisplayRaid(index);
+                ComboIndex.SelectedIndex = index;
             }
         }
 
@@ -411,7 +410,7 @@ namespace RaidCrawler
                         }
                     }
                 }
-                DisplayRaid(index);
+                ComboIndex.SelectedIndex = index;
             }
         }
 
@@ -609,7 +608,8 @@ namespace RaidCrawler
             {
                 ButtonPrevious.Enabled = true;
                 ButtonNext.Enabled = true;
-                DisplayRaid(index);
+                ComboIndex.DataSource = Enumerable.Range(0, Raids.Count + 1).Select(z => $"{z + 1:D2} / {Raids.Count:D2}").ToArray();
+                ComboIndex.SelectedIndex = index < Raids.Count ? index : 0;
             }
             else
             {
@@ -768,6 +768,12 @@ namespace RaidCrawler
             Move2.Text = ShowExtraMoves ? Raid.strings.Move[extra_moves[1]] : Raid.strings.Move[encounter.Move2];
             Move3.Text = ShowExtraMoves ? Raid.strings.Move[extra_moves[2]] : Raid.strings.Move[encounter.Move3];
             Move4.Text = ShowExtraMoves ? Raid.strings.Move[extra_moves[3]] : Raid.strings.Move[encounter.Move4];
+        }
+
+        private void ComboIndex_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            index = ComboIndex.SelectedIndex;
+            DisplayRaid(index);
         }
     }
 }

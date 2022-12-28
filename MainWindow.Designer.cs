@@ -28,8 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
-            this.toolTip = new System.Windows.Forms.ToolTip();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.ButtonDisconnect = new System.Windows.Forms.Button();
             this.ButtonConnect = new System.Windows.Forms.Button();
             this.ConnectionStatusText = new System.Windows.Forms.Label();
@@ -45,7 +46,6 @@
             this.LabelEC = new System.Windows.Forms.Label();
             this.Seed = new System.Windows.Forms.TextBox();
             this.LabelSeed = new System.Windows.Forms.Label();
-            this.LabelIndex = new System.Windows.Forms.Label();
             this.ButtonNext = new System.Windows.Forms.Button();
             this.ButtonPrevious = new System.Windows.Forms.Button();
             this.Area = new System.Windows.Forms.TextBox();
@@ -87,6 +87,7 @@
             this.LabelSandwichBonus = new System.Windows.Forms.Label();
             this.RaidBoost = new System.Windows.Forms.ComboBox();
             this.CheckDisable = new System.Windows.Forms.CheckBox();
+            this.ComboIndex = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.Sprite)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GemIcon)).BeginInit();
             this.SuspendLayout();
@@ -241,19 +242,10 @@
             this.LabelSeed.TabIndex = 42;
             this.LabelSeed.Text = "Seed:";
             // 
-            // LabelIndex
-            // 
-            this.LabelIndex.AutoSize = true;
-            this.LabelIndex.Location = new System.Drawing.Point(89, 85);
-            this.LabelIndex.Name = "LabelIndex";
-            this.LabelIndex.Size = new System.Drawing.Size(48, 15);
-            this.LabelIndex.TabIndex = 57;
-            this.LabelIndex.Text = "ww/ww";
-            // 
             // ButtonNext
             // 
             this.ButtonNext.Enabled = false;
-            this.ButtonNext.Location = new System.Drawing.Point(146, 80);
+            this.ButtonNext.Location = new System.Drawing.Point(156, 80);
             this.ButtonNext.Name = "ButtonNext";
             this.ButtonNext.Size = new System.Drawing.Size(33, 23);
             this.ButtonNext.TabIndex = 56;
@@ -264,7 +256,7 @@
             // ButtonPrevious
             // 
             this.ButtonPrevious.Enabled = false;
-            this.ButtonPrevious.Location = new System.Drawing.Point(47, 80);
+            this.ButtonPrevious.Location = new System.Drawing.Point(37, 80);
             this.ButtonPrevious.Name = "ButtonPrevious";
             this.ButtonPrevious.Size = new System.Drawing.Size(33, 23);
             this.ButtonPrevious.TabIndex = 55;
@@ -677,11 +669,23 @@
             this.CheckDisable.Text = "Disable?";
             this.CheckDisable.UseVisualStyleBackColor = true;
             // 
+            // ComboIndex
+            // 
+            this.ComboIndex.BackColor = System.Drawing.SystemColors.Window;
+            this.ComboIndex.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ComboIndex.FormattingEnabled = true;
+            this.ComboIndex.Location = new System.Drawing.Point(76, 80);
+            this.ComboIndex.Name = "ComboIndex";
+            this.ComboIndex.Size = new System.Drawing.Size(74, 23);
+            this.ComboIndex.TabIndex = 120;
+            this.ComboIndex.SelectedIndexChanged += new System.EventHandler(this.ComboIndex_SelectedIndexChanged);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(640, 314);
+            this.Controls.Add(this.ComboIndex);
             this.Controls.Add(this.CheckDisable);
             this.Controls.Add(this.LabelSandwichBonus);
             this.Controls.Add(this.RaidBoost);
@@ -721,7 +725,6 @@
             this.Controls.Add(this.LabelIVs);
             this.Controls.Add(this.Area);
             this.Controls.Add(this.LabelUNK_2);
-            this.Controls.Add(this.LabelIndex);
             this.Controls.Add(this.ButtonNext);
             this.Controls.Add(this.ButtonPrevious);
             this.Controls.Add(this.TeraType);
@@ -770,7 +773,6 @@
         private Label LabelEC;
         private TextBox Seed;
         private Label LabelSeed;
-        private Label LabelIndex;
         private Button ButtonNext;
         private Button ButtonPrevious;
         private TextBox Area;
@@ -812,5 +814,6 @@
         private Label LabelSandwichBonus;
         private ComboBox RaidBoost;
         private CheckBox CheckDisable;
+        private ComboBox ComboIndex;
     }
 }
