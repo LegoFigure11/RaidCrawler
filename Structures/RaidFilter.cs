@@ -56,7 +56,7 @@ namespace RaidCrawler.Structures
         {
             if (RewardItems == null || RewardsCount == 0)
                 return true;
-            var rewards = Rewards.GetRewards(enc, raid.Seed, SandwichBoost);
+            var rewards = Rewards.GetRewards(enc, raid.Seed, raid.TeraType, SandwichBoost);
             if (rewards == null)
                 return false;
             var count = rewards.Where(z => RewardItems.Contains(z.Item1)).Count();

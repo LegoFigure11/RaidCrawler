@@ -66,7 +66,7 @@ namespace RaidCrawler.Structures
             return null;
         }
 
-        public static List<(int, int, int)>? GetRewards(TeraEncounter enc, uint seed, List<RaidFixedRewards>? fixed_rewards, List<RaidLotteryRewards>? lottery_rewards, int boost)
+        public static List<(int, int, int)>? GetRewards(TeraEncounter enc, uint seed, int teratype, List<RaidFixedRewards>? fixed_rewards, List<RaidLotteryRewards>? lottery_rewards, int boost)
         {
             if (lottery_rewards == null)
                 return null;
@@ -89,7 +89,7 @@ namespace RaidCrawler.Structures
                 var item = fixed_table.GetReward(i);
                 if (item.Category == 0 && item.ItemID == 0)
                     continue;
-                result.Add((item.ItemID == 0 ? item.Category * 10000 : item.ItemID, item.Num, item.SubjectType));
+                result.Add((item.ItemID == 0 ? item.Category == 2 ? Rewards.GetTeraShard(teratype) : Rewards.GetMaterial(enc.Species) : item.ItemID, item.Num, item.SubjectType));
             }
 
             // lottery reward
@@ -108,8 +108,8 @@ namespace RaidCrawler.Structures
                     if (roll < item.Rate)
                     {
                         if (item.Category == 0) result.Add((item.ItemID, item.Num, 0));
-                        else if (item.Category == 1) result.Add(item.ItemID == 0 ? (10000, item.Num, 0) : (item.ItemID, item.Num, 0));
-                        else result.Add(item.ItemID == 0 ? (20000, item.Num, 0) : (item.ItemID, item.Num, 0));
+                        else if (item.Category == 1) result.Add(item.ItemID == 0 ? (Rewards.GetMaterial(enc.Species), item.Num, 0) : (item.ItemID, item.Num, 0));
+                        else result.Add(item.ItemID == 0 ? (Rewards.GetTeraShard(teratype), item.Num, 0) : (item.ItemID, item.Num, 0));
                         break;
                     }
                     roll -= item.Rate;
