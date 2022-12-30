@@ -20,8 +20,6 @@
     <None Remove="Resources\Base\raid_enemy_06_array.bin" />
     <None Remove="Resources\Base\raid_fixed_reward_item_array.json" />
     <None Remove="Resources\Base\raid_lottery_reward_item_array.json" />
-    <None Remove="Resources\Delivery\fixed_reward_item_array" />
-    <None Remove="Resources\Delivery\raid_priority_array" />
     <None Remove="Resources\den_locations.json" />
     <None Remove="Resources\encounter_gem_paldea.pkl" />
     <None Remove="Resources\lottery_reward_item_array" />
