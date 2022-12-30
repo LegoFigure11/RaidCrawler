@@ -88,6 +88,7 @@
             this.RaidBoost = new System.Windows.Forms.ComboBox();
             this.CheckDisable = new System.Windows.Forms.CheckBox();
             this.ComboIndex = new System.Windows.Forms.ComboBox();
+            this.SendScreenshot = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.Sprite)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GemIcon)).BeginInit();
             this.SuspendLayout();
@@ -680,11 +681,22 @@
             this.ComboIndex.TabIndex = 120;
             this.ComboIndex.SelectedIndexChanged += new System.EventHandler(this.ComboIndex_SelectedIndexChanged);
             // 
+            // SendScreenshot
+            // 
+            this.SendScreenshot.Location = new System.Drawing.Point(220, 223);
+            this.SendScreenshot.Name = "SendScreenshot";
+            this.SendScreenshot.Size = new System.Drawing.Size(76, 23);
+            this.SendScreenshot.TabIndex = 121;
+            this.SendScreenshot.Text = "Screenshot";
+            this.SendScreenshot.UseVisualStyleBackColor = true;
+            this.SendScreenshot.Click += new System.EventHandler(this.SendScreenshot_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(640, 314);
+            this.Controls.Add(this.SendScreenshot);
             this.Controls.Add(this.ComboIndex);
             this.Controls.Add(this.CheckDisable);
             this.Controls.Add(this.LabelSandwichBonus);
@@ -815,5 +827,6 @@
         private ComboBox RaidBoost;
         private CheckBox CheckDisable;
         private ComboBox ComboIndex;
+        private Button SendScreenshot;
     }
 }

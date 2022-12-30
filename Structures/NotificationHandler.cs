@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using PKHeX.Core;
 using PKHeX.Drawing.PokeSprite;
+using SysBot.Base;
 using System.Text;
 
 namespace RaidCrawler.Structures
@@ -27,6 +28,25 @@ namespace RaidCrawler.Structures
                 return;
             var webhook = GenerateWebhook(encounter, raid, filter);
             var content = new StringContent(JsonConvert.SerializeObject(webhook), Encoding.UTF8, "application/json");
+            foreach (var url in DiscordWebhooks)
+                Client.PostAsync(url.Trim(), content).Wait();
+        }
+
+        public static void SendScreenshot(SwitchSocketAsync nx)
+        {
+            if (DiscordWebhooks == null)
+                return;
+            var screenshot = SysBot.Base.Decoder.ConvertHexByteStringToBytes(nx.PixelPeek(new CancellationToken()).Result);
+            var content = new MultipartFormDataContent();
+            var info = new
+            {
+                username = $"RaidCrawler",
+                avatar_url = "https://www.serebii.net/scarletviolet/ribbons/mightiestmark.png",
+                content = "Switch Screenshot",
+            };
+            var basic_info = new StringContent(JsonConvert.SerializeObject(info), Encoding.UTF8, "application/json");
+            content.Add(basic_info, "payload_json");
+            content.Add(new ByteArrayContent(screenshot), "screenshot.jpg", "screenshot.jpg");
             foreach (var url in DiscordWebhooks)
                 Client.PostAsync(url.Trim(), content).Wait();
         }

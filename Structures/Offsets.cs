@@ -1,5 +1,6 @@
 ﻿using PKHeX.Core;
 using SysBot.Base;
+using System.Net.Sockets;
 
 namespace RaidCrawler.Structures
 {

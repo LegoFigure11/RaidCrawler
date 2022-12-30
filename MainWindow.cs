@@ -8,6 +8,7 @@ using RaidCrawler.Subforms;
 using SysBot.Base;
 using System.Data;
 using System.Net.Sockets;
+using System.Text;
 using static RaidCrawler.Structures.Offsets;
 using static SysBot.Base.SwitchButton;
 using static System.Buffers.Binary.BinaryPrimitives;
@@ -447,7 +448,8 @@ namespace RaidCrawler
 
         private static async Task Touch(int x, int y, int hold, int delay, CancellationToken token)
         {
-            await SwitchConnection.SendAsync(SwitchCommand.Touch(x, y, hold), token).ConfigureAwait(false);
+            var command = Encoding.ASCII.GetBytes($"touchHold {x} {y} {hold}\r\n");
+            await SwitchConnection.SendAsync(command, token).ConfigureAwait(false);
             await Task.Delay(delay, token).ConfigureAwait(false);
         }
 
@@ -798,6 +800,17 @@ namespace RaidCrawler
         {
             index = ComboIndex.SelectedIndex;
             DisplayRaid(index);
+        }
+
+        private void SendScreenshot_Click(object sender, EventArgs e)
+        {
+            if (!SwitchConnection.Connected)
+            {
+                MessageBox.Show("Cannot send a screenshot since switch is not connected.");
+                return;
+            }
+
+            NotificationHandler.SendScreenshot(SwitchConnection);
         }
     }
 }
