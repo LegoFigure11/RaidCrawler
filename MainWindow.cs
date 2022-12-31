@@ -63,7 +63,8 @@ namespace RaidCrawler
             };
 
             Raid.GemTeraRaids = TeraEncounter.GetAllEncounters(raid_data);
-            Raid.DistTeraRaids = TeraDistribution.GetAllEncounters("raid_enemy_array");
+            //Raid.DistTeraRaids = TeraDistribution.GetAllEncounters("raid_enemy_array");
+            //Raid.DeliveryRaidPriority = FlatbufferDumper.DumpDeliveryPriorities("raid_priority_array");
             var filterpath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "filters.json");
             if (File.Exists(filterpath))
                 RaidFilters = JsonConvert.DeserializeObject<List<RaidFilter>>(File.ReadAllText(filterpath)) ?? new List<RaidFilter>();
@@ -72,9 +73,8 @@ namespace RaidCrawler
             // load rewards
             Raid.BaseFixedRewards = JsonConvert.DeserializeObject<List<RaidFixedRewards>>(Utils.GetStringResource("raid_fixed_reward_item_array.json") ?? "[]");
             Raid.BaseLotteryRewards = JsonConvert.DeserializeObject<List<RaidLotteryRewards>>(Utils.GetStringResource("raid_lottery_reward_item_array.json") ?? "[]");
-            Raid.DeliveryRaidFixedRewards = FlatbufferDumper.DumpFixedRewards("fixed_reward_item_array");
-            Raid.DeliveryRaidLotteryRewards = FlatbufferDumper.DumpLotteryRewards("lottery_reward_item_array");
-            Raid.DeliveryRaidPriority = FlatbufferDumper.DumpDeliveryPriorities("raid_priority_array");
+            //Raid.DeliveryRaidFixedRewards = FlatbufferDumper.DumpFixedRewards("fixed_reward_item_array");
+            //Raid.DeliveryRaidLotteryRewards = FlatbufferDumper.DumpLotteryRewards("lottery_reward_item_array");
 
             Raid.Game = Settings.Default.Game;
             SpriteBuilder.ShowTeraThicknessStripe = 0x4;
@@ -152,6 +152,17 @@ namespace RaidCrawler
                     Progress.SelectedIndex = await GetStoryProgress(CancellationToken.None);
                     EventProgress.SelectedIndex = Math.Min(Progress.SelectedIndex, 3);
 
+                    ConnectionStatusText.Text = "Reading event raid status...";
+                    var delivery_raid_fbs = await ReadSaveBlockObject(BCATRaidBinaryLocation.Item1, BCATRaidBinaryLocation.Item2, CancellationToken.None);
+                    var delivery_raid_prio = await ReadSaveBlockObject(BCATRaidPriorityLocation.Item1, BCATRaidPriorityLocation.Item2, CancellationToken.None);
+                    var delivery_fixed_rewards = await ReadSaveBlockObject(BCATRaidFixedRewardLocation.Item1, BCATRaidFixedRewardLocation.Item2, CancellationToken.None);
+                    var delivery_lottery_rewards = await ReadSaveBlockObject(BCATRaidLotteryRewardLocation.Item1, BCATRaidLotteryRewardLocation.Item2, CancellationToken.None);
+                    
+                    Raid.DistTeraRaids = TeraDistribution.GetAllEncounters(delivery_raid_fbs);
+                    Raid.DeliveryRaidPriority = FlatbufferDumper.DumpDeliveryPriorities(delivery_raid_prio);
+                    Raid.DeliveryRaidFixedRewards = FlatbufferDumper.DumpFixedRewards(delivery_fixed_rewards);
+                    Raid.DeliveryRaidLotteryRewards = FlatbufferDumper.DumpLotteryRewards(delivery_lottery_rewards);
+
                     ConnectionStatusText.Text = "Reading raids...";
                     await ReadRaids(CancellationToken.None);
 
@@ -203,6 +214,17 @@ namespace RaidCrawler
             var block_ofs = await OffsetUtil.GetPointerAddress($"[{SaveBlockPointer}+{offset + 8:X}]", token);
             var block = await SwitchConnection.ReadBytesAbsoluteAsync(block_ofs, size, token);
             return DecryptBlock(key, block);
+        }
+
+        public static async Task<byte[]> ReadSaveBlockObject(int offset, uint key, CancellationToken token)
+        {
+            (offset, key) = await SearchSaveBlock(offset, key, token);
+            var header_ofs = await OffsetUtil.GetPointerAddress($"[{SaveBlockPointer}+{offset + 8:X}]", token);
+            var header = await SwitchConnection.ReadBytesAbsoluteAsync(header_ofs, 5, token);
+            header = DecryptBlock(key, header);
+            var size = ReadUInt32LittleEndian(header[1..]);
+            var obj = await SwitchConnection.ReadBytesAbsoluteAsync(header_ofs, 5 + (int)size, token);
+            return DecryptBlock(key, obj)[5..];
         }
 
         public static async Task<(int, uint)> SearchSaveBlock(int base_offset, uint? key, CancellationToken token)

@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using FlatSharp;
 using static System.Buffers.Binary.BinaryPrimitives;
+using System.IO;
 
 namespace RaidCrawler.Structures
 {
@@ -41,7 +42,13 @@ namespace RaidCrawler.Structures
 
         public static ITeraRaid[] GetAllEncounters(string resource)
         {
-            var all = FlatbufferDumper.DumpDistributionRaids(resource);
+            var encounters = Utils.GetBinaryResource(resource);
+            return GetAllEncounters(encounters);
+        }
+
+        public static ITeraRaid[] GetAllEncounters(byte[] encounters)
+        {
+            var all = FlatbufferDumper.DumpDistributionRaids(encounters);
             var type2 = EncounterDist9.GetArray(all[0]);
             var type3 = EncounterMight9.GetArray(all[1]);
             var rewards2 = GetRewardTables(all[2]);

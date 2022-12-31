@@ -1,5 +1,6 @@
 ﻿using FlatSharp;
 using System.Buffers.Binary;
+using System.IO;
 
 namespace RaidCrawler.Structures
 {
@@ -67,12 +68,11 @@ namespace RaidCrawler.Structures
             return new[] {pickle, extra_moves, rewards};
         }
 
-        public static byte[][] DumpDistributionRaids(string path)
+        public static byte[][] DumpDistributionRaids(byte[] encounters)
         {
             var type2 = new List<byte[]>();
             var type3 = new List<byte[]>();
 
-            var encounters = Utils.GetBinaryResource(path);
             if (encounters.Length == 0)
                 return new byte[0][];
             var tableEncounters = FlatBufferSerializer.Default.Parse<DeliveryRaidEnemyTableArray>(encounters);
@@ -98,23 +98,24 @@ namespace RaidCrawler.Structures
                            type2.SelectMany(z => z.TakeLast(1)).ToArray(), type3.SelectMany(z => z.TakeLast(1)).ToArray() };
         }
 
-        public static List<DeliveryRaidLotteryRewardItem> DumpLotteryRewards(string path)
+        public static List<DeliveryRaidLotteryRewardItem> DumpLotteryRewards(string path) => DumpLotteryRewards(Utils.GetBinaryResource(path));
+        public static List<DeliveryRaidLotteryRewardItem> DumpLotteryRewards(byte[] rewards)
         {
-            var rewards = Utils.GetBinaryResource(path);
             var tableRewards = FlatBufferSerializer.Default.Parse<DeliveryRaidLotteryRewardItemArray>(rewards);
             return tableRewards.Table.ToList();
         }
 
-        public static List<DeliveryRaidFixedRewardItem> DumpFixedRewards(string path)
+        public static List<DeliveryRaidFixedRewardItem> DumpFixedRewards(string path) => DumpFixedRewards(Utils.GetBinaryResource(path));
+        public static List<DeliveryRaidFixedRewardItem> DumpFixedRewards(byte[] rewards)
         {
-            var rewards = Utils.GetBinaryResource(path);
             var tableRewards = FlatBufferSerializer.Default.Parse<DeliveryRaidFixedRewardItemArray>(rewards);
             return tableRewards.Table.ToList();
         }
 
-        public static DeliveryGroupID DumpDeliveryPriorities(string path)
+        public static DeliveryGroupID DumpDeliveryPriorities(string path) => DumpDeliveryPriorities(Utils.GetBinaryResource(path));
+        public static DeliveryGroupID DumpDeliveryPriorities(byte[] flatbuffer)
         {
-            var prios = FlatBufferSerializer.Default.Parse<DeliveryRaidPriorityArray>(Utils.GetBinaryResource(path));
+            var prios = FlatBufferSerializer.Default.Parse<DeliveryRaidPriorityArray>(flatbuffer);
             return prios.Table[0].DeliveryGroupID;
         }
 
