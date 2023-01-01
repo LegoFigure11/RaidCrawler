@@ -110,10 +110,10 @@ namespace RaidCrawler.Structures
             return tableRewards.Table.ToList();
         }
 
-        public static DeliveryGroupID DumpDeliveryPriorities(byte[] flatbuffer)
+        public static (DeliveryGroupID, int) DumpDeliveryPriorities(byte[] flatbuffer)
         {
             var prios = FlatBufferSerializer.Default.Parse<DeliveryRaidPriorityArray>(flatbuffer);
-            return prios.Table[0].DeliveryGroupID;
+            return (prios.Table[0].DeliveryGroupID, prios.Table[0].VersionNo);
         }
 
         private static readonly int[][] StageStars =

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using NLog.Filters;
 using PKHeX.Core;
 using PKHeX.Drawing;
 using PKHeX.Drawing.PokeSprite;
@@ -229,13 +230,26 @@ namespace RaidCrawler
 
         public static async Task ReadEventRaids(bool force = false)
         {
+            var prio_file = Path.Combine(Directory.GetCurrentDirectory(), "cache", "raid_priority_array");
+            if (File.Exists(prio_file))
+            {
+                (_, var version) = FlatbufferDumper.DumpDeliveryPriorities(File.ReadAllBytes(prio_file));
+                var blk = await ReadBlockDefault(BCATRaidPriorityLocation, "raid_priority_array.tmp", true);
+                (_, var v2) = FlatbufferDumper.DumpDeliveryPriorities(blk);
+                if (version != v2)
+                    force = true;
+                var tmp_file = Path.Combine(Directory.GetCurrentDirectory(), "cache", "raid_priority_array.tmp");
+                if (File.Exists(tmp_file))
+                    File.Delete(tmp_file);
+            }
+
             var delivery_raid_fbs = await ReadBlockDefault(BCATRaidBinaryLocation, "raid_enemy_array", force);
             var delivery_raid_prio = await ReadBlockDefault(BCATRaidPriorityLocation, "raid_priority_array", force);
             var delivery_fixed_rewards = await ReadBlockDefault(BCATRaidFixedRewardLocation, "fixed_reward_item_array", force);
             var delivery_lottery_rewards = await ReadBlockDefault(BCATRaidLotteryRewardLocation, "lottery_reward_item_array", force);
 
             Raid.DistTeraRaids = TeraDistribution.GetAllEncounters(delivery_raid_fbs);
-            Raid.DeliveryRaidPriority = FlatbufferDumper.DumpDeliveryPriorities(delivery_raid_prio);
+            (Raid.DeliveryRaidPriority, _) = FlatbufferDumper.DumpDeliveryPriorities(delivery_raid_prio);
             Raid.DeliveryRaidFixedRewards = FlatbufferDumper.DumpFixedRewards(delivery_fixed_rewards);
             Raid.DeliveryRaidLotteryRewards = FlatbufferDumper.DumpLotteryRewards(delivery_lottery_rewards);
         }
