@@ -98,21 +98,18 @@ namespace RaidCrawler.Structures
                            type2.SelectMany(z => z.TakeLast(1)).ToArray(), type3.SelectMany(z => z.TakeLast(1)).ToArray() };
         }
 
-        public static List<DeliveryRaidLotteryRewardItem> DumpLotteryRewards(string path) => DumpLotteryRewards(Utils.GetBinaryResource(path));
         public static List<DeliveryRaidLotteryRewardItem> DumpLotteryRewards(byte[] rewards)
         {
             var tableRewards = FlatBufferSerializer.Default.Parse<DeliveryRaidLotteryRewardItemArray>(rewards);
             return tableRewards.Table.ToList();
         }
 
-        public static List<DeliveryRaidFixedRewardItem> DumpFixedRewards(string path) => DumpFixedRewards(Utils.GetBinaryResource(path));
         public static List<DeliveryRaidFixedRewardItem> DumpFixedRewards(byte[] rewards)
         {
             var tableRewards = FlatBufferSerializer.Default.Parse<DeliveryRaidFixedRewardItemArray>(rewards);
             return tableRewards.Table.ToList();
         }
 
-        public static DeliveryGroupID DumpDeliveryPriorities(string path) => DumpDeliveryPriorities(Utils.GetBinaryResource(path));
         public static DeliveryGroupID DumpDeliveryPriorities(byte[] flatbuffer)
         {
             var prios = FlatBufferSerializer.Default.Parse<DeliveryRaidPriorityArray>(flatbuffer);

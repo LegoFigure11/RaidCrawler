@@ -40,12 +40,6 @@ namespace RaidCrawler.Structures
                 Debug.WriteLine(ExtraMoves);
         }
 
-        public static ITeraRaid[] GetAllEncounters(string resource)
-        {
-            var encounters = Utils.GetBinaryResource(resource);
-            return GetAllEncounters(encounters);
-        }
-
         public static ITeraRaid[] GetAllEncounters(byte[] encounters)
         {
             var all = FlatbufferDumper.DumpDistributionRaids(encounters);

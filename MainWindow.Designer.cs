@@ -81,7 +81,7 @@
             this.Ability = new System.Windows.Forms.TextBox();
             this.LabelAbility = new System.Windows.Forms.Label();
             this.GemIcon = new System.Windows.Forms.PictureBox();
-            this.ButtonDumpRaid = new System.Windows.Forms.Button();
+            this.ButtonDownloadEvents = new System.Windows.Forms.Button();
             this.ConfigSettings = new System.Windows.Forms.Button();
             this.Rewards = new System.Windows.Forms.Button();
             this.LabelSandwichBonus = new System.Windows.Forms.Label();
@@ -398,7 +398,7 @@
             this.ButtonViewRAM.Name = "ButtonViewRAM";
             this.ButtonViewRAM.Size = new System.Drawing.Size(83, 23);
             this.ButtonViewRAM.TabIndex = 89;
-            this.ButtonViewRAM.Text = "Dump Block";
+            this.ButtonViewRAM.Text = "Dump Raid";
             this.ButtonViewRAM.UseVisualStyleBackColor = true;
             this.ButtonViewRAM.Click += new System.EventHandler(this.ViewRAM_Click);
             // 
@@ -607,14 +607,14 @@
             // 
             // ButtonDumpRaid
             // 
-            this.ButtonDumpRaid.Enabled = false;
-            this.ButtonDumpRaid.Location = new System.Drawing.Point(545, 32);
-            this.ButtonDumpRaid.Name = "ButtonDumpRaid";
-            this.ButtonDumpRaid.Size = new System.Drawing.Size(83, 23);
-            this.ButtonDumpRaid.TabIndex = 112;
-            this.ButtonDumpRaid.Text = "Dump Raid";
-            this.ButtonDumpRaid.UseVisualStyleBackColor = true;
-            this.ButtonDumpRaid.Click += new System.EventHandler(this.ButtonDumpRaid_Click);
+            this.ButtonDownloadEvents.Enabled = false;
+            this.ButtonDownloadEvents.Location = new System.Drawing.Point(545, 32);
+            this.ButtonDownloadEvents.Name = "ButtonDumpRaid";
+            this.ButtonDownloadEvents.Size = new System.Drawing.Size(83, 23);
+            this.ButtonDownloadEvents.TabIndex = 112;
+            this.ButtonDownloadEvents.Text = "Pull Events";
+            this.ButtonDownloadEvents.UseVisualStyleBackColor = true;
+            this.ButtonDownloadEvents.Click += new System.EventHandler(this.DownloadEvents_Click);
             // 
             // ConfigSettings
             // 
@@ -703,7 +703,7 @@
             this.Controls.Add(this.RaidBoost);
             this.Controls.Add(this.Rewards);
             this.Controls.Add(this.ConfigSettings);
-            this.Controls.Add(this.ButtonDumpRaid);
+            this.Controls.Add(this.ButtonDownloadEvents);
             this.Controls.Add(this.GemIcon);
             this.Controls.Add(this.Ability);
             this.Controls.Add(this.LabelAbility);
@@ -820,7 +820,7 @@
         private TextBox Ability;
         private Label LabelAbility;
         private PictureBox GemIcon;
-        private Button ButtonDumpRaid;
+        private Button ButtonDownloadEvents;
         private Button ConfigSettings;
         private Button Rewards;
         private Label LabelSandwichBonus;

@@ -63,8 +63,6 @@ namespace RaidCrawler
             };
 
             Raid.GemTeraRaids = TeraEncounter.GetAllEncounters(raid_data);
-            //Raid.DistTeraRaids = TeraDistribution.GetAllEncounters("raid_enemy_array");
-            //Raid.DeliveryRaidPriority = FlatbufferDumper.DumpDeliveryPriorities("raid_priority_array");
             var filterpath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "filters.json");
             if (File.Exists(filterpath))
                 RaidFilters = JsonConvert.DeserializeObject<List<RaidFilter>>(File.ReadAllText(filterpath)) ?? new List<RaidFilter>();
@@ -73,8 +71,6 @@ namespace RaidCrawler
             // load rewards
             Raid.BaseFixedRewards = JsonConvert.DeserializeObject<List<RaidFixedRewards>>(Utils.GetStringResource("raid_fixed_reward_item_array.json") ?? "[]");
             Raid.BaseLotteryRewards = JsonConvert.DeserializeObject<List<RaidLotteryRewards>>(Utils.GetStringResource("raid_lottery_reward_item_array.json") ?? "[]");
-            //Raid.DeliveryRaidFixedRewards = FlatbufferDumper.DumpFixedRewards("fixed_reward_item_array");
-            //Raid.DeliveryRaidLotteryRewards = FlatbufferDumper.DumpLotteryRewards("lottery_reward_item_array");
 
             Raid.Game = Settings.Default.Game;
             SpriteBuilder.ShowTeraThicknessStripe = 0x4;
@@ -118,7 +114,7 @@ namespace RaidCrawler
             ButtonReadRaids.Enabled = false;
             ButtonAdvanceDate.Enabled = false;
             ButtonViewRAM.Enabled = false;
-            ButtonDumpRaid.Enabled = false;
+            ButtonDownloadEvents.Enabled = false;
         }
 
         private async void Connect()
@@ -153,15 +149,7 @@ namespace RaidCrawler
                     EventProgress.SelectedIndex = Math.Min(Progress.SelectedIndex, 3);
 
                     ConnectionStatusText.Text = "Reading event raid status...";
-                    var delivery_raid_fbs = await ReadSaveBlockObject(BCATRaidBinaryLocation.Item1, BCATRaidBinaryLocation.Item2, CancellationToken.None);
-                    var delivery_raid_prio = await ReadSaveBlockObject(BCATRaidPriorityLocation.Item1, BCATRaidPriorityLocation.Item2, CancellationToken.None);
-                    var delivery_fixed_rewards = await ReadSaveBlockObject(BCATRaidFixedRewardLocation.Item1, BCATRaidFixedRewardLocation.Item2, CancellationToken.None);
-                    var delivery_lottery_rewards = await ReadSaveBlockObject(BCATRaidLotteryRewardLocation.Item1, BCATRaidLotteryRewardLocation.Item2, CancellationToken.None);
-                    
-                    Raid.DistTeraRaids = TeraDistribution.GetAllEncounters(delivery_raid_fbs);
-                    Raid.DeliveryRaidPriority = FlatbufferDumper.DumpDeliveryPriorities(delivery_raid_prio);
-                    Raid.DeliveryRaidFixedRewards = FlatbufferDumper.DumpFixedRewards(delivery_fixed_rewards);
-                    Raid.DeliveryRaidLotteryRewards = FlatbufferDumper.DumpLotteryRewards(delivery_lottery_rewards);
+                    await ReadEventRaids();
 
                     ConnectionStatusText.Text = "Reading raids...";
                     await ReadRaids(CancellationToken.None);
@@ -172,7 +160,7 @@ namespace RaidCrawler
                     ButtonConnect.Enabled = false;
                     ButtonDisconnect.Enabled = true;
                     ButtonViewRAM.Enabled = true;
-                    ButtonDumpRaid.Enabled = true;
+                    ButtonDownloadEvents.Enabled = true;
                 }
                 catch (SocketException err)
                 {
@@ -225,6 +213,31 @@ namespace RaidCrawler
             var size = ReadUInt32LittleEndian(header[1..]);
             var obj = await SwitchConnection.ReadBytesAbsoluteAsync(header_ofs, 5 + (int)size, token);
             return DecryptBlock(key, obj)[5..];
+        }
+
+        public static async Task<byte[]> ReadBlockDefault((int, uint) offsets, string? cache = null, bool force = false)
+        {
+            var folder = Path.Combine(Directory.GetCurrentDirectory(), "cache");
+            Directory.CreateDirectory(folder);
+            if (force == false && cache != null && File.Exists(Path.Combine(folder, cache)))
+                return File.ReadAllBytes(Path.Combine(folder, cache));
+            var bin = await ReadSaveBlockObject(offsets.Item1, offsets.Item2, CancellationToken.None);
+            if (cache != null)
+                File.WriteAllBytes(Path.Combine(folder, cache), bin);
+            return bin;
+        }
+
+        public static async Task ReadEventRaids(bool force = false)
+        {
+            var delivery_raid_fbs = await ReadBlockDefault(BCATRaidBinaryLocation, "raid_enemy_array", force);
+            var delivery_raid_prio = await ReadBlockDefault(BCATRaidPriorityLocation, "raid_priority_array", force);
+            var delivery_fixed_rewards = await ReadBlockDefault(BCATRaidFixedRewardLocation, "fixed_reward_item_array", force);
+            var delivery_lottery_rewards = await ReadBlockDefault(BCATRaidLotteryRewardLocation, "lottery_reward_item_array", force);
+
+            Raid.DistTeraRaids = TeraDistribution.GetAllEncounters(delivery_raid_fbs);
+            Raid.DeliveryRaidPriority = FlatbufferDumper.DumpDeliveryPriorities(delivery_raid_prio);
+            Raid.DeliveryRaidFixedRewards = FlatbufferDumper.DumpFixedRewards(delivery_fixed_rewards);
+            Raid.DeliveryRaidLotteryRewards = FlatbufferDumper.DumpLotteryRewards(delivery_lottery_rewards);
         }
 
         public static async Task<(int, uint)> SearchSaveBlock(int base_offset, uint? key, CancellationToken token)
@@ -684,7 +697,7 @@ namespace RaidCrawler
 
         private async void ViewRAM_Click(object sender, EventArgs e)
         {
-            if (SwitchConnection.Connected)
+            if (SwitchConnection.Connected && ModifierKeys == Keys.Shift)
             {
                 if (IsReading)
                 {
@@ -698,6 +711,11 @@ namespace RaidCrawler
                     BlockViewerWindow.ShowDialog();
                     IsReading = false;
                 }
+            }
+            if (Raids[index] != null)
+            {
+                RaidBlockViewer BlockViewerWindow = new(Raids[index].Data, offset);
+                BlockViewerWindow.ShowDialog();
             }
         }
 
@@ -722,13 +740,11 @@ namespace RaidCrawler
             Disconnect();
         }
 
-        private void ButtonDumpRaid_Click(object sender, EventArgs e)
+        private async void DownloadEvents_Click(object sender, EventArgs e)
         {
-            if (Raids[index] != null)
-            {
-                RaidBlockViewer BlockViewerWindow = new(Raids[index].Data, offset);
-                BlockViewerWindow.ShowDialog();
-            }
+            if (!SwitchConnection.Connected)
+                return;
+            await ReadEventRaids(true);
         }
 
         private void Seed_Clicked(object sender, EventArgs e)
