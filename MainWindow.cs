@@ -241,6 +241,8 @@ namespace RaidCrawler
                 var tmp_file = Path.Combine(Directory.GetCurrentDirectory(), "cache", "raid_priority_array.tmp");
                 if (File.Exists(tmp_file))
                     File.Delete(tmp_file);
+                if (v2 == 0) // raid reset
+                    return;
             }
 
             var delivery_raid_fbs = await ReadBlockDefault(BCATRaidBinaryLocation, "raid_enemy_array", force);
