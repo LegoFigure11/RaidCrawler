@@ -244,14 +244,16 @@ namespace RaidCrawler
                 if (v2 == 0) // raid reset
                     return;
             }
+            var delivery_raid_prio = await ReadBlockDefault(BCATRaidPriorityLocation, "raid_priority_array", force);
+            (Raid.DeliveryRaidPriority, var priority) = FlatbufferDumper.DumpDeliveryPriorities(delivery_raid_prio);
+            if (priority == 0)
+                return;
 
             var delivery_raid_fbs = await ReadBlockDefault(BCATRaidBinaryLocation, "raid_enemy_array", force);
-            var delivery_raid_prio = await ReadBlockDefault(BCATRaidPriorityLocation, "raid_priority_array", force);
             var delivery_fixed_rewards = await ReadBlockDefault(BCATRaidFixedRewardLocation, "fixed_reward_item_array", force);
             var delivery_lottery_rewards = await ReadBlockDefault(BCATRaidLotteryRewardLocation, "lottery_reward_item_array", force);
 
             Raid.DistTeraRaids = TeraDistribution.GetAllEncounters(delivery_raid_fbs);
-            (Raid.DeliveryRaidPriority, _) = FlatbufferDumper.DumpDeliveryPriorities(delivery_raid_prio);
             Raid.DeliveryRaidFixedRewards = FlatbufferDumper.DumpFixedRewards(delivery_fixed_rewards);
             Raid.DeliveryRaidLotteryRewards = FlatbufferDumper.DumpLotteryRewards(delivery_lottery_rewards);
         }
