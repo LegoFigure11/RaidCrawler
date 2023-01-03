@@ -154,6 +154,7 @@
             this.ConnectionStatusText.Size = new System.Drawing.Size(89, 15);
             this.ConnectionStatusText.TabIndex = 9;
             this.ConnectionStatusText.Text = "Not connected.";
+            this.ConnectionStatusText.TextChanged += new System.EventHandler(this.ConnectionStatusText_TextChanged);
             // 
             // InputSwitchIP
             // 

@@ -77,9 +77,11 @@
             // 
             // PicPatch
             // 
+            this.PicPatch.Image = global::RaidCrawler.Properties.Resources.item_1606_hires;
             this.PicPatch.Location = new System.Drawing.Point(12, 12);
             this.PicPatch.Name = "PicPatch";
             this.PicPatch.Size = new System.Drawing.Size(25, 25);
+            this.PicPatch.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.PicPatch.TabIndex = 2;
             this.PicPatch.TabStop = false;
             // 
@@ -89,6 +91,7 @@
             this.PicSweet.Location = new System.Drawing.Point(12, 43);
             this.PicSweet.Name = "PicSweet";
             this.PicSweet.Size = new System.Drawing.Size(25, 25);
+            this.PicSweet.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.PicSweet.TabIndex = 3;
             this.PicSweet.TabStop = false;
             // 
@@ -98,6 +101,7 @@
             this.PicSour.Location = new System.Drawing.Point(12, 74);
             this.PicSour.Name = "PicSour";
             this.PicSour.Size = new System.Drawing.Size(25, 25);
+            this.PicSour.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.PicSour.TabIndex = 4;
             this.PicSour.TabStop = false;
             // 
@@ -107,6 +111,7 @@
             this.PicSpicy.Location = new System.Drawing.Point(12, 105);
             this.PicSpicy.Name = "PicSpicy";
             this.PicSpicy.Size = new System.Drawing.Size(25, 25);
+            this.PicSpicy.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.PicSpicy.TabIndex = 5;
             this.PicSpicy.TabStop = false;
             // 
@@ -172,9 +177,11 @@
             // 
             // PicCap
             // 
+            this.PicCap.Image = global::RaidCrawler.Properties.Resources.item_0795_hires;
             this.PicCap.Location = new System.Drawing.Point(150, 105);
             this.PicCap.Name = "PicCap";
             this.PicCap.Size = new System.Drawing.Size(25, 25);
+            this.PicCap.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.PicCap.TabIndex = 13;
             this.PicCap.TabStop = false;
             // 
@@ -184,6 +191,7 @@
             this.PicBitter.Location = new System.Drawing.Point(150, 74);
             this.PicBitter.Name = "PicBitter";
             this.PicBitter.Size = new System.Drawing.Size(25, 25);
+            this.PicBitter.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.PicBitter.TabIndex = 12;
             this.PicBitter.TabStop = false;
             // 
@@ -193,14 +201,17 @@
             this.PicSalty.Location = new System.Drawing.Point(150, 43);
             this.PicSalty.Name = "PicSalty";
             this.PicSalty.Size = new System.Drawing.Size(25, 25);
+            this.PicSalty.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.PicSalty.TabIndex = 11;
             this.PicSalty.TabStop = false;
             // 
             // PicCapsule
             // 
+            this.PicCapsule.Image = global::RaidCrawler.Properties.Resources.item_0645_hires;
             this.PicCapsule.Location = new System.Drawing.Point(150, 12);
             this.PicCapsule.Name = "PicCapsule";
             this.PicCapsule.Size = new System.Drawing.Size(25, 25);
+            this.PicCapsule.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.PicCapsule.TabIndex = 10;
             this.PicCapsule.TabStop = false;
             // 

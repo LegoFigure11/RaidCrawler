@@ -29,6 +29,8 @@ namespace RaidCrawler.Subforms
             DaysToSkip.Value = Settings.Default.CfgDaysToSkip;
             ReturnHome.Value = Settings.Default.CfgReturnHome;
             ReturnGame.Value = Settings.Default.CfgReturnGame;
+
+            ExperimentalView.Checked = Settings.Default.CfgExperimentalView;
         }
 
         private void EnableAlert_CheckedChanged(object sender, EventArgs e)
@@ -63,9 +65,12 @@ namespace RaidCrawler.Subforms
             Settings.Default.CfgReturnHome = ReturnHome.Value;
             Settings.Default.CfgReturnGame = ReturnGame.Value;
 
+            Settings.Default.CfgExperimentalView = ExperimentalView.Checked;
+
             Settings.Default.Save();
 
             Close();
         }
+
     }
 }

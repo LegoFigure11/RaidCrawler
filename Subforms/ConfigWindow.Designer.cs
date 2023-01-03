@@ -61,6 +61,8 @@
             this.UseTouch = new System.Windows.Forms.CheckBox();
             this.DiscordWebhook = new System.Windows.Forms.TextBox();
             this.EnableDiscordNotifications = new System.Windows.Forms.CheckBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.ExperimentalView = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.BaseDelay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SystemDDownPresses)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NavigateToSettings)).BeginInit();
@@ -181,7 +183,7 @@
             // 
             // Save
             // 
-            this.Save.Location = new System.Drawing.Point(12, 548);
+            this.Save.Location = new System.Drawing.Point(12, 594);
             this.Save.Name = "Save";
             this.Save.Size = new System.Drawing.Size(327, 23);
             this.Save.TabIndex = 12;
@@ -454,11 +456,33 @@
             this.EnableDiscordNotifications.UseVisualStyleBackColor = true;
             this.EnableDiscordNotifications.CheckedChanged += new System.EventHandler(this.EnableDiscordNotifications_CheckedChanged);
             // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label13.Location = new System.Drawing.Point(12, 545);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(84, 15);
+            this.label13.TabIndex = 39;
+            this.label13.Text = "Experimental:";
+            // 
+            // ExperimentalView
+            // 
+            this.ExperimentalView.AutoSize = true;
+            this.ExperimentalView.Location = new System.Drawing.Point(12, 563);
+            this.ExperimentalView.Name = "ExperimentalView";
+            this.ExperimentalView.Size = new System.Drawing.Size(241, 19);
+            this.ExperimentalView.TabIndex = 40;
+            this.ExperimentalView.Text = "Experimental Raid View  (requires restart)";
+            this.ExperimentalView.UseVisualStyleBackColor = true;
+            // 
             // ConfigWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(351, 582);
+            this.ClientSize = new System.Drawing.Size(351, 629);
+            this.Controls.Add(this.ExperimentalView);
+            this.Controls.Add(this.label13);
             this.Controls.Add(this.EnableDiscordNotifications);
             this.Controls.Add(this.DiscordWebhook);
             this.Controls.Add(this.UseTouch);
@@ -548,5 +572,7 @@
         private CheckBox UseTouch;
         private TextBox DiscordWebhook;
         private CheckBox EnableDiscordNotifications;
+        private Label label13;
+        private CheckBox ExperimentalView;
     }
 }
