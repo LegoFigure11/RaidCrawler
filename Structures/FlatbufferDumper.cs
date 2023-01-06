@@ -1,5 +1,6 @@
 ﻿using FlatSharp;
 using System.Buffers.Binary;
+using System.Diagnostics;
 using System.IO;
 
 namespace RaidCrawler.Structures
@@ -112,8 +113,16 @@ namespace RaidCrawler.Structures
 
         public static (DeliveryGroupID, int) DumpDeliveryPriorities(byte[] flatbuffer)
         {
-            var prios = FlatBufferSerializer.Default.Parse<DeliveryRaidPriorityArray>(flatbuffer);
-            return (prios.Table[0].DeliveryGroupID, prios.Table[0].VersionNo);
+            try
+            {
+                var prios = FlatBufferSerializer.Default.Parse<DeliveryRaidPriorityArray>(flatbuffer);
+                return (prios.Table[0].DeliveryGroupID, prios.Table[0].VersionNo);
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+                return (new DeliveryRaidPriorityArray().Table[0].DeliveryGroupID, 0);
+            }
         }
 
         private static readonly int[][] StageStars =
