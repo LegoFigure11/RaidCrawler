@@ -612,7 +612,7 @@ namespace RaidCrawler
         private bool CheckAdvanceDate(out bool prompt)
         {
             prompt = false;
-            if (CheckEnableFilters.Checked)
+            if (!CheckEnableFilters.Checked)
                 return false;
             if (prev.Count != Raids.Count)
                 return true;
