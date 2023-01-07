@@ -86,7 +86,7 @@
             this.Rewards = new System.Windows.Forms.Button();
             this.LabelSandwichBonus = new System.Windows.Forms.Label();
             this.RaidBoost = new System.Windows.Forms.ComboBox();
-            this.CheckDisable = new System.Windows.Forms.CheckBox();
+            this.CheckEnableFilters = new System.Windows.Forms.CheckBox();
             this.ComboIndex = new System.Windows.Forms.ComboBox();
             this.SendScreenshot = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.Sprite)).BeginInit();
@@ -325,6 +325,8 @@
             this.ButtonAdvanceDate.Size = new System.Drawing.Size(97, 27);
             this.ButtonAdvanceDate.TabIndex = 81;
             this.ButtonAdvanceDate.Text = "Advance Date";
+            this.toolTip.SetToolTip(this.ButtonAdvanceDate, "Advance Date performs one (1) time set.\r\n\r\nIf Stop Filters are defined, Advance D" +
+        "ate\r\ncontinues advancing the date until a stop\r\nfilter has been hit.");
             this.ButtonAdvanceDate.UseVisualStyleBackColor = true;
             this.ButtonAdvanceDate.Click += new System.EventHandler(this.ButtonAdvanceDate_Click);
             // 
@@ -562,9 +564,9 @@
             // 
             this.StopFilter.Location = new System.Drawing.Point(13, 250);
             this.StopFilter.Name = "StopFilter";
-            this.StopFilter.Size = new System.Drawing.Size(199, 23);
+            this.StopFilter.Size = new System.Drawing.Size(97, 23);
             this.StopFilter.TabIndex = 107;
-            this.StopFilter.Text = "Set Stop Filters";
+            this.StopFilter.Text = "Edit Filters";
             this.StopFilter.UseVisualStyleBackColor = true;
             this.StopFilter.Click += new System.EventHandler(this.StopFilter_Click);
             // 
@@ -605,11 +607,11 @@
             this.GemIcon.TabIndex = 111;
             this.GemIcon.TabStop = false;
             // 
-            // ButtonDumpRaid
+            // ButtonDownloadEvents
             // 
             this.ButtonDownloadEvents.Enabled = false;
             this.ButtonDownloadEvents.Location = new System.Drawing.Point(545, 32);
-            this.ButtonDownloadEvents.Name = "ButtonDumpRaid";
+            this.ButtonDownloadEvents.Name = "ButtonDownloadEvents";
             this.ButtonDownloadEvents.Size = new System.Drawing.Size(83, 23);
             this.ButtonDownloadEvents.TabIndex = 112;
             this.ButtonDownloadEvents.Text = "Pull Events";
@@ -660,15 +662,20 @@
             this.RaidBoost.Text = "w";
             this.RaidBoost.SelectedIndexChanged += new System.EventHandler(this.RaidBoost_SelectedIndexChanged);
             // 
-            // CheckDisable
+            // CheckEnableFilters
             // 
-            this.CheckDisable.AutoSize = true;
-            this.CheckDisable.Location = new System.Drawing.Point(222, 253);
-            this.CheckDisable.Name = "CheckDisable";
-            this.CheckDisable.Size = new System.Drawing.Size(69, 19);
-            this.CheckDisable.TabIndex = 119;
-            this.CheckDisable.Text = "Disable?";
-            this.CheckDisable.UseVisualStyleBackColor = true;
+            this.CheckEnableFilters.AutoSize = true;
+            this.CheckEnableFilters.Checked = true;
+            this.CheckEnableFilters.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.CheckEnableFilters.Location = new System.Drawing.Point(119, 254);
+            this.CheckEnableFilters.Name = "CheckEnableFilters";
+            this.CheckEnableFilters.Size = new System.Drawing.Size(95, 19);
+            this.CheckEnableFilters.TabIndex = 119;
+            this.CheckEnableFilters.Text = "Enable Filters";
+            this.toolTip.SetToolTip(this.CheckEnableFilters, "Enable Filters enables or disables all filters\r\nentirely.\r\n\r\nEnabled - Advance Da" +
+        "te will continue until\r\na match occurs from a filter.\r\n\r\nDisabled - Advance Date" +
+        " will only advance\r\none (1) day.");
+            this.CheckEnableFilters.UseVisualStyleBackColor = true;
             // 
             // ComboIndex
             // 
@@ -698,7 +705,7 @@
             this.ClientSize = new System.Drawing.Size(640, 314);
             this.Controls.Add(this.SendScreenshot);
             this.Controls.Add(this.ComboIndex);
-            this.Controls.Add(this.CheckDisable);
+            this.Controls.Add(this.CheckEnableFilters);
             this.Controls.Add(this.LabelSandwichBonus);
             this.Controls.Add(this.RaidBoost);
             this.Controls.Add(this.Rewards);
@@ -825,7 +832,7 @@
         private Button Rewards;
         private Label LabelSandwichBonus;
         private ComboBox RaidBoost;
-        private CheckBox CheckDisable;
+        private CheckBox CheckEnableFilters;
         private ComboBox ComboIndex;
         private Button SendScreenshot;
     }
