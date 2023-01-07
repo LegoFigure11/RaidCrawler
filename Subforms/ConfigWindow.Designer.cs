@@ -61,6 +61,8 @@
             this.UseTouch = new System.Windows.Forms.CheckBox();
             this.DiscordWebhook = new System.Windows.Forms.TextBox();
             this.EnableDiscordNotifications = new System.Windows.Forms.CheckBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.SystemOvershoot = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.BaseDelay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SystemDDownPresses)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NavigateToSettings)).BeginInit();
@@ -72,6 +74,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.ReturnHome)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ReturnGame)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DaysToSkip)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SystemOvershoot)).BeginInit();
             this.SuspendLayout();
             // 
             // FocusWindow
@@ -181,7 +184,7 @@
             // 
             // Save
             // 
-            this.Save.Location = new System.Drawing.Point(12, 548);
+            this.Save.Location = new System.Drawing.Point(12, 576);
             this.Save.Name = "Save";
             this.Save.Size = new System.Drawing.Size(327, 23);
             this.Save.TabIndex = 12;
@@ -296,7 +299,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(12, 405);
+            this.label7.Location = new System.Drawing.Point(12, 433);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(123, 15);
             this.label7.TabIndex = 25;
@@ -304,7 +307,7 @@
             // 
             // Submenu
             // 
-            this.Submenu.Location = new System.Drawing.Point(271, 403);
+            this.Submenu.Location = new System.Drawing.Point(271, 431);
             this.Submenu.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -322,7 +325,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(12, 434);
+            this.label8.Location = new System.Drawing.Point(12, 462);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(138, 15);
             this.label8.TabIndex = 27;
@@ -330,7 +333,7 @@
             // 
             // DateChange
             // 
-            this.DateChange.Location = new System.Drawing.Point(271, 432);
+            this.DateChange.Location = new System.Drawing.Point(271, 460);
             this.DateChange.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -348,7 +351,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(12, 492);
+            this.label9.Location = new System.Drawing.Point(12, 520);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(160, 15);
             this.label9.TabIndex = 29;
@@ -356,7 +359,7 @@
             // 
             // ReturnHome
             // 
-            this.ReturnHome.Location = new System.Drawing.Point(271, 490);
+            this.ReturnHome.Location = new System.Drawing.Point(271, 518);
             this.ReturnHome.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -374,7 +377,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(12, 521);
+            this.label10.Location = new System.Drawing.Point(12, 549);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(119, 15);
             this.label10.TabIndex = 31;
@@ -382,7 +385,7 @@
             // 
             // ReturnGame
             // 
-            this.ReturnGame.Location = new System.Drawing.Point(271, 519);
+            this.ReturnGame.Location = new System.Drawing.Point(271, 547);
             this.ReturnGame.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -400,7 +403,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(12, 463);
+            this.label11.Location = new System.Drawing.Point(12, 491);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(179, 15);
             this.label11.TabIndex = 33;
@@ -408,7 +411,7 @@
             // 
             // DaysToSkip
             // 
-            this.DaysToSkip.Location = new System.Drawing.Point(271, 461);
+            this.DaysToSkip.Location = new System.Drawing.Point(271, 489);
             this.DaysToSkip.Maximum = new decimal(new int[] {
             99,
             0,
@@ -454,11 +457,39 @@
             this.EnableDiscordNotifications.UseVisualStyleBackColor = true;
             this.EnableDiscordNotifications.CheckedChanged += new System.EventHandler(this.EnableDiscordNotifications_CheckedChanged);
             // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(12, 404);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(233, 15);
+            this.label13.TabIndex = 39;
+            this.label13.Text = "Time to hold to overshoot \"Date and Time\"";
+            // 
+            // SystemOvershoot
+            // 
+            this.SystemOvershoot.Location = new System.Drawing.Point(271, 402);
+            this.SystemOvershoot.Maximum = new decimal(new int[] {
+            1200,
+            0,
+            0,
+            0});
+            this.SystemOvershoot.Name = "SystemOvershoot";
+            this.SystemOvershoot.Size = new System.Drawing.Size(68, 23);
+            this.SystemOvershoot.TabIndex = 40;
+            this.SystemOvershoot.Value = new decimal(new int[] {
+            950,
+            0,
+            0,
+            0});
+            // 
             // ConfigWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(351, 582);
+            this.ClientSize = new System.Drawing.Size(351, 621);
+            this.Controls.Add(this.SystemOvershoot);
+            this.Controls.Add(this.label13);
             this.Controls.Add(this.EnableDiscordNotifications);
             this.Controls.Add(this.DiscordWebhook);
             this.Controls.Add(this.UseTouch);
@@ -508,6 +539,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.ReturnHome)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ReturnGame)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DaysToSkip)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SystemOvershoot)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -548,5 +580,7 @@
         private CheckBox UseTouch;
         private TextBox DiscordWebhook;
         private CheckBox EnableDiscordNotifications;
+        private Label label13;
+        private NumericUpDown SystemOvershoot;
     }
 }
