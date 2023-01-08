@@ -18,6 +18,7 @@ namespace RaidCrawler.Subforms
             DiscordWebhook.Enabled = EnableDiscordNotifications.Checked;
 
             UseTouch.Checked = Settings.Default.CfgUseTouch;
+            UseOvershoot.Checked = Settings.Default.CfgUseOvershoot;
             BaseDelay.Value = Settings.Default.CfgBaseDelay;
             OpenHome.Value = Settings.Default.CfgOpenHome;
             NavigateToSettings.Value = Settings.Default.CfgNavigateToSettings;
@@ -52,6 +53,7 @@ namespace RaidCrawler.Subforms
             Settings.Default.CfgDiscordWebhook = DiscordWebhook.Text;
 
             Settings.Default.CfgUseTouch = UseTouch.Checked;
+            Settings.Default.CfgUseOvershoot = UseOvershoot.Checked;
             Settings.Default.CfgBaseDelay = BaseDelay.Value;
             Settings.Default.CfgOpenHome = OpenHome.Value;
             Settings.Default.CfgNavigateToSettings = NavigateToSettings.Value;

@@ -510,6 +510,7 @@
             // 
             // ActiveFilters
             // 
+            this.ActiveFilters.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.ActiveFilters.FormattingEnabled = true;
             this.ActiveFilters.ItemHeight = 15;
             this.ActiveFilters.Location = new System.Drawing.Point(257, 23);

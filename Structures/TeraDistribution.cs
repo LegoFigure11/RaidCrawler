@@ -1,8 +1,6 @@
 ﻿using PKHeX.Core;
 using System.Diagnostics;
-using FlatSharp;
 using static System.Buffers.Binary.BinaryPrimitives;
-using System.IO;
 
 namespace RaidCrawler.Structures
 {
@@ -129,9 +127,9 @@ namespace RaidCrawler.Structures
 
         public static int GetDeliveryGroupID(int eventct, DeliveryGroupID ids)
         {
-            int[] cts = new int[10] { ids.GroupID01, ids.GroupID02, ids.GroupID03, ids.GroupID04, ids.GroupID05, 
+            int[] cts = new int[10] { ids.GroupID01, ids.GroupID02, ids.GroupID03, ids.GroupID04, ids.GroupID05,
                                       ids.GroupID06, ids.GroupID07, ids.GroupID08, ids.GroupID09, ids.GroupID10 };
-            for (int i=0; i < cts.Length; i++)
+            for (int i = 0; i < cts.Length; i++)
             {
                 var ct = cts[i];
                 if (eventct < ct)

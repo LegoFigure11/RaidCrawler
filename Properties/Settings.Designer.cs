@@ -278,7 +278,22 @@ namespace RaidCrawler.Properties {
                 this["CfgUseTouch"] = value;
             }
         }
-        
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool CfgUseOvershoot
+        {
+            get
+            {
+                return ((bool)(this["CfgUseOvershoot"]));
+            }
+            set
+            {
+                this["CfgUseOvershoot"] = value;
+            }
+        }
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0, 0")]

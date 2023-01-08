@@ -45,10 +45,10 @@ namespace RaidCrawler.Structures
             return StarsComp switch
             {
                 0 => enc.Stars == (int)Stars,
-                1 => enc.Stars >  (int)Stars,
+                1 => enc.Stars > (int)Stars,
                 2 => enc.Stars >= (int)Stars,
                 3 => enc.Stars <= (int)Stars,
-                4 => enc.Stars <  (int)Stars,
+                4 => enc.Stars < (int)Stars,
                 _ => false
             };
         }
@@ -61,12 +61,13 @@ namespace RaidCrawler.Structures
             if (rewards == null)
                 return false;
             var count = rewards.Where(z => RewardItems.Contains(z.Item1)).Count();
-            return RewardsComp switch {
+            return RewardsComp switch 
+            {
                 0 => count == RewardsCount,
-                1 => count >  RewardsCount,
+                1 => count > RewardsCount,
                 2 => count >= RewardsCount,
                 3 => count <= RewardsCount,
-                4 => count <  RewardsCount,
+                4 => count < RewardsCount,
                 _ => false
             };
         }
@@ -159,7 +160,7 @@ namespace RaidCrawler.Structures
 
         public bool IsBatchFilterSatisfied(ITeraRaid? encounter, Raid raid)
         {
-            if (BatchFilters == null) 
+            if (BatchFilters == null)
                 return true;
             if (encounter == null)
                 return false;
@@ -178,7 +179,7 @@ namespace RaidCrawler.Structures
         public bool FilterSatisfied(ITeraRaid? encounter, Raid raid, int SandwichBoost)
         {
             return Enabled && IsIVsSatisfied(encounter, raid) && IsShinySatisfied(raid) && IsSpeciesSatisfied(encounter)
-                && IsNatureSatisfied(encounter, raid) && IsStarsSatisfied(encounter) && IsTeraTypeSatisfied(raid) 
+                && IsNatureSatisfied(encounter, raid) && IsStarsSatisfied(encounter) && IsTeraTypeSatisfied(raid)
                 && IsRewardsSatisfied(encounter, raid, SandwichBoost) && IsGenderSatisfied(encounter, raid) && IsBatchFilterSatisfied(encounter, raid);
         }
 
