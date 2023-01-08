@@ -78,6 +78,7 @@ namespace RaidCrawler.Structures
             {
                 username = $"RaidCrawler",
                 avatar_url = "https://www.serebii.net/scarletviolet/ribbons/mightiestmark.png",
+                content = Properties.Settings.Default.CfgDiscordMessageContent,
                 embeds = new List<object>
                 {
                     new

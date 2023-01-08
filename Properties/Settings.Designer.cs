@@ -311,5 +311,17 @@ namespace RaidCrawler.Properties {
                 this["CfgExperimentalView"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string CfgDiscordMessageContent {
+            get {
+                return ((string)(this["CfgDiscordMessageContent"]));
+            }
+            set {
+                this["CfgDiscordMessageContent"] = value;
+            }
+        }
     }
 }
