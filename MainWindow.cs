@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using NLog.Filters;
 using PKHeX.Core;
 using PKHeX.Drawing;
 using PKHeX.Drawing.PokeSprite;
@@ -361,7 +360,7 @@ namespace RaidCrawler
         private string GetPIDString(Raid raid, ITeraRaid? enc)
         {
             var shiny_mark = " (☆)";
-            if (HideSeed) 
+            if (HideSeed)
                 return "Hidden";
             var pid = $"{raid.PID:X8}";
             return Raid.CheckIsShiny(raid, enc) ? pid + shiny_mark : pid;
