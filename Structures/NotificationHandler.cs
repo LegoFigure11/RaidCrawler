@@ -11,7 +11,8 @@ namespace RaidCrawler.Structures
         private static HttpClient? _client;
         public static HttpClient Client
         {
-            get {
+            get 
+            {
                 if (_client == null)
                     _client = new HttpClient();
                 return _client;

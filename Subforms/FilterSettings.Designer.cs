@@ -510,12 +510,14 @@
             // 
             // ActiveFilters
             // 
+            this.ActiveFilters.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.ActiveFilters.FormattingEnabled = true;
             this.ActiveFilters.ItemHeight = 15;
             this.ActiveFilters.Location = new System.Drawing.Point(257, 23);
             this.ActiveFilters.Name = "ActiveFilters";
             this.ActiveFilters.Size = new System.Drawing.Size(185, 259);
             this.ActiveFilters.TabIndex = 20;
+            this.ActiveFilters.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.ActiveFilters_DrawItem);
             this.ActiveFilters.SelectedIndexChanged += new System.EventHandler(this.ActiveFilters_SelectedIndexChanged);
             // 
             // FilterName

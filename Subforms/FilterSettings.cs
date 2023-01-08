@@ -292,5 +292,19 @@ namespace RaidCrawler.Subforms
                 Rewards.Text = string.Join(",", s);
             }
         }
+
+        private void ActiveFilters_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            e.DrawBackground();
+
+            ListBox lb = (ListBox)sender;
+            Graphics g = e.Graphics;
+            RaidFilter filter = (RaidFilter)lb.Items[e.Index];
+
+            g.FillRectangle(new SolidBrush(((e.State & DrawItemState.Selected) == DrawItemState.Selected) ? ColorTranslator.FromHtml("#000078d7") : Color.White), e.Bounds);
+            g.DrawString(filter.Name, new Font(Name = "Segoe UI", 9), new SolidBrush(filter.Enabled ? e.ForeColor : Color.Gray), new PointF(e.Bounds.X, e.Bounds.Y));
+
+            e.DrawFocusRectangle();
+        }
     }
 }

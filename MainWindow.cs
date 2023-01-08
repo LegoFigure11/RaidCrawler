@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using NLog.Filters;
 using PKHeX.Core;
 using PKHeX.Drawing;
 using PKHeX.Drawing.PokeSprite;
@@ -361,7 +360,7 @@ namespace RaidCrawler
         private string GetPIDString(Raid raid, ITeraRaid? enc)
         {
             var shiny_mark = " (☆)";
-            if (HideSeed) 
+            if (HideSeed)
                 return "Hidden";
             var pid = $"{raid.PID:X8}";
             return Raid.CheckIsShiny(raid, enc) ? pid + shiny_mark : pid;
@@ -541,8 +540,17 @@ namespace RaidCrawler
             // Navigate to "Date and Time"
             await Click(DRIGHT, 0_200 + BaseDelay, token).ConfigureAwait(false);
             // Hold down to overshoot Date/Time by one. DUP to recover.
-            await PressAndHold(DDOWN, (int)Settings.Default.CfgSystemOvershoot, 0, token).ConfigureAwait(false);
-            await Click(DUP, 0_500, token).ConfigureAwait(false);
+            if (Settings.Default.CfgUseOvershoot)
+            {
+                await PressAndHold(DDOWN, (int)Settings.Default.CfgSystemOvershoot, 0, token).ConfigureAwait(false);
+                await Click(DUP, 0_500, token).ConfigureAwait(false);
+            }
+            else
+                // I tried using holds here but could not get the timing consistent
+                // Even if this is slightly slower, it is at least consistent
+                // And not missing any cycles means it's faster overall
+                for (int i = 0; i < Settings.Default.CfgSystemDDownPresses; i++) 
+                    await Click(DDOWN, 0_050 + BaseDelay, token).ConfigureAwait(false);
             await Click(A, (int)Settings.Default.CfgSubmenu + BaseDelay, token).ConfigureAwait(false);
 
             // Navigate to Change Date/Time
@@ -835,13 +843,21 @@ namespace RaidCrawler
             }
         }
 
+        Point Default = new(305, 245);
+        Point ShowExtra = new(314, 245);
         private void Move_Clicked(object sender, EventArgs e)
         {
+            if (Raids.Count == 0)
+            {
+                MessageBox.Show("Raids not loaded.");
+                return;
+            }
             var encounter = Encounters[index];
             if (encounter == null)
                 return;
             ShowExtraMoves = !ShowExtraMoves;
             LabelMoves.Text = ShowExtraMoves ? "Extra:" : "Moves:";
+            LabelMoves.Location = ShowExtraMoves ? ShowExtra : Default;
             var extra_moves = new ushort[] { 0, 0, 0, 0 };
             for (int i = 0; i < encounter.ExtraMoves.Length; i++)
                 if (i < extra_moves.Count()) extra_moves[i] = encounter.ExtraMoves[i];
