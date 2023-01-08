@@ -24,6 +24,7 @@ namespace RaidCrawler.Subforms
             OpenSettings.Value = Settings.Default.CfgOpenSettings;
             Hold.Value = Settings.Default.CfgHold;
             SystemDDownPresses.Value = Settings.Default.CfgSystemDDownPresses;
+            SystemOvershoot.Value = Settings.Default.CfgSystemOvershoot;
             Submenu.Value = Settings.Default.CfgSubmenu;
             DateChange.Value = Settings.Default.CfgDateChange;
             DaysToSkip.Value = Settings.Default.CfgDaysToSkip;
@@ -57,6 +58,7 @@ namespace RaidCrawler.Subforms
             Settings.Default.CfgOpenSettings = OpenSettings.Value;
             Settings.Default.CfgHold = Hold.Value;
             Settings.Default.CfgSystemDDownPresses = SystemDDownPresses.Value;
+            Settings.Default.CfgSystemOvershoot = SystemOvershoot.Value;
             Settings.Default.CfgSubmenu = Submenu.Value;
             Settings.Default.CfgDateChange = DateChange.Value;
             Settings.Default.CfgDaysToSkip = DaysToSkip.Value;

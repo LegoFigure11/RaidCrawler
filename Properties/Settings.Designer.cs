@@ -143,7 +143,22 @@ namespace RaidCrawler.Properties {
                 this["CfgSystemDDownPresses"] = value;
             }
         }
-        
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("950")]
+        public decimal CfgSystemOvershoot
+        {
+            get
+            {
+                return ((decimal)(this["CfgSystemOvershoot"]));
+            }
+            set
+            {
+                this["CfgSystemOvershoot"] = value;
+            }
+        }
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1800")]
