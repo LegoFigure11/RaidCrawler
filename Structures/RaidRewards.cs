@@ -116,7 +116,7 @@ namespace RaidCrawler.Structures
                 Species.Houndour or Species.Houndoom => 1990,
                 Species.Phanpy or Species.Donphan => 1991,
                 Species.Stantler or Species.Wyrdeer => 1992,
-                Species.Larvitar or Species.Pupitar or Species.Tyranitar => 1994,
+                Species.Larvitar or Species.Pupitar or Species.Tyranitar => 1993,
                 Species.Wingull or Species.Pelipper => 1994,
                 Species.Ralts or Species.Kirlia or Species.Gardevoir or Species.Gallade => 1995,
                 Species.Surskit or Species.Masquerain => 1996,
