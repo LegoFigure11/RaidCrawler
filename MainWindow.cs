@@ -303,9 +303,9 @@ namespace RaidCrawler
                 IsEvent.Checked = raid.IsEvent;
 
                 var teratype = Raid.GetTeraType(encounter, raid);
-                TeraType.Text = $"{Raid.strings.types[teratype]} ({teratype})";
+                TeraType.Text = Raid.strings.types[teratype];
                 int StarCount = encounter is TeraDistribution ? encounter.Stars : Raid.GetStarCount(raid.Difficulty, Progress.SelectedIndex, raid.IsBlack);
-                Difficulty.Text = raid.IsEvent ? string.Concat(Enumerable.Repeat("☆", StarCount)) : string.Concat(Enumerable.Repeat("☆", StarCount)) + $" ({raid.Difficulty})";
+                Difficulty.Text = string.Concat(Enumerable.Repeat("☆", StarCount));
 
                 if (encounter != null)
                 {
