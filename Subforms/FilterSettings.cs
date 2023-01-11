@@ -40,12 +40,14 @@ namespace RaidCrawler.Subforms
         {
             FilterName.Text = filter.Name;
             Species.SelectedIndex = filter.Species != null ? (int)filter.Species : 0;
+            Form.Value = filter.Form != null ? (int)filter.Form : 0;
             Nature.SelectedIndex = filter.Nature != null ? (int)filter.Nature : 0;
             Stars.SelectedIndex = filter.Stars != null ? (int)filter.Stars - 1 : 0;
             StarsComp.SelectedIndex = filter.StarsComp;
             TeraType.SelectedIndex = filter.TeraType != null ? (int)filter.TeraType : 0;
             Gender.SelectedIndex = filter.Gender != null ? (int)filter.Gender : 0;
             SpeciesCheck.Checked = filter.Species != null;
+            FormCheck.Checked = filter.Form != null;
             NatureCheck.Checked = filter.Nature != null;
             StarCheck.Checked = filter.Stars != null;
             TeraCheck.Checked = filter.TeraType != null;
@@ -127,6 +129,7 @@ namespace RaidCrawler.Subforms
 
             filter.Name = FilterName.Text.Trim();
             filter.Species = SpeciesCheck.Checked ? Species.SelectedIndex : null;
+            filter.Form = FormCheck.Checked ? (int)Form.Value : null;
             filter.Nature = NatureCheck.Checked ? Nature.SelectedIndex : null;
             filter.Stars = StarCheck.Checked ? Stars.SelectedIndex + 1 : null;
             filter.StarsComp = StarsComp.SelectedIndex;
@@ -168,6 +171,11 @@ namespace RaidCrawler.Subforms
         private void SpeciesCheck_CheckedChanged(object sender, EventArgs e)
         {
             Species.Enabled = SpeciesCheck.Checked;
+        }
+
+        private void FormCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            Form.Enabled = FormCheck.Checked;
         }
 
         private void NatureCheck_CheckedChanged(object sender, EventArgs e)
