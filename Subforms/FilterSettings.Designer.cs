@@ -30,6 +30,8 @@
         {
             this.Species = new System.Windows.Forms.ComboBox();
             this.SpeciesCheck = new System.Windows.Forms.CheckBox();
+            this.Form = new System.Windows.Forms.NumericUpDown();
+            this.FormCheck = new System.Windows.Forms.CheckBox();
             this.NatureCheck = new System.Windows.Forms.CheckBox();
             this.Nature = new System.Windows.Forms.ComboBox();
             this.StarCheck = new System.Windows.Forms.CheckBox();
@@ -73,6 +75,7 @@
             this.Gender = new System.Windows.Forms.ComboBox();
             this.LabelBatchFilters = new System.Windows.Forms.Label();
             this.BatchFilters = new System.Windows.Forms.TextBox();
+            ((System.ComponentModel.ISupportInitialize)(this.Form)).BeginInit();
             this.PerfectIVFilterGroup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.IVSPE)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.IVSPD)).BeginInit();
@@ -103,10 +106,29 @@
             this.SpeciesCheck.UseVisualStyleBackColor = true;
             this.SpeciesCheck.CheckedChanged += new System.EventHandler(this.SpeciesCheck_CheckedChanged);
             // 
+            // Form
+            // 
+            this.Form.Enabled = false;
+            this.Form.Location = new System.Drawing.Point(104, 82);
+            this.Form.Name = "Form";
+            this.Form.Size = new System.Drawing.Size(121, 23);
+            this.Form.TabIndex = 0;
+            // 
+            // FormCheck
+            // 
+            this.FormCheck.AutoSize = true;
+            this.FormCheck.Location = new System.Drawing.Point(15, 84);
+            this.FormCheck.Name = "FormCheck";
+            this.FormCheck.Size = new System.Drawing.Size(54, 19);
+            this.FormCheck.TabIndex = 1;
+            this.FormCheck.Text = "Form";
+            this.FormCheck.UseVisualStyleBackColor = true;
+            this.FormCheck.CheckedChanged += new System.EventHandler(this.FormCheck_CheckedChanged);
+            // 
             // NatureCheck
             // 
             this.NatureCheck.AutoSize = true;
-            this.NatureCheck.Location = new System.Drawing.Point(15, 86);
+            this.NatureCheck.Location = new System.Drawing.Point(15, 113);
             this.NatureCheck.Name = "NatureCheck";
             this.NatureCheck.Size = new System.Drawing.Size(62, 19);
             this.NatureCheck.TabIndex = 3;
@@ -118,7 +140,7 @@
             // 
             this.Nature.Enabled = false;
             this.Nature.FormattingEnabled = true;
-            this.Nature.Location = new System.Drawing.Point(104, 84);
+            this.Nature.Location = new System.Drawing.Point(104, 111);
             this.Nature.Name = "Nature";
             this.Nature.Size = new System.Drawing.Size(121, 23);
             this.Nature.TabIndex = 2;
@@ -126,7 +148,7 @@
             // StarCheck
             // 
             this.StarCheck.AutoSize = true;
-            this.StarCheck.Location = new System.Drawing.Point(15, 115);
+            this.StarCheck.Location = new System.Drawing.Point(15, 142);
             this.StarCheck.Name = "StarCheck";
             this.StarCheck.Size = new System.Drawing.Size(51, 19);
             this.StarCheck.TabIndex = 5;
@@ -146,7 +168,7 @@
             "5",
             "6",
             "7"});
-            this.Stars.Location = new System.Drawing.Point(104, 113);
+            this.Stars.Location = new System.Drawing.Point(104, 140);
             this.Stars.Name = "Stars";
             this.Stars.Size = new System.Drawing.Size(62, 23);
             this.Stars.TabIndex = 4;
@@ -154,7 +176,7 @@
             // ShinyCheck
             // 
             this.ShinyCheck.AutoSize = true;
-            this.ShinyCheck.Location = new System.Drawing.Point(15, 258);
+            this.ShinyCheck.Location = new System.Drawing.Point(15, 285);
             this.ShinyCheck.Name = "ShinyCheck";
             this.ShinyCheck.Size = new System.Drawing.Size(60, 19);
             this.ShinyCheck.TabIndex = 6;
@@ -163,7 +185,7 @@
             // 
             // Add
             // 
-            this.Add.Location = new System.Drawing.Point(12, 413);
+            this.Add.Location = new System.Drawing.Point(12, 440);
             this.Add.Name = "Add";
             this.Add.Size = new System.Drawing.Size(111, 23);
             this.Add.TabIndex = 9;
@@ -191,7 +213,7 @@
             this.PerfectIVFilterGroup.Controls.Add(this.Def);
             this.PerfectIVFilterGroup.Controls.Add(this.Atk);
             this.PerfectIVFilterGroup.Controls.Add(this.HP);
-            this.PerfectIVFilterGroup.Location = new System.Drawing.Point(12, 283);
+            this.PerfectIVFilterGroup.Location = new System.Drawing.Point(12, 310);
             this.PerfectIVFilterGroup.Name = "PerfectIVFilterGroup";
             this.PerfectIVFilterGroup.Size = new System.Drawing.Size(231, 124);
             this.PerfectIVFilterGroup.TabIndex = 10;
@@ -483,7 +505,7 @@
             // TeraCheck
             // 
             this.TeraCheck.AutoSize = true;
-            this.TeraCheck.Location = new System.Drawing.Point(15, 144);
+            this.TeraCheck.Location = new System.Drawing.Point(15, 171);
             this.TeraCheck.Name = "TeraCheck";
             this.TeraCheck.Size = new System.Drawing.Size(74, 19);
             this.TeraCheck.TabIndex = 18;
@@ -503,7 +525,7 @@
             "5",
             "6",
             "7"});
-            this.TeraType.Location = new System.Drawing.Point(104, 142);
+            this.TeraType.Location = new System.Drawing.Point(104, 169);
             this.TeraType.Name = "TeraType";
             this.TeraType.Size = new System.Drawing.Size(121, 23);
             this.TeraType.TabIndex = 17;
@@ -540,7 +562,7 @@
             // 
             // Remove
             // 
-            this.Remove.Location = new System.Drawing.Point(132, 413);
+            this.Remove.Location = new System.Drawing.Point(132, 440);
             this.Remove.Name = "Remove";
             this.Remove.Size = new System.Drawing.Size(111, 23);
             this.Remove.TabIndex = 23;
@@ -551,7 +573,7 @@
             // DisableFilter
             // 
             this.DisableFilter.AutoSize = true;
-            this.DisableFilter.Location = new System.Drawing.Point(135, 258);
+            this.DisableFilter.Location = new System.Drawing.Point(135, 285);
             this.DisableFilter.Name = "DisableFilter";
             this.DisableFilter.Size = new System.Drawing.Size(98, 19);
             this.DisableFilter.TabIndex = 24;
@@ -569,7 +591,7 @@
             ">=",
             "<=",
             "<"});
-            this.StarsComp.Location = new System.Drawing.Point(172, 113);
+            this.StarsComp.Location = new System.Drawing.Point(172, 140);
             this.StarsComp.Name = "StarsComp";
             this.StarsComp.Size = new System.Drawing.Size(53, 23);
             this.StarsComp.TabIndex = 18;
@@ -586,7 +608,7 @@
             ">=",
             "<=",
             "<"});
-            this.RewardsComp.Location = new System.Drawing.Point(172, 229);
+            this.RewardsComp.Location = new System.Drawing.Point(172, 256);
             this.RewardsComp.Name = "RewardsComp";
             this.RewardsComp.Size = new System.Drawing.Size(53, 23);
             this.RewardsComp.TabIndex = 27;
@@ -594,7 +616,7 @@
             // CheckRewards
             // 
             this.CheckRewards.AutoSize = true;
-            this.CheckRewards.Location = new System.Drawing.Point(15, 202);
+            this.CheckRewards.Location = new System.Drawing.Point(15, 229);
             this.CheckRewards.Name = "CheckRewards";
             this.CheckRewards.Size = new System.Drawing.Size(70, 19);
             this.CheckRewards.TabIndex = 26;
@@ -605,7 +627,7 @@
             // Rewards
             // 
             this.Rewards.Enabled = false;
-            this.Rewards.Location = new System.Drawing.Point(104, 200);
+            this.Rewards.Location = new System.Drawing.Point(104, 227);
             this.Rewards.Name = "Rewards";
             this.Rewards.Size = new System.Drawing.Size(96, 23);
             this.Rewards.TabIndex = 28;
@@ -614,7 +636,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(14, 232);
+            this.label2.Location = new System.Drawing.Point(14, 259);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(82, 15);
             this.label2.TabIndex = 29;
@@ -623,7 +645,7 @@
             // RewardsCount
             // 
             this.RewardsCount.Enabled = false;
-            this.RewardsCount.Location = new System.Drawing.Point(104, 229);
+            this.RewardsCount.Location = new System.Drawing.Point(104, 256);
             this.RewardsCount.Maximum = new decimal(new int[] {
             12,
             0,
@@ -635,7 +657,7 @@
             // 
             // ButtonOpenRewardsList
             // 
-            this.ButtonOpenRewardsList.Location = new System.Drawing.Point(206, 200);
+            this.ButtonOpenRewardsList.Location = new System.Drawing.Point(206, 227);
             this.ButtonOpenRewardsList.Name = "ButtonOpenRewardsList";
             this.ButtonOpenRewardsList.Size = new System.Drawing.Size(19, 23);
             this.ButtonOpenRewardsList.TabIndex = 31;
@@ -646,7 +668,7 @@
             // GenderCheck
             // 
             this.GenderCheck.AutoSize = true;
-            this.GenderCheck.Location = new System.Drawing.Point(15, 173);
+            this.GenderCheck.Location = new System.Drawing.Point(15, 200);
             this.GenderCheck.Name = "GenderCheck";
             this.GenderCheck.Size = new System.Drawing.Size(64, 19);
             this.GenderCheck.TabIndex = 33;
@@ -662,7 +684,7 @@
             "Male",
             "Female",
             "Genderless"});
-            this.Gender.Location = new System.Drawing.Point(104, 171);
+            this.Gender.Location = new System.Drawing.Point(104, 198);
             this.Gender.Name = "Gender";
             this.Gender.Size = new System.Drawing.Size(121, 23);
             this.Gender.TabIndex = 32;
@@ -682,14 +704,14 @@
             this.BatchFilters.Location = new System.Drawing.Point(257, 305);
             this.BatchFilters.Multiline = true;
             this.BatchFilters.Name = "BatchFilters";
-            this.BatchFilters.Size = new System.Drawing.Size(185, 130);
+            this.BatchFilters.Size = new System.Drawing.Size(185, 157);
             this.BatchFilters.TabIndex = 35;
             // 
             // FilterSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(454, 447);
+            this.ClientSize = new System.Drawing.Size(454, 474);
             this.Controls.Add(this.BatchFilters);
             this.Controls.Add(this.LabelBatchFilters);
             this.Controls.Add(this.GenderCheck);
@@ -715,6 +737,8 @@
             this.Controls.Add(this.Stars);
             this.Controls.Add(this.NatureCheck);
             this.Controls.Add(this.Nature);
+            this.Controls.Add(this.FormCheck);
+            this.Controls.Add(this.Form);
             this.Controls.Add(this.SpeciesCheck);
             this.Controls.Add(this.Species);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -724,6 +748,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "FilterSettings";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Save_Click);
+            ((System.ComponentModel.ISupportInitialize)(this.Form)).EndInit();
             this.PerfectIVFilterGroup.ResumeLayout(false);
             this.PerfectIVFilterGroup.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.IVSPE)).EndInit();
@@ -742,6 +767,8 @@
 
         private ComboBox Species;
         private CheckBox SpeciesCheck;
+        private NumericUpDown Form;
+        private CheckBox FormCheck;
         private CheckBox NatureCheck;
         private ComboBox Nature;
         private CheckBox StarCheck;
