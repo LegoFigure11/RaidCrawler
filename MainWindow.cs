@@ -729,7 +729,7 @@ namespace RaidCrawler
                     IsReading = false;
                 }
             }
-            if (Raids[index] != null)
+            else if (Raids[index] != null)
             {
                 RaidBlockViewer BlockViewerWindow = new(Raids[index].Data, offset);
                 BlockViewerWindow.ShowDialog();
