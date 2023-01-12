@@ -16,6 +16,8 @@ namespace RaidCrawler.Subforms
             EnableDiscordNotifications.Checked = Settings.Default.CfgEnableNotification;
             DiscordWebhook.Text = Settings.Default.CfgDiscordWebhook;
             DiscordWebhook.Enabled = EnableDiscordNotifications.Checked;
+            DiscordMessageContent.Text = Settings.Default.CfgDiscordMessageContent;
+            DiscordMessageContent.Enabled = EnableDiscordNotifications.Checked;
 
             UseTouch.Checked = Settings.Default.CfgUseTouch;
             BaseDelay.Value = Settings.Default.CfgBaseDelay;
@@ -41,6 +43,7 @@ namespace RaidCrawler.Subforms
         private void EnableDiscordNotifications_CheckedChanged(object sender, EventArgs e)
         {
             DiscordWebhook.Enabled = EnableDiscordNotifications.Checked;
+            DiscordMessageContent.Enabled = EnableDiscordNotifications.Checked;
         }
 
         private void Save_Click(object sender, EventArgs e)
@@ -51,6 +54,7 @@ namespace RaidCrawler.Subforms
             Settings.Default.CfgAlertWindowMessage = AlertMessage.Text;
             Settings.Default.CfgEnableNotification = EnableDiscordNotifications.Checked;
             Settings.Default.CfgDiscordWebhook = DiscordWebhook.Text;
+            Settings.Default.CfgDiscordMessageContent = DiscordMessageContent.Text;
 
             Settings.Default.CfgUseTouch = UseTouch.Checked;
             Settings.Default.CfgBaseDelay = BaseDelay.Value;
