@@ -121,7 +121,7 @@ namespace RaidCrawler.Structures
             catch(Exception ex)
             {
                 Debug.WriteLine(ex.ToString());
-                return (new DeliveryRaidPriorityArray().Table[0].DeliveryGroupID, 0);
+                return (new DeliveryGroupID(), 0);
             }
         }
 
