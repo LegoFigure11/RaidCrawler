@@ -157,9 +157,9 @@ namespace RaidCrawler.Subforms
                         break;
                     }
                 }
+                filters.Add(filter);
                 bs.ResetBindings(false);
                 ActiveFilters.SetItemChecked(ActiveFilters.Items.Count - 1, filter.Enabled);
-                filters.Add(filter);
                 ActiveFilters.SelectedIndex = ActiveFilters.Items.Count - 1;
             }
             else
