@@ -67,6 +67,8 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.label14 = new System.Windows.Forms.Label();
+            this.DiscordMessageContent = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.BaseDelay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SystemDDownPresses)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NavigateToSettings)).BeginInit();
@@ -500,6 +502,8 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.DiscordMessageContent);
+            this.tabPage1.Controls.Add(this.label14);
             this.tabPage1.Controls.Add(this.LabelMatchFound);
             this.tabPage1.Controls.Add(this.FocusWindow);
             this.tabPage1.Controls.Add(this.EnableAlert);
@@ -561,6 +565,22 @@
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Experimental";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(6, 173);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(296, 15);
+            this.label14.TabIndex = 39;
+            this.label14.Text = "Choose the content for discord messages (allow pings)";
+            // 
+            // DiscordMessageContent
+            // 
+            this.DiscordMessageContent.Location = new System.Drawing.Point(6, 191);
+            this.DiscordMessageContent.Name = "DiscordMessageContent";
+            this.DiscordMessageContent.Size = new System.Drawing.Size(452, 23);
+            this.DiscordMessageContent.TabIndex = 40;
             // 
             // ConfigWindow
             // 
@@ -637,5 +657,7 @@
         private TabPage tabPage1;
         private TabPage tabPage2;
         private TabPage tabPage3;
+        private TextBox DiscordMessageContent;
+        private Label label14;
     }
 }
