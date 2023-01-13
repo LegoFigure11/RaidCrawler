@@ -63,6 +63,10 @@
             this.EnableDiscordNotifications = new System.Windows.Forms.CheckBox();
             this.label13 = new System.Windows.Forms.Label();
             this.ExperimentalView = new System.Windows.Forms.CheckBox();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
             ((System.ComponentModel.ISupportInitialize)(this.BaseDelay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SystemDDownPresses)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NavigateToSettings)).BeginInit();
@@ -74,12 +78,16 @@
             ((System.ComponentModel.ISupportInitialize)(this.ReturnHome)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ReturnGame)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DaysToSkip)).BeginInit();
+            this.tabControl1.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
+            this.tabPage3.SuspendLayout();
             this.SuspendLayout();
             // 
             // FocusWindow
             // 
             this.FocusWindow.AutoSize = true;
-            this.FocusWindow.Location = new System.Drawing.Point(12, 52);
+            this.FocusWindow.Location = new System.Drawing.Point(6, 46);
             this.FocusWindow.Name = "FocusWindow";
             this.FocusWindow.Size = new System.Drawing.Size(123, 19);
             this.FocusWindow.TabIndex = 1;
@@ -89,7 +97,7 @@
             // EnableAlert
             // 
             this.EnableAlert.AutoSize = true;
-            this.EnableAlert.Location = new System.Drawing.Point(12, 77);
+            this.EnableAlert.Location = new System.Drawing.Point(6, 71);
             this.EnableAlert.Name = "EnableAlert";
             this.EnableAlert.Size = new System.Drawing.Size(293, 19);
             this.EnableAlert.TabIndex = 2;
@@ -100,7 +108,7 @@
             // PlayTone
             // 
             this.PlayTone.AutoSize = true;
-            this.PlayTone.Location = new System.Drawing.Point(12, 27);
+            this.PlayTone.Location = new System.Drawing.Point(6, 21);
             this.PlayTone.Name = "PlayTone";
             this.PlayTone.Size = new System.Drawing.Size(84, 19);
             this.PlayTone.TabIndex = 0;
@@ -111,7 +119,7 @@
             // 
             this.LabelMatchFound.AutoSize = true;
             this.LabelMatchFound.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.LabelMatchFound.Location = new System.Drawing.Point(12, 9);
+            this.LabelMatchFound.Location = new System.Drawing.Point(6, 3);
             this.LabelMatchFound.Name = "LabelMatchFound";
             this.LabelMatchFound.Size = new System.Drawing.Size(137, 15);
             this.LabelMatchFound.TabIndex = 3;
@@ -119,25 +127,25 @@
             // 
             // AlertMessage
             // 
-            this.AlertMessage.Location = new System.Drawing.Point(12, 102);
+            this.AlertMessage.Location = new System.Drawing.Point(6, 96);
             this.AlertMessage.Name = "AlertMessage";
-            this.AlertMessage.Size = new System.Drawing.Size(327, 23);
+            this.AlertMessage.Size = new System.Drawing.Size(452, 23);
             this.AlertMessage.TabIndex = 4;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label2.Location = new System.Drawing.Point(12, 181);
+            this.label2.Location = new System.Drawing.Point(6, 3);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(233, 15);
             this.label2.TabIndex = 6;
-            this.label2.Text = "Date Advance Options (all timings in ms):";
+            this.label2.Text = "Advance Date Options (all timings in ms):";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 231);
+            this.label1.Location = new System.Drawing.Point(6, 53);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(196, 15);
             this.label1.TabIndex = 8;
@@ -145,7 +153,7 @@
             // 
             // BaseDelay
             // 
-            this.BaseDelay.Location = new System.Drawing.Point(271, 229);
+            this.BaseDelay.Location = new System.Drawing.Point(265, 51);
             this.BaseDelay.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -157,7 +165,7 @@
             // 
             // SystemDDownPresses
             // 
-            this.SystemDDownPresses.Location = new System.Drawing.Point(271, 374);
+            this.SystemDDownPresses.Location = new System.Drawing.Point(265, 196);
             this.SystemDDownPresses.Maximum = new decimal(new int[] {
             99,
             0,
@@ -175,7 +183,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 376);
+            this.label3.Location = new System.Drawing.Point(6, 198);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(228, 15);
             this.label3.TabIndex = 11;
@@ -183,9 +191,11 @@
             // 
             // Save
             // 
-            this.Save.Location = new System.Drawing.Point(12, 594);
+            this.Save.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.Save.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.Save.Location = new System.Drawing.Point(0, 402);
             this.Save.Name = "Save";
-            this.Save.Size = new System.Drawing.Size(327, 23);
+            this.Save.Size = new System.Drawing.Size(472, 32);
             this.Save.TabIndex = 12;
             this.Save.Text = "Save";
             this.Save.UseVisualStyleBackColor = true;
@@ -193,7 +203,7 @@
             // 
             // NavigateToSettings
             // 
-            this.NavigateToSettings.Location = new System.Drawing.Point(271, 287);
+            this.NavigateToSettings.Location = new System.Drawing.Point(265, 109);
             this.NavigateToSettings.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -210,7 +220,7 @@
             // 
             // OpenSettings
             // 
-            this.OpenSettings.Location = new System.Drawing.Point(271, 316);
+            this.OpenSettings.Location = new System.Drawing.Point(265, 138);
             this.OpenSettings.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -227,7 +237,7 @@
             // 
             // OpenHome
             // 
-            this.OpenHome.Location = new System.Drawing.Point(271, 258);
+            this.OpenHome.Location = new System.Drawing.Point(265, 80);
             this.OpenHome.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -245,7 +255,7 @@
             // LabelDelayOpenHOME
             // 
             this.LabelDelayOpenHOME.AutoSize = true;
-            this.LabelDelayOpenHOME.Location = new System.Drawing.Point(12, 260);
+            this.LabelDelayOpenHOME.Location = new System.Drawing.Point(6, 82);
             this.LabelDelayOpenHOME.Name = "LabelDelayOpenHOME";
             this.LabelDelayOpenHOME.Size = new System.Drawing.Size(140, 15);
             this.LabelDelayOpenHOME.TabIndex = 19;
@@ -254,7 +264,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 289);
+            this.label4.Location = new System.Drawing.Point(6, 111);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(146, 15);
             this.label4.TabIndex = 20;
@@ -263,7 +273,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(12, 318);
+            this.label5.Location = new System.Drawing.Point(6, 140);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(114, 15);
             this.label5.TabIndex = 21;
@@ -272,7 +282,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(12, 347);
+            this.label6.Location = new System.Drawing.Point(6, 169);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(187, 15);
             this.label6.TabIndex = 23;
@@ -280,7 +290,7 @@
             // 
             // Hold
             // 
-            this.Hold.Location = new System.Drawing.Point(271, 345);
+            this.Hold.Location = new System.Drawing.Point(265, 167);
             this.Hold.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -298,7 +308,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(12, 405);
+            this.label7.Location = new System.Drawing.Point(6, 227);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(123, 15);
             this.label7.TabIndex = 25;
@@ -306,7 +316,7 @@
             // 
             // Submenu
             // 
-            this.Submenu.Location = new System.Drawing.Point(271, 403);
+            this.Submenu.Location = new System.Drawing.Point(265, 225);
             this.Submenu.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -324,7 +334,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(12, 434);
+            this.label8.Location = new System.Drawing.Point(6, 256);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(138, 15);
             this.label8.TabIndex = 27;
@@ -332,7 +342,7 @@
             // 
             // DateChange
             // 
-            this.DateChange.Location = new System.Drawing.Point(271, 432);
+            this.DateChange.Location = new System.Drawing.Point(265, 254);
             this.DateChange.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -350,7 +360,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(12, 492);
+            this.label9.Location = new System.Drawing.Point(6, 314);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(160, 15);
             this.label9.TabIndex = 29;
@@ -358,7 +368,7 @@
             // 
             // ReturnHome
             // 
-            this.ReturnHome.Location = new System.Drawing.Point(271, 490);
+            this.ReturnHome.Location = new System.Drawing.Point(265, 312);
             this.ReturnHome.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -376,7 +386,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(12, 521);
+            this.label10.Location = new System.Drawing.Point(6, 343);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(119, 15);
             this.label10.TabIndex = 31;
@@ -384,7 +394,7 @@
             // 
             // ReturnGame
             // 
-            this.ReturnGame.Location = new System.Drawing.Point(271, 519);
+            this.ReturnGame.Location = new System.Drawing.Point(265, 341);
             this.ReturnGame.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -402,7 +412,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(12, 463);
+            this.label11.Location = new System.Drawing.Point(6, 285);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(179, 15);
             this.label11.TabIndex = 33;
@@ -410,7 +420,7 @@
             // 
             // DaysToSkip
             // 
-            this.DaysToSkip.Location = new System.Drawing.Point(271, 461);
+            this.DaysToSkip.Location = new System.Drawing.Point(265, 283);
             this.DaysToSkip.Maximum = new decimal(new int[] {
             99,
             0,
@@ -423,16 +433,16 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(12, 202);
+            this.label12.Location = new System.Drawing.Point(28, 24);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(251, 15);
+            this.label12.Size = new System.Drawing.Size(248, 15);
             this.label12.TabIndex = 34;
-            this.label12.Text = "Use touch screen inputs (faster, experimental):";
+            this.label12.Text = "Use touch screen inputs (faster, experimental)";
             // 
             // UseTouch
             // 
             this.UseTouch.AutoSize = true;
-            this.UseTouch.Location = new System.Drawing.Point(297, 203);
+            this.UseTouch.Location = new System.Drawing.Point(8, 25);
             this.UseTouch.Name = "UseTouch";
             this.UseTouch.Size = new System.Drawing.Size(15, 14);
             this.UseTouch.TabIndex = 36;
@@ -440,15 +450,15 @@
             // 
             // DiscordWebhook
             // 
-            this.DiscordWebhook.Location = new System.Drawing.Point(12, 153);
+            this.DiscordWebhook.Location = new System.Drawing.Point(6, 147);
             this.DiscordWebhook.Name = "DiscordWebhook";
-            this.DiscordWebhook.Size = new System.Drawing.Size(327, 23);
+            this.DiscordWebhook.Size = new System.Drawing.Size(452, 23);
             this.DiscordWebhook.TabIndex = 37;
             // 
             // EnableDiscordNotifications
             // 
             this.EnableDiscordNotifications.AutoSize = true;
-            this.EnableDiscordNotifications.Location = new System.Drawing.Point(12, 130);
+            this.EnableDiscordNotifications.Location = new System.Drawing.Point(6, 124);
             this.EnableDiscordNotifications.Name = "EnableDiscordNotifications";
             this.EnableDiscordNotifications.Size = new System.Drawing.Size(303, 19);
             this.EnableDiscordNotifications.TabIndex = 38;
@@ -460,7 +470,7 @@
             // 
             this.label13.AutoSize = true;
             this.label13.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label13.Location = new System.Drawing.Point(12, 545);
+            this.label13.Location = new System.Drawing.Point(6, 3);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(84, 15);
             this.label13.TabIndex = 39;
@@ -469,53 +479,96 @@
             // ExperimentalView
             // 
             this.ExperimentalView.AutoSize = true;
-            this.ExperimentalView.Location = new System.Drawing.Point(12, 563);
+            this.ExperimentalView.Location = new System.Drawing.Point(6, 21);
             this.ExperimentalView.Name = "ExperimentalView";
             this.ExperimentalView.Size = new System.Drawing.Size(241, 19);
             this.ExperimentalView.TabIndex = 40;
             this.ExperimentalView.Text = "Experimental Raid View  (requires restart)";
             this.ExperimentalView.UseVisualStyleBackColor = true;
             // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage3);
+            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl1.Location = new System.Drawing.Point(0, 0);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(472, 402);
+            this.tabControl1.TabIndex = 41;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.LabelMatchFound);
+            this.tabPage1.Controls.Add(this.FocusWindow);
+            this.tabPage1.Controls.Add(this.EnableAlert);
+            this.tabPage1.Controls.Add(this.EnableDiscordNotifications);
+            this.tabPage1.Controls.Add(this.PlayTone);
+            this.tabPage1.Controls.Add(this.DiscordWebhook);
+            this.tabPage1.Controls.Add(this.AlertMessage);
+            this.tabPage1.Location = new System.Drawing.Point(4, 24);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(464, 374);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "Match";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Controls.Add(this.label2);
+            this.tabPage2.Controls.Add(this.label1);
+            this.tabPage2.Controls.Add(this.BaseDelay);
+            this.tabPage2.Controls.Add(this.UseTouch);
+            this.tabPage2.Controls.Add(this.SystemDDownPresses);
+            this.tabPage2.Controls.Add(this.label12);
+            this.tabPage2.Controls.Add(this.label3);
+            this.tabPage2.Controls.Add(this.label11);
+            this.tabPage2.Controls.Add(this.NavigateToSettings);
+            this.tabPage2.Controls.Add(this.DaysToSkip);
+            this.tabPage2.Controls.Add(this.OpenSettings);
+            this.tabPage2.Controls.Add(this.label10);
+            this.tabPage2.Controls.Add(this.OpenHome);
+            this.tabPage2.Controls.Add(this.ReturnGame);
+            this.tabPage2.Controls.Add(this.LabelDelayOpenHOME);
+            this.tabPage2.Controls.Add(this.label9);
+            this.tabPage2.Controls.Add(this.label4);
+            this.tabPage2.Controls.Add(this.ReturnHome);
+            this.tabPage2.Controls.Add(this.label5);
+            this.tabPage2.Controls.Add(this.label8);
+            this.tabPage2.Controls.Add(this.Hold);
+            this.tabPage2.Controls.Add(this.DateChange);
+            this.tabPage2.Controls.Add(this.label6);
+            this.tabPage2.Controls.Add(this.label7);
+            this.tabPage2.Controls.Add(this.Submenu);
+            this.tabPage2.Location = new System.Drawing.Point(4, 24);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(464, 374);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "Advance Date";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.label13);
+            this.tabPage3.Controls.Add(this.ExperimentalView);
+            this.tabPage3.Location = new System.Drawing.Point(4, 24);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(464, 374);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "Experimental";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
             // ConfigWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(351, 629);
-            this.Controls.Add(this.ExperimentalView);
-            this.Controls.Add(this.label13);
-            this.Controls.Add(this.EnableDiscordNotifications);
-            this.Controls.Add(this.DiscordWebhook);
-            this.Controls.Add(this.UseTouch);
-            this.Controls.Add(this.label12);
-            this.Controls.Add(this.label11);
-            this.Controls.Add(this.DaysToSkip);
-            this.Controls.Add(this.label10);
-            this.Controls.Add(this.ReturnGame);
-            this.Controls.Add(this.label9);
-            this.Controls.Add(this.ReturnHome);
-            this.Controls.Add(this.label8);
-            this.Controls.Add(this.DateChange);
-            this.Controls.Add(this.label7);
-            this.Controls.Add(this.Submenu);
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.Hold);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.LabelDelayOpenHOME);
-            this.Controls.Add(this.OpenHome);
-            this.Controls.Add(this.OpenSettings);
-            this.Controls.Add(this.NavigateToSettings);
+            this.ClientSize = new System.Drawing.Size(472, 434);
+            this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.Save);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.SystemDDownPresses);
-            this.Controls.Add(this.BaseDelay);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.AlertMessage);
-            this.Controls.Add(this.LabelMatchFound);
-            this.Controls.Add(this.PlayTone);
-            this.Controls.Add(this.EnableAlert);
-            this.Controls.Add(this.FocusWindow);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.Name = "ConfigWindow";
@@ -532,8 +585,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.ReturnHome)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ReturnGame)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DaysToSkip)).EndInit();
+            this.tabControl1.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
+            this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
+            this.tabPage3.ResumeLayout(false);
+            this.tabPage3.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -574,5 +633,9 @@
         private CheckBox EnableDiscordNotifications;
         private Label label13;
         private CheckBox ExperimentalView;
+        private TabControl tabControl1;
+        private TabPage tabPage1;
+        private TabPage tabPage2;
+        private TabPage tabPage3;
     }
 }
