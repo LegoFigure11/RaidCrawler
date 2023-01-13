@@ -16,7 +16,7 @@ namespace RaidCrawler.Subforms
             Species.DataSource = Enum.GetValues(typeof(Species)).Cast<Species>().Where(z => z != PKHeX.Core.Species.MAX_COUNT).ToArray();
             Nature.DataSource = Enum.GetValues(typeof(Nature));
             TeraType.DataSource = Enum.GetValues(typeof(MoveType)).Cast<MoveType>().Where(z => z != MoveType.Any).ToArray();
-            ActiveFilters.DisplayMember = "Name";
+            
             Stars.SelectedIndex = 0;
             StarsComp.SelectedIndex = 0;
             HPComp.SelectedIndex = 0;
@@ -25,17 +25,26 @@ namespace RaidCrawler.Subforms
             SpaComp.SelectedIndex = 0;
             SpdComp.SelectedIndex = 0;
             SpeComp.SelectedIndex = 0;
-            foreach (var filter in filters)
-                ActiveFilters.Items.Add(filter);
-            for (int i = 0; i < filters.Count; i++)
-                ActiveFilters.SetItemChecked(i, filters[i].Enabled);
+
+            ResetActiveFilters();
             if (ActiveFilters.Items.Count > 0)
                 ActiveFilters.SelectedIndex = 0;
             if (ActiveFilters.SelectedIndex == -1)
                 Remove.Enabled = false;
+        }
 
-            bs.DataSource = filters;
-            ActiveFilters.DataSource = bs;
+        public void ResetActiveFilters()
+        {
+            if (bs.DataSource == null)
+            {
+                bs.DataSource = filters;
+                ActiveFilters.DataSource = bs;
+                ActiveFilters.DisplayMember = "Name";
+            }
+            else 
+                bs.ResetBindings(false);
+            for (int i = 0; i < filters.Count; i++)
+                ActiveFilters.SetItemChecked(i, filters[i].Enabled);
         }
 
         public void SelectFilter(RaidFilter filter)
@@ -158,8 +167,7 @@ namespace RaidCrawler.Subforms
                     }
                 }
                 filters.Add(filter);
-                bs.ResetBindings(false);
-                ActiveFilters.SetItemChecked(ActiveFilters.Items.Count - 1, filter.Enabled);
+                ResetActiveFilters();
                 ActiveFilters.SelectedIndex = ActiveFilters.Items.Count - 1;
             }
             else
@@ -264,6 +272,11 @@ namespace RaidCrawler.Subforms
             if (ActiveFilters.SelectedIndex < 0)
                 return;
             SelectFilter(filters[ActiveFilters.SelectedIndex]);
+        }
+
+        private void ActiveFilters_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            filters[e.Index].Enabled = e.NewValue == CheckState.Checked;
         }
 
         private void FilterName_TextChanged(object sender, EventArgs e)

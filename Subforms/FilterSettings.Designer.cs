@@ -540,6 +540,7 @@
             this.ActiveFilters.TabIndex = 20;
             this.ActiveFilters.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.ActiveFilters_DrawItem);
             this.ActiveFilters.SelectedIndexChanged += new System.EventHandler(this.ActiveFilters_SelectedIndexChanged);
+            this.ActiveFilters.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.ActiveFilters_ItemCheck);
             // 
             // FilterName
             // 
