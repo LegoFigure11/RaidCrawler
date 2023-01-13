@@ -302,6 +302,18 @@ namespace RaidCrawler.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string CfgDiscordMessageContent {
+            get {
+                return ((string)(this["CfgDiscordMessageContent"]));
+            }
+            set {
+                this["CfgDiscordMessageContent"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool CfgExperimentalView {
             get {
