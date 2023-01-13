@@ -82,11 +82,11 @@ namespace RaidCrawler.Structures
             };
         }
 
-        public bool IsShinySatisfied(Raid raid)
+        public bool IsShinySatisfied(ITeraRaid? encounter, Raid raid)
         {
             if (Shiny == false)
                 return true;
-            return raid.IsShiny == true;
+            return Raid.CheckIsShiny(raid, encounter) == true;
         }
 
         public bool IsTeraTypeSatisfied(Raid raid)
@@ -188,7 +188,7 @@ namespace RaidCrawler.Structures
 
         public bool FilterSatisfied(ITeraRaid? encounter, Raid raid, int SandwichBoost)
         {
-            return Enabled && IsIVsSatisfied(encounter, raid) && IsShinySatisfied(raid) && IsSpeciesSatisfied(encounter) && IsFormSatisfied(encounter)
+            return Enabled && IsIVsSatisfied(encounter, raid) && IsShinySatisfied(encounter, raid) && IsSpeciesSatisfied(encounter) && IsFormSatisfied(encounter)
                 && IsNatureSatisfied(encounter, raid) && IsStarsSatisfied(encounter) && IsTeraTypeSatisfied(raid)
                 && IsRewardsSatisfied(encounter, raid, SandwichBoost) && IsGenderSatisfied(encounter, raid) && IsBatchFilterSatisfied(encounter, raid);
         }
