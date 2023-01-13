@@ -1,7 +1,5 @@
 ﻿using FlatSharp;
-using System.Buffers.Binary;
 using System.Diagnostics;
-using System.IO;
 
 namespace RaidCrawler.Structures
 {
@@ -66,7 +64,7 @@ namespace RaidCrawler.Structures
             var pickle = ms.ToArray();
             var extra_moves = ms2.ToArray();
             var rewards = ms3.ToArray();
-            return new[] {pickle, extra_moves, rewards};
+            return new[] { pickle, extra_moves, rewards };
         }
 
         public static byte[][] DumpDistributionRaids(byte[] encounters)
@@ -118,7 +116,7 @@ namespace RaidCrawler.Structures
                 var prios = FlatBufferSerializer.Default.Parse<DeliveryRaidPriorityArray>(flatbuffer);
                 return (prios.Table[0].DeliveryGroupID, prios.Table[0].VersionNo);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Debug.WriteLine(ex.ToString());
                 return (new DeliveryGroupID(), 0);

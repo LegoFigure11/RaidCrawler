@@ -299,5 +299,17 @@ namespace RaidCrawler.Properties {
                 this["CfgDiscordWebhook"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool CfgExperimentalView {
+            get {
+                return ((bool)(this["CfgExperimentalView"]));
+            }
+            set {
+                this["CfgExperimentalView"] = value;
+            }
+        }
     }
 }
