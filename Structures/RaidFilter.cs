@@ -5,6 +5,7 @@ namespace RaidCrawler.Structures
     {
         public string? Name { get; set; }
         public int? Species { get; set; }
+        public int? Form { get; set; }
         public int? Stars { get; set; }
         public int StarsComp { get; set; }
         public bool Shiny { get; set; }
@@ -22,7 +23,7 @@ namespace RaidCrawler.Structures
 
         public bool IsFilterSet()
         {
-            if (Species == null && Stars == null && Shiny == false && Nature == null && TeraType == null && Gender == null && IVBin == 0 && (RewardItems == null || RewardsCount == 0) && BatchFilters == null)
+            if (Species == null && Form == null && Stars == null && Shiny == false && Nature == null && TeraType == null && Gender == null && IVBin == 0 && (RewardItems == null || RewardsCount == 0) && BatchFilters == null)
                 return false;
             return true;
         }
@@ -34,6 +35,15 @@ namespace RaidCrawler.Structures
             if (enc == null)
                 return false;
             return enc.Species == (int)Species;
+        }
+
+        public bool IsFormSatisfied(ITeraRaid? enc)
+        {
+            if (Form == null)
+                return true;
+            if (enc == null)
+                return false;
+            return enc.Form == (int)Form;
         }
 
         public bool IsStarsSatisfied(ITeraRaid? enc)
@@ -178,7 +188,7 @@ namespace RaidCrawler.Structures
 
         public bool FilterSatisfied(ITeraRaid? encounter, Raid raid, int SandwichBoost)
         {
-            return Enabled && IsIVsSatisfied(encounter, raid) && IsShinySatisfied(raid) && IsSpeciesSatisfied(encounter)
+            return Enabled && IsIVsSatisfied(encounter, raid) && IsShinySatisfied(raid) && IsSpeciesSatisfied(encounter) && IsFormSatisfied(encounter)
                 && IsNatureSatisfied(encounter, raid) && IsStarsSatisfied(encounter) && IsTeraTypeSatisfied(raid)
                 && IsRewardsSatisfied(encounter, raid, SandwichBoost) && IsGenderSatisfied(encounter, raid) && IsBatchFilterSatisfied(encounter, raid);
         }
