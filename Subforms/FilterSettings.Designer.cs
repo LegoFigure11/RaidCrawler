@@ -59,11 +59,10 @@
             this.HP = new System.Windows.Forms.CheckBox();
             this.TeraCheck = new System.Windows.Forms.CheckBox();
             this.TeraType = new System.Windows.Forms.ComboBox();
-            this.ActiveFilters = new System.Windows.Forms.ListBox();
+            this.ActiveFilters = new System.Windows.Forms.CheckedListBox();
             this.FilterName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.Remove = new System.Windows.Forms.Button();
-            this.DisableFilter = new System.Windows.Forms.CheckBox();
             this.StarsComp = new System.Windows.Forms.ComboBox();
             this.RewardsComp = new System.Windows.Forms.ComboBox();
             this.CheckRewards = new System.Windows.Forms.CheckBox();
@@ -570,16 +569,6 @@
             this.Remove.UseVisualStyleBackColor = true;
             this.Remove.Click += new System.EventHandler(this.Remove_Click);
             // 
-            // DisableFilter
-            // 
-            this.DisableFilter.AutoSize = true;
-            this.DisableFilter.Location = new System.Drawing.Point(135, 285);
-            this.DisableFilter.Name = "DisableFilter";
-            this.DisableFilter.Size = new System.Drawing.Size(98, 19);
-            this.DisableFilter.TabIndex = 24;
-            this.DisableFilter.Text = "Disable Filter?";
-            this.DisableFilter.UseVisualStyleBackColor = true;
-            // 
             // StarsComp
             // 
             this.StarsComp.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -723,7 +712,6 @@
             this.Controls.Add(this.RewardsComp);
             this.Controls.Add(this.CheckRewards);
             this.Controls.Add(this.StarsComp);
-            this.Controls.Add(this.DisableFilter);
             this.Controls.Add(this.Remove);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.FilterName);
@@ -790,11 +778,10 @@
         private NumericUpDown IVHP;
         private CheckBox TeraCheck;
         private ComboBox TeraType;
-        private ListBox ActiveFilters;
+        private CheckedListBox ActiveFilters;
         private TextBox FilterName;
         private Label label1;
         private Button Remove;
-        private CheckBox DisableFilter;
         private ComboBox HPComp;
         private ComboBox SpeComp;
         private ComboBox SpaComp;

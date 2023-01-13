@@ -27,6 +27,8 @@ namespace RaidCrawler.Subforms
             SpeComp.SelectedIndex = 0;
             foreach (var filter in filters)
                 ActiveFilters.Items.Add(filter);
+            for (int i = 0; i < filters.Count; i++)
+                ActiveFilters.SetItemChecked(i, filters[i].Enabled);
             if (ActiveFilters.Items.Count > 0)
                 ActiveFilters.SelectedIndex = 0;
             if (ActiveFilters.SelectedIndex == -1)
@@ -59,7 +61,6 @@ namespace RaidCrawler.Subforms
             RewardsComp.SelectedIndex = filter.RewardsComp;
             RewardsCount.Value = filter.RewardsCount;
             BatchFilters.Text = filter.BatchFilters != null ? string.Join(Environment.NewLine, filter.BatchFilters) : string.Empty;
-            DisableFilter.Checked = !filter.Enabled;
 
             var ivbin = filter.IVBin;
             HP.Checked = (ivbin & 1) == 1;
@@ -143,7 +144,7 @@ namespace RaidCrawler.Subforms
             filter.RewardsCount = (int)RewardsCount.Value;
             filter.RewardsComp = RewardsComp.SelectedIndex;
             filter.BatchFilters = BatchFilters.Text.Trim() == string.Empty ? null : BatchFilters.Text.Split(Environment.NewLine);
-            filter.Enabled = !DisableFilter.Checked;
+            filter.Enabled = true;
 
             if (filter.IsFilterSet())
             {
@@ -156,8 +157,9 @@ namespace RaidCrawler.Subforms
                         break;
                     }
                 }
-                filters.Add(filter);
                 bs.ResetBindings(false);
+                ActiveFilters.SetItemChecked(ActiveFilters.Items.Count - 1, filter.Enabled);
+                filters.Add(filter);
                 ActiveFilters.SelectedIndex = ActiveFilters.Items.Count - 1;
             }
             else
@@ -237,6 +239,9 @@ namespace RaidCrawler.Subforms
 
         private void Save_Click(object sender, EventArgs e)
         {
+            HashSet<int> indexset = new HashSet<int>(ActiveFilters.CheckedIndices.Cast<int>());
+            for (int i = 0; i < filters.Count; i++)
+                filters[i].Enabled = indexset.Contains(i);
             string output = JsonConvert.SerializeObject(filters);
             using StreamWriter sw = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "filters.json"));
             sw.Write(output);
