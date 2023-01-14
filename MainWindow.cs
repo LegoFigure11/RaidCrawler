@@ -198,7 +198,7 @@ namespace RaidCrawler
         private static async Task<int> GetStoryProgress(CancellationToken token)
         {
             int progress = 0;
-            for (int i = DifficultyFlags.Length - 1; i > 0 && progress == 0; i--)
+            for (int i = DifficultyFlags.Length - 1; i >= 0 && progress == 0; i--)
             {
                 // See https://github.com/Lincoln-LM/sv-live-map/pull/43
                 var block = await ReadSaveBlock(DifficultyFlags[i].Item1, 1, DifficultyFlags[i].Item2, token);
