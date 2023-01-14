@@ -7,6 +7,7 @@ using RaidCrawler.Structures;
 using RaidCrawler.Subforms;
 using SysBot.Base;
 using System.Data;
+using System.Diagnostics;
 using System.Net.Sockets;
 using System.Text;
 using static RaidCrawler.Structures.Offsets;
@@ -42,6 +43,7 @@ namespace RaidCrawler
         private Color DefaultColor;
         private FormWindowState _WindowState;
 
+        private Stopwatch stopwatch= new Stopwatch();
         private TeraRaidView teraRaidView = new TeraRaidView();
 
         public MainWindow()
@@ -117,6 +119,7 @@ namespace RaidCrawler
         {
             Disconnect();
             ConnectionStatusText.Text = "Disconnected.";
+            stopwatch.Stop();
             ButtonConnect.Enabled = true;
             ButtonDisconnect.Enabled = false;
             ButtonReadRaids.Enabled = false;
@@ -769,6 +772,9 @@ namespace RaidCrawler
         {
             if (SwitchConnection.Connected)
             {
+                SearchTimer.Start();
+                stopwatch.Reset();
+                stopwatch.Start();
                 ButtonReadRaids.Enabled = false;
                 ButtonAdvanceDate.Enabled = false;
                 _WindowState = WindowState;
@@ -781,6 +787,10 @@ namespace RaidCrawler
                 } while (CheckAdvanceDate(out prompt));
                 if (prompt)
                 {
+                    stopwatch.Stop();
+                    var timeSpan = stopwatch.Elapsed;
+                    string time = String.Format("{0:00}:{1:00}:{2:00}",
+                    timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
                     if (Settings.Default.CfgPlaySound) System.Media.SystemSounds.Asterisk.Play();
                     if (Settings.Default.CfgFocusWindow)
                     {
@@ -795,7 +805,7 @@ namespace RaidCrawler
                                 continue;
                             if (filter.FilterSatisfied(Encounters[i], Raids[i], RaidBoost.SelectedIndex))
                             {
-                                NotificationHandler.SendNotifications(Encounters[i], Raids[i], filter);
+                                NotificationHandler.SendNotifications(Encounters[i], Raids[i], filter, time);
                                 ComboIndex.SelectedIndex = i;
                             }
                         }
@@ -1087,6 +1097,14 @@ namespace RaidCrawler
             {
                 teraRaidView.debug.Text = ConnectionStatusText.Text;
             }
+        }
+
+        private void SearchTimer_Tick(object sender, EventArgs e)
+        {
+            var timeSpan = stopwatch.Elapsed;
+            string time = String.Format("{0:00}:{1:00}:{2:00}",
+            timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
+            SearchTime.Text = "Search Time: " + time;
         }
     }
 }

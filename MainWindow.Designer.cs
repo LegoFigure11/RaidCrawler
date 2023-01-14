@@ -89,6 +89,8 @@
             this.RaidBoost = new System.Windows.Forms.ComboBox();
             this.ComboIndex = new System.Windows.Forms.ComboBox();
             this.SendScreenshot = new System.Windows.Forms.Button();
+            this.SearchTimer = new System.Windows.Forms.Timer(this.components);
+            this.SearchTime = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.Sprite)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GemIcon)).BeginInit();
             this.SuspendLayout();
@@ -698,12 +700,27 @@
             this.SendScreenshot.Text = "Screenshot";
             this.SendScreenshot.UseVisualStyleBackColor = true;
             this.SendScreenshot.Click += new System.EventHandler(this.SendScreenshot_Click);
+            //
+            // SearchTimer
+            // 
+            this.SearchTimer.Tick += new System.EventHandler(this.SearchTimer_Tick);
+            // 
+            // SearchTime
+            // 
+            this.SearchTime.AutoSize = true;
+            this.SearchTime.Location = new System.Drawing.Point(220, 24);
+            this.SearchTime.Name = "SearchTime";
+            this.SearchTime.Size = new System.Drawing.Size(82, 15);
+            this.SearchTime.TabIndex = 122;
+            this.SearchTime.Text = "Search Time: -";
+            // 
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(640, 314);
+            this.Controls.Add(this.SearchTime);
             this.Controls.Add(this.SendScreenshot);
             this.Controls.Add(this.ComboIndex);
             this.Controls.Add(this.CheckEnableFilters);
@@ -836,5 +853,7 @@
         private CheckBox CheckEnableFilters;
         private ComboBox ComboIndex;
         private Button SendScreenshot;
+        private System.Windows.Forms.Timer SearchTimer;
+        private Label SearchTime;
     }
 }
