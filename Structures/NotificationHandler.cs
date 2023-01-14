@@ -21,13 +21,13 @@ namespace RaidCrawler.Structures
 
         public static string[]? DiscordWebhooks = Properties.Settings.Default.CfgEnableNotification ? Properties.Settings.Default.CfgDiscordWebhook.Split(',') : null;
 
-        public static void SendNotifications(ITeraRaid? encounter, Raid raid, RaidFilter filter)
+        public static void SendNotifications(ITeraRaid? encounter, Raid raid, RaidFilter filter, String time)
         {
             if (encounter == null)
                 return;
             if (DiscordWebhooks == null)
                 return;
-            var webhook = GenerateWebhook(encounter, raid, filter);
+            var webhook = GenerateWebhook(encounter, raid, filter, time);
             var content = new StringContent(JsonConvert.SerializeObject(webhook), Encoding.UTF8, "application/json");
             foreach (var url in DiscordWebhooks)
                 Client.PostAsync(url.Trim(), content).Wait();
@@ -52,7 +52,7 @@ namespace RaidCrawler.Structures
                 Client.PostAsync(url.Trim(), content).Wait();
         }
 
-        public static object GenerateWebhook(ITeraRaid encounter, Raid raid, RaidFilter filter)
+        public static object GenerateWebhook(ITeraRaid encounter, Raid raid, RaidFilter filter, String time)
         {
             var param = Raid.GetParam(encounter);
             var blank = new PK9
@@ -100,6 +100,7 @@ namespace RaidCrawler.Structures
                             new { name = "IVs", value = ivs, inline = true, },
                             new { name = "Moves", value = movestr, inline = true, },
                             new { name = "Extra Moves", value = extramoves == string.Empty ? "None" : extramoves, inline = true, },
+                            new { name = "Search Time", value = time, inline = true, },
                         },
                     }
                 }
