@@ -739,10 +739,17 @@ namespace RaidCrawler
 
             // Navigate to "Date and Time"
             await Click(DRIGHT, 0_200 + BaseDelay, token).ConfigureAwait(false);
-            // I tried using holds here but could not get the timing consistent
-            // Even if this is slightly slower, it is at least consistent
-            // And not missing any cycles means it's faster overall
-            for (int i = 0; i < Settings.Default.CfgSystemDDownPresses; i++) await Click(DDOWN, 0_050 + BaseDelay, token).ConfigureAwait(false);
+            // Hold down to overshoot Date/Time by one. DUP to recover.
+            if (Settings.Default.CfgUseOvershoot)
+            {
+                await PressAndHold(DDOWN, (int)Settings.Default.CfgSystemOvershoot, 0, token).ConfigureAwait(false);
+                await Click(DUP, 0_500, token).ConfigureAwait(false);
+            }
+            else
+                // I tried using holds here but could not get the timing consistent
+                // Even if this is slightly slower, it is at least consistent
+                // And not missing any cycles means it's faster overall
+                for (int i = 0; i < Settings.Default.CfgSystemDDownPresses; i++) await Click(DDOWN, 0_050 + BaseDelay, token).ConfigureAwait(false);
             await Click(A, (int)Settings.Default.CfgSubmenu + BaseDelay, token).ConfigureAwait(false);
 
             // Navigate to Change Date/Time

@@ -20,12 +20,14 @@ namespace RaidCrawler.Subforms
             DiscordMessageContent.Enabled = EnableDiscordNotifications.Checked;
 
             UseTouch.Checked = Settings.Default.CfgUseTouch;
+            UseOvershoot.Checked = Settings.Default.CfgUseOvershoot;
             BaseDelay.Value = Settings.Default.CfgBaseDelay;
             OpenHome.Value = Settings.Default.CfgOpenHome;
             NavigateToSettings.Value = Settings.Default.CfgNavigateToSettings;
             OpenSettings.Value = Settings.Default.CfgOpenSettings;
             Hold.Value = Settings.Default.CfgHold;
             SystemDDownPresses.Value = Settings.Default.CfgSystemDDownPresses;
+            SystemOvershoot.Value = Settings.Default.CfgSystemOvershoot;
             Submenu.Value = Settings.Default.CfgSubmenu;
             DateChange.Value = Settings.Default.CfgDateChange;
             DaysToSkip.Value = Settings.Default.CfgDaysToSkip;
@@ -57,12 +59,14 @@ namespace RaidCrawler.Subforms
             Settings.Default.CfgDiscordMessageContent = DiscordMessageContent.Text;
 
             Settings.Default.CfgUseTouch = UseTouch.Checked;
+            Settings.Default.CfgUseOvershoot = UseOvershoot.Checked;
             Settings.Default.CfgBaseDelay = BaseDelay.Value;
             Settings.Default.CfgOpenHome = OpenHome.Value;
             Settings.Default.CfgNavigateToSettings = NavigateToSettings.Value;
             Settings.Default.CfgOpenSettings = OpenSettings.Value;
             Settings.Default.CfgHold = Hold.Value;
             Settings.Default.CfgSystemDDownPresses = SystemDDownPresses.Value;
+            Settings.Default.CfgSystemOvershoot = (int)SystemOvershoot.Value;
             Settings.Default.CfgSubmenu = Submenu.Value;
             Settings.Default.CfgDateChange = DateChange.Value;
             Settings.Default.CfgDaysToSkip = DaysToSkip.Value;

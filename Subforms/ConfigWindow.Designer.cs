@@ -65,7 +65,13 @@
             this.ExperimentalView = new System.Windows.Forms.CheckBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.DiscordMessageContent = new System.Windows.Forms.TextBox();
+            this.label14 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.label16 = new System.Windows.Forms.Label();
+            this.SystemOvershoot = new System.Windows.Forms.NumericUpDown();
+            this.UseOvershoot = new System.Windows.Forms.CheckBox();
+            this.label15 = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.label14 = new System.Windows.Forms.Label();
             this.DiscordMessageContent = new System.Windows.Forms.TextBox();
@@ -83,6 +89,7 @@
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.SystemOvershoot)).BeginInit();
             this.tabPage3.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -147,7 +154,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 53);
+            this.label1.Location = new System.Drawing.Point(6, 70);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(196, 15);
             this.label1.TabIndex = 8;
@@ -155,7 +162,7 @@
             // 
             // BaseDelay
             // 
-            this.BaseDelay.Location = new System.Drawing.Point(265, 51);
+            this.BaseDelay.Location = new System.Drawing.Point(265, 68);
             this.BaseDelay.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -167,7 +174,7 @@
             // 
             // SystemDDownPresses
             // 
-            this.SystemDDownPresses.Location = new System.Drawing.Point(265, 196);
+            this.SystemDDownPresses.Location = new System.Drawing.Point(265, 213);
             this.SystemDDownPresses.Maximum = new decimal(new int[] {
             99,
             0,
@@ -185,7 +192,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 198);
+            this.label3.Location = new System.Drawing.Point(6, 215);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(228, 15);
             this.label3.TabIndex = 11;
@@ -195,7 +202,7 @@
             // 
             this.Save.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.Save.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.Save.Location = new System.Drawing.Point(0, 402);
+            this.Save.Location = new System.Drawing.Point(0, 444);
             this.Save.Name = "Save";
             this.Save.Size = new System.Drawing.Size(472, 32);
             this.Save.TabIndex = 12;
@@ -205,7 +212,7 @@
             // 
             // NavigateToSettings
             // 
-            this.NavigateToSettings.Location = new System.Drawing.Point(265, 109);
+            this.NavigateToSettings.Location = new System.Drawing.Point(265, 126);
             this.NavigateToSettings.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -222,7 +229,7 @@
             // 
             // OpenSettings
             // 
-            this.OpenSettings.Location = new System.Drawing.Point(265, 138);
+            this.OpenSettings.Location = new System.Drawing.Point(265, 155);
             this.OpenSettings.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -239,7 +246,7 @@
             // 
             // OpenHome
             // 
-            this.OpenHome.Location = new System.Drawing.Point(265, 80);
+            this.OpenHome.Location = new System.Drawing.Point(265, 97);
             this.OpenHome.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -257,7 +264,7 @@
             // LabelDelayOpenHOME
             // 
             this.LabelDelayOpenHOME.AutoSize = true;
-            this.LabelDelayOpenHOME.Location = new System.Drawing.Point(6, 82);
+            this.LabelDelayOpenHOME.Location = new System.Drawing.Point(6, 99);
             this.LabelDelayOpenHOME.Name = "LabelDelayOpenHOME";
             this.LabelDelayOpenHOME.Size = new System.Drawing.Size(140, 15);
             this.LabelDelayOpenHOME.TabIndex = 19;
@@ -266,7 +273,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 111);
+            this.label4.Location = new System.Drawing.Point(6, 128);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(146, 15);
             this.label4.TabIndex = 20;
@@ -275,7 +282,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 140);
+            this.label5.Location = new System.Drawing.Point(6, 157);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(114, 15);
             this.label5.TabIndex = 21;
@@ -284,7 +291,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(6, 169);
+            this.label6.Location = new System.Drawing.Point(6, 186);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(187, 15);
             this.label6.TabIndex = 23;
@@ -292,7 +299,7 @@
             // 
             // Hold
             // 
-            this.Hold.Location = new System.Drawing.Point(265, 167);
+            this.Hold.Location = new System.Drawing.Point(265, 184);
             this.Hold.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -310,7 +317,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(6, 227);
+            this.label7.Location = new System.Drawing.Point(6, 244);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(123, 15);
             this.label7.TabIndex = 25;
@@ -318,7 +325,7 @@
             // 
             // Submenu
             // 
-            this.Submenu.Location = new System.Drawing.Point(265, 225);
+            this.Submenu.Location = new System.Drawing.Point(265, 242);
             this.Submenu.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -336,7 +343,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(6, 256);
+            this.label8.Location = new System.Drawing.Point(6, 273);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(138, 15);
             this.label8.TabIndex = 27;
@@ -344,7 +351,7 @@
             // 
             // DateChange
             // 
-            this.DateChange.Location = new System.Drawing.Point(265, 254);
+            this.DateChange.Location = new System.Drawing.Point(265, 271);
             this.DateChange.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -362,7 +369,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(6, 314);
+            this.label9.Location = new System.Drawing.Point(6, 331);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(160, 15);
             this.label9.TabIndex = 29;
@@ -370,7 +377,7 @@
             // 
             // ReturnHome
             // 
-            this.ReturnHome.Location = new System.Drawing.Point(265, 312);
+            this.ReturnHome.Location = new System.Drawing.Point(265, 329);
             this.ReturnHome.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -388,7 +395,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(6, 343);
+            this.label10.Location = new System.Drawing.Point(6, 360);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(119, 15);
             this.label10.TabIndex = 31;
@@ -396,7 +403,7 @@
             // 
             // ReturnGame
             // 
-            this.ReturnGame.Location = new System.Drawing.Point(265, 341);
+            this.ReturnGame.Location = new System.Drawing.Point(265, 358);
             this.ReturnGame.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -414,7 +421,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(6, 285);
+            this.label11.Location = new System.Drawing.Point(6, 302);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(179, 15);
             this.label11.TabIndex = 33;
@@ -422,7 +429,7 @@
             // 
             // DaysToSkip
             // 
-            this.DaysToSkip.Location = new System.Drawing.Point(265, 283);
+            this.DaysToSkip.Location = new System.Drawing.Point(265, 300);
             this.DaysToSkip.Maximum = new decimal(new int[] {
             99,
             0,
@@ -497,7 +504,7 @@
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(472, 402);
+            this.tabControl1.Size = new System.Drawing.Size(472, 444);
             this.tabControl1.TabIndex = 41;
             // 
             // tabPage1
@@ -514,13 +521,33 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 24);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(464, 374);
+            this.tabPage1.Size = new System.Drawing.Size(464, 416);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Match";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // DiscordMessageContent
+            // 
+            this.DiscordMessageContent.Location = new System.Drawing.Point(6, 191);
+            this.DiscordMessageContent.Name = "DiscordMessageContent";
+            this.DiscordMessageContent.Size = new System.Drawing.Size(452, 23);
+            this.DiscordMessageContent.TabIndex = 40;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(6, 173);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(296, 15);
+            this.label14.TabIndex = 39;
+            this.label14.Text = "Choose the content for discord messages (allow pings)";
+            // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.label16);
+            this.tabPage2.Controls.Add(this.SystemOvershoot);
+            this.tabPage2.Controls.Add(this.UseOvershoot);
+            this.tabPage2.Controls.Add(this.label15);
             this.tabPage2.Controls.Add(this.label2);
             this.tabPage2.Controls.Add(this.label1);
             this.tabPage2.Controls.Add(this.BaseDelay);
@@ -549,10 +576,54 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 24);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(464, 374);
+            this.tabPage2.Size = new System.Drawing.Size(464, 416);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Advance Date";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(6, 391);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(233, 15);
+            this.label16.TabIndex = 40;
+            this.label16.Text = "Time to hold to overshoot \"Date and Time\"";
+            // 
+            // SystemOvershoot
+            // 
+            this.SystemOvershoot.Location = new System.Drawing.Point(265, 389);
+            this.SystemOvershoot.Maximum = new decimal(new int[] {
+            1200,
+            0,
+            0,
+            0});
+            this.SystemOvershoot.Name = "SystemOvershoot";
+            this.SystemOvershoot.Size = new System.Drawing.Size(68, 23);
+            this.SystemOvershoot.TabIndex = 39;
+            this.SystemOvershoot.Value = new decimal(new int[] {
+            950,
+            0,
+            0,
+            0});
+            // 
+            // UseOvershoot
+            // 
+            this.UseOvershoot.AutoSize = true;
+            this.UseOvershoot.Location = new System.Drawing.Point(8, 46);
+            this.UseOvershoot.Name = "UseOvershoot";
+            this.UseOvershoot.Size = new System.Drawing.Size(15, 14);
+            this.UseOvershoot.TabIndex = 38;
+            this.UseOvershoot.UseVisualStyleBackColor = true;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(28, 45);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(261, 15);
+            this.label15.TabIndex = 37;
+            this.label15.Text = "Use overshoot instead of DDOWN inputs (faster)";
             // 
             // tabPage3
             // 
@@ -561,7 +632,7 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 24);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(464, 374);
+            this.tabPage3.Size = new System.Drawing.Size(464, 416);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Experimental";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -586,7 +657,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(472, 434);
+            this.ClientSize = new System.Drawing.Size(472, 476);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.Save);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -610,6 +681,7 @@
             this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.SystemOvershoot)).EndInit();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
             this.ResumeLayout(false);
@@ -659,5 +731,9 @@
         private TabPage tabPage3;
         private TextBox DiscordMessageContent;
         private Label label14;
+        private Label label16;
+        private NumericUpDown SystemOvershoot;
+        private CheckBox UseOvershoot;
+        private Label label15;
     }
 }

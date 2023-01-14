@@ -323,5 +323,29 @@ namespace RaidCrawler.Properties {
                 this["CfgExperimentalView"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool CfgUseOvershoot {
+            get {
+                return ((bool)(this["CfgUseOvershoot"]));
+            }
+            set {
+                this["CfgUseOvershoot"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("950")]
+        public int CfgSystemOvershoot {
+            get {
+                return ((int)(this["CfgSystemOvershoot"]));
+            }
+            set {
+                this["CfgSystemOvershoot"] = value;
+            }
+        }
     }
 }

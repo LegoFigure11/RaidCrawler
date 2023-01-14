@@ -77,5 +77,11 @@
     <Setting Name="CfgExperimentalView" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="CfgUseOvershoot" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="CfgSystemOvershoot" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">950</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
