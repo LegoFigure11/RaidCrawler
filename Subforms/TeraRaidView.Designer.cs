@@ -86,6 +86,8 @@
             this.textSourHerba = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.textSpicyHerba = new System.Windows.Forms.TextBox();
+            this.labelSearchTime = new System.Windows.Forms.Label();
+            this.textSearchTime = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.Map)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBoxPokemon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TeraType)).BeginInit();
@@ -549,9 +551,10 @@
             // 
             // pictureBox1
             // 
+            this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
             this.pictureBox1.Location = new System.Drawing.Point(12, 501);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(936, 27);
+            this.pictureBox1.Size = new System.Drawing.Size(850, 27);
             this.pictureBox1.TabIndex = 126;
             this.pictureBox1.TabStop = false;
             // 
@@ -769,12 +772,40 @@
             this.textSpicyHerba.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.textSpicyHerba.TextChanged += new System.EventHandler(this.rewards_TextChanged);
             // 
+            // labelSearchTime
+            // 
+            this.labelSearchTime.AutoSize = true;
+            this.labelSearchTime.BackColor = System.Drawing.Color.Transparent;
+            this.labelSearchTime.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.labelSearchTime.ForeColor = System.Drawing.Color.LightSlateGray;
+            this.labelSearchTime.Location = new System.Drawing.Point(682, 502);
+            this.labelSearchTime.Name = "labelSearchTime";
+            this.labelSearchTime.Size = new System.Drawing.Size(189, 25);
+            this.labelSearchTime.TabIndex = 152;
+            this.labelSearchTime.Text = "Search Time Elapsed:";
+            this.labelSearchTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // textSearchTime
+            // 
+            this.textSearchTime.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(5)))), ((int)(((byte)(25)))));
+            this.textSearchTime.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textSearchTime.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.textSearchTime.ForeColor = System.Drawing.Color.LightSlateGray;
+            this.textSearchTime.Location = new System.Drawing.Point(868, 502);
+            this.textSearchTime.Name = "textSearchTime";
+            this.textSearchTime.PlaceholderText = "00";
+            this.textSearchTime.Size = new System.Drawing.Size(80, 25);
+            this.textSearchTime.TabIndex = 153;
+            this.textSearchTime.Text = "00:00:00";
+            this.textSearchTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
             // TeraRaidView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(5)))), ((int)(((byte)(25)))));
             this.ClientSize = new System.Drawing.Size(960, 540);
+            this.Controls.Add(this.textSearchTime);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.textSpicyHerba);
             this.Controls.Add(this.label5);
@@ -806,6 +837,7 @@
             this.Controls.Add(this.picBoxPokemon);
             this.Controls.Add(this.Area);
             this.Controls.Add(this.Map);
+            this.Controls.Add(this.labelSearchTime);
             this.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -893,5 +925,7 @@
         public TextBox textSourHerba;
         private Label label6;
         public TextBox textSpicyHerba;
+        public Label labelSearchTime;
+        public TextBox textSearchTime;
     }
 }
