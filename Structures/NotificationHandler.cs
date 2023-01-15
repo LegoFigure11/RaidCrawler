@@ -104,8 +104,8 @@ namespace RaidCrawler.Structures
                         },
                         fields = new List<object>
                         {
-                            new { name = "Difficultyㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ", value = difficulty, inline = true, },
-                            new { name = "Natureㅤㅤㅤㅤㅤ", value = nature, inline = true },
+                            new { name = "Difficultyㅤㅤㅤㅤㅤㅤ", value = difficulty, inline = true, },
+                            new { name = "Natureㅤㅤㅤ", value = nature, inline = true },
                             new { name = "Ability", value = ability, inline = true, },
 
                             new { name = "IVs", value = ivs, inline = true, },
