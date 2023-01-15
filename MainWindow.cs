@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using PKHeX.Core;
 using PKHeX.Drawing;
 using PKHeX.Drawing.PokeSprite;
@@ -6,6 +6,7 @@ using RaidCrawler.Properties;
 using RaidCrawler.Structures;
 using RaidCrawler.Subforms;
 using SysBot.Base;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Diagnostics;
 using System.Net.Sockets;
@@ -42,7 +43,6 @@ namespace RaidCrawler
 
         private Color DefaultColor;
         private FormWindowState _WindowState;
-
         private Stopwatch stopwatch = new Stopwatch();
         private TeraRaidView teraRaidView = new TeraRaidView();
 
@@ -54,7 +54,7 @@ namespace RaidCrawler
             build = $" (dev-{date:yyyyMMdd})";
 #endif
             var v = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version!;
-            Text = "RaidCrawler v" + v.Major + "." + v.Minor + "." + v.Build + build;
+            Text = "RaidCrawler v" + v.Major + "." + v.Minor + "." + v.Build + build + " " + Settings.Default.CfgInstanceName;
 
             var raid_data = new[]
             {
@@ -872,12 +872,12 @@ namespace RaidCrawler
                                 continue;
                             if (filter.FilterSatisfied(Encounters[i], Raids[i], RaidBoost.SelectedIndex))
                             {
-                                NotificationHandler.SendNotifications(Encounters[i], Raids[i], filter, time);
+                                NotificationHandler.SendNotifications(Encounters[i], Raids[i], filter, time, RewardsList[i]);
                                 ComboIndex.SelectedIndex = i;
                             }
                         }
                     }
-                    if (Settings.Default.CfgEnableAlertWindow) MessageBox.Show(Settings.Default.CfgAlertWindowMessage, "Result found!", MessageBoxButtons.OK);
+                    if (Settings.Default.CfgEnableAlertWindow) MessageBox.Show(Settings.Default.CfgAlertWindowMessage + "\n\nTime Spent: " + time, "Result found!", MessageBoxButtons.OK);
                 }
 
                 ButtonReadRaids.Enabled = true;

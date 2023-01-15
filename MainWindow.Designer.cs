@@ -715,6 +715,19 @@
             this.SearchTime.Text = "Search Time: -";
             // 
             // 
+            // SearchTimer
+            // 
+            this.SearchTimer.Tick += new System.EventHandler(this.SearchTimer_Tick);
+            // 
+            // SearchTime
+            // 
+            this.SearchTime.AutoSize = true;
+            this.SearchTime.Location = new System.Drawing.Point(220, 24);
+            this.SearchTime.Name = "SearchTime";
+            this.SearchTime.Size = new System.Drawing.Size(82, 15);
+            this.SearchTime.TabIndex = 122;
+            this.SearchTime.Text = "Search Time: -";
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);

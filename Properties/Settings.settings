@@ -83,5 +83,20 @@
     <Setting Name="CfgSystemOvershoot" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">950</Value>
     </Setting>
+    <Setting Name="CfgInstanceName" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="CfgIVstyle" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="CfgIVspacer" Type="System.String" Scope="User">
+      <Value Profile="(Default)">" "</Value>
+    </Setting>
+    <Setting Name="CfgIVverbose" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="CfgEnableEmoji" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
