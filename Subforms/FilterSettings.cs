@@ -264,6 +264,8 @@ namespace RaidCrawler.Subforms
             var idx = ActiveFilters.SelectedIndex;
             filters.RemoveAt(idx);
             bs.ResetBindings(false);
+            for (int i = 0; i < filters.Count; i++)
+                ActiveFilters.SetItemChecked(i, filters[i].Enabled);
         }
 
         private void ActiveFilters_SelectedIndexChanged(object sender, EventArgs e)
