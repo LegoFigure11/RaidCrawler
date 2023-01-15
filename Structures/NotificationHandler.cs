@@ -82,9 +82,9 @@ namespace RaidCrawler.Structures
             var ivs = IVsStringEmoji(ToSpeedLast(blank.IVs), Settings.Default.CfgIVstyle, Settings.Default.CfgIVspacer, Settings.Default.CfgIVverbose, emoji);
             var sprite_name = SpriteName.GetResourceStringSprite(blank.Species, blank.Form, blank.Gender, blank.FormArgument, blank.Generation, shiny);
             var moves = new ushort[4] { encounter.Move1, encounter.Move2, encounter.Move3, encounter.Move4 };
-            var movestr = string.Concat(moves.Where(z => z != 0).Select(z => $"{Raid.strings.Move[z]}⠀\n")).Trim();
-            var extramoves = string.Concat(encounter.ExtraMoves.Where(z => z != 0).Select(z => $"{Raid.strings.Move[z]}⠀\n")).Trim();
-            var area = $"{Areas.Area[raid.Area - 1]} [Den {raid.Den}]⠀";
+            var movestr = string.Concat(moves.Where(z => z != 0).Select(z => $"{Raid.strings.Move[z]}ㅤ\n")).Trim();
+            var extramoves = string.Concat(encounter.ExtraMoves.Where(z => z != 0).Select(z => $"{Raid.strings.Move[z]}ㅤ\n")).Trim();
+            var area = $"{Areas.Area[raid.Area - 1]} [Den {raid.Den}]ㅤ";
             var instance = " " + Settings.Default.CfgInstanceName;
             var rewards = GetRewards(RewardsList, emoji);
             var SuccessWebHook = new
@@ -105,8 +105,9 @@ namespace RaidCrawler.Structures
                         },
                         fields = new List<object>
                         {
-                            new { name = "Difficulty⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀", value = difficulty, inline = true, },
-                            new { name = "Nature⠀⠀⠀⠀⠀", value = nature, inline = true },
+
+                            new { name = "Difficultyㅤㅤㅤㅤㅤㅤ", value = difficulty, inline = true, },
+                            new { name = "Natureㅤㅤㅤ", value = nature, inline = true },
                             new { name = "Ability", value = ability, inline = true, },
 
                             new { name = "IVs", value = ivs, inline = true, },
