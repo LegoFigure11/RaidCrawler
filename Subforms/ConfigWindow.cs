@@ -8,6 +8,8 @@ namespace RaidCrawler.Subforms
         {
             InitializeComponent();
 
+            InstanceName.Text = Settings.Default.CfgInstanceName;
+
             PlayTone.Checked = Settings.Default.CfgPlaySound;
             FocusWindow.Checked = Settings.Default.CfgFocusWindow;
             EnableAlert.Checked = Settings.Default.CfgEnableAlertWindow;
@@ -34,6 +36,12 @@ namespace RaidCrawler.Subforms
             ReturnHome.Value = Settings.Default.CfgReturnHome;
             ReturnGame.Value = Settings.Default.CfgReturnGame;
 
+            IVstyle.SelectedIndex = Settings.Default.CfgIVstyle;
+            IVspacer.Text = Settings.Default.CfgIVspacer;
+            IVverbose.Checked = Settings.Default.CfgIVverbose;
+
+            EnableEmoji.Checked = Settings.Default.CfgEnableEmoji;
+
             ExperimentalView.Checked = Settings.Default.CfgExperimentalView;
         }
 
@@ -50,6 +58,8 @@ namespace RaidCrawler.Subforms
 
         private void Save_Click(object sender, EventArgs e)
         {
+            Settings.Default.CfgInstanceName = InstanceName.Text;
+
             Settings.Default.CfgPlaySound = PlayTone.Checked;
             Settings.Default.CfgFocusWindow = FocusWindow.Checked;
             Settings.Default.CfgEnableAlertWindow = EnableAlert.Checked;
@@ -72,6 +82,12 @@ namespace RaidCrawler.Subforms
             Settings.Default.CfgDaysToSkip = DaysToSkip.Value;
             Settings.Default.CfgReturnHome = ReturnHome.Value;
             Settings.Default.CfgReturnGame = ReturnGame.Value;
+
+            Settings.Default.CfgIVstyle = IVstyle.SelectedIndex;
+            Settings.Default.CfgIVspacer = IVspacer.Text;
+            Settings.Default.CfgIVverbose = IVverbose.Checked;
+
+            Settings.Default.CfgEnableEmoji = EnableEmoji.Checked;
 
             Settings.Default.CfgExperimentalView = ExperimentalView.Checked;
 

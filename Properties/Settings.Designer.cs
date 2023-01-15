@@ -347,5 +347,65 @@ namespace RaidCrawler.Properties {
                 this["CfgSystemOvershoot"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string CfgInstanceName {
+            get {
+                return ((string)(this["CfgInstanceName"]));
+            }
+            set {
+                this["CfgInstanceName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int CfgIVstyle {
+            get {
+                return ((int)(this["CfgIVstyle"]));
+            }
+            set {
+                this["CfgIVstyle"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("\" \"")]
+        public string CfgIVspacer {
+            get {
+                return ((string)(this["CfgIVspacer"]));
+            }
+            set {
+                this["CfgIVspacer"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool CfgIVverbose {
+            get {
+                return ((bool)(this["CfgIVverbose"]));
+            }
+            set {
+                this["CfgIVverbose"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool CfgEnableEmoji {
+            get {
+                return ((bool)(this["CfgEnableEmoji"]));
+            }
+            set {
+                this["CfgEnableEmoji"] = value;
+            }
+        }
     }
 }

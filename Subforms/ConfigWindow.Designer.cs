@@ -72,9 +72,17 @@
             this.SystemOvershoot = new System.Windows.Forms.NumericUpDown();
             this.UseOvershoot = new System.Windows.Forms.CheckBox();
             this.label15 = new System.Windows.Forms.Label();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.label20 = new System.Windows.Forms.Label();
+            this.label19 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
+            this.EnableEmoji = new System.Windows.Forms.CheckBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.label14 = new System.Windows.Forms.Label();
-            this.DiscordMessageContent = new System.Windows.Forms.TextBox();
+            this.InstanceName = new System.Windows.Forms.TextBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.IVverbose = new System.Windows.Forms.CheckBox();
+            this.IVspacer = new System.Windows.Forms.TextBox();
+            this.IVstyle = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.BaseDelay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SystemDDownPresses)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NavigateToSettings)).BeginInit();
@@ -90,6 +98,7 @@
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SystemOvershoot)).BeginInit();
+            this.tabPage4.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -499,6 +508,7 @@
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
@@ -625,8 +635,66 @@
             this.label15.TabIndex = 37;
             this.label15.Text = "Use overshoot instead of DDOWN inputs (faster)";
             // 
+            // tabPage4
+            // 
+            this.tabPage4.Controls.Add(this.IVstyle);
+            this.tabPage4.Controls.Add(this.IVspacer);
+            this.tabPage4.Controls.Add(this.IVverbose);
+            this.tabPage4.Controls.Add(this.label20);
+            this.tabPage4.Controls.Add(this.label19);
+            this.tabPage4.Controls.Add(this.label18);
+            this.tabPage4.Controls.Add(this.EnableEmoji);
+            this.tabPage4.Location = new System.Drawing.Point(4, 24);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Size = new System.Drawing.Size(464, 416);
+            this.tabPage4.TabIndex = 3;
+            this.tabPage4.Text = "Webhook";
+            this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(8, 109);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(54, 15);
+            this.label20.TabIndex = 3;
+            this.label20.Text = "IV spacer";
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(8, 65);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(44, 15);
+            this.label19.TabIndex = 2;
+            this.label19.Text = "IV style";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label18.Location = new System.Drawing.Point(8, 25);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(68, 15);
+            this.label18.TabIndex = 1;
+            this.label18.Text = "IV Settings";
+            // 
+            // EnableEmoji
+            // 
+            this.EnableEmoji.AutoSize = true;
+            this.EnableEmoji.Checked = true;
+            this.EnableEmoji.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.EnableEmoji.Location = new System.Drawing.Point(8, 3);
+            this.EnableEmoji.Name = "EnableEmoji";
+            this.EnableEmoji.Size = new System.Drawing.Size(94, 19);
+            this.EnableEmoji.TabIndex = 0;
+            this.EnableEmoji.Text = "Enable Emoji";
+            this.EnableEmoji.UseVisualStyleBackColor = true;
+            // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.InstanceName);
+            this.tabPage3.Controls.Add(this.label17);
             this.tabPage3.Controls.Add(this.label13);
             this.tabPage3.Controls.Add(this.ExperimentalView);
             this.tabPage3.Location = new System.Drawing.Point(4, 24);
@@ -637,21 +705,51 @@
             this.tabPage3.Text = "Experimental";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
-            // label14
+            // InstanceName
             // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(6, 173);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(296, 15);
-            this.label14.TabIndex = 39;
-            this.label14.Text = "Choose the content for discord messages (allow pings)";
+            this.InstanceName.Location = new System.Drawing.Point(6, 61);
+            this.InstanceName.Name = "InstanceName";
+            this.InstanceName.Size = new System.Drawing.Size(100, 23);
+            this.InstanceName.TabIndex = 42;
             // 
-            // DiscordMessageContent
+            // label17
             // 
-            this.DiscordMessageContent.Location = new System.Drawing.Point(6, 191);
-            this.DiscordMessageContent.Name = "DiscordMessageContent";
-            this.DiscordMessageContent.Size = new System.Drawing.Size(452, 23);
-            this.DiscordMessageContent.TabIndex = 40;
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(6, 43);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(89, 15);
+            this.label17.TabIndex = 41;
+            this.label17.Text = "Instance Name:";
+            // 
+            // IVverbose
+            // 
+            this.IVverbose.AutoSize = true;
+            this.IVverbose.Location = new System.Drawing.Point(8, 43);
+            this.IVverbose.Name = "IVverbose";
+            this.IVverbose.Size = new System.Drawing.Size(85, 19);
+            this.IVverbose.TabIndex = 5;
+            this.IVverbose.Text = "Verbose IVs";
+            this.IVverbose.UseVisualStyleBackColor = true;
+            // 
+            // IVspacer
+            // 
+            this.IVspacer.Location = new System.Drawing.Point(8, 127);
+            this.IVspacer.Name = "IVspacer";
+            this.IVspacer.Size = new System.Drawing.Size(100, 23);
+            this.IVspacer.TabIndex = 7;
+            this.IVspacer.Text = "\" \"";
+            // 
+            // IVstyle
+            // 
+            this.IVstyle.FormattingEnabled = true;
+            this.IVstyle.Items.AddRange(new object[] {
+            "Emoji",
+            "Highlighted Numerical",
+            "Numerical"});
+            this.IVstyle.Location = new System.Drawing.Point(8, 83);
+            this.IVstyle.Name = "IVstyle";
+            this.IVstyle.Size = new System.Drawing.Size(121, 23);
+            this.IVstyle.TabIndex = 8;
             // 
             // ConfigWindow
             // 
@@ -682,6 +780,8 @@
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SystemOvershoot)).EndInit();
+            this.tabPage4.ResumeLayout(false);
+            this.tabPage4.PerformLayout();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
             this.ResumeLayout(false);
@@ -735,5 +835,15 @@
         private NumericUpDown SystemOvershoot;
         private CheckBox UseOvershoot;
         private Label label15;
+        private TextBox InstanceName;
+        private Label label17;
+        private TabPage tabPage4;
+        private CheckBox EnableEmoji;
+        private Label label20;
+        private Label label19;
+        private Label label18;
+        private ComboBox IVstyle;
+        private TextBox IVspacer;
+        private CheckBox IVverbose;
     }
 }
