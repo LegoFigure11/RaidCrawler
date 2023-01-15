@@ -589,21 +589,11 @@ namespace RaidCrawler
                             teraRaidView.labelSpicyHerba.ForeColor = Color.WhiteSmoke;
                         }
                     }
+                    teraRaidView.Controls["Shiny"].Visible = Raid.CheckIsShiny(raid, encounter) ? true : false;
                 }
                 else
                 {
-                    // Species.Text = string.Empty;
-                    //  Move1.Text = string.Empty;
-                    // Move2.Text = string.Empty;
-                    // Move3.Text = string.Empty;
-                    // Move4.Text = string.Empty;
-                    // IVs.Text = string.Empty;
-                    // Gender.Text = string.Empty;
-                    // Nature.Text = string.Empty;
-                    // Ability.Text = string.Empty;
-
-                    teraRaidView.Controls["Shiny"].Visible = Raid.CheckIsShiny(raid, encounter) ? true : false;
-                    //IVs.BackColor = IVs.Text is "31/31/31/31/31/31" ? Color.YellowGreen : DefaultColor;
+                    // TODO Clear all the fields.
                 }
             }
             else
