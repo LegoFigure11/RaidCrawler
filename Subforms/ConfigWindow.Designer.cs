@@ -73,6 +73,12 @@
             this.UseOvershoot = new System.Windows.Forms.CheckBox();
             this.label15 = new System.Windows.Forms.Label();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.denToggle = new System.Windows.Forms.CheckBox();
+            this.label22 = new System.Windows.Forms.Label();
+            this.label21 = new System.Windows.Forms.Label();
+            this.IVstyle = new System.Windows.Forms.ComboBox();
+            this.IVspacer = new System.Windows.Forms.TextBox();
+            this.IVverbose = new System.Windows.Forms.CheckBox();
             this.label20 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
@@ -80,9 +86,6 @@
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.InstanceName = new System.Windows.Forms.TextBox();
             this.label17 = new System.Windows.Forms.Label();
-            this.IVverbose = new System.Windows.Forms.CheckBox();
-            this.IVspacer = new System.Windows.Forms.TextBox();
-            this.IVstyle = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.BaseDelay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SystemDDownPresses)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NavigateToSettings)).BeginInit();
@@ -637,6 +640,8 @@
             // 
             // tabPage4
             // 
+            this.tabPage4.Controls.Add(this.denToggle);
+            this.tabPage4.Controls.Add(this.label22);
             this.tabPage4.Controls.Add(this.IVstyle);
             this.tabPage4.Controls.Add(this.IVspacer);
             this.tabPage4.Controls.Add(this.IVverbose);
@@ -651,10 +656,63 @@
             this.tabPage4.Text = "Webhook";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
+            // denToggle
+            // 
+            this.denToggle.AutoSize = true;
+            this.denToggle.Checked = true;
+            this.denToggle.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.denToggle.Location = new System.Drawing.Point(10, 170);
+            this.denToggle.Name = "denToggle";
+            this.denToggle.Size = new System.Drawing.Size(79, 19);
+            this.denToggle.TabIndex = 21;
+            this.denToggle.Text = "Show Den";
+            this.denToggle.UseVisualStyleBackColor = true;
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label22.Location = new System.Drawing.Point(8, 152);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(103, 15);
+            this.label22.TabIndex = 20;
+            this.label22.Text = "Location Settings";
+            // 
+            // IVstyle
+            // 
+            this.IVstyle.FormattingEnabled = true;
+            this.IVstyle.Items.AddRange(new object[] {
+            "Emoji",
+            "Highlighted Numerical",
+            "Numerical"});
+            this.IVstyle.Location = new System.Drawing.Point(8, 82);
+            this.IVstyle.Name = "IVstyle";
+            this.IVstyle.Size = new System.Drawing.Size(121, 23);
+            this.IVstyle.TabIndex = 8;
+            // 
+            // IVspacer
+            // 
+            this.IVspacer.Location = new System.Drawing.Point(8, 126);
+            this.IVspacer.Name = "IVspacer";
+            this.IVspacer.Size = new System.Drawing.Size(100, 23);
+            this.IVspacer.TabIndex = 7;
+            this.IVspacer.Text = "\" \"";
+            // 
+            // IVverbose
+            // 
+            this.IVverbose.AutoSize = true;
+            this.IVverbose.Location = new System.Drawing.Point(8, 42);
+            this.IVverbose.Name = "IVverbose";
+            this.IVverbose.Size = new System.Drawing.Size(85, 19);
+            this.IVverbose.TabIndex = 5;
+            this.IVverbose.Text = "Verbose IVs";
+            this.IVverbose.UseVisualStyleBackColor = true;
+            // 
             // label20
             // 
             this.label20.AutoSize = true;
             this.label20.Location = new System.Drawing.Point(8, 109);
+            this.label20.Location = new System.Drawing.Point(8, 108);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(54, 15);
             this.label20.TabIndex = 3;
@@ -664,6 +722,7 @@
             // 
             this.label19.AutoSize = true;
             this.label19.Location = new System.Drawing.Point(8, 65);
+            this.label19.Location = new System.Drawing.Point(8, 64);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(44, 15);
             this.label19.TabIndex = 2;
@@ -674,6 +733,7 @@
             this.label18.AutoSize = true;
             this.label18.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.label18.Location = new System.Drawing.Point(8, 25);
+            this.label18.Location = new System.Drawing.Point(8, 24);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(68, 15);
             this.label18.TabIndex = 1;
@@ -720,36 +780,6 @@
             this.label17.Size = new System.Drawing.Size(89, 15);
             this.label17.TabIndex = 41;
             this.label17.Text = "Instance Name:";
-            // 
-            // IVverbose
-            // 
-            this.IVverbose.AutoSize = true;
-            this.IVverbose.Location = new System.Drawing.Point(8, 43);
-            this.IVverbose.Name = "IVverbose";
-            this.IVverbose.Size = new System.Drawing.Size(85, 19);
-            this.IVverbose.TabIndex = 5;
-            this.IVverbose.Text = "Verbose IVs";
-            this.IVverbose.UseVisualStyleBackColor = true;
-            // 
-            // IVspacer
-            // 
-            this.IVspacer.Location = new System.Drawing.Point(8, 127);
-            this.IVspacer.Name = "IVspacer";
-            this.IVspacer.Size = new System.Drawing.Size(100, 23);
-            this.IVspacer.TabIndex = 7;
-            this.IVspacer.Text = "\" \"";
-            // 
-            // IVstyle
-            // 
-            this.IVstyle.FormattingEnabled = true;
-            this.IVstyle.Items.AddRange(new object[] {
-            "Emoji",
-            "Highlighted Numerical",
-            "Numerical"});
-            this.IVstyle.Location = new System.Drawing.Point(8, 83);
-            this.IVstyle.Name = "IVstyle";
-            this.IVstyle.Size = new System.Drawing.Size(121, 23);
-            this.IVstyle.TabIndex = 8;
             // 
             // ConfigWindow
             // 
@@ -845,5 +875,7 @@
         private ComboBox IVstyle;
         private TextBox IVspacer;
         private CheckBox IVverbose;
+        private CheckBox denToggle;
+        private Label label22;
     }
 }

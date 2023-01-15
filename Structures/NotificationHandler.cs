@@ -84,7 +84,7 @@ namespace RaidCrawler.Structures
             var moves = new ushort[4] { encounter.Move1, encounter.Move2, encounter.Move3, encounter.Move4 };
             var movestr = string.Concat(moves.Where(z => z != 0).Select(z => $"{Raid.strings.Move[z]}ㅤ\n")).Trim();
             var extramoves = string.Concat(encounter.ExtraMoves.Where(z => z != 0).Select(z => $"{Raid.strings.Move[z]}ㅤ\n")).Trim();
-            var area = $"{Areas.Area[raid.Area - 1]} [Den {raid.Den}]ㅤ";
+            var area = $"{Areas.Area[raid.Area - 1]}" + (Settings.Default.CfgToggleDen ? $" [Den {raid.Den}]ㅤ" : "ㅤ");
             var instance = " " + Settings.Default.CfgInstanceName;
             var rewards = GetRewards(RewardsList, emoji);
             var SuccessWebHook = new
@@ -117,7 +117,7 @@ namespace RaidCrawler.Structures
                             new { name = "Search Time󠀠󠀠󠀠", value = time, inline = true, },
                             new { name = "Filter Name", value = filter.Name, inline = true, },
 
-                            new { name = (rewards != "") ? "Rewards" : "", value = rewards, inline = false, },
+                            new { name = (rewards != "" ? "Rewards" : ""), value = rewards, inline = false, },
                         },
                     }
                 }
