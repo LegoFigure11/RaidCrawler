@@ -676,6 +676,8 @@ namespace RaidCrawler
             if (original == null)
                 return null;
             var gem = (Image)new Bitmap(original, new Size(30, 30));
+            SpriteUtil.GetSpriteGlow(gem, 0xFF, 0xFF, 0xFF, out var glow, true);
+            gem = ImageUtil.LayerImage(gem, ImageUtil.GetBitmap(glow, gem.Width, gem.Height, gem.PixelFormat), 0, 0);
             if (den_locations == null || den_locations.Count == 0)
                 return null;
             try
