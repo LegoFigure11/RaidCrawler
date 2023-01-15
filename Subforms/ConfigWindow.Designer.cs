@@ -75,7 +75,6 @@
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.denToggle = new System.Windows.Forms.CheckBox();
             this.label22 = new System.Windows.Forms.Label();
-            this.label21 = new System.Windows.Forms.Label();
             this.IVstyle = new System.Windows.Forms.ComboBox();
             this.IVspacer = new System.Windows.Forms.TextBox();
             this.IVverbose = new System.Windows.Forms.CheckBox();
