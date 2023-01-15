@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+﻿using RaidCrawler.Properties;
 using RaidCrawler.Structures;
 
 namespace RaidCrawler.Subforms
@@ -7,8 +8,12 @@ namespace RaidCrawler.Subforms
     {
         private readonly Config c = new();
         public ConfigWindow(Config c)
+        MainWindow mainForm;
+
+        public ConfigWindow(MainWindow parent)
         {
             InitializeComponent();
+            mainForm = parent;
 
             this.c = c;
 
@@ -62,7 +67,6 @@ namespace RaidCrawler.Subforms
         private void EnableDiscordNotifications_CheckedChanged(object sender, EventArgs e)
         {
             DiscordWebhook.Enabled = EnableDiscordNotifications.Checked;
-            DiscordMessageContent.Enabled = EnableDiscordNotifications.Checked;
         }
 
         private void Save_Click(object sender, EventArgs e)
@@ -112,6 +116,17 @@ namespace RaidCrawler.Subforms
         {
             SystemDDownPresses.Enabled = !UseOvershoot.Checked;
             SystemOvershoot.Enabled = UseOvershoot.Checked;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Settings.Default.CfgInstanceName = InstanceName.Text;
+            Settings.Default.CfgDiscordMessageContent = DiscordMessageContent.Text;
+            Settings.Default.CfgIVstyle = IVstyle.SelectedIndex;
+            Settings.Default.CfgIVspacer = IVspacer.Text;
+            Settings.Default.CfgIVverbose = IVverbose.Checked;
+            Settings.Default.CfgEnableEmoji = EnableEmoji.Checked;
+            mainForm.TestWebhook();
         }
     }
 }

@@ -872,8 +872,7 @@ namespace RaidCrawler
                 {
                     stopwatch.Stop();
                     var timeSpan = stopwatch.Elapsed;
-                    string time = String.Format("{0:00}:{1:00}:{2:00}",
-                    timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
+                    string time = String.Format("{0:00}:{1:00}:{2:00}", timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
                     if (Config.PlaySound) System.Media.SystemSounds.Asterisk.Play();
                     if (Config.FocusWindow)
                     {
@@ -902,6 +901,21 @@ namespace RaidCrawler
                 ButtonReadRaids.Enabled = true;
                 ButtonAdvanceDate.Enabled = true;
                 SearchTimer.Stop();
+            }
+        }
+
+        public void TestWebhook()
+        {
+            int i = ComboIndex.SelectedIndex;
+            if (i >= 0 && Encounters[i] != null && Raids[i] != null && RaidFilters[0] != null)
+            {
+                var timeSpan = stopwatch.Elapsed;
+                string time = String.Format("{0:00}:{1:00}:{2:00}", timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
+                NotificationHandler.SendNotifications(Encounters[i], Raids[i], RaidFilters[0], time, RewardsList[i]);
+            }
+            else
+            {
+                MessageBox.Show("Please connect to your device and ensure a raid has been found.");
             }
         }
 
@@ -1083,7 +1097,7 @@ namespace RaidCrawler
 
         private void ConfigSettings_Click(object sender, EventArgs e)
         {
-            var form = new ConfigWindow(Config);
+            var form = new ConfigWindow(this);
             form.ShowDialog();
         }
 
