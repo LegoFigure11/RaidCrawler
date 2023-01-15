@@ -68,26 +68,32 @@
             this.Moveset2 = new System.Windows.Forms.TextBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.picBitter = new System.Windows.Forms.PictureBox();
-            this.picSalty = new System.Windows.Forms.PictureBox();
-            this.picSpicy = new System.Windows.Forms.PictureBox();
-            this.picSour = new System.Windows.Forms.PictureBox();
-            this.picSweet = new System.Windows.Forms.PictureBox();
-            this.picPatch = new System.Windows.Forms.PictureBox();
+            this.picBottleCap = new System.Windows.Forms.PictureBox();
+            this.picSaltyHerba = new System.Windows.Forms.PictureBox();
+            this.picSpicyHerba = new System.Windows.Forms.PictureBox();
+            this.picSourHerba = new System.Windows.Forms.PictureBox();
+            this.picSweetHerba = new System.Windows.Forms.PictureBox();
+            this.picAbilityPatch = new System.Windows.Forms.PictureBox();
             this.labelAbilityPatch = new System.Windows.Forms.Label();
             this.textAbilityPatch = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
+            this.labelSweetHerba = new System.Windows.Forms.Label();
             this.textSweetHerba = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
+            this.labelSaltyHerba = new System.Windows.Forms.Label();
             this.textSaltyHerba = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.textBitterHerba = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
+            this.labelBottleCap = new System.Windows.Forms.Label();
+            this.textBottleCap = new System.Windows.Forms.TextBox();
+            this.labelSourHerba = new System.Windows.Forms.Label();
             this.textSourHerba = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
+            this.labelSpicyHerba = new System.Windows.Forms.Label();
             this.textSpicyHerba = new System.Windows.Forms.TextBox();
             this.labelSearchTime = new System.Windows.Forms.Label();
             this.textSearchTime = new System.Windows.Forms.TextBox();
+            this.picAbilityCapsule = new System.Windows.Forms.PictureBox();
+            this.picBitterHerba = new System.Windows.Forms.PictureBox();
+            this.labelBitterHerba = new System.Windows.Forms.Label();
+            this.textBitterHerba = new System.Windows.Forms.TextBox();
+            this.labelAbilityCapsule = new System.Windows.Forms.Label();
+            this.textAbilityCapsule = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.Map)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBoxPokemon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TeraType)).BeginInit();
@@ -95,12 +101,14 @@
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picBitter)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picSalty)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picSpicy)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picSour)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picSweet)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picPatch)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picBottleCap)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSaltyHerba)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSpicyHerba)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSourHerba)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSweetHerba)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picAbilityPatch)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picAbilityCapsule)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picBitterHerba)).BeginInit();
             this.SuspendLayout();
             // 
             // Map
@@ -562,75 +570,75 @@
             // 
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // picBitter
+            // picBottleCap
             // 
-            this.picBitter.Image = global::RaidCrawler.Properties.Resources.item_1907_hires;
-            this.picBitter.Location = new System.Drawing.Point(564, 448);
-            this.picBitter.Name = "picBitter";
-            this.picBitter.Size = new System.Drawing.Size(48, 48);
-            this.picBitter.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picBitter.TabIndex = 138;
-            this.picBitter.TabStop = false;
+            this.picBottleCap.Image = global::RaidCrawler.Properties.Resources.item_0795_hires;
+            this.picBottleCap.Location = new System.Drawing.Point(560, 448);
+            this.picBottleCap.Name = "picBottleCap";
+            this.picBottleCap.Size = new System.Drawing.Size(48, 48);
+            this.picBottleCap.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picBottleCap.TabIndex = 138;
+            this.picBottleCap.TabStop = false;
             // 
-            // picSalty
+            // picSaltyHerba
             // 
-            this.picSalty.Image = global::RaidCrawler.Properties.Resources.item_1905_hires;
-            this.picSalty.Location = new System.Drawing.Point(828, 402);
-            this.picSalty.Name = "picSalty";
-            this.picSalty.Size = new System.Drawing.Size(48, 48);
-            this.picSalty.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picSalty.TabIndex = 137;
-            this.picSalty.TabStop = false;
+            this.picSaltyHerba.Image = global::RaidCrawler.Properties.Resources.item_1905_hires;
+            this.picSaltyHerba.Location = new System.Drawing.Point(857, 402);
+            this.picSaltyHerba.Name = "picSaltyHerba";
+            this.picSaltyHerba.Size = new System.Drawing.Size(48, 48);
+            this.picSaltyHerba.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picSaltyHerba.TabIndex = 137;
+            this.picSaltyHerba.TabStop = false;
             // 
-            // picSpicy
+            // picSpicyHerba
             // 
-            this.picSpicy.Image = global::RaidCrawler.Properties.Resources.item_1908_hires;
-            this.picSpicy.Location = new System.Drawing.Point(828, 452);
-            this.picSpicy.Name = "picSpicy";
-            this.picSpicy.Size = new System.Drawing.Size(48, 48);
-            this.picSpicy.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picSpicy.TabIndex = 131;
-            this.picSpicy.TabStop = false;
+            this.picSpicyHerba.Image = global::RaidCrawler.Properties.Resources.item_1908_hires;
+            this.picSpicyHerba.Location = new System.Drawing.Point(857, 448);
+            this.picSpicyHerba.Name = "picSpicyHerba";
+            this.picSpicyHerba.Size = new System.Drawing.Size(48, 48);
+            this.picSpicyHerba.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picSpicyHerba.TabIndex = 131;
+            this.picSpicyHerba.TabStop = false;
             // 
-            // picSour
+            // picSourHerba
             // 
-            this.picSour.Image = global::RaidCrawler.Properties.Resources.item_1906_hires;
-            this.picSour.Location = new System.Drawing.Point(698, 448);
-            this.picSour.Name = "picSour";
-            this.picSour.Size = new System.Drawing.Size(48, 48);
-            this.picSour.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picSour.TabIndex = 130;
-            this.picSour.TabStop = false;
+            this.picSourHerba.Image = global::RaidCrawler.Properties.Resources.item_1906_hires;
+            this.picSourHerba.Location = new System.Drawing.Point(759, 448);
+            this.picSourHerba.Name = "picSourHerba";
+            this.picSourHerba.Size = new System.Drawing.Size(48, 48);
+            this.picSourHerba.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picSourHerba.TabIndex = 130;
+            this.picSourHerba.TabStop = false;
             // 
-            // picSweet
+            // picSweetHerba
             // 
-            this.picSweet.Image = global::RaidCrawler.Properties.Resources.item_1904_hires;
-            this.picSweet.Location = new System.Drawing.Point(698, 402);
-            this.picSweet.Name = "picSweet";
-            this.picSweet.Size = new System.Drawing.Size(48, 48);
-            this.picSweet.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picSweet.TabIndex = 129;
-            this.picSweet.TabStop = false;
+            this.picSweetHerba.Image = global::RaidCrawler.Properties.Resources.item_1904_hires;
+            this.picSweetHerba.Location = new System.Drawing.Point(759, 402);
+            this.picSweetHerba.Name = "picSweetHerba";
+            this.picSweetHerba.Size = new System.Drawing.Size(48, 48);
+            this.picSweetHerba.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picSweetHerba.TabIndex = 129;
+            this.picSweetHerba.TabStop = false;
             // 
-            // picPatch
+            // picAbilityPatch
             // 
-            this.picPatch.Image = global::RaidCrawler.Properties.Resources.item_1606_hires;
-            this.picPatch.Location = new System.Drawing.Point(564, 402);
-            this.picPatch.Name = "picPatch";
-            this.picPatch.Size = new System.Drawing.Size(48, 48);
-            this.picPatch.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picPatch.TabIndex = 128;
-            this.picPatch.TabStop = false;
+            this.picAbilityPatch.Image = global::RaidCrawler.Properties.Resources.item_1606_hires;
+            this.picAbilityPatch.Location = new System.Drawing.Point(560, 402);
+            this.picAbilityPatch.Name = "picAbilityPatch";
+            this.picAbilityPatch.Size = new System.Drawing.Size(48, 48);
+            this.picAbilityPatch.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picAbilityPatch.TabIndex = 128;
+            this.picAbilityPatch.TabStop = false;
             // 
             // labelAbilityPatch
             // 
             this.labelAbilityPatch.AutoSize = true;
             this.labelAbilityPatch.ForeColor = System.Drawing.Color.Silver;
-            this.labelAbilityPatch.Location = new System.Drawing.Point(618, 402);
+            this.labelAbilityPatch.Location = new System.Drawing.Point(614, 404);
             this.labelAbilityPatch.Name = "labelAbilityPatch";
-            this.labelAbilityPatch.Size = new System.Drawing.Size(74, 15);
+            this.labelAbilityPatch.Size = new System.Drawing.Size(37, 15);
             this.labelAbilityPatch.TabIndex = 135;
-            this.labelAbilityPatch.Text = "Ability Patch";
+            this.labelAbilityPatch.Text = "Patch";
             this.labelAbilityPatch.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // textAbilityPatch
@@ -639,7 +647,7 @@
             this.textAbilityPatch.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textAbilityPatch.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.textAbilityPatch.ForeColor = System.Drawing.Color.White;
-            this.textAbilityPatch.Location = new System.Drawing.Point(638, 418);
+            this.textAbilityPatch.Location = new System.Drawing.Point(616, 419);
             this.textAbilityPatch.Name = "textAbilityPatch";
             this.textAbilityPatch.PlaceholderText = "00";
             this.textAbilityPatch.Size = new System.Drawing.Size(30, 25);
@@ -647,16 +655,16 @@
             this.textAbilityPatch.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.textAbilityPatch.TextChanged += new System.EventHandler(this.rewards_TextChanged);
             // 
-            // label2
+            // labelSweetHerba
             // 
-            this.label2.AutoSize = true;
-            this.label2.ForeColor = System.Drawing.Color.Silver;
-            this.label2.Location = new System.Drawing.Point(752, 402);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(73, 15);
-            this.label2.TabIndex = 143;
-            this.label2.Text = "Sweet Herba";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.labelSweetHerba.AutoSize = true;
+            this.labelSweetHerba.ForeColor = System.Drawing.Color.Silver;
+            this.labelSweetHerba.Location = new System.Drawing.Point(813, 404);
+            this.labelSweetHerba.Name = "labelSweetHerba";
+            this.labelSweetHerba.Size = new System.Drawing.Size(38, 15);
+            this.labelSweetHerba.TabIndex = 143;
+            this.labelSweetHerba.Text = "Sweet";
+            this.labelSweetHerba.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // textSweetHerba
             // 
@@ -664,7 +672,7 @@
             this.textSweetHerba.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textSweetHerba.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.textSweetHerba.ForeColor = System.Drawing.Color.White;
-            this.textSweetHerba.Location = new System.Drawing.Point(772, 418);
+            this.textSweetHerba.Location = new System.Drawing.Point(817, 419);
             this.textSweetHerba.Name = "textSweetHerba";
             this.textSweetHerba.PlaceholderText = "00";
             this.textSweetHerba.Size = new System.Drawing.Size(30, 25);
@@ -672,16 +680,16 @@
             this.textSweetHerba.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.textSweetHerba.TextChanged += new System.EventHandler(this.rewards_TextChanged);
             // 
-            // label3
+            // labelSaltyHerba
             // 
-            this.label3.AutoSize = true;
-            this.label3.ForeColor = System.Drawing.Color.Silver;
-            this.label3.Location = new System.Drawing.Point(882, 402);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(67, 15);
-            this.label3.TabIndex = 145;
-            this.label3.Text = "Salty Herba";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.labelSaltyHerba.AutoSize = true;
+            this.labelSaltyHerba.ForeColor = System.Drawing.Color.Silver;
+            this.labelSaltyHerba.Location = new System.Drawing.Point(910, 404);
+            this.labelSaltyHerba.Name = "labelSaltyHerba";
+            this.labelSaltyHerba.Size = new System.Drawing.Size(32, 15);
+            this.labelSaltyHerba.TabIndex = 145;
+            this.labelSaltyHerba.Text = "Salty";
+            this.labelSaltyHerba.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // textSaltyHerba
             // 
@@ -689,7 +697,7 @@
             this.textSaltyHerba.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textSaltyHerba.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.textSaltyHerba.ForeColor = System.Drawing.Color.White;
-            this.textSaltyHerba.Location = new System.Drawing.Point(902, 418);
+            this.textSaltyHerba.Location = new System.Drawing.Point(911, 419);
             this.textSaltyHerba.Name = "textSaltyHerba";
             this.textSaltyHerba.PlaceholderText = "00";
             this.textSaltyHerba.Size = new System.Drawing.Size(30, 25);
@@ -697,41 +705,41 @@
             this.textSaltyHerba.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.textSaltyHerba.TextChanged += new System.EventHandler(this.rewards_TextChanged);
             // 
-            // label4
+            // labelBottleCap
             // 
-            this.label4.AutoSize = true;
-            this.label4.ForeColor = System.Drawing.Color.Silver;
-            this.label4.Location = new System.Drawing.Point(618, 452);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(70, 15);
-            this.label4.TabIndex = 147;
-            this.label4.Text = "Bitter Herba";
-            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.labelBottleCap.AutoSize = true;
+            this.labelBottleCap.ForeColor = System.Drawing.Color.Silver;
+            this.labelBottleCap.Location = new System.Drawing.Point(618, 452);
+            this.labelBottleCap.Name = "labelBottleCap";
+            this.labelBottleCap.Size = new System.Drawing.Size(28, 15);
+            this.labelBottleCap.TabIndex = 147;
+            this.labelBottleCap.Text = "Cap";
+            this.labelBottleCap.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // textBitterHerba
+            // textBottleCap
             // 
-            this.textBitterHerba.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(5)))), ((int)(((byte)(25)))));
-            this.textBitterHerba.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBitterHerba.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.textBitterHerba.ForeColor = System.Drawing.Color.White;
-            this.textBitterHerba.Location = new System.Drawing.Point(638, 468);
-            this.textBitterHerba.Name = "textBitterHerba";
-            this.textBitterHerba.PlaceholderText = "00";
-            this.textBitterHerba.Size = new System.Drawing.Size(30, 25);
-            this.textBitterHerba.TabIndex = 146;
-            this.textBitterHerba.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.textBitterHerba.TextChanged += new System.EventHandler(this.rewards_TextChanged);
+            this.textBottleCap.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(5)))), ((int)(((byte)(25)))));
+            this.textBottleCap.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBottleCap.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.textBottleCap.ForeColor = System.Drawing.Color.White;
+            this.textBottleCap.Location = new System.Drawing.Point(616, 467);
+            this.textBottleCap.Name = "textBottleCap";
+            this.textBottleCap.PlaceholderText = "00";
+            this.textBottleCap.Size = new System.Drawing.Size(30, 25);
+            this.textBottleCap.TabIndex = 146;
+            this.textBottleCap.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBottleCap.TextChanged += new System.EventHandler(this.rewards_TextChanged);
             // 
-            // label5
+            // labelSourHerba
             // 
-            this.label5.AutoSize = true;
-            this.label5.ForeColor = System.Drawing.Color.Silver;
-            this.label5.Location = new System.Drawing.Point(752, 452);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(66, 15);
-            this.label5.TabIndex = 149;
-            this.label5.Text = "Sour Herba";
-            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.labelSourHerba.AutoSize = true;
+            this.labelSourHerba.ForeColor = System.Drawing.Color.Silver;
+            this.labelSourHerba.Location = new System.Drawing.Point(817, 452);
+            this.labelSourHerba.Name = "labelSourHerba";
+            this.labelSourHerba.Size = new System.Drawing.Size(31, 15);
+            this.labelSourHerba.TabIndex = 149;
+            this.labelSourHerba.Text = "Sour";
+            this.labelSourHerba.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // textSourHerba
             // 
@@ -739,7 +747,7 @@
             this.textSourHerba.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textSourHerba.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.textSourHerba.ForeColor = System.Drawing.Color.White;
-            this.textSourHerba.Location = new System.Drawing.Point(772, 468);
+            this.textSourHerba.Location = new System.Drawing.Point(817, 467);
             this.textSourHerba.Name = "textSourHerba";
             this.textSourHerba.PlaceholderText = "00";
             this.textSourHerba.Size = new System.Drawing.Size(30, 25);
@@ -747,16 +755,16 @@
             this.textSourHerba.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.textSourHerba.TextChanged += new System.EventHandler(this.rewards_TextChanged);
             // 
-            // label6
+            // labelSpicyHerba
             // 
-            this.label6.AutoSize = true;
-            this.label6.ForeColor = System.Drawing.Color.Silver;
-            this.label6.Location = new System.Drawing.Point(882, 452);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(70, 15);
-            this.label6.TabIndex = 151;
-            this.label6.Text = "Spicy Herba";
-            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.labelSpicyHerba.AutoSize = true;
+            this.labelSpicyHerba.ForeColor = System.Drawing.Color.Silver;
+            this.labelSpicyHerba.Location = new System.Drawing.Point(908, 450);
+            this.labelSpicyHerba.Name = "labelSpicyHerba";
+            this.labelSpicyHerba.Size = new System.Drawing.Size(35, 15);
+            this.labelSpicyHerba.TabIndex = 151;
+            this.labelSpicyHerba.Text = "Spicy";
+            this.labelSpicyHerba.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // textSpicyHerba
             // 
@@ -764,7 +772,7 @@
             this.textSpicyHerba.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textSpicyHerba.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.textSpicyHerba.ForeColor = System.Drawing.Color.White;
-            this.textSpicyHerba.Location = new System.Drawing.Point(902, 468);
+            this.textSpicyHerba.Location = new System.Drawing.Point(911, 467);
             this.textSpicyHerba.Name = "textSpicyHerba";
             this.textSpicyHerba.PlaceholderText = "00";
             this.textSpicyHerba.Size = new System.Drawing.Size(30, 25);
@@ -799,31 +807,105 @@
             this.textSearchTime.Text = "00:00:00";
             this.textSearchTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
+            // picAbilityCapsule
+            // 
+            this.picAbilityCapsule.Image = global::RaidCrawler.Properties.Resources.item_0645_hires;
+            this.picAbilityCapsule.Location = new System.Drawing.Point(656, 402);
+            this.picAbilityCapsule.Name = "picAbilityCapsule";
+            this.picAbilityCapsule.Size = new System.Drawing.Size(48, 48);
+            this.picAbilityCapsule.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picAbilityCapsule.TabIndex = 154;
+            this.picAbilityCapsule.TabStop = false;
+            // 
+            // picBitterHerba
+            // 
+            this.picBitterHerba.Image = global::RaidCrawler.Properties.Resources.item_1907_hires;
+            this.picBitterHerba.Location = new System.Drawing.Point(656, 448);
+            this.picBitterHerba.Name = "picBitterHerba";
+            this.picBitterHerba.Size = new System.Drawing.Size(48, 48);
+            this.picBitterHerba.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picBitterHerba.TabIndex = 155;
+            this.picBitterHerba.TabStop = false;
+            // 
+            // labelBitterHerba
+            // 
+            this.labelBitterHerba.AutoSize = true;
+            this.labelBitterHerba.ForeColor = System.Drawing.Color.Silver;
+            this.labelBitterHerba.Location = new System.Drawing.Point(713, 452);
+            this.labelBitterHerba.Name = "labelBitterHerba";
+            this.labelBitterHerba.Size = new System.Drawing.Size(35, 15);
+            this.labelBitterHerba.TabIndex = 159;
+            this.labelBitterHerba.Text = "Bitter";
+            this.labelBitterHerba.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // textBitterHerba
+            // 
+            this.textBitterHerba.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(5)))), ((int)(((byte)(25)))));
+            this.textBitterHerba.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBitterHerba.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.textBitterHerba.ForeColor = System.Drawing.Color.White;
+            this.textBitterHerba.Location = new System.Drawing.Point(714, 467);
+            this.textBitterHerba.Name = "textBitterHerba";
+            this.textBitterHerba.PlaceholderText = "00";
+            this.textBitterHerba.Size = new System.Drawing.Size(30, 25);
+            this.textBitterHerba.TabIndex = 158;
+            this.textBitterHerba.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // labelAbilityCapsule
+            // 
+            this.labelAbilityCapsule.AutoSize = true;
+            this.labelAbilityCapsule.ForeColor = System.Drawing.Color.Silver;
+            this.labelAbilityCapsule.Location = new System.Drawing.Point(707, 404);
+            this.labelAbilityCapsule.Name = "labelAbilityCapsule";
+            this.labelAbilityCapsule.Size = new System.Drawing.Size(49, 15);
+            this.labelAbilityCapsule.TabIndex = 157;
+            this.labelAbilityCapsule.Text = "Capsule";
+            this.labelAbilityCapsule.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // textAbilityCapsule
+            // 
+            this.textAbilityCapsule.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(5)))), ((int)(((byte)(25)))));
+            this.textAbilityCapsule.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textAbilityCapsule.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.textAbilityCapsule.ForeColor = System.Drawing.Color.White;
+            this.textAbilityCapsule.Location = new System.Drawing.Point(715, 419);
+            this.textAbilityCapsule.Name = "textAbilityCapsule";
+            this.textAbilityCapsule.PlaceholderText = "00";
+            this.textAbilityCapsule.Size = new System.Drawing.Size(30, 25);
+            this.textAbilityCapsule.TabIndex = 156;
+            this.textAbilityCapsule.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
             // TeraRaidView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(5)))), ((int)(((byte)(25)))));
             this.ClientSize = new System.Drawing.Size(960, 540);
-            this.Controls.Add(this.textSearchTime);
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.textSpicyHerba);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.textSourHerba);
-            this.Controls.Add(this.label4);
+            this.Controls.Add(this.labelBitterHerba);
             this.Controls.Add(this.textBitterHerba);
-            this.Controls.Add(this.label3);
+            this.Controls.Add(this.labelAbilityCapsule);
+            this.Controls.Add(this.textAbilityCapsule);
+            this.Controls.Add(this.picBitterHerba);
+            this.Controls.Add(this.picAbilityCapsule);
+            this.Controls.Add(this.textSearchTime);
+            this.Controls.Add(this.labelSpicyHerba);
+            this.Controls.Add(this.textSpicyHerba);
+            this.Controls.Add(this.labelSourHerba);
+            this.Controls.Add(this.textSourHerba);
+            this.Controls.Add(this.labelBottleCap);
+            this.Controls.Add(this.textBottleCap);
+            this.Controls.Add(this.labelSaltyHerba);
             this.Controls.Add(this.textSaltyHerba);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.labelSweetHerba);
             this.Controls.Add(this.textSweetHerba);
             this.Controls.Add(this.labelAbilityPatch);
             this.Controls.Add(this.textAbilityPatch);
-            this.Controls.Add(this.picBitter);
-            this.Controls.Add(this.picSalty);
-            this.Controls.Add(this.picSpicy);
-            this.Controls.Add(this.picSour);
-            this.Controls.Add(this.picSweet);
-            this.Controls.Add(this.picPatch);
+            this.Controls.Add(this.picBottleCap);
+            this.Controls.Add(this.picSaltyHerba);
+            this.Controls.Add(this.picSpicyHerba);
+            this.Controls.Add(this.picSourHerba);
+            this.Controls.Add(this.picSweetHerba);
+            this.Controls.Add(this.picAbilityPatch);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
@@ -836,8 +918,8 @@
             this.Controls.Add(this.Difficulty);
             this.Controls.Add(this.picBoxPokemon);
             this.Controls.Add(this.Area);
-            this.Controls.Add(this.Map);
             this.Controls.Add(this.labelSearchTime);
+            this.Controls.Add(this.Map);
             this.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -857,12 +939,14 @@
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picBitter)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picSalty)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picSpicy)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picSour)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picSweet)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picPatch)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picBottleCap)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSaltyHerba)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSpicyHerba)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSourHerba)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSweetHerba)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picAbilityPatch)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picAbilityCapsule)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picBitterHerba)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -907,25 +991,31 @@
         public TextBox Moveset3;
         private PictureBox pictureBox1;
         private System.Windows.Forms.Timer timer1;
-        private PictureBox picBitter;
-        private PictureBox picSalty;
-        private PictureBox picSpicy;
-        private PictureBox picSour;
-        private PictureBox picSweet;
-        private PictureBox picPatch;
-        private Label labelAbilityPatch;
         public TextBox textAbilityPatch;
-        private Label label2;
         public TextBox textSweetHerba;
-        private Label label3;
         public TextBox textSaltyHerba;
-        private Label label4;
-        public TextBox textBitterHerba;
-        private Label label5;
+        public TextBox textBottleCap;
         public TextBox textSourHerba;
-        private Label label6;
         public TextBox textSpicyHerba;
         public Label labelSearchTime;
         public TextBox textSearchTime;
+        public TextBox textBitterHerba;
+        public TextBox textAbilityCapsule;
+        public PictureBox picBottleCap;
+        public PictureBox picSaltyHerba;
+        public PictureBox picSpicyHerba;
+        public PictureBox picSourHerba;
+        public PictureBox picSweetHerba;
+        public PictureBox picAbilityPatch;
+        public Label labelAbilityPatch;
+        public Label labelSweetHerba;
+        public Label labelSaltyHerba;
+        public Label labelBottleCap;
+        public Label labelSourHerba;
+        public Label labelSpicyHerba;
+        public PictureBox picAbilityCapsule;
+        public PictureBox picBitterHerba;
+        public Label labelBitterHerba;
+        public Label labelAbilityCapsule;
     }
 }

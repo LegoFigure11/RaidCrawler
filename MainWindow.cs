@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using PKHeX.Core;
 using PKHeX.Drawing;
 using PKHeX.Drawing.PokeSprite;
@@ -43,10 +43,7 @@ namespace RaidCrawler
 
         private Color DefaultColor;
         private FormWindowState _WindowState;
-
-
-        private Stopwatch stopwatch= new Stopwatch();
-
+        private Stopwatch stopwatch = new Stopwatch();
         private TeraRaidView teraRaidView = new TeraRaidView();
 
         public MainWindow()
@@ -432,7 +429,8 @@ namespace RaidCrawler
                     if (teraRaidView.HP.Text is "31")
                     {
                         teraRaidView.HP.BackColor = Color.ForestGreen;
-                    } else if (teraRaidView.HP.Text is "00")
+                    }
+                    else if (teraRaidView.HP.Text is "00")
                     {
                         teraRaidView.HP.BackColor = Color.DarkRed;
                     }
@@ -458,7 +456,7 @@ namespace RaidCrawler
                     }
                     else if (teraRaidView.DEF.Text is "00")
                     {
-                       teraRaidView.DEF.BackColor = Color.DarkRed;
+                        teraRaidView.DEF.BackColor = Color.DarkRed;
                     }
 
                     // SPA
@@ -507,30 +505,90 @@ namespace RaidCrawler
 
                     // Rewards
                     var rewards = RewardsList[index];
+
                     teraRaidView.textAbilityPatch.Text = "0";
+                    teraRaidView.textAbilityPatch.ForeColor = Color.DimGray;
+                    teraRaidView.labelAbilityPatch.ForeColor = Color.DimGray;
+
+                    teraRaidView.textAbilityCapsule.Text = "0";
+                    teraRaidView.textAbilityCapsule.ForeColor = Color.DimGray;
+                    teraRaidView.labelAbilityCapsule.ForeColor = Color.DimGray;
+
+                    teraRaidView.textBottleCap.Text = "0";
+                    teraRaidView.textBottleCap.ForeColor = Color.DimGray;
+                    teraRaidView.labelBottleCap.ForeColor = Color.DimGray;
+
                     teraRaidView.textSweetHerba.Text = "0";
+                    teraRaidView.textSweetHerba.ForeColor = Color.DimGray;
+                    teraRaidView.labelSweetHerba.ForeColor = Color.DimGray;
+
                     teraRaidView.textSaltyHerba.Text = "0";
+                    teraRaidView.textSaltyHerba.ForeColor = Color.DimGray;
+                    teraRaidView.labelSaltyHerba.ForeColor = Color.DimGray;
+
                     teraRaidView.textBitterHerba.Text = "0";
+                    teraRaidView.textBitterHerba.ForeColor = Color.DimGray;
+                    teraRaidView.labelBitterHerba.ForeColor = Color.DimGray;
+
                     teraRaidView.textSourHerba.Text = "0";
+                    teraRaidView.textSourHerba.ForeColor = Color.DimGray;
+                    teraRaidView.labelSourHerba.ForeColor = Color.DimGray;
+
                     teraRaidView.textSpicyHerba.Text = "0";
+                    teraRaidView.textSpicyHerba.ForeColor = Color.DimGray;
+                    teraRaidView.labelSpicyHerba.ForeColor = Color.DimGray;
 
                     for (int i = 0; i < rewards.Count; i++)
                     {
-                        if (rewards[i].Item1 == 1904)
-                            teraRaidView.textSweetHerba.Text = (int.Parse(teraRaidView.textSweetHerba.Text) + 1).ToString();
-                        if (rewards[i].Item1 == 1905)
-                            teraRaidView.textSaltyHerba.Text = (int.Parse(teraRaidView.textSaltyHerba.Text) + 1).ToString();
-                        if (rewards[i].Item1 == 1906)
-                            teraRaidView.textSourHerba.Text = (int.Parse(teraRaidView.textSourHerba.Text) + 1).ToString();
-                        if (rewards[i].Item1 == 1907)
-                            teraRaidView.textBitterHerba.Text = (int.Parse(teraRaidView.textBitterHerba.Text) + 1).ToString();
-                        if (rewards[i].Item1 == 1908)
-                            teraRaidView.textSpicyHerba.Text = (int.Parse(teraRaidView.textSpicyHerba.Text) + 1).ToString();
+                        if (rewards[i].Item1 == 645)
+                        {
+                            teraRaidView.textAbilityCapsule.Text = (int.Parse(teraRaidView.textAbilityCapsule.Text) + 1).ToString();
+                            teraRaidView.textAbilityCapsule.ForeColor = Color.White;
+                            teraRaidView.labelAbilityCapsule.ForeColor = Color.WhiteSmoke;
+                        }
+                        if (rewards[i].Item1 == 795)
+                        {
+                            teraRaidView.textBottleCap.Text = (int.Parse(teraRaidView.textBottleCap.Text) + 1).ToString();
+                            teraRaidView.textBottleCap.ForeColor = Color.White;
+                            teraRaidView.labelBottleCap.ForeColor = Color.WhiteSmoke;
+                        }
                         if (rewards[i].Item1 == 1606)
+                        {
                             teraRaidView.textAbilityPatch.Text = (int.Parse(teraRaidView.textAbilityPatch.Text) + 1).ToString();
+                            teraRaidView.textAbilityPatch.ForeColor = Color.White;
+                            teraRaidView.labelAbilityPatch.ForeColor = Color.WhiteSmoke;
+                        }
+                        if (rewards[i].Item1 == 1904)
+                        {
+                            teraRaidView.textSweetHerba.Text = (int.Parse(teraRaidView.textSweetHerba.Text) + 1).ToString();
+                            teraRaidView.textSweetHerba.ForeColor = Color.White;
+                            teraRaidView.labelSweetHerba.ForeColor = Color.WhiteSmoke;
+                        }
+                        if (rewards[i].Item1 == 1905)
+                        {
+                            teraRaidView.textSaltyHerba.Text = (int.Parse(teraRaidView.textSaltyHerba.Text) + 1).ToString();
+                            teraRaidView.textSaltyHerba.ForeColor = Color.White;
+                            teraRaidView.labelSaltyHerba.ForeColor = Color.WhiteSmoke;
+                        }
+                        if (rewards[i].Item1 == 1906)
+                        {
+                            teraRaidView.textSourHerba.Text = (int.Parse(teraRaidView.textSourHerba.Text) + 1).ToString();
+                            teraRaidView.textSourHerba.ForeColor = Color.White;
+                            teraRaidView.labelSourHerba.ForeColor = Color.WhiteSmoke;
+                        }
+                        if (rewards[i].Item1 == 1907)
+                        {
+                            teraRaidView.textBitterHerba.Text = (int.Parse(teraRaidView.textBitterHerba.Text) + 1).ToString();
+                            teraRaidView.textBitterHerba.ForeColor = Color.White;
+                            teraRaidView.labelBitterHerba.ForeColor = Color.WhiteSmoke;
+                        }
+                        if (rewards[i].Item1 == 1908)
+                        {
+                            teraRaidView.textSpicyHerba.Text = (int.Parse(teraRaidView.textSpicyHerba.Text) + 1).ToString();
+                            teraRaidView.textSpicyHerba.ForeColor = Color.White;
+                            teraRaidView.labelSpicyHerba.ForeColor = Color.WhiteSmoke;
+                        }
                     }
-
-
                 }
                 else
                 {
@@ -544,10 +602,9 @@ namespace RaidCrawler
                     // Nature.Text = string.Empty;
                     // Ability.Text = string.Empty;
 
+                    teraRaidView.Controls["Shiny"].Visible = Raid.CheckIsShiny(raid, encounter) ? true : false;
+                    //IVs.BackColor = IVs.Text is "31/31/31/31/31/31" ? Color.YellowGreen : DefaultColor;
                 }
-
-                teraRaidView.Controls["Shiny"].Visible = Raid.CheckIsShiny(raid, encounter) ? true : false;
-                //IVs.BackColor = IVs.Text is "31/31/31/31/31/31" ? Color.YellowGreen : DefaultColor;
             }
             else
             {
@@ -724,7 +781,7 @@ namespace RaidCrawler
             ConnectionStatusText.Text = "Changing date...";
             int BaseDelay = (int)Settings.Default.CfgBaseDelay;
             await Click(LSTICK, 0_050 + BaseDelay, token).ConfigureAwait(false); // Sometimes it seems like the first command doesn't go through so send this just in case
-            // HOME Menu
+                                                                                 // HOME Menu
             await Click(HOME, (int)Settings.Default.CfgOpenHome + BaseDelay, token).ConfigureAwait(false);
             // Navigate to Settings
             if (Settings.Default.CfgUseTouch)
