@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using RaidCrawler.Properties;
 
 namespace RaidCrawler.Subforms
 {
@@ -38,7 +39,12 @@ namespace RaidCrawler.Subforms
             pbComplete = 100;
             bmp = new Bitmap(pbWidth, pbHeight);
 
-            timer1.Interval = 180;
+            decimal delays;
+            delays = Settings.Default.CfgBaseDelay * 20 + Settings.Default.CfgOpenHome + Settings.Default.CfgNavigateToSettings +
+                Settings.Default.CfgOpenSettings + Settings.Default.CfgHold + Settings.Default.CfgSubmenu + Settings.Default.CfgDateChange +
+                Settings.Default.CfgReturnHome + Settings.Default.CfgReturnGame + 4250; // fudge time to read raids
+
+            timer1.Interval = (int)(delays/100);
             timer1.Start();
         }
 
