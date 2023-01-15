@@ -25,7 +25,6 @@ namespace RaidCrawler.Structures
 
         public static string[]? DiscordWebhooks = Properties.Settings.Default.CfgEnableNotification ? Properties.Settings.Default.CfgDiscordWebhook.Split(',') : null;
 
-
         public static void SendNotifications(ITeraRaid? encounter, Raid raid, RaidFilter filter, String time, List<(int, int, int)>? RewardsList)
         {
             if (encounter == null)
