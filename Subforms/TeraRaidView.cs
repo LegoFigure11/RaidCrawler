@@ -63,7 +63,6 @@ namespace RaidCrawler.Subforms
             //Note!
             //To keep things simple I am adding +1 to pbComplete every 50ms
             //You can change this as per your requirement :)
-            pbComplete--;
             if (pbComplete < 0)
             {
                 g.FillRectangle(new SolidBrush(Color.FromArgb(0, 5, 25)), new Rectangle(0, 0, pbWidth, pbHeight));
@@ -71,7 +70,7 @@ namespace RaidCrawler.Subforms
                 g.Dispose();
                 timer1.Stop();
             }
-
+            pbComplete--;
         }
 
         private void TeraRaidView_MouseDown(object sender, MouseEventArgs e)
