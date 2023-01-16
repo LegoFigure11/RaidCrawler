@@ -1,13 +1,12 @@
 ﻿using Newtonsoft.Json;
-using NLog.Filters;
-using RaidCrawler.Properties;
+using RaidCrawler.Structures;
 
 namespace RaidCrawler.Subforms
 {
     public partial class ConfigWindow : Form
     {
-        private readonly Structures.Config c = new();
-        public ConfigWindow(Structures.Config c)
+        private readonly Config c = new();
+        public ConfigWindow(Config c)
         {
             InitializeComponent();
 

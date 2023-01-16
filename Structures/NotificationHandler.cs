@@ -1,11 +1,7 @@
 using Newtonsoft.Json;
 using PKHeX.Core;
 using PKHeX.Drawing.PokeSprite;
-using RaidCrawler.Properties;
-using RaidCrawler.Subforms;
 using SysBot.Base;
-using System.Collections.Generic;
-using System.Diagnostics.Metrics;
 using System.Text;
 
 namespace RaidCrawler.Structures

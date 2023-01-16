@@ -1,13 +1,10 @@
 using Newtonsoft.Json;
-using NLog.Filters;
 using PKHeX.Core;
 using PKHeX.Drawing;
 using PKHeX.Drawing.PokeSprite;
-using RaidCrawler.Properties;
 using RaidCrawler.Structures;
 using RaidCrawler.Subforms;
 using SysBot.Base;
-using System.Collections.ObjectModel;
 using System.Data;
 using System.Diagnostics;
 using System.Net.Sockets;
