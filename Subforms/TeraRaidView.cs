@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using RaidCrawler.Properties;
 
 namespace RaidCrawler.Subforms
 {
@@ -38,7 +39,12 @@ namespace RaidCrawler.Subforms
             pbComplete = 100;
             bmp = new Bitmap(pbWidth, pbHeight);
 
-            timer1.Interval = 180;
+            decimal delays;
+            delays = Settings.Default.CfgBaseDelay * 20 + Settings.Default.CfgOpenHome + Settings.Default.CfgNavigateToSettings +
+                Settings.Default.CfgOpenSettings + Settings.Default.CfgHold + Settings.Default.CfgSubmenu + Settings.Default.CfgDateChange +
+                Settings.Default.CfgReturnHome + Settings.Default.CfgReturnGame + 4250; // fudge time to read raids
+
+            timer1.Interval = (int)(delays/100);
             timer1.Start();
         }
 
@@ -57,7 +63,6 @@ namespace RaidCrawler.Subforms
             //Note!
             //To keep things simple I am adding +1 to pbComplete every 50ms
             //You can change this as per your requirement :)
-            pbComplete--;
             if (pbComplete < 0)
             {
                 g.FillRectangle(new SolidBrush(Color.FromArgb(0, 5, 25)), new Rectangle(0, 0, pbWidth, pbHeight));
@@ -65,7 +70,7 @@ namespace RaidCrawler.Subforms
                 g.Dispose();
                 timer1.Stop();
             }
-
+            pbComplete--;
         }
 
         private void TeraRaidView_MouseDown(object sender, MouseEventArgs e)
