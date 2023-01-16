@@ -190,7 +190,7 @@
             this.ECCheck.Name = "ECCheck";
             this.ECCheck.Size = new System.Drawing.Size(60,19);
             this.ECCheck.TabIndex = 19;
-            this.ECCheck.Text = "EC % 0?";
+            this.ECCheck.Text = "EC%100?";
             this.ECCheck.UseVisualStyleBackColor = true;
             // 
             // Add
