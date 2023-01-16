@@ -1,50 +1,55 @@
-﻿using RaidCrawler.Properties;
+﻿using Newtonsoft.Json;
+using NLog.Filters;
+using RaidCrawler.Properties;
 
 namespace RaidCrawler.Subforms
 {
     public partial class ConfigWindow : Form
     {
-        public ConfigWindow()
+        private readonly Structures.Config c = new();
+        public ConfigWindow(Structures.Config c)
         {
             InitializeComponent();
 
-            InstanceName.Text = Settings.Default.CfgInstanceName;
+            this.c = c;
 
-            PlayTone.Checked = Settings.Default.CfgPlaySound;
-            FocusWindow.Checked = Settings.Default.CfgFocusWindow;
-            EnableAlert.Checked = Settings.Default.CfgEnableAlertWindow;
-            AlertMessage.Text = Settings.Default.CfgAlertWindowMessage;
+            InstanceName.Text = c.InstanceName;
+
+            PlayTone.Checked = c.PlaySound;
+            FocusWindow.Checked = c.FocusWindow;
+            EnableAlert.Checked = c.EnableAlertWindow;
+            AlertMessage.Text = c.AlertWindowMessage;
             AlertMessage.Enabled = EnableAlert.Checked;
-            EnableDiscordNotifications.Checked = Settings.Default.CfgEnableNotification;
-            DiscordWebhook.Text = Settings.Default.CfgDiscordWebhook;
+            EnableDiscordNotifications.Checked = c.EnableNotification;
+            DiscordWebhook.Text = c.DiscordWebhook;
             DiscordWebhook.Enabled = EnableDiscordNotifications.Checked;
-            DiscordMessageContent.Text = Settings.Default.CfgDiscordMessageContent;
+            DiscordMessageContent.Text = c.DiscordMessageContent;
             DiscordMessageContent.Enabled = EnableDiscordNotifications.Checked;
 
-            UseTouch.Checked = Settings.Default.CfgUseTouch;
-            UseOvershoot.Checked = Settings.Default.CfgUseOvershoot;
-            BaseDelay.Value = Settings.Default.CfgBaseDelay;
-            OpenHome.Value = Settings.Default.CfgOpenHome;
-            NavigateToSettings.Value = Settings.Default.CfgNavigateToSettings;
-            OpenSettings.Value = Settings.Default.CfgOpenSettings;
-            Hold.Value = Settings.Default.CfgHold;
-            SystemDDownPresses.Value = Settings.Default.CfgSystemDDownPresses;
-            SystemOvershoot.Value = Settings.Default.CfgSystemOvershoot;
-            Submenu.Value = Settings.Default.CfgSubmenu;
-            DateChange.Value = Settings.Default.CfgDateChange;
-            DaysToSkip.Value = Settings.Default.CfgDaysToSkip;
-            ReturnHome.Value = Settings.Default.CfgReturnHome;
-            ReturnGame.Value = Settings.Default.CfgReturnGame;
+            UseTouch.Checked = c.UseTouch;
+            UseOvershoot.Checked = c.UseOvershoot;
+            BaseDelay.Value = c.BaseDelay;
+            OpenHome.Value = c.OpenHome;
+            NavigateToSettings.Value = c.NavigateToSettings;
+            OpenSettings.Value = c.OpenSettings;
+            Hold.Value = c.Hold;
+            SystemDDownPresses.Value = c.SystemDDownPresses;
+            SystemOvershoot.Value = c.SystemOvershoot;
+            Submenu.Value = c.Submenu;
+            DateChange.Value = c.DateChange;
+            DaysToSkip.Value = c.DaysToSkip;
+            ReturnHome.Value = c.ReturnHome;
+            ReturnGame.Value = c.ReturnGame;
 
-            IVstyle.SelectedIndex = Settings.Default.CfgIVstyle;
-            IVspacer.Text = Settings.Default.CfgIVspacer;
-            IVverbose.Checked = Settings.Default.CfgIVverbose;
+            IVstyle.SelectedIndex = c.IVsStyle;
+            IVspacer.Text = c.IVsSpacer;
+            IVverbose.Checked = c.VerboseIVs;
 
-            denToggle.Checked = Settings.Default.CfgToggleDen;
+            denToggle.Checked = c.ToggleDen;
 
-            EnableEmoji.Checked = Settings.Default.CfgEnableEmoji;
+            EnableEmoji.Checked = c.EnableEmoji;
 
-            ExperimentalView.Checked = Settings.Default.CfgExperimentalView;
+            ExperimentalView.Checked = c.StreamerView;
         }
 
         private void EnableAlert_CheckedChanged(object sender, EventArgs e)
@@ -60,44 +65,45 @@ namespace RaidCrawler.Subforms
 
         private void Save_Click(object sender, EventArgs e)
         {
-            Settings.Default.CfgInstanceName = InstanceName.Text;
+            c.InstanceName = InstanceName.Text;
 
-            Settings.Default.CfgPlaySound = PlayTone.Checked;
-            Settings.Default.CfgFocusWindow = FocusWindow.Checked;
-            Settings.Default.CfgEnableAlertWindow = EnableAlert.Checked;
-            Settings.Default.CfgAlertWindowMessage = AlertMessage.Text;
-            Settings.Default.CfgEnableNotification = EnableDiscordNotifications.Checked;
-            Settings.Default.CfgDiscordWebhook = DiscordWebhook.Text;
-            Settings.Default.CfgDiscordMessageContent = DiscordMessageContent.Text;
+            c.PlaySound = PlayTone.Checked;
+            c.FocusWindow = FocusWindow.Checked;
+            c.EnableAlertWindow = EnableAlert.Checked;
+            c.AlertWindowMessage = AlertMessage.Text;
+            c.EnableNotification = EnableDiscordNotifications.Checked;
+            c.DiscordWebhook = DiscordWebhook.Text;
+            c.DiscordMessageContent = DiscordMessageContent.Text;
 
-            Settings.Default.CfgUseTouch = UseTouch.Checked;
-            Settings.Default.CfgUseOvershoot = UseOvershoot.Checked;
-            Settings.Default.CfgBaseDelay = BaseDelay.Value;
-            Settings.Default.CfgOpenHome = OpenHome.Value;
-            Settings.Default.CfgNavigateToSettings = NavigateToSettings.Value;
-            Settings.Default.CfgOpenSettings = OpenSettings.Value;
-            Settings.Default.CfgHold = Hold.Value;
-            Settings.Default.CfgSystemDDownPresses = SystemDDownPresses.Value;
-            Settings.Default.CfgSystemOvershoot = (int)SystemOvershoot.Value;
-            Settings.Default.CfgSubmenu = Submenu.Value;
-            Settings.Default.CfgDateChange = DateChange.Value;
-            Settings.Default.CfgDaysToSkip = DaysToSkip.Value;
-            Settings.Default.CfgReturnHome = ReturnHome.Value;
-            Settings.Default.CfgReturnGame = ReturnGame.Value;
+            c.UseTouch = UseTouch.Checked;
+            c.UseOvershoot = UseOvershoot.Checked;
+            c.BaseDelay = BaseDelay.Value;
+            c.OpenHome = OpenHome.Value;
+            c.NavigateToSettings = NavigateToSettings.Value;
+            c.OpenSettings = OpenSettings.Value;
+            c.Hold = Hold.Value;
+            c.SystemDDownPresses = SystemDDownPresses.Value;
+            c.SystemOvershoot = SystemOvershoot.Value;
+            c.Submenu = Submenu.Value;
+            c.DateChange = DateChange.Value;
+            c.DaysToSkip = DaysToSkip.Value;
+            c.ReturnHome = ReturnHome.Value;
+            c.ReturnGame = ReturnGame.Value;
 
-            Settings.Default.CfgIVstyle = IVstyle.SelectedIndex;
-            Settings.Default.CfgIVspacer = IVspacer.Text;
-            Settings.Default.CfgIVverbose = IVverbose.Checked;
+            c.IVsStyle = IVstyle.SelectedIndex;
+            c.IVsSpacer = IVspacer.Text;
+            c.VerboseIVs = IVverbose.Checked;
 
-            Settings.Default.CfgEnableEmoji = EnableEmoji.Checked;
+            c.EnableEmoji = EnableEmoji.Checked;
 
-            Settings.Default.CfgToggleDen = denToggle.Checked;
-            Settings.Default.CfgExperimentalView = ExperimentalView.Checked;
+            c.ToggleDen = denToggle.Checked;
+            c.StreamerView = ExperimentalView.Checked;
 
-            Settings.Default.Save();
+            string output = JsonConvert.SerializeObject(c);
+            using StreamWriter sw = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.json"));
+            sw.Write(output);
 
             Close();
         }
-
     }
 }

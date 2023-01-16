@@ -22,12 +22,14 @@ namespace RaidCrawler.Subforms
         int pbWidth, pbHeight, pbComplete;
         Bitmap bmp;
         Graphics g;
+        Structures.Config c;
 
-        public TeraRaidView()
+        public TeraRaidView(Structures.Config c)
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.Manual;
             this.Location = new Point(0, 0);
+            this.c = c;
         }
 
         public void startProgress()
@@ -40,11 +42,11 @@ namespace RaidCrawler.Subforms
             bmp = new Bitmap(pbWidth, pbHeight);
 
             decimal delays;
-            delays = Settings.Default.CfgBaseDelay * 20 + Settings.Default.CfgOpenHome + Settings.Default.CfgNavigateToSettings +
-                Settings.Default.CfgOpenSettings + Settings.Default.CfgHold + Settings.Default.CfgSubmenu + Settings.Default.CfgDateChange +
-                Settings.Default.CfgReturnHome + Settings.Default.CfgReturnGame + 4250; // fudge time to read raids
+            delays = c.BaseDelay * 20 + c.OpenHome + c.NavigateToSettings +
+                c.OpenSettings + c.Hold + c.Submenu + c.DateChange +
+                c.ReturnHome + c.ReturnGame + 4250; // fudge time to read raids
 
-            timer1.Interval = (int)(delays/100);
+            timer1.Interval = (int)(delays / 100);
             timer1.Start();
         }
 

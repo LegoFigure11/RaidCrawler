@@ -23,22 +23,24 @@ namespace RaidCrawler.Structures
             }
         }
 
-        public static string[]? DiscordWebhooks = Properties.Settings.Default.CfgEnableNotification ? Properties.Settings.Default.CfgDiscordWebhook.Split(',') : null;
+        public static string[]? DiscordWebhooks;
 
-        public static void SendNotifications(ITeraRaid? encounter, Raid raid, RaidFilter filter, String time, List<(int, int, int)>? RewardsList)
+        public static void SendNotifications(Config c, ITeraRaid? encounter, Raid raid, RaidFilter filter, String time, List<(int, int, int)>? RewardsList)
         {
             if (encounter == null)
                 return;
+            DiscordWebhooks = c.EnableNotification ? c.DiscordWebhook.Split(',') : null;
             if (DiscordWebhooks == null)
                 return;
-            var webhook = GenerateWebhook(encounter, raid, filter, time, RewardsList);
+            var webhook = GenerateWebhook(c, encounter, raid, filter, time, RewardsList);
             var content = new StringContent(JsonConvert.SerializeObject(webhook), Encoding.UTF8, "application/json");
             foreach (var url in DiscordWebhooks)
                 Client.PostAsync(url.Trim(), content).Wait();
         }
 
-        public static void SendScreenshot(SwitchSocketAsync nx)
+        public static void SendScreenshot(Config c, SwitchSocketAsync nx)
         {
+            DiscordWebhooks = c.EnableNotification ? c.DiscordWebhook.Split(',') : null;
             if (DiscordWebhooks == null)
                 return;
             var screenshot = SysBot.Base.Decoder.ConvertHexByteStringToBytes(nx.PixelPeek(new CancellationToken()).Result);
@@ -56,7 +58,7 @@ namespace RaidCrawler.Structures
                 Client.PostAsync(url.Trim(), content).Wait();
         }
 
-        public static object GenerateWebhook(ITeraRaid encounter, Raid raid, RaidFilter filter, String time, List<(int, int, int)>? RewardsList)
+        public static object GenerateWebhook(Config c, ITeraRaid encounter, Raid raid, RaidFilter filter, String time, List<(int, int, int)>? RewardsList)
         {
             var param = Raid.GetParam(encounter);
             var blank = new PK9
@@ -65,7 +67,7 @@ namespace RaidCrawler.Structures
                 Form = encounter.Form
             };
             Encounter9RNG.GenerateData(blank, param, EncounterCriteria.Unrestricted, raid.Seed);
-            var emoji = Settings.Default.CfgEnableEmoji;
+            var emoji = c.EnableEmoji;
             var isevent = raid.IsEvent;
             var species = $"{Raid.strings.Species[encounter.Species]}{(encounter.Form != 0 ? $"-{encounter.Form}" : "")}";
             var difficulty = Difficulty(encounter.Stars, isevent, emoji);
@@ -78,19 +80,19 @@ namespace RaidCrawler.Structures
             var hexcolor = $"{color.R:X2}{color.G:X2}{color.B:X2}";
             var tera = $"{Raid.strings.types[teratype]}";
             var teraemoji = TeraEmoji($"{Raid.strings.types[teratype]}", emoji);
-            var ivs = IVsStringEmoji(ToSpeedLast(blank.IVs), Settings.Default.CfgIVstyle, Settings.Default.CfgIVspacer, Settings.Default.CfgIVverbose, emoji);
+            var ivs = IVsStringEmoji(ToSpeedLast(blank.IVs), c.IVsStyle, c.IVsSpacer, c.VerboseIVs, emoji);
             var sprite_name = SpriteName.GetResourceStringSprite(blank.Species, blank.Form, blank.Gender, blank.FormArgument, blank.Generation, shiny);
             var moves = new ushort[4] { encounter.Move1, encounter.Move2, encounter.Move3, encounter.Move4 };
             var movestr = string.Concat(moves.Where(z => z != 0).Select(z => $"{Raid.strings.Move[z]}ㅤ\n")).Trim();
             var extramoves = string.Concat(encounter.ExtraMoves.Where(z => z != 0).Select(z => $"{Raid.strings.Move[z]}ㅤ\n")).Trim();
-            var area = $"{Areas.Area[raid.Area - 1]}" + (Settings.Default.CfgToggleDen ? $" [Den {raid.Den}]ㅤ" : "ㅤ");
-            var instance = " " + Settings.Default.CfgInstanceName;
+            var area = $"{Areas.Area[raid.Area - 1]}" + (c.ToggleDen ? $" [Den {raid.Den}]ㅤ" : "ㅤ");
+            var instance = " " + c.InstanceName;
             var rewards = GetRewards(RewardsList, emoji);
             var SuccessWebHook = new
             {
                 username = $"RaidCrawler" + instance,
                 avatar_url = "https://www.serebii.net/scarletviolet/ribbons/mightiestmark.png",
-                content = Properties.Settings.Default.CfgDiscordMessageContent,
+                content = c.DiscordMessageContent,
                 embeds = new List<object>
                 {
                     new
