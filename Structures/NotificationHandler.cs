@@ -160,14 +160,14 @@ namespace RaidCrawler.Structures
             {
                 switch (rewards[i].Item1)
                 {
-                    case 0645: abilitycapsule ++; break;
-                    case 0795: bottlecap ++; break;
-                    case 1606: abilitypatch ++; break;
-                    case 1904: sweetherba ++; break;
-                    case 1905: saltyherba ++; break;
-                    case 1906: sourherba ++; break;
-                    case 1907: bitterherba ++; break;
-                    case 1908: spicyherba ++; break;
+                    case 0645: abilitycapsule++; break;
+                    case 0795: bottlecap++; break;
+                    case 1606: abilitypatch++; break;
+                    case 1904: sweetherba++; break;
+                    case 1905: saltyherba++; break;
+                    case 1906: sourherba++; break;
+                    case 1907: bitterherba++; break;
+                    case 1908: spicyherba++; break;
                 }
             }
 
@@ -214,7 +214,7 @@ namespace RaidCrawler.Structures
                             default: s += $"`{ivs[i]:D2}`{(verbose ? " " + stats[i] : string.Empty)}"; break;
                         }
                         if (i < 5)
-                            s += spacer.Replace("\"","");
+                            s += spacer.Replace("\"", "");
                         break;
                     case 1:
                         s += $"`{ivs[i]:D2}`{(verbose ? " " + stats[i] : string.Empty)}";

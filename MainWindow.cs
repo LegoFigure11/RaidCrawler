@@ -1,5 +1,4 @@
 using Newtonsoft.Json;
-using NLog.Filters;
 using PKHeX.Core;
 using PKHeX.Drawing;
 using PKHeX.Drawing.PokeSprite;

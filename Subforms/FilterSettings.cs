@@ -16,7 +16,7 @@ namespace RaidCrawler.Subforms
             Species.DataSource = Enum.GetValues(typeof(Species)).Cast<Species>().Where(z => z != PKHeX.Core.Species.MAX_COUNT).ToArray();
             Nature.DataSource = Enum.GetValues(typeof(Nature));
             TeraType.DataSource = Enum.GetValues(typeof(MoveType)).Cast<MoveType>().Where(z => z != MoveType.Any).ToArray();
-            
+
             Stars.SelectedIndex = 0;
             StarsComp.SelectedIndex = 0;
             HPComp.SelectedIndex = 0;
@@ -41,7 +41,7 @@ namespace RaidCrawler.Subforms
                 ActiveFilters.DataSource = bs;
                 ActiveFilters.DisplayMember = "Name";
             }
-            else 
+            else
                 bs.ResetBindings(false);
             for (int i = 0; i < filters.Count; i++)
                 ActiveFilters.SetItemChecked(i, filters[i].Enabled);
