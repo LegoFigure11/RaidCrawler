@@ -40,6 +40,9 @@ namespace RaidCrawler.Subforms
             ReturnHome.Value = c.ReturnHome;
             ReturnGame.Value = c.ReturnGame;
 
+            SystemDDownPresses.Enabled = !UseOvershoot.Checked;
+            SystemOvershoot.Enabled = UseOvershoot.Checked;
+
             IVstyle.SelectedIndex = c.IVsStyle;
             IVspacer.Text = c.IVsSpacer;
             IVverbose.Checked = c.VerboseIVs;
@@ -103,6 +106,12 @@ namespace RaidCrawler.Subforms
             sw.Write(output);
 
             Close();
+        }
+
+        private void UseOvershoot_CheckedChanged(object sender, EventArgs e)
+        {
+            SystemDDownPresses.Enabled = !UseOvershoot.Checked;
+            SystemOvershoot.Enabled = UseOvershoot.Checked;
         }
     }
 }

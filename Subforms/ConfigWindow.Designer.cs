@@ -149,7 +149,7 @@
             // 
             this.AlertMessage.Location = new System.Drawing.Point(6, 96);
             this.AlertMessage.Name = "AlertMessage";
-            this.AlertMessage.Size = new System.Drawing.Size(452, 23);
+            this.AlertMessage.Size = new System.Drawing.Size(327, 23);
             this.AlertMessage.TabIndex = 4;
             // 
             // label2
@@ -215,7 +215,7 @@
             this.Save.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.Save.Location = new System.Drawing.Point(0, 444);
             this.Save.Name = "Save";
-            this.Save.Size = new System.Drawing.Size(472, 32);
+            this.Save.Size = new System.Drawing.Size(349, 32);
             this.Save.TabIndex = 12;
             this.Save.Text = "Save";
             this.Save.UseVisualStyleBackColor = true;
@@ -472,7 +472,7 @@
             // 
             this.DiscordWebhook.Location = new System.Drawing.Point(6, 147);
             this.DiscordWebhook.Name = "DiscordWebhook";
-            this.DiscordWebhook.Size = new System.Drawing.Size(452, 23);
+            this.DiscordWebhook.Size = new System.Drawing.Size(327, 23);
             this.DiscordWebhook.TabIndex = 37;
             // 
             // EnableDiscordNotifications
@@ -516,7 +516,7 @@
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(472, 444);
+            this.tabControl1.Size = new System.Drawing.Size(349, 444);
             this.tabControl1.TabIndex = 41;
             // 
             // tabPage1
@@ -533,7 +533,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 24);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(464, 416);
+            this.tabPage1.Size = new System.Drawing.Size(341, 416);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Match";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -542,7 +542,7 @@
             // 
             this.DiscordMessageContent.Location = new System.Drawing.Point(6, 191);
             this.DiscordMessageContent.Name = "DiscordMessageContent";
-            this.DiscordMessageContent.Size = new System.Drawing.Size(452, 23);
+            this.DiscordMessageContent.Size = new System.Drawing.Size(327, 23);
             this.DiscordMessageContent.TabIndex = 40;
             // 
             // label14
@@ -588,7 +588,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 24);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(464, 416);
+            this.tabPage2.Size = new System.Drawing.Size(341, 416);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Advance Date";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -596,15 +596,15 @@
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(6, 391);
+            this.label16.Location = new System.Drawing.Point(8, 389);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(233, 15);
+            this.label16.Size = new System.Drawing.Size(236, 15);
             this.label16.TabIndex = 40;
-            this.label16.Text = "Time to hold to overshoot \"Date and Time\"";
+            this.label16.Text = "Time to hold to overshoot \"Date and Time\":";
             // 
             // SystemOvershoot
             // 
-            this.SystemOvershoot.Location = new System.Drawing.Point(265, 389);
+            this.SystemOvershoot.Location = new System.Drawing.Point(265, 387);
             this.SystemOvershoot.Maximum = new decimal(new int[] {
             1200,
             0,
@@ -627,6 +627,7 @@
             this.UseOvershoot.Size = new System.Drawing.Size(15, 14);
             this.UseOvershoot.TabIndex = 38;
             this.UseOvershoot.UseVisualStyleBackColor = true;
+            this.UseOvershoot.CheckedChanged += new System.EventHandler(this.UseOvershoot_CheckedChanged);
             // 
             // label15
             // 
@@ -650,7 +651,7 @@
             this.tabPage4.Controls.Add(this.EnableEmoji);
             this.tabPage4.Location = new System.Drawing.Point(4, 24);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(464, 416);
+            this.tabPage4.Size = new System.Drawing.Size(341, 416);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Webhook";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -710,7 +711,6 @@
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(8, 109);
             this.label20.Location = new System.Drawing.Point(8, 108);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(54, 15);
@@ -720,7 +720,6 @@
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(8, 65);
             this.label19.Location = new System.Drawing.Point(8, 64);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(44, 15);
@@ -731,7 +730,6 @@
             // 
             this.label18.AutoSize = true;
             this.label18.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label18.Location = new System.Drawing.Point(8, 25);
             this.label18.Location = new System.Drawing.Point(8, 24);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(68, 15);
@@ -759,7 +757,7 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 24);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(464, 416);
+            this.tabPage3.Size = new System.Drawing.Size(341, 416);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Experimental";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -784,7 +782,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(472, 476);
+            this.ClientSize = new System.Drawing.Size(349, 476);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.Save);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
