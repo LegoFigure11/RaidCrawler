@@ -262,7 +262,7 @@ namespace RaidCrawler.Structures
                 case "Ice": s = (emoji ? "<:ice:1064557609857863770>" : tera); break;
                 case "Normal": s = (emoji ? "<:normal:1064546286247886938>" : tera); break;
                 case "Poison": s = (emoji ? "<:poison:1064546294854586400>" : tera); break;
-                case "Psychic": s = (emoji ? "<:poison:1064546294854586400>" : tera); break;
+                case "Psychic": s = (emoji ? "<:psychic:1064557585124049006>" : tera); break;
                 case "Rock": s = (emoji ? "<:rock:1064546299992625242>" : tera); break;
                 case "Steel": s = (emoji ? "<:steel:1064557443742453790>" : tera); break;
                 case "Water": s = (emoji ? "<:water:1064557509404270642>" : tera); break;
