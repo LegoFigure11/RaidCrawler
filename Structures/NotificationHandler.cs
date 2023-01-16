@@ -93,7 +93,7 @@ namespace RaidCrawler.Structures
                 {
                     new
                     {
-                        title = $"{(shiny ? (emoji ? "<:shiny:1060794151869874227>" : "Shiny") : "")} {species} {gender} {teraemoji}",
+                        title = $"{(shiny ? (emoji ? "<:shiny:1064540762991243354>" : "Shiny") : "")} {species} {gender} {teraemoji}",
                         description = $"",
                         color = int.Parse(hexcolor, System.Globalization.NumberStyles.HexNumber),
                         thumbnail = new
@@ -125,9 +125,9 @@ namespace RaidCrawler.Structures
         private static string Difficulty(byte stars, bool isevent, bool emoji)
         {
             string s = string.Empty;
-            string mstar = (emoji ? "<:raidStarM:1060475723405606994>" : "☆");
-            string bstar = (emoji ? "<:raidStarB:1060475726572294144>" : "☆");
-            string ystar = (emoji ? "<:raidStarY:1060475725498560512>" : "☆");
+            string mstar = (emoji ? "<:pinkstar:1064538642934140978>" : ":star:");
+            string bstar = (emoji ? "<:bluestar:1064538604409471016>" : ":star:");
+            string ystar = (emoji ? "<:yellowstar:1064538672113922109>" : ":star:");
             s = (stars == 7) ? string.Concat(Enumerable.Repeat(mstar, stars)) :
                 (isevent) ? string.Concat(Enumerable.Repeat(bstar, stars)) : string.Concat(Enumerable.Repeat(ystar, stars));
             return s;
@@ -137,8 +137,8 @@ namespace RaidCrawler.Structures
             string gender = string.Empty;
             switch (genderInt)
             {
-                case 0: gender = (emoji ? "<:male:1060738367274352730>" : "Male"); break;
-                case 1: gender = (emoji ? "<:female:1060738368541048965>" : "Female"); break;
+                case 0: gender = (emoji ? "<:male:1064539278039863397>" : ":male_sign:"); break;
+                case 1: gender = (emoji ? "<:female:1064539369572155504>" : ":female_sign:"); break;
                 case 2: gender = ""; break;
             }
             return gender;
@@ -171,14 +171,14 @@ namespace RaidCrawler.Structures
                 }
             }
 
-            s += (abilitycapsule > 0) ? (emoji ? $"`{abilitycapsule}`<:abilitycapsule:1059122237019537478> " : $"`{abilitycapsule}` Ability Capsule  ") : "";
-            s += (bottlecap > 0) ? (emoji ? $"`{bottlecap}`<:abilitypatch:1059123255283302450> " : $"`{bottlecap}` Bottle Cap  ") : "";
-            s += (abilitypatch > 0) ? (emoji ? $"`{abilitypatch}`<:bottlecap:1058436109761265765> " : $"`{abilitypatch}` Ability Patch  ") : "";
-            s += (sweetherba > 0) ? (emoji ? $"`{sweetherba}`<:herbaSweet:1058436152924844052> " : $"`{sweetherba}` Sweet Herba  ") : "";
-            s += (saltyherba > 0) ? (emoji ? $"`{saltyherba}`<:herbaSalty:1058436153931464764> " : $"`{saltyherba}` Salty Herba  ") : "";
-            s += (sourherba > 0) ? (emoji ? $"`{sourherba}`<:herbaSour:1058436114752475228> " : $"`{sourherba}` Sour Herba  ") : "";
-            s += (bitterherba > 0) ? (emoji ? $"`{bitterherba}`<:herbaBitter:1058436112034562088> " : $"`{bitterherba}` Bitter Herba  ") : "";
-            s += (spicyherba > 0) ? (emoji ? $"`{spicyherba}`<:herbaSpicy:1058436113276096614> " : $"`{spicyherba}` Spicy Herba  ") : "";
+            s += (abilitycapsule > 0) ? (emoji ? $"`{abilitycapsule}`<:abilitycapsule:1064541406921752737> " : $"`{abilitycapsule}` Ability Capsule  ") : "";
+            s += (bottlecap > 0) ? (emoji ? $"`{bottlecap}`<:bottlecap:1064537470370320495> " : $"`{bottlecap}` Bottle Cap  ") : "";
+            s += (abilitypatch > 0) ? (emoji ? $"`{abilitypatch}`<:abilitypatch:1064538087763476522> " : $"`{abilitypatch}` Ability Patch  ") : "";
+            s += (sweetherba > 0) ? (emoji ? $"`{sweetherba}`<:sweetherba:1064541764163227759> " : $"`{sweetherba}` Sweet Herba  ") : "";
+            s += (saltyherba > 0) ? (emoji ? $"`{saltyherba}`<:saltyherba:1064541768147796038> " : $"`{saltyherba}` Salty Herba  ") : "";
+            s += (sourherba > 0) ? (emoji ? $"`{sourherba}`<:sourherba:1064541770148483073> " : $"`{sourherba}` Sour Herba  ") : "";
+            s += (bitterherba > 0) ? (emoji ? $"`{bitterherba}`<:bitterherba:1064541773763977256> " : $"`{bitterherba}` Bitter Herba  ") : "";
+            s += (spicyherba > 0) ? (emoji ? $"`{spicyherba}`<:spicyherba:1064541776699994132> " : $"`{spicyherba}` Spicy Herba  ") : "";
 
             return s;
         }
@@ -200,8 +200,8 @@ namespace RaidCrawler.Structures
         {
             string s = string.Empty;
             var stats = new[] { "HP", "Atk", "Def", "SpA", "SpD", "Spe" };
-            var iv0 = new[] { "<:m1Health0:1063983356309688430>", "<:m2Attack0:1063983327385751683>", "<:m3Defence0:1063983331294838814>", "<:m4SpecialAttack0:1063983360294273084>", "<:m5SpecialDefence0:1063983385762082867>", "<:m6Speed0:1063983390052847659>" };
-            var iv31 = new[] { "<:m1Health31:1063983357773500508>", "<:m2Attack31:1063983329097039992>", "<:m3Defence31:1063983333056458822>", "<:m4SpecialAttack31:1063983361619660861>", "<:m5SpecialDefence31:1063983387137822761>", "<:m6Speed31:1063983441672163469>" };
+            var iv0 = new[] { "<:h0:1064542713736876105>", "<:a0:1064543120223649845>", "<:b0:1064543195557539951>", "<:c0:1064543276293697576>", "<:d0:1064543356086140979>", "<:s0:1064543418002448414>" };
+            var iv31 = new[] { "<:h31:1064544907106205817>", "<:a31:1064544969685205083>", "<:b31:1064545034675961866>", "<:c31:1064545097225609226>", "<:d31:1064545163336237137>", "<:s31:1064545221448306803>" };
             for (int i = 0; i < ivs.Length; i++)
             {
                 switch (style)
@@ -248,24 +248,24 @@ namespace RaidCrawler.Structures
             string s = string.Empty;
             switch (tera)
             {
-                case "Bug": s = (emoji ? "<:tBug:1060235283976699995>" : tera); break;
-                case "Dark": s = (emoji ? "<:tDark:1060235285394366564>" : tera); break;
-                case "Dragon": s = (emoji ? "<:tDragon:1060235286879141917>" : tera); break;
-                case "Electric": s = (emoji ? "<:tElectric:1060235288691093566>" : tera); break;
-                case "Fairy": s = (emoji ? "<:tFairy:1060235282127003730>" : tera); break;
-                case "Fighting": s = (emoji ? "<:tFighting:1060235325705822309>" : tera); break;
-                case "Fire": s = (emoji ? "<:tFire:1060235326834102382>" : tera); break;
-                case "Flying": s = (emoji ? "<:tFlying:1060235328717336646>" : tera); break;
-                case "Ghost": s = (emoji ? "<:tGhost:1060235329665241129>" : tera); break;
-                case "Grass": s = (emoji ? "<:tGrass:1060235303828332655>" : tera); break;
-                case "Ground": s = (emoji ? "<:tGround:1060235355867058308>" : tera); break;
-                case "Ice": s = (emoji ? "<:tIce:1060235356710109246>" : tera); break;
-                case "Normal": s = (emoji ? "<:tNormal:1060235360334008331>" : tera); break;
-                case "Poison": s = (emoji ? "<:tPoison:1060235353732161569>" : tera); break;
-                case "Psychic": s = (emoji ? "<:tPsychic:1060235385235570811>" : tera); break;
-                case "Rock": s = (emoji ? "<:tRock:1060235386279972906>" : tera); break;
-                case "Steel": s = (emoji ? "<:tSteel:1060235358358491147>" : tera); break;
-                case "Water": s = (emoji ? "<:tWater:1060235383411056640>" : tera); break;
+                case "Bug": s = (emoji ? "<:bug:1064546304048496812>" : tera); break;
+                case "Dark": s = (emoji ? "<:dark:1064557656079085588>" : tera); break;
+                case "Dragon": s = (emoji ? "<:dragon:1064557631890538566>" : tera); break;
+                case "Electric": s = (emoji ? "<:electric:1064557559563943956>" : tera); break;
+                case "Fairy": s = (emoji ? "<:fairy:1064557682566123701>" : tera); break;
+                case "Fighting": s = (emoji ? "<:fighting:1064546289406189648>" : tera); break;
+                case "Fire": s = (emoji ? "<:fire:1064557482468446230>" : tera); break;
+                case "Flying": s = (emoji ? "<:flying:1064546291239104623>" : tera); break;
+                case "Ghost": s = (emoji ? "<:ghost:1064546307848536115>" : tera); break;
+                case "Grass": s = (emoji ? "<:grass:1064557534096130099>" : tera); break;
+                case "Ground": s = (emoji ? "<:ground:1064546296725241988>" : tera); break;
+                case "Ice": s = (emoji ? "<:ice:1064557609857863770>" : tera); break;
+                case "Normal": s = (emoji ? "<:normal:1064546286247886938>" : tera); break;
+                case "Poison": s = (emoji ? "<:poison:1064546294854586400>" : tera); break;
+                case "Psychic": s = (emoji ? "<:poison:1064546294854586400>" : tera); break;
+                case "Rock": s = (emoji ? "<:rock:1064546299992625242>" : tera); break;
+                case "Steel": s = (emoji ? "<:steel:1064557443742453790>" : tera); break;
+                case "Water": s = (emoji ? "<:water:1064557509404270642>" : tera); break;
             }
             return s;
         }
