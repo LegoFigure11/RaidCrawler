@@ -894,7 +894,8 @@ namespace RaidCrawler
                                 ComboIndex.SelectedIndex = i;
                             }
                         }
-                        NotificationHandler.SendNotifications(Config, Encounters[i], Raids[i], satisfied_filters, time, RewardsList[i]);
+                        if (satisfied_filters.Count > 0)
+                            NotificationHandler.SendNotifications(Config, Encounters[i], Raids[i], satisfied_filters, time, RewardsList[i]);
                     }
                     if (Config.EnableAlertWindow) MessageBox.Show(Config.AlertWindowMessage + "\n\nTime Spent: " + time, "Result found!", MessageBoxButtons.OK);
                 }
