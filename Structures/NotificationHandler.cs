@@ -21,14 +21,14 @@ namespace RaidCrawler.Structures
 
         public static string[]? DiscordWebhooks;
 
-        public static void SendNotifications(Config c, ITeraRaid? encounter, Raid raid, RaidFilter filter, String time, List<(int, int, int)>? RewardsList)
+        public static void SendNotifications(Config c, ITeraRaid? encounter, Raid raid, IEnumerable<RaidFilter> filters, String time, List<(int, int, int)>? RewardsList)
         {
             if (encounter == null)
                 return;
             DiscordWebhooks = c.EnableNotification ? c.DiscordWebhook.Split(',') : null;
             if (DiscordWebhooks == null)
                 return;
-            var webhook = GenerateWebhook(c, encounter, raid, filter, time, RewardsList);
+            var webhook = GenerateWebhook(c, encounter, raid, filters, time, RewardsList);
             var content = new StringContent(JsonConvert.SerializeObject(webhook), Encoding.UTF8, "application/json");
             foreach (var url in DiscordWebhooks)
                 Client.PostAsync(url.Trim(), content).Wait();
@@ -54,7 +54,7 @@ namespace RaidCrawler.Structures
                 Client.PostAsync(url.Trim(), content).Wait();
         }
 
-        public static object GenerateWebhook(Config c, ITeraRaid encounter, Raid raid, RaidFilter filter, String time, List<(int, int, int)>? RewardsList)
+        public static object GenerateWebhook(Config c, ITeraRaid encounter, Raid raid, IEnumerable<RaidFilter> filters, String time, List<(int, int, int)>? RewardsList)
         {
             var param = Raid.GetParam(encounter);
             var blank = new PK9
@@ -112,7 +112,7 @@ namespace RaidCrawler.Structures
 
                             new { name = "Location󠀠󠀠󠀠", value = area, inline = true, },
                             new { name = "Search Time󠀠󠀠󠀠", value = time, inline = true, },
-                            new { name = "Filter Name", value = filter.Name, inline = true, },
+                            new { name = "Filter Name" + (filters.Count() > 1 ? "s" : string.Empty), value = string.Join(", ", filters.Select(z => z.Name)), inline = true, },
 
                             new { name = (rewards != "" ? "Rewards" : ""), value = rewards, inline = false, },
                         },

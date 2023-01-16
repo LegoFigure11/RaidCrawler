@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using NLog.Filters;
 using PKHeX.Core;
 using PKHeX.Drawing;
 using PKHeX.Drawing.PokeSprite;
@@ -882,16 +883,18 @@ namespace RaidCrawler
                     }
                     for (int i = 0; i < Raids.Count; i++)
                     {
+                        var satisfied_filters = new List<RaidFilter>();
                         foreach (var filter in RaidFilters)
                         {
                             if (filter == null)
                                 continue;
                             if (filter.FilterSatisfied(Encounters[i], Raids[i], RaidBoost.SelectedIndex))
                             {
-                                NotificationHandler.SendNotifications(Config, Encounters[i], Raids[i], filter, time, RewardsList[i]);
+                                satisfied_filters.Add(filter);
                                 ComboIndex.SelectedIndex = i;
                             }
                         }
+                        NotificationHandler.SendNotifications(Config, Encounters[i], Raids[i], satisfied_filters, time, RewardsList[i]);
                     }
                     if (Config.EnableAlertWindow) MessageBox.Show(Config.AlertWindowMessage + "\n\nTime Spent: " + time, "Result found!", MessageBoxButtons.OK);
                 }
