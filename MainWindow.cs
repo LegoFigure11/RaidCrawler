@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using NLog.Filters;
 using PKHeX.Core;
 using PKHeX.Drawing;
 using PKHeX.Drawing.PokeSprite;
@@ -19,9 +20,10 @@ namespace RaidCrawler
 {
     public partial class MainWindow : Form
     {
+        private readonly Config Config = new();
 
-        private readonly static SwitchConnectionConfig Config = new() { Protocol = SwitchProtocol.WiFi, IP = Settings.Default.SwitchIP, Port = 6000 };
-        private readonly static SwitchSocketAsync SwitchConnection = new(Config);
+        private readonly static SwitchConnectionConfig ConnectionConfig = new() { Protocol = SwitchProtocol.WiFi, IP = "192.168.0.0", Port = 6000 };
+        private readonly static SwitchSocketAsync SwitchConnection = new(ConnectionConfig);
 
         private readonly static OffsetUtil OffsetUtil = new(SwitchConnection);
 
@@ -44,7 +46,7 @@ namespace RaidCrawler
         private Color DefaultColor;
         private FormWindowState _WindowState;
         private Stopwatch stopwatch = new Stopwatch();
-        private TeraRaidView teraRaidView = new TeraRaidView();
+        private TeraRaidView teraRaidView;
 
         public MainWindow()
         {
@@ -54,7 +56,6 @@ namespace RaidCrawler
             build = $" (dev-{date:yyyyMMdd})";
 #endif
             var v = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version!;
-            Text = "RaidCrawler v" + v.Major + "." + v.Minor + "." + v.Build + build + " " + Settings.Default.CfgInstanceName;
 
             var raid_data = new[]
             {
@@ -72,32 +73,55 @@ namespace RaidCrawler
                 RaidFilters = JsonConvert.DeserializeObject<List<RaidFilter>>(File.ReadAllText(filterpath)) ?? new List<RaidFilter>();
             den_locations = JsonConvert.DeserializeObject<Dictionary<string, float[]>>(Utils.GetStringResource("den_locations.json") ?? "{}");
 
+            var configpath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.json");
+            if (File.Exists(configpath))
+            {
+                Config = JsonConvert.DeserializeObject<Config>(File.ReadAllText(configpath)) ?? new Config();
+            }
+            else
+            {
+                Config = new Config();
+                SaveConfig();
+            }
+            Text = "RaidCrawler v" + v.Major + "." + v.Minor + "." + v.Build + build + " " + Config.InstanceName;
+
+
             // load rewards
             Raid.BaseFixedRewards = JsonConvert.DeserializeObject<List<RaidFixedRewards>>(Utils.GetStringResource("raid_fixed_reward_item_array.json") ?? "[]");
             Raid.BaseLotteryRewards = JsonConvert.DeserializeObject<List<RaidLotteryRewards>>(Utils.GetStringResource("raid_lottery_reward_item_array.json") ?? "[]");
 
-            Raid.Game = Settings.Default.Game;
+            Raid.Game = Config.Game;
             SpriteBuilder.ShowTeraThicknessStripe = 0x4;
             SpriteBuilder.ShowTeraOpacityStripe = 0xAF;
             SpriteBuilder.ShowTeraOpacityBackground = 0xFF;
             SpriteUtil.ChangeMode(SpriteBuilderMode.SpritesArtwork5668);
 
+            teraRaidView = new TeraRaidView(Config);
+
             InitializeComponent();
+        }
+
+        private void SaveConfig()
+        {
+            var configpath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.json");
+            string output = JsonConvert.SerializeObject(Config);
+            using StreamWriter sw = new(configpath);
+            sw.Write(output);
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
-            Location = Settings.Default.CfgLocation;
+            Location = Config.Location;
             if (Location.X == 0 && Location.Y == 0)
                 CenterToScreen();
-            InputSwitchIP.Text = Settings.Default.SwitchIP;
+            InputSwitchIP.Text = Config.SwitchIP;
             DefaultColor = IVs.BackColor;
-            Progress.SelectedIndex = Settings.Default.Progress;
-            EventProgress.SelectedIndex = Settings.Default.EventProgress;
-            Game.SelectedIndex = Game.FindString(Settings.Default.Game);
+            Progress.SelectedIndex = Config.Progress;
+            EventProgress.SelectedIndex = Config.EventProgress;
+            Game.SelectedIndex = Game.FindString(Config.Game);
             RaidBoost.SelectedIndex = 0;
 
-            if (Settings.Default.CfgExperimentalView)
+            if (Config.StreamerView)
             {
                 teraRaidView.Map.Image = map;
                 teraRaidView.Show();
@@ -109,10 +133,10 @@ namespace RaidCrawler
             TextBox textBox = (TextBox)sender;
             if (textBox.Text != "192.168.0.0")
             {
-                Settings.Default.SwitchIP = textBox.Text;
-                Config.IP = textBox.Text;
+                Config.SwitchIP = textBox.Text;
+                ConnectionConfig.IP = textBox.Text;
             }
-            Settings.Default.Save();
+            SaveConfig();
         }
 
         private void Disconnect_Click(object sender, EventArgs e)
@@ -765,66 +789,66 @@ namespace RaidCrawler
 
         private async Task AdvanceDate(CancellationToken token)
         {
-            if (Settings.Default.CfgExperimentalView)
+            if (Config.StreamerView)
             {
                 teraRaidView.startProgress();
             }
 
             ConnectionStatusText.Text = "Changing date...";
-            int BaseDelay = (int)Settings.Default.CfgBaseDelay;
+            int BaseDelay = (int)Config.BaseDelay;
             await Click(LSTICK, 0_050 + BaseDelay, token).ConfigureAwait(false); // Sometimes it seems like the first command doesn't go through so send this just in case
                                                                                  // HOME Menu
-            await Click(HOME, (int)Settings.Default.CfgOpenHome + BaseDelay, token).ConfigureAwait(false);
+            await Click(HOME, (int)Config.OpenHome + BaseDelay, token).ConfigureAwait(false);
             // Navigate to Settings
-            if (Settings.Default.CfgUseTouch)
+            if (Config.UseTouch)
             {
                 await Touch(840, 540, 0_050, BaseDelay, token).ConfigureAwait(false);
             }
             else
             {
-                await Click(DDOWN, (int)Settings.Default.CfgNavigateToSettings + 0_100 + BaseDelay, token).ConfigureAwait(false);
-                for (int i = 0; i < 5; i++) await Click(DRIGHT, (int)Settings.Default.CfgNavigateToSettings + BaseDelay, token).ConfigureAwait(false);
+                await Click(DDOWN, (int)Config.NavigateToSettings + 0_100 + BaseDelay, token).ConfigureAwait(false);
+                for (int i = 0; i < 5; i++) await Click(DRIGHT, (int)Config.NavigateToSettings + BaseDelay, token).ConfigureAwait(false);
             }
-            await Click(A, (int)Settings.Default.CfgOpenSettings + BaseDelay, token).ConfigureAwait(false);
+            await Click(A, (int)Config.OpenSettings + BaseDelay, token).ConfigureAwait(false);
             // Scroll to bottom
-            await PressAndHold(DDOWN, (int)Settings.Default.CfgHold, BaseDelay, token).ConfigureAwait(false);
+            await PressAndHold(DDOWN, (int)Config.Hold, BaseDelay, token).ConfigureAwait(false);
 
             // Navigate to "Date and Time"
             await Click(DRIGHT, 0_200 + BaseDelay, token).ConfigureAwait(false);
             // Hold down to overshoot Date/Time by one. DUP to recover.
-            if (Settings.Default.CfgUseOvershoot)
+            if (Config.UseOvershoot)
             {
-                await PressAndHold(DDOWN, (int)Settings.Default.CfgSystemOvershoot, 0, token).ConfigureAwait(false);
+                await PressAndHold(DDOWN, (int)Config.SystemOvershoot, 0, token).ConfigureAwait(false);
                 await Click(DUP, 0_500, token).ConfigureAwait(false);
             }
             else
                 // I tried using holds here but could not get the timing consistent
                 // Even if this is slightly slower, it is at least consistent
                 // And not missing any cycles means it's faster overall
-                for (int i = 0; i < Settings.Default.CfgSystemDDownPresses; i++) await Click(DDOWN, 0_050 + BaseDelay, token).ConfigureAwait(false);
-            await Click(A, (int)Settings.Default.CfgSubmenu + BaseDelay, token).ConfigureAwait(false);
+                for (int i = 0; i < Config.SystemDDownPresses; i++) await Click(DDOWN, 0_050 + BaseDelay, token).ConfigureAwait(false);
+            await Click(A, (int)Config.Submenu + BaseDelay, token).ConfigureAwait(false);
 
             // Navigate to Change Date/Time
-            if (Settings.Default.CfgUseTouch)
+            if (Config.UseTouch)
             {
                 await Touch(840, 400, 0_050, 0_300 + BaseDelay, token).ConfigureAwait(false);
             }
             else
             {
                 for (int i = 0; i < 2; i++) await Click(DDOWN, 0_200 + BaseDelay, token).ConfigureAwait(false);
-                await Click(A, (int)Settings.Default.CfgDateChange + BaseDelay, token).ConfigureAwait(false);
+                await Click(A, (int)Config.DateChange + BaseDelay, token).ConfigureAwait(false);
             }
 
             // Change the date
-            for (int i = 0; i < Settings.Default.CfgDaysToSkip; i++) await Click(DUP, 0_200 + BaseDelay, token).ConfigureAwait(false); // Not actually necessary, so we default to 0 as per #29
+            for (int i = 0; i < Config.DaysToSkip; i++) await Click(DUP, 0_200 + BaseDelay, token).ConfigureAwait(false); // Not actually necessary, so we default to 0 as per #29
 
 
             for (int i = 0; i < 6; i++) await Click(DRIGHT, 0_050 + BaseDelay, token).ConfigureAwait(false);
             await Click(A, 0_500 + BaseDelay, token).ConfigureAwait(false);
 
             // Return to game
-            await Click(HOME, (int)Settings.Default.CfgReturnHome + BaseDelay, token).ConfigureAwait(false);
-            await Click(HOME, (int)Settings.Default.CfgReturnGame + BaseDelay, token).ConfigureAwait(false);
+            await Click(HOME, (int)Config.ReturnHome + BaseDelay, token).ConfigureAwait(false);
+            await Click(HOME, (int)Config.ReturnGame + BaseDelay, token).ConfigureAwait(false);
         }
 
         private async void ButtonAdvanceDate_Click(object sender, EventArgs e)
@@ -853,8 +877,8 @@ namespace RaidCrawler
                     var timeSpan = stopwatch.Elapsed;
                     string time = String.Format("{0:00}:{1:00}:{2:00}",
                     timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
-                    if (Settings.Default.CfgPlaySound) System.Media.SystemSounds.Asterisk.Play();
-                    if (Settings.Default.CfgFocusWindow)
+                    if (Config.PlaySound) System.Media.SystemSounds.Asterisk.Play();
+                    if (Config.FocusWindow)
                     {
                         WindowState = _WindowState;
                         Activate();
@@ -867,12 +891,12 @@ namespace RaidCrawler
                                 continue;
                             if (filter.FilterSatisfied(Encounters[i], Raids[i], RaidBoost.SelectedIndex))
                             {
-                                NotificationHandler.SendNotifications(Encounters[i], Raids[i], filter, time, RewardsList[i]);
+                                NotificationHandler.SendNotifications(Config, Encounters[i], Raids[i], filter, time, RewardsList[i]);
                                 ComboIndex.SelectedIndex = i;
                             }
                         }
                     }
-                    if (Settings.Default.CfgEnableAlertWindow) MessageBox.Show(Settings.Default.CfgAlertWindowMessage + "\n\nTime Spent: " + time, "Result found!", MessageBoxButtons.OK);
+                    if (Config.EnableAlertWindow) MessageBox.Show(Config.AlertWindowMessage + "\n\nTime Spent: " + time, "Result found!", MessageBoxButtons.OK);
                 }
 
                 ButtonReadRaids.Enabled = true;
@@ -979,15 +1003,15 @@ namespace RaidCrawler
 
         private void Progress_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Settings.Default.Progress = Progress.SelectedIndex;
-            Settings.Default.Save();
+            Config.Progress = Progress.SelectedIndex;
+            SaveConfig();
             if (Raids.Count > 0) DisplayRaid(index);
         }
 
         private void EventProgress_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Settings.Default.EventProgress = EventProgress.SelectedIndex;
-            Settings.Default.Save();
+            Config.EventProgress = EventProgress.SelectedIndex;
+            SaveConfig();
             if (Raids.Count > 0) DisplayRaid(index);
         }
 
@@ -1018,8 +1042,8 @@ namespace RaidCrawler
         private void Game_SelectedIndexChanged(object sender, EventArgs e)
         {
             Raid.Game = Game.Text;
-            Settings.Default.Game = Game.Text;
-            Settings.Default.Save();
+            Config.Game = Game.Text;
+            SaveConfig();
             if (Raids.Count > 0) DisplayRaid(index);
         }
 
@@ -1031,8 +1055,8 @@ namespace RaidCrawler
 
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Settings.Default.CfgLocation = Location;
-            Settings.Default.Save();
+            Config.Location = Location;
+            SaveConfig();
             Disconnect();
         }
 
@@ -1059,7 +1083,7 @@ namespace RaidCrawler
 
         private void ConfigSettings_Click(object sender, EventArgs e)
         {
-            var form = new ConfigWindow();
+            var form = new ConfigWindow(Config);
             form.ShowDialog();
         }
 
@@ -1143,7 +1167,7 @@ namespace RaidCrawler
             index = ComboIndex.SelectedIndex;
             DisplayRaid(index);
 
-            if (Settings.Default.CfgExperimentalView)
+            if (Config.StreamerView)
             {
                 DisplayPrettyRaid(index);
             }
@@ -1157,12 +1181,12 @@ namespace RaidCrawler
                 return;
             }
 
-            NotificationHandler.SendScreenshot(SwitchConnection);
+            NotificationHandler.SendScreenshot(Config, SwitchConnection);
         }
 
         private void ConnectionStatusText_TextChanged(object sender, EventArgs e)
         {
-            if (Settings.Default.CfgExperimentalView)
+            if (Config.StreamerView)
             {
                 teraRaidView.debug.Text = ConnectionStatusText.Text;
             }
@@ -1174,7 +1198,7 @@ namespace RaidCrawler
             string time = String.Format("{0:00}:{1:00}:{2:00}",
             timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
             SearchTime.Text = "Search Time: " + time;
-            if (Settings.Default.CfgExperimentalView)
+            if (Config.StreamerView)
             {
                 teraRaidView.textSearchTime.Text = time;
             }
