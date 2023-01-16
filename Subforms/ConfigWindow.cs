@@ -40,6 +40,8 @@ namespace RaidCrawler.Subforms
             IVspacer.Text = Settings.Default.CfgIVspacer;
             IVverbose.Checked = Settings.Default.CfgIVverbose;
 
+            denToggle.Checked = Settings.Default.CfgToggleDen;
+
             EnableEmoji.Checked = Settings.Default.CfgEnableEmoji;
 
             ExperimentalView.Checked = Settings.Default.CfgExperimentalView;
@@ -89,6 +91,7 @@ namespace RaidCrawler.Subforms
 
             Settings.Default.CfgEnableEmoji = EnableEmoji.Checked;
 
+            Settings.Default.CfgToggleDen = denToggle.Checked;
             Settings.Default.CfgExperimentalView = ExperimentalView.Checked;
 
             Settings.Default.Save();
