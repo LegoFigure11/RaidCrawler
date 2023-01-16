@@ -834,6 +834,9 @@ namespace RaidCrawler
                 SearchTimer.Start();
                 stopwatch.Reset();
                 stopwatch.Start();
+                DaySkipTries = 0;
+                DaySkipSuccess = 0;
+
                 ButtonReadRaids.Enabled = false;
                 ButtonAdvanceDate.Enabled = false;
                 _WindowState = WindowState;
@@ -891,6 +894,12 @@ namespace RaidCrawler
                 if (Raids[i].Seed != prev[i])
                     sameraids = false;
             }
+
+            DaySkipTries++;
+            if (!sameraids)
+                DaySkipSuccess++;
+            DaySkipSuccessRate.Text = $"Day skip success rate: {DaySkipSuccess}/{DaySkipTries}";
+
             if (sameraids)
                 return true;
             if (RaidFilters.Any(z => z.FilterSatisfied(Encounters, Raids, RaidBoost.SelectedIndex)))
