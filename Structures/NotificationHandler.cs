@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using PKHeX.Core;
 using PKHeX.Drawing.PokeSprite;
 using RaidCrawler.Properties;
