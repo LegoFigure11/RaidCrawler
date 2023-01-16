@@ -72,6 +72,7 @@
             this.ButtonOpenRewardsList = new System.Windows.Forms.Button();
             this.GenderCheck = new System.Windows.Forms.CheckBox();
             this.Gender = new System.Windows.Forms.ComboBox();
+            this.ECCheck = new System.Windows.Forms.CheckBox();
             this.LabelBatchFilters = new System.Windows.Forms.Label();
             this.BatchFilters = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.Form)).BeginInit();
@@ -181,6 +182,16 @@
             this.ShinyCheck.TabIndex = 6;
             this.ShinyCheck.Text = "Shiny?";
             this.ShinyCheck.UseVisualStyleBackColor = true;
+            //
+            // ECCheck
+            //
+            this.ECCheck.AutoSize = true;
+            this.ECCheck.Location = new System.Drawing.Point(104, 285);
+            this.ECCheck.Name = "ECCheck";
+            this.ECCheck.Size = new System.Drawing.Size(60,19);
+            this.ECCheck.TabIndex = 19;
+            this.ECCheck.Text = "EC % 0?";
+            this.ECCheck.UseVisualStyleBackColor = true;
             // 
             // Add
             // 
@@ -722,6 +733,7 @@
             this.Controls.Add(this.PerfectIVFilterGroup);
             this.Controls.Add(this.Add);
             this.Controls.Add(this.ShinyCheck);
+            this.Controls.Add(this.ECCheck);
             this.Controls.Add(this.StarCheck);
             this.Controls.Add(this.Stars);
             this.Controls.Add(this.NatureCheck);
@@ -798,6 +810,7 @@
         private Button ButtonOpenRewardsList;
         private CheckBox GenderCheck;
         private ComboBox Gender;
+        private CheckBox ECCheck;
         private Label LabelBatchFilters;
         private TextBox BatchFilters;
     }
