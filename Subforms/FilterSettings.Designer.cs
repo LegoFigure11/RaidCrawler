@@ -74,6 +74,7 @@
             this.Gender = new System.Windows.Forms.ComboBox();
             this.LabelBatchFilters = new System.Windows.Forms.Label();
             this.BatchFilters = new System.Windows.Forms.TextBox();
+            this.SquareCheck = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.Form)).BeginInit();
             this.PerfectIVFilterGroup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.IVSPE)).BeginInit();
@@ -531,16 +532,14 @@
             // 
             // ActiveFilters
             // 
-            this.ActiveFilters.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.ActiveFilters.FormattingEnabled = true;
-            this.ActiveFilters.ItemHeight = 15;
             this.ActiveFilters.Location = new System.Drawing.Point(257, 23);
             this.ActiveFilters.Name = "ActiveFilters";
-            this.ActiveFilters.Size = new System.Drawing.Size(185, 259);
+            this.ActiveFilters.Size = new System.Drawing.Size(185, 256);
             this.ActiveFilters.TabIndex = 20;
+            this.ActiveFilters.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.ActiveFilters_ItemCheck);
             this.ActiveFilters.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.ActiveFilters_DrawItem);
             this.ActiveFilters.SelectedIndexChanged += new System.EventHandler(this.ActiveFilters_SelectedIndexChanged);
-            this.ActiveFilters.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.ActiveFilters_ItemCheck);
             // 
             // FilterName
             // 
@@ -697,11 +696,22 @@
             this.BatchFilters.Size = new System.Drawing.Size(185, 157);
             this.BatchFilters.TabIndex = 35;
             // 
+            // SquareCheck
+            // 
+            this.SquareCheck.AutoSize = true;
+            this.SquareCheck.Location = new System.Drawing.Point(91, 285);
+            this.SquareCheck.Name = "SquareCheck";
+            this.SquareCheck.Size = new System.Drawing.Size(99, 19);
+            this.SquareCheck.TabIndex = 36;
+            this.SquareCheck.Text = "Square Shiny?";
+            this.SquareCheck.UseVisualStyleBackColor = true;
+            // 
             // FilterSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(454, 474);
+            this.Controls.Add(this.SquareCheck);
             this.Controls.Add(this.BatchFilters);
             this.Controls.Add(this.LabelBatchFilters);
             this.Controls.Add(this.GenderCheck);
@@ -800,5 +810,6 @@
         private ComboBox Gender;
         private Label LabelBatchFilters;
         private TextBox BatchFilters;
+        private CheckBox SquareCheck;
     }
 }

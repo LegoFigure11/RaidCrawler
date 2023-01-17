@@ -71,6 +71,8 @@
             this.UseOvershoot = new System.Windows.Forms.CheckBox();
             this.label15 = new System.Windows.Forms.Label();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.EmojiConfig = new System.Windows.Forms.Button();
+            this.labelWebhooks = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
             this.DiscordMessageContent = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
@@ -87,7 +89,6 @@
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.InstanceName = new System.Windows.Forms.TextBox();
             this.label17 = new System.Windows.Forms.Label();
-            this.labelWebhooks = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.BaseDelay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SystemDDownPresses)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NavigateToSettings)).BeginInit();
@@ -625,6 +626,7 @@
             // 
             // tabPage4
             // 
+            this.tabPage4.Controls.Add(this.EmojiConfig);
             this.tabPage4.Controls.Add(this.labelWebhooks);
             this.tabPage4.Controls.Add(this.label21);
             this.tabPage4.Controls.Add(this.DiscordMessageContent);
@@ -645,6 +647,25 @@
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Webhook";
             this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // EmojiConfig
+            // 
+            this.EmojiConfig.Location = new System.Drawing.Point(7, 94);
+            this.EmojiConfig.Name = "EmojiConfig";
+            this.EmojiConfig.Size = new System.Drawing.Size(100, 23);
+            this.EmojiConfig.TabIndex = 46;
+            this.EmojiConfig.Text = "Emoji Config";
+            this.EmojiConfig.UseVisualStyleBackColor = true;
+            this.EmojiConfig.Click += new System.EventHandler(this.EmojiConfig_Click);
+            // 
+            // labelWebhooks
+            // 
+            this.labelWebhooks.AutoSize = true;
+            this.labelWebhooks.Location = new System.Drawing.Point(7, 389);
+            this.labelWebhooks.Name = "labelWebhooks";
+            this.labelWebhooks.Size = new System.Drawing.Size(85, 15);
+            this.labelWebhooks.TabIndex = 44;
+            this.labelWebhooks.Text = "Webhooks are ";
             // 
             // label21
             // 
@@ -687,7 +708,7 @@
             this.denToggle.AutoSize = true;
             this.denToggle.Checked = true;
             this.denToggle.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.denToggle.Location = new System.Drawing.Point(10, 236);
+            this.denToggle.Location = new System.Drawing.Point(10, 266);
             this.denToggle.Name = "denToggle";
             this.denToggle.Size = new System.Drawing.Size(79, 19);
             this.denToggle.TabIndex = 21;
@@ -698,7 +719,7 @@
             // 
             this.label22.AutoSize = true;
             this.label22.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label22.Location = new System.Drawing.Point(8, 218);
+            this.label22.Location = new System.Drawing.Point(8, 248);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(103, 15);
             this.label22.TabIndex = 20;
@@ -711,14 +732,14 @@
             "Emoji",
             "Highlighted Numerical",
             "Numerical"});
-            this.IVstyle.Location = new System.Drawing.Point(8, 148);
+            this.IVstyle.Location = new System.Drawing.Point(8, 178);
             this.IVstyle.Name = "IVstyle";
             this.IVstyle.Size = new System.Drawing.Size(121, 23);
             this.IVstyle.TabIndex = 8;
             // 
             // IVspacer
             // 
-            this.IVspacer.Location = new System.Drawing.Point(8, 192);
+            this.IVspacer.Location = new System.Drawing.Point(8, 222);
             this.IVspacer.Name = "IVspacer";
             this.IVspacer.Size = new System.Drawing.Size(100, 23);
             this.IVspacer.TabIndex = 7;
@@ -727,7 +748,7 @@
             // IVverbose
             // 
             this.IVverbose.AutoSize = true;
-            this.IVverbose.Location = new System.Drawing.Point(8, 108);
+            this.IVverbose.Location = new System.Drawing.Point(8, 138);
             this.IVverbose.Name = "IVverbose";
             this.IVverbose.Size = new System.Drawing.Size(85, 19);
             this.IVverbose.TabIndex = 5;
@@ -737,7 +758,7 @@
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(8, 174);
+            this.label20.Location = new System.Drawing.Point(8, 204);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(54, 15);
             this.label20.TabIndex = 3;
@@ -746,7 +767,7 @@
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(8, 130);
+            this.label19.Location = new System.Drawing.Point(8, 160);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(44, 15);
             this.label19.TabIndex = 2;
@@ -756,7 +777,7 @@
             // 
             this.label18.AutoSize = true;
             this.label18.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label18.Location = new System.Drawing.Point(8, 90);
+            this.label18.Location = new System.Drawing.Point(8, 120);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(68, 15);
             this.label18.TabIndex = 1;
@@ -803,15 +824,6 @@
             this.label17.Size = new System.Drawing.Size(89, 15);
             this.label17.TabIndex = 41;
             this.label17.Text = "Instance Name:";
-            // 
-            // labelWebhooks
-            // 
-            this.labelWebhooks.AutoSize = true;
-            this.labelWebhooks.Location = new System.Drawing.Point(7, 389);
-            this.labelWebhooks.Name = "labelWebhooks";
-            this.labelWebhooks.Size = new System.Drawing.Size(85, 15);
-            this.labelWebhooks.TabIndex = 44;
-            this.labelWebhooks.Text = "Webhooks are ";
             // 
             // ConfigWindow
             // 
@@ -912,5 +924,6 @@
         private TextBox DiscordMessageContent;
         private Label label14;
         private Label labelWebhooks;
+        private Button EmojiConfig;
     }
 }
