@@ -86,6 +86,7 @@
             this.SearchTimer = new System.Windows.Forms.Timer(this.components);
             this.SearchTime = new System.Windows.Forms.Label();
             this.DaySkipSuccessRate = new System.Windows.Forms.Label();
+            this.btnOpenMap = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.Sprite)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GemIcon)).BeginInit();
             this.SuspendLayout();
@@ -572,7 +573,7 @@
             // 
             // Rewards
             // 
-            this.Rewards.Location = new System.Drawing.Point(221, 300);
+            this.Rewards.Location = new System.Drawing.Point(221, 302);
             this.Rewards.Name = "Rewards";
             this.Rewards.Size = new System.Drawing.Size(76, 23);
             this.Rewards.TabIndex = 116;
@@ -647,11 +648,22 @@
             this.DaySkipSuccessRate.TabIndex = 123;
             this.DaySkipSuccessRate.Text = "Day skip success rate : -";
             // 
+            // btnOpenMap
+            // 
+            this.btnOpenMap.Location = new System.Drawing.Point(221, 273);
+            this.btnOpenMap.Name = "btnOpenMap";
+            this.btnOpenMap.Size = new System.Drawing.Size(76, 23);
+            this.btnOpenMap.TabIndex = 124;
+            this.btnOpenMap.Text = "Open Map";
+            this.btnOpenMap.UseVisualStyleBackColor = true;
+            this.btnOpenMap.Click += new System.EventHandler(this.DisplayMap);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(640, 340);
+            this.Controls.Add(this.btnOpenMap);
             this.Controls.Add(this.DaySkipSuccessRate);
             this.Controls.Add(this.SearchTime);
             this.Controls.Add(this.SendScreenshot);
@@ -779,5 +791,6 @@
         private int DaySkipTries = 0;
         private int DaySkipSuccess = 0;
         private Label DaySkipSuccessRate;
+        private Button btnOpenMap;
     }
 }
