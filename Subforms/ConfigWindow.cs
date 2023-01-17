@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Data;
 using RaidCrawler.Structures;
+using System.Windows.Forms;
 
 namespace RaidCrawler.Subforms
 {
@@ -149,7 +150,10 @@ namespace RaidCrawler.Subforms
         private void EmojiConfig_Click(object sender, EventArgs e)
         {
             EmojiConfig config = new EmojiConfig(c);
-            config.Show();
+            if (config.ShowDialog() == DialogResult.OK)
+            {
+                config.Show();
+            }
         }
     }
 }
