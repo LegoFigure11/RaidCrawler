@@ -93,7 +93,7 @@ namespace RaidCrawler.Structures
                 {
                     new
                     {
-                        title = $"{(shiny ? (emoji ? "<:shiny:1064540762991243354>" : "Shiny") : "")} {species} {gender} {teraemoji}",
+                        title = $"{(shiny ? (emoji ? "<:shiny:1064845915036323840>" : "Shiny") : "")} {species} {gender} {teraemoji}",
                         description = $"",
                         color = int.Parse(hexcolor, System.Globalization.NumberStyles.HexNumber),
                         thumbnail = new
@@ -137,8 +137,8 @@ namespace RaidCrawler.Structures
             string gender = string.Empty;
             switch (genderInt)
             {
-                case 0: gender = (emoji ? "<:male:1064539278039863397>" : ":male_sign:"); break;
-                case 1: gender = (emoji ? "<:female:1064539369572155504>" : ":female_sign:"); break;
+                case 0: gender = (emoji ? "<:male:1064844611341795398>" : ":male_sign:"); break;
+                case 1: gender = (emoji ? "<:female:1064844510636552212>" : ":female_sign:"); break;
                 case 2: gender = ""; break;
             }
             return gender;
@@ -200,8 +200,8 @@ namespace RaidCrawler.Structures
         {
             string s = string.Empty;
             var stats = new[] { "HP", "Atk", "Def", "SpA", "SpD", "Spe" };
-            var iv0 = new[] { "<:h0:1064542713736876105>", "<:a0:1064543120223649845>", "<:b0:1064543195557539951>", "<:c0:1064543276293697576>", "<:d0:1064543356086140979>", "<:s0:1064543418002448414>" };
-            var iv31 = new[] { "<:h31:1064544907106205817>", "<:a31:1064544969685205083>", "<:b31:1064545034675961866>", "<:c31:1064545097225609226>", "<:d31:1064545163336237137>", "<:s31:1064545221448306803>" };
+            var iv0 = new[] { "<:h0:1064842950573572126>", "<:a0:1064842895712075796>", "<:b0:1064842811196833832>", "<:c0:1064842749272133752>", "<:d0:1064842668624068608>", "<:s0:1064842545953243176>" };
+            var iv31 = new[] { "<:h31:1064726680628895784>", "<:a31:1064726668419289138>", "<:b31:1064726671703429220>", "<:c31:1064726673649582121>", "<:d31:1064726677176987832>", "<:s31:1064726682721865818>" };
             for (int i = 0; i < ivs.Length; i++)
             {
                 switch (style)
