@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConfigWindow));
             this.FocusWindow = new System.Windows.Forms.CheckBox();
             this.EnableAlert = new System.Windows.Forms.CheckBox();
             this.PlayTone = new System.Windows.Forms.CheckBox();
@@ -64,13 +65,22 @@
             this.label13 = new System.Windows.Forms.Label();
             this.ExperimentalView = new System.Windows.Forms.CheckBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.tabGeneral = new System.Windows.Forms.TabPage();
+            this.label23 = new System.Windows.Forms.Label();
+            this.LabelEventProgress = new System.Windows.Forms.Label();
+            this.EventProgress = new System.Windows.Forms.ComboBox();
+            this.LabelGame = new System.Windows.Forms.Label();
+            this.Game = new System.Windows.Forms.ComboBox();
+            this.LabelStoryProgress = new System.Windows.Forms.Label();
+            this.StoryProgress = new System.Windows.Forms.ComboBox();
+            this.tabMatch = new System.Windows.Forms.TabPage();
+            this.tabAdvanceDate = new System.Windows.Forms.TabPage();
             this.label16 = new System.Windows.Forms.Label();
             this.SystemOvershoot = new System.Windows.Forms.NumericUpDown();
             this.UseOvershoot = new System.Windows.Forms.CheckBox();
             this.label15 = new System.Windows.Forms.Label();
-            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.tabWebhook = new System.Windows.Forms.TabPage();
+            this.labelWebhooks = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
             this.DiscordMessageContent = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
@@ -84,10 +94,14 @@
             this.label19 = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
             this.EnableEmoji = new System.Windows.Forms.CheckBox();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.tabExperimental = new System.Windows.Forms.TabPage();
             this.InstanceName = new System.Windows.Forms.TextBox();
             this.label17 = new System.Windows.Forms.Label();
-            this.labelWebhooks = new System.Windows.Forms.Label();
+            this.tabAbout = new System.Windows.Forms.TabPage();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.labelAppName = new System.Windows.Forms.Label();
+            this.picAppIcon = new System.Windows.Forms.PictureBox();
+            this.labelAppVersion = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.BaseDelay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SystemDDownPresses)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NavigateToSettings)).BeginInit();
@@ -100,11 +114,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.ReturnGame)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DaysToSkip)).BeginInit();
             this.tabControl1.SuspendLayout();
-            this.tabPage1.SuspendLayout();
-            this.tabPage2.SuspendLayout();
+            this.tabGeneral.SuspendLayout();
+            this.tabMatch.SuspendLayout();
+            this.tabAdvanceDate.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SystemOvershoot)).BeginInit();
-            this.tabPage4.SuspendLayout();
-            this.tabPage3.SuspendLayout();
+            this.tabWebhook.SuspendLayout();
+            this.tabExperimental.SuspendLayout();
+            this.tabAbout.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picAppIcon)).BeginInit();
             this.SuspendLayout();
             // 
             // FocusWindow
@@ -218,7 +235,7 @@
             this.Save.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.Save.Location = new System.Drawing.Point(0, 444);
             this.Save.Name = "Save";
-            this.Save.Size = new System.Drawing.Size(349, 32);
+            this.Save.Size = new System.Drawing.Size(433, 32);
             this.Save.TabIndex = 12;
             this.Save.Text = "Save";
             this.Save.UseVisualStyleBackColor = true;
@@ -511,72 +528,171 @@
             // 
             // tabControl1
             // 
-            this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Controls.Add(this.tabPage4);
-            this.tabControl1.Controls.Add(this.tabPage3);
+            this.tabControl1.Controls.Add(this.tabGeneral);
+            this.tabControl1.Controls.Add(this.tabMatch);
+            this.tabControl1.Controls.Add(this.tabAdvanceDate);
+            this.tabControl1.Controls.Add(this.tabWebhook);
+            this.tabControl1.Controls.Add(this.tabExperimental);
+            this.tabControl1.Controls.Add(this.tabAbout);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(349, 444);
+            this.tabControl1.Size = new System.Drawing.Size(433, 444);
             this.tabControl1.TabIndex = 41;
             // 
-            // tabPage1
+            // tabGeneral
             // 
-            this.tabPage1.Controls.Add(this.LabelMatchFound);
-            this.tabPage1.Controls.Add(this.FocusWindow);
-            this.tabPage1.Controls.Add(this.EnableAlert);
-            this.tabPage1.Controls.Add(this.EnableDiscordNotifications);
-            this.tabPage1.Controls.Add(this.PlayTone);
-            this.tabPage1.Controls.Add(this.DiscordWebhook);
-            this.tabPage1.Controls.Add(this.AlertMessage);
-            this.tabPage1.Location = new System.Drawing.Point(4, 24);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(341, 416);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Match";
-            this.tabPage1.UseVisualStyleBackColor = true;
+            this.tabGeneral.Controls.Add(this.label23);
+            this.tabGeneral.Controls.Add(this.LabelEventProgress);
+            this.tabGeneral.Controls.Add(this.EventProgress);
+            this.tabGeneral.Controls.Add(this.LabelGame);
+            this.tabGeneral.Controls.Add(this.Game);
+            this.tabGeneral.Controls.Add(this.LabelStoryProgress);
+            this.tabGeneral.Controls.Add(this.StoryProgress);
+            this.tabGeneral.Location = new System.Drawing.Point(4, 24);
+            this.tabGeneral.Name = "tabGeneral";
+            this.tabGeneral.Padding = new System.Windows.Forms.Padding(3);
+            this.tabGeneral.Size = new System.Drawing.Size(425, 416);
+            this.tabGeneral.TabIndex = 5;
+            this.tabGeneral.Text = "General";
+            this.tabGeneral.UseVisualStyleBackColor = true;
+            this.tabGeneral.Click += new System.EventHandler(this.tabGeneral_Click);
             // 
-            // tabPage2
+            // label23
             // 
-            this.tabPage2.Controls.Add(this.label16);
-            this.tabPage2.Controls.Add(this.SystemOvershoot);
-            this.tabPage2.Controls.Add(this.UseOvershoot);
-            this.tabPage2.Controls.Add(this.label15);
-            this.tabPage2.Controls.Add(this.label2);
-            this.tabPage2.Controls.Add(this.label1);
-            this.tabPage2.Controls.Add(this.BaseDelay);
-            this.tabPage2.Controls.Add(this.UseTouch);
-            this.tabPage2.Controls.Add(this.SystemDDownPresses);
-            this.tabPage2.Controls.Add(this.label12);
-            this.tabPage2.Controls.Add(this.label3);
-            this.tabPage2.Controls.Add(this.label11);
-            this.tabPage2.Controls.Add(this.NavigateToSettings);
-            this.tabPage2.Controls.Add(this.DaysToSkip);
-            this.tabPage2.Controls.Add(this.OpenSettings);
-            this.tabPage2.Controls.Add(this.label10);
-            this.tabPage2.Controls.Add(this.OpenHome);
-            this.tabPage2.Controls.Add(this.ReturnGame);
-            this.tabPage2.Controls.Add(this.LabelDelayOpenHOME);
-            this.tabPage2.Controls.Add(this.label9);
-            this.tabPage2.Controls.Add(this.label4);
-            this.tabPage2.Controls.Add(this.ReturnHome);
-            this.tabPage2.Controls.Add(this.label5);
-            this.tabPage2.Controls.Add(this.label8);
-            this.tabPage2.Controls.Add(this.Hold);
-            this.tabPage2.Controls.Add(this.DateChange);
-            this.tabPage2.Controls.Add(this.label6);
-            this.tabPage2.Controls.Add(this.label7);
-            this.tabPage2.Controls.Add(this.Submenu);
-            this.tabPage2.Location = new System.Drawing.Point(4, 24);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(341, 416);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Advance Date";
-            this.tabPage2.UseVisualStyleBackColor = true;
+            this.label23.AutoSize = true;
+            this.label23.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label23.Location = new System.Drawing.Point(6, 3);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(118, 15);
+            this.label23.TabIndex = 109;
+            this.label23.Text = "Application Settings";
+            // 
+            // LabelEventProgress
+            // 
+            this.LabelEventProgress.AutoSize = true;
+            this.LabelEventProgress.Location = new System.Drawing.Point(7, 83);
+            this.LabelEventProgress.Name = "LabelEventProgress";
+            this.LabelEventProgress.Size = new System.Drawing.Size(117, 15);
+            this.LabelEventProgress.TabIndex = 108;
+            this.LabelEventProgress.Text = "Event Progress Level:";
+            // 
+            // EventProgress
+            // 
+            this.EventProgress.FormattingEnabled = true;
+            this.EventProgress.Items.AddRange(new object[] {
+            "1",
+            "2",
+            "3",
+            "4"});
+            this.EventProgress.Location = new System.Drawing.Point(159, 80);
+            this.EventProgress.Name = "EventProgress";
+            this.EventProgress.Size = new System.Drawing.Size(48, 23);
+            this.EventProgress.TabIndex = 107;
+            this.EventProgress.Text = "w";
+            // 
+            // LabelGame
+            // 
+            this.LabelGame.AutoSize = true;
+            this.LabelGame.Location = new System.Drawing.Point(8, 28);
+            this.LabelGame.Name = "LabelGame";
+            this.LabelGame.Size = new System.Drawing.Size(41, 15);
+            this.LabelGame.TabIndex = 106;
+            this.LabelGame.Text = "Game:";
+            // 
+            // Game
+            // 
+            this.Game.FormattingEnabled = true;
+            this.Game.Items.AddRange(new object[] {
+            "Scarlet",
+            "Violet"});
+            this.Game.Location = new System.Drawing.Point(111, 25);
+            this.Game.Name = "Game";
+            this.Game.Size = new System.Drawing.Size(96, 23);
+            this.Game.TabIndex = 105;
+            this.Game.Text = "w";
+            this.Game.SelectedIndexChanged += new System.EventHandler(this.Game_SelectedIndexChanged);
+            // 
+            // LabelStoryProgress
+            // 
+            this.LabelStoryProgress.AutoSize = true;
+            this.LabelStoryProgress.Location = new System.Drawing.Point(8, 55);
+            this.LabelStoryProgress.Name = "LabelStoryProgress";
+            this.LabelStoryProgress.Size = new System.Drawing.Size(115, 15);
+            this.LabelStoryProgress.TabIndex = 104;
+            this.LabelStoryProgress.Text = "Story Progress Level:";
+            // 
+            // StoryProgress
+            // 
+            this.StoryProgress.FormattingEnabled = true;
+            this.StoryProgress.Items.AddRange(new object[] {
+            "1",
+            "2",
+            "3",
+            "4",
+            "5"});
+            this.StoryProgress.Location = new System.Drawing.Point(159, 52);
+            this.StoryProgress.Name = "StoryProgress";
+            this.StoryProgress.Size = new System.Drawing.Size(48, 23);
+            this.StoryProgress.TabIndex = 103;
+            this.StoryProgress.Text = "w";
+            // 
+            // tabMatch
+            // 
+            this.tabMatch.Controls.Add(this.LabelMatchFound);
+            this.tabMatch.Controls.Add(this.FocusWindow);
+            this.tabMatch.Controls.Add(this.EnableAlert);
+            this.tabMatch.Controls.Add(this.EnableDiscordNotifications);
+            this.tabMatch.Controls.Add(this.PlayTone);
+            this.tabMatch.Controls.Add(this.DiscordWebhook);
+            this.tabMatch.Controls.Add(this.AlertMessage);
+            this.tabMatch.Location = new System.Drawing.Point(4, 24);
+            this.tabMatch.Name = "tabMatch";
+            this.tabMatch.Padding = new System.Windows.Forms.Padding(3);
+            this.tabMatch.Size = new System.Drawing.Size(425, 416);
+            this.tabMatch.TabIndex = 0;
+            this.tabMatch.Text = "Match";
+            this.tabMatch.UseVisualStyleBackColor = true;
+            // 
+            // tabAdvanceDate
+            // 
+            this.tabAdvanceDate.Controls.Add(this.label16);
+            this.tabAdvanceDate.Controls.Add(this.SystemOvershoot);
+            this.tabAdvanceDate.Controls.Add(this.UseOvershoot);
+            this.tabAdvanceDate.Controls.Add(this.label15);
+            this.tabAdvanceDate.Controls.Add(this.label2);
+            this.tabAdvanceDate.Controls.Add(this.label1);
+            this.tabAdvanceDate.Controls.Add(this.BaseDelay);
+            this.tabAdvanceDate.Controls.Add(this.UseTouch);
+            this.tabAdvanceDate.Controls.Add(this.SystemDDownPresses);
+            this.tabAdvanceDate.Controls.Add(this.label12);
+            this.tabAdvanceDate.Controls.Add(this.label3);
+            this.tabAdvanceDate.Controls.Add(this.label11);
+            this.tabAdvanceDate.Controls.Add(this.NavigateToSettings);
+            this.tabAdvanceDate.Controls.Add(this.DaysToSkip);
+            this.tabAdvanceDate.Controls.Add(this.OpenSettings);
+            this.tabAdvanceDate.Controls.Add(this.label10);
+            this.tabAdvanceDate.Controls.Add(this.OpenHome);
+            this.tabAdvanceDate.Controls.Add(this.ReturnGame);
+            this.tabAdvanceDate.Controls.Add(this.LabelDelayOpenHOME);
+            this.tabAdvanceDate.Controls.Add(this.label9);
+            this.tabAdvanceDate.Controls.Add(this.label4);
+            this.tabAdvanceDate.Controls.Add(this.ReturnHome);
+            this.tabAdvanceDate.Controls.Add(this.label5);
+            this.tabAdvanceDate.Controls.Add(this.label8);
+            this.tabAdvanceDate.Controls.Add(this.Hold);
+            this.tabAdvanceDate.Controls.Add(this.DateChange);
+            this.tabAdvanceDate.Controls.Add(this.label6);
+            this.tabAdvanceDate.Controls.Add(this.label7);
+            this.tabAdvanceDate.Controls.Add(this.Submenu);
+            this.tabAdvanceDate.Location = new System.Drawing.Point(4, 24);
+            this.tabAdvanceDate.Name = "tabAdvanceDate";
+            this.tabAdvanceDate.Padding = new System.Windows.Forms.Padding(3);
+            this.tabAdvanceDate.Size = new System.Drawing.Size(425, 416);
+            this.tabAdvanceDate.TabIndex = 1;
+            this.tabAdvanceDate.Text = "Advance Date";
+            this.tabAdvanceDate.UseVisualStyleBackColor = true;
             // 
             // label16
             // 
@@ -623,28 +739,37 @@
             this.label15.TabIndex = 37;
             this.label15.Text = "Use overshoot instead of DDOWN inputs (faster)";
             // 
-            // tabPage4
+            // tabWebhook
             // 
-            this.tabPage4.Controls.Add(this.labelWebhooks);
-            this.tabPage4.Controls.Add(this.label21);
-            this.tabPage4.Controls.Add(this.DiscordMessageContent);
-            this.tabPage4.Controls.Add(this.label14);
-            this.tabPage4.Controls.Add(this.btnTestWebHook);
-            this.tabPage4.Controls.Add(this.denToggle);
-            this.tabPage4.Controls.Add(this.label22);
-            this.tabPage4.Controls.Add(this.IVstyle);
-            this.tabPage4.Controls.Add(this.IVspacer);
-            this.tabPage4.Controls.Add(this.IVverbose);
-            this.tabPage4.Controls.Add(this.label20);
-            this.tabPage4.Controls.Add(this.label19);
-            this.tabPage4.Controls.Add(this.label18);
-            this.tabPage4.Controls.Add(this.EnableEmoji);
-            this.tabPage4.Location = new System.Drawing.Point(4, 24);
-            this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(341, 416);
-            this.tabPage4.TabIndex = 3;
-            this.tabPage4.Text = "Webhook";
-            this.tabPage4.UseVisualStyleBackColor = true;
+            this.tabWebhook.Controls.Add(this.labelWebhooks);
+            this.tabWebhook.Controls.Add(this.label21);
+            this.tabWebhook.Controls.Add(this.DiscordMessageContent);
+            this.tabWebhook.Controls.Add(this.label14);
+            this.tabWebhook.Controls.Add(this.btnTestWebHook);
+            this.tabWebhook.Controls.Add(this.denToggle);
+            this.tabWebhook.Controls.Add(this.label22);
+            this.tabWebhook.Controls.Add(this.IVstyle);
+            this.tabWebhook.Controls.Add(this.IVspacer);
+            this.tabWebhook.Controls.Add(this.IVverbose);
+            this.tabWebhook.Controls.Add(this.label20);
+            this.tabWebhook.Controls.Add(this.label19);
+            this.tabWebhook.Controls.Add(this.label18);
+            this.tabWebhook.Controls.Add(this.EnableEmoji);
+            this.tabWebhook.Location = new System.Drawing.Point(4, 24);
+            this.tabWebhook.Name = "tabWebhook";
+            this.tabWebhook.Size = new System.Drawing.Size(425, 416);
+            this.tabWebhook.TabIndex = 3;
+            this.tabWebhook.Text = "Webhook";
+            this.tabWebhook.UseVisualStyleBackColor = true;
+            // 
+            // labelWebhooks
+            // 
+            this.labelWebhooks.AutoSize = true;
+            this.labelWebhooks.Location = new System.Drawing.Point(7, 389);
+            this.labelWebhooks.Name = "labelWebhooks";
+            this.labelWebhooks.Size = new System.Drawing.Size(85, 15);
+            this.labelWebhooks.TabIndex = 44;
+            this.labelWebhooks.Text = "Webhooks are ";
             // 
             // label21
             // 
@@ -774,19 +899,19 @@
             this.EnableEmoji.Text = "Enable Emoji";
             this.EnableEmoji.UseVisualStyleBackColor = true;
             // 
-            // tabPage3
+            // tabExperimental
             // 
-            this.tabPage3.Controls.Add(this.InstanceName);
-            this.tabPage3.Controls.Add(this.label17);
-            this.tabPage3.Controls.Add(this.label13);
-            this.tabPage3.Controls.Add(this.ExperimentalView);
-            this.tabPage3.Location = new System.Drawing.Point(4, 24);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(341, 416);
-            this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "Experimental";
-            this.tabPage3.UseVisualStyleBackColor = true;
+            this.tabExperimental.Controls.Add(this.InstanceName);
+            this.tabExperimental.Controls.Add(this.label17);
+            this.tabExperimental.Controls.Add(this.label13);
+            this.tabExperimental.Controls.Add(this.ExperimentalView);
+            this.tabExperimental.Location = new System.Drawing.Point(4, 24);
+            this.tabExperimental.Name = "tabExperimental";
+            this.tabExperimental.Padding = new System.Windows.Forms.Padding(3);
+            this.tabExperimental.Size = new System.Drawing.Size(425, 416);
+            this.tabExperimental.TabIndex = 2;
+            this.tabExperimental.Text = "Experimental";
+            this.tabExperimental.UseVisualStyleBackColor = true;
             // 
             // InstanceName
             // 
@@ -804,20 +929,66 @@
             this.label17.TabIndex = 41;
             this.label17.Text = "Instance Name:";
             // 
-            // labelWebhooks
+            // tabAbout
             // 
-            this.labelWebhooks.AutoSize = true;
-            this.labelWebhooks.Location = new System.Drawing.Point(7, 389);
-            this.labelWebhooks.Name = "labelWebhooks";
-            this.labelWebhooks.Size = new System.Drawing.Size(85, 15);
-            this.labelWebhooks.TabIndex = 44;
-            this.labelWebhooks.Text = "Webhooks are ";
+            this.tabAbout.Controls.Add(this.linkLabel1);
+            this.tabAbout.Controls.Add(this.labelAppName);
+            this.tabAbout.Controls.Add(this.picAppIcon);
+            this.tabAbout.Controls.Add(this.labelAppVersion);
+            this.tabAbout.Location = new System.Drawing.Point(4, 24);
+            this.tabAbout.Name = "tabAbout";
+            this.tabAbout.Padding = new System.Windows.Forms.Padding(3);
+            this.tabAbout.Size = new System.Drawing.Size(425, 416);
+            this.tabAbout.TabIndex = 4;
+            this.tabAbout.Text = "About";
+            this.tabAbout.UseVisualStyleBackColor = true;
+            // 
+            // linkLabel1
+            // 
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Location = new System.Drawing.Point(80, 191);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(253, 15);
+            this.linkLabel1.TabIndex = 4;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "https://github.com/LegoFigure11/RaidCrawler";
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            // 
+            // labelAppName
+            // 
+            this.labelAppName.AutoSize = true;
+            this.labelAppName.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.labelAppName.Location = new System.Drawing.Point(160, 82);
+            this.labelAppName.Name = "labelAppName";
+            this.labelAppName.Size = new System.Drawing.Size(119, 25);
+            this.labelAppName.TabIndex = 2;
+            this.labelAppName.Text = "RaidCrawler";
+            this.labelAppName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // picAppIcon
+            // 
+            this.picAppIcon.Image = ((System.Drawing.Image)(resources.GetObject("picAppIcon.Image")));
+            this.picAppIcon.Location = new System.Drawing.Point(131, 77);
+            this.picAppIcon.Name = "picAppIcon";
+            this.picAppIcon.Size = new System.Drawing.Size(32, 32);
+            this.picAppIcon.TabIndex = 1;
+            this.picAppIcon.TabStop = false;
+            // 
+            // labelAppVersion
+            // 
+            this.labelAppVersion.AutoSize = true;
+            this.labelAppVersion.Location = new System.Drawing.Point(180, 124);
+            this.labelAppVersion.Name = "labelAppVersion";
+            this.labelAppVersion.Size = new System.Drawing.Size(78, 15);
+            this.labelAppVersion.TabIndex = 0;
+            this.labelAppVersion.Text = "v0.0.0-000000";
+            this.labelAppVersion.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // ConfigWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(349, 476);
+            this.ClientSize = new System.Drawing.Size(433, 476);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.Save);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -837,15 +1008,20 @@
             ((System.ComponentModel.ISupportInitialize)(this.ReturnGame)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DaysToSkip)).EndInit();
             this.tabControl1.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
-            this.tabPage2.ResumeLayout(false);
-            this.tabPage2.PerformLayout();
+            this.tabGeneral.ResumeLayout(false);
+            this.tabGeneral.PerformLayout();
+            this.tabMatch.ResumeLayout(false);
+            this.tabMatch.PerformLayout();
+            this.tabAdvanceDate.ResumeLayout(false);
+            this.tabAdvanceDate.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SystemOvershoot)).EndInit();
-            this.tabPage4.ResumeLayout(false);
-            this.tabPage4.PerformLayout();
-            this.tabPage3.ResumeLayout(false);
-            this.tabPage3.PerformLayout();
+            this.tabWebhook.ResumeLayout(false);
+            this.tabWebhook.PerformLayout();
+            this.tabExperimental.ResumeLayout(false);
+            this.tabExperimental.PerformLayout();
+            this.tabAbout.ResumeLayout(false);
+            this.tabAbout.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picAppIcon)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -888,16 +1064,16 @@
         private Label label13;
         private CheckBox ExperimentalView;
         private TabControl tabControl1;
-        private TabPage tabPage1;
-        private TabPage tabPage2;
-        private TabPage tabPage3;
+        private TabPage tabMatch;
+        private TabPage tabAdvanceDate;
+        private TabPage tabExperimental;
         private Label label16;
         private NumericUpDown SystemOvershoot;
         private CheckBox UseOvershoot;
         private Label label15;
         private TextBox InstanceName;
         private Label label17;
-        private TabPage tabPage4;
+        private TabPage tabWebhook;
         private CheckBox EnableEmoji;
         private Label label20;
         private Label label19;
@@ -912,5 +1088,18 @@
         private TextBox DiscordMessageContent;
         private Label label14;
         private Label labelWebhooks;
+        private TabPage tabAbout;
+        private Label labelAppVersion;
+        private LinkLabel linkLabel1;
+        private Label labelAppName;
+        private PictureBox picAppIcon;
+        private TabPage tabGeneral;
+        private Label label23;
+        private Label LabelEventProgress;
+        private ComboBox EventProgress;
+        private Label LabelGame;
+        private ComboBox Game;
+        private Label LabelStoryProgress;
+        private ComboBox StoryProgress;
     }
 }

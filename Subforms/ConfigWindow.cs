@@ -1,18 +1,29 @@
 ﻿using Newtonsoft.Json;
 using RaidCrawler.Structures;
+using System;
 
 namespace RaidCrawler.Subforms
 {
     public partial class ConfigWindow : Form
     {
         private readonly Config c = new();
+        
         public ConfigWindow(Config c)
         {
+            var assembly = System.Reflection.Assembly.GetEntryAssembly();
+            var v = assembly.GetName().Version!;
+            var gitVersionInformationType = assembly.GetType("GitVersionInformation");
+            var shaField = gitVersionInformationType.GetField("ShortSha");
+
             InitializeComponent();
 
             this.c = c;
 
             InstanceName.Text = c.InstanceName;
+            StoryProgress.SelectedIndex = c.Progress;
+            EventProgress.SelectedIndex = c.EventProgress;
+            Game.SelectedIndex = Game.FindString(c.Game);
+
 
             PlayTone.Checked = c.PlaySound;
             FocusWindow.Checked = c.FocusWindow;
@@ -52,6 +63,12 @@ namespace RaidCrawler.Subforms
             EnableEmoji.Checked = c.EnableEmoji;
 
             ExperimentalView.Checked = c.StreamerView;
+
+            labelAppVersion.Text = "v" + v.Major + "." + v.Minor + "." + v.Build + "-" + shaField.GetValue(null);
+            labelAppVersion.Left = (tabAbout.Width - labelAppVersion.Width) / 2;
+            labelAppName.Left = ((tabAbout.Width - labelAppName.Width) / 2) + (picAppIcon.Width / 2) + 2;
+            picAppIcon.Left = labelAppName.Left - picAppIcon.Width - 2;
+            linkLabel1.Left = (tabAbout.Width - linkLabel1.Width) / 2;
         }
 
         private void EnableAlert_CheckedChanged(object sender, EventArgs e)
@@ -126,6 +143,22 @@ namespace RaidCrawler.Subforms
             c.ToggleDen = denToggle.Checked;
             var mainForm = Application.OpenForms.OfType<MainWindow>().Single();
             mainForm.TestWebhook();
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(((LinkLabel)sender).Text) { UseShellExecute = true });
+        }
+
+        private void tabGeneral_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Game_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var mainForm = Application.OpenForms.OfType<MainWindow>().Single();
+            mainForm.Game_SelectedIndexChanged();
         }
     }
 }

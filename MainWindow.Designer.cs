@@ -59,8 +59,6 @@
             this.LabelIsEvent = new System.Windows.Forms.Label();
             this.Difficulty = new System.Windows.Forms.TextBox();
             this.LabelDifficulty = new System.Windows.Forms.Label();
-            this.Progress = new System.Windows.Forms.ComboBox();
-            this.LabelStoryProgress = new System.Windows.Forms.Label();
             this.ButtonViewRAM = new System.Windows.Forms.Button();
             this.Species = new System.Windows.Forms.TextBox();
             this.LabelSpecies = new System.Windows.Forms.Label();
@@ -69,10 +67,6 @@
             this.Move2 = new System.Windows.Forms.TextBox();
             this.Move4 = new System.Windows.Forms.TextBox();
             this.Move3 = new System.Windows.Forms.TextBox();
-            this.LabelGame = new System.Windows.Forms.Label();
-            this.Game = new System.Windows.Forms.ComboBox();
-            this.LabelEventProgress = new System.Windows.Forms.Label();
-            this.EventProgress = new System.Windows.Forms.ComboBox();
             this.Nature = new System.Windows.Forms.TextBox();
             this.LabelNature = new System.Windows.Forms.Label();
             this.Gender = new System.Windows.Forms.TextBox();
@@ -193,7 +187,7 @@
             // 
             this.LabelLoadedRaids.AutoSize = true;
             this.LabelLoadedRaids.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.LabelLoadedRaids.Location = new System.Drawing.Point(220, 9);
+            this.LabelLoadedRaids.Location = new System.Drawing.Point(63, 145);
             this.LabelLoadedRaids.Name = "LabelLoadedRaids";
             this.LabelLoadedRaids.Size = new System.Drawing.Size(97, 15);
             this.LabelLoadedRaids.TabIndex = 12;
@@ -387,31 +381,6 @@
             this.LabelDifficulty.TabIndex = 85;
             this.LabelDifficulty.Text = "Difficulty:";
             // 
-            // Progress
-            // 
-            this.Progress.FormattingEnabled = true;
-            this.Progress.Items.AddRange(new object[] {
-            "1",
-            "2",
-            "3",
-            "4",
-            "5"});
-            this.Progress.Location = new System.Drawing.Point(164, 168);
-            this.Progress.Name = "Progress";
-            this.Progress.Size = new System.Drawing.Size(48, 23);
-            this.Progress.TabIndex = 87;
-            this.Progress.Text = "w";
-            this.Progress.SelectedIndexChanged += new System.EventHandler(this.Progress_SelectedIndexChanged);
-            // 
-            // LabelStoryProgress
-            // 
-            this.LabelStoryProgress.AutoSize = true;
-            this.LabelStoryProgress.Location = new System.Drawing.Point(13, 171);
-            this.LabelStoryProgress.Name = "LabelStoryProgress";
-            this.LabelStoryProgress.Size = new System.Drawing.Size(115, 15);
-            this.LabelStoryProgress.TabIndex = 88;
-            this.LabelStoryProgress.Text = "Story Progress Level:";
-            // 
             // ButtonViewRAM
             // 
             this.ButtonViewRAM.Enabled = false;
@@ -494,52 +463,6 @@
             this.Move3.Size = new System.Drawing.Size(133, 22);
             this.Move3.TabIndex = 97;
             this.Move3.Click += new System.EventHandler(this.Move_Clicked);
-            // 
-            // LabelGame
-            // 
-            this.LabelGame.AutoSize = true;
-            this.LabelGame.Location = new System.Drawing.Point(13, 144);
-            this.LabelGame.Name = "LabelGame";
-            this.LabelGame.Size = new System.Drawing.Size(41, 15);
-            this.LabelGame.TabIndex = 100;
-            this.LabelGame.Text = "Game:";
-            // 
-            // Game
-            // 
-            this.Game.FormattingEnabled = true;
-            this.Game.Items.AddRange(new object[] {
-            "Scarlet",
-            "Violet"});
-            this.Game.Location = new System.Drawing.Point(116, 141);
-            this.Game.Name = "Game";
-            this.Game.Size = new System.Drawing.Size(96, 23);
-            this.Game.TabIndex = 99;
-            this.Game.Text = "w";
-            this.Game.SelectedIndexChanged += new System.EventHandler(this.Game_SelectedIndexChanged);
-            // 
-            // LabelEventProgress
-            // 
-            this.LabelEventProgress.AutoSize = true;
-            this.LabelEventProgress.Location = new System.Drawing.Point(12, 199);
-            this.LabelEventProgress.Name = "LabelEventProgress";
-            this.LabelEventProgress.Size = new System.Drawing.Size(117, 15);
-            this.LabelEventProgress.TabIndex = 102;
-            this.LabelEventProgress.Text = "Event Progress Level:";
-            // 
-            // EventProgress
-            // 
-            this.EventProgress.FormattingEnabled = true;
-            this.EventProgress.Items.AddRange(new object[] {
-            "1",
-            "2",
-            "3",
-            "4"});
-            this.EventProgress.Location = new System.Drawing.Point(164, 196);
-            this.EventProgress.Name = "EventProgress";
-            this.EventProgress.Size = new System.Drawing.Size(48, 23);
-            this.EventProgress.TabIndex = 101;
-            this.EventProgress.Text = "w";
-            this.EventProgress.SelectedIndexChanged += new System.EventHandler(this.EventProgress_SelectedIndexChanged);
             // 
             // Nature
             // 
@@ -709,7 +632,7 @@
             // SearchTime
             // 
             this.SearchTime.AutoSize = true;
-            this.SearchTime.Location = new System.Drawing.Point(220, 24);
+            this.SearchTime.Location = new System.Drawing.Point(63, 168);
             this.SearchTime.Name = "SearchTime";
             this.SearchTime.Size = new System.Drawing.Size(82, 15);
             this.SearchTime.TabIndex = 122;
@@ -718,9 +641,9 @@
             // DaySkipSuccessRate
             // 
             this.DaySkipSuccessRate.AutoSize = true;
-            this.DaySkipSuccessRate.Location = new System.Drawing.Point(220, 40);
+            this.DaySkipSuccessRate.Location = new System.Drawing.Point(14, 183);
             this.DaySkipSuccessRate.Name = "DaySkipSuccessRate";
-            this.DaySkipSuccessRate.Size = new System.Drawing.Size(82, 15);
+            this.DaySkipSuccessRate.Size = new System.Drawing.Size(131, 15);
             this.DaySkipSuccessRate.TabIndex = 123;
             this.DaySkipSuccessRate.Text = "Day skip success rate : -";
             // 
@@ -748,10 +671,6 @@
             this.Controls.Add(this.LabelNature);
             this.Controls.Add(this.Gender);
             this.Controls.Add(this.LabelGender);
-            this.Controls.Add(this.LabelEventProgress);
-            this.Controls.Add(this.EventProgress);
-            this.Controls.Add(this.LabelGame);
-            this.Controls.Add(this.Game);
             this.Controls.Add(this.Move4);
             this.Controls.Add(this.Move3);
             this.Controls.Add(this.Move2);
@@ -760,8 +679,6 @@
             this.Controls.Add(this.Species);
             this.Controls.Add(this.LabelSpecies);
             this.Controls.Add(this.ButtonViewRAM);
-            this.Controls.Add(this.LabelStoryProgress);
-            this.Controls.Add(this.Progress);
             this.Controls.Add(this.Difficulty);
             this.Controls.Add(this.LabelDifficulty);
             this.Controls.Add(this.LabelIsEvent);
@@ -832,8 +749,6 @@
         private Label LabelIsEvent;
         private TextBox Difficulty;
         private Label LabelDifficulty;
-        private ComboBox Progress;
-        private Label LabelStoryProgress;
         private Button ButtonViewRAM;
         private TextBox Species;
         private Label LabelSpecies;
@@ -842,10 +757,6 @@
         private TextBox Move2;
         private TextBox Move4;
         private TextBox Move3;
-        private Label LabelGame;
-        private ComboBox Game;
-        private Label LabelEventProgress;
-        private ComboBox EventProgress;
         private TextBox Nature;
         private Label LabelNature;
         private TextBox Gender;

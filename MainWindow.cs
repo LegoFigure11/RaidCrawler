@@ -113,9 +113,6 @@ namespace RaidCrawler
                 CenterToScreen();
             InputSwitchIP.Text = Config.SwitchIP;
             DefaultColor = IVs.BackColor;
-            Progress.SelectedIndex = Config.Progress;
-            EventProgress.SelectedIndex = Config.EventProgress;
-            Game.SelectedIndex = Game.FindString(Config.Game);
             RaidBoost.SelectedIndex = 0;
 
             if (Config.StreamerView)
@@ -163,11 +160,11 @@ namespace RaidCrawler
                     string id = await GetGameID(CancellationToken.None);
                     if (id is ScarletID)
                     {
-                        Game.SelectedIndex = Game.FindString("Scarlet");
+                        Config.Game = "Scarlet";
                     }
                     else if (id is VioletID)
                     {
-                        Game.SelectedIndex = Game.FindString("Violet");
+                        Config.Game = "Violet";
                     }
                     else
                     {
@@ -177,8 +174,8 @@ namespace RaidCrawler
                     }
 
                     ConnectionStatusText.Text = "Reading story progress...";
-                    Progress.SelectedIndex = await GetStoryProgress(CancellationToken.None);
-                    EventProgress.SelectedIndex = Math.Min(Progress.SelectedIndex, 3);
+                    Config.Progress = await GetStoryProgress(CancellationToken.None);
+                    Config.EventProgress = Math.Min(Config.Progress-1, 3);
 
                     ConnectionStatusText.Text = "Reading event raid status...";
                     await ReadEventRaids();
@@ -336,7 +333,7 @@ namespace RaidCrawler
 
                 var teratype = Raid.GetTeraType(encounter, raid);
                 TeraType.Text = Raid.strings.types[teratype];
-                int StarCount = encounter is TeraDistribution ? encounter.Stars : Raid.GetStarCount(raid.Difficulty, Progress.SelectedIndex, raid.IsBlack);
+                int StarCount = encounter is TeraDistribution ? encounter.Stars : Raid.GetStarCount(raid.Difficulty, Config.Progress, raid.IsBlack);
                 Difficulty.Text = string.Concat(Enumerable.Repeat("☆", StarCount));
 
                 if (encounter != null)
@@ -403,7 +400,7 @@ namespace RaidCrawler
                 teraRaidView.TeraType.Image = (Bitmap)Properties.Resources.ResourceManager.GetObject("gem_text_" + teratype);
                 // IsEvent.Checked = raid.IsEvent;
 
-                int StarCount = encounter is TeraDistribution ? encounter.Stars : Raid.GetStarCount(raid.Difficulty, Progress.SelectedIndex, raid.IsBlack);
+                int StarCount = encounter is TeraDistribution ? encounter.Stars : Raid.GetStarCount(raid.Difficulty, Config.Progress-1, raid.IsBlack);
                 teraRaidView.Difficulty.Text = string.Concat(Enumerable.Repeat("⭐", StarCount));
 
                 if (encounter != null)
@@ -970,7 +967,7 @@ namespace RaidCrawler
             for (int i = 0; i < count; i++)
             {
                 raid = new Raid(Data.Skip(i * Raid.SIZE).Take(Raid.SIZE).ToArray());
-                var progress = raid.IsEvent ? EventProgress.SelectedIndex : Progress.SelectedIndex;
+                var progress = raid.IsEvent ? Config.EventProgress -1 : Config.Progress -1 ;
                 var raid_delivery_group_id = raid.IsEvent ? TeraDistribution.GetDeliveryGroupID(eventct, Raid.DeliveryRaidPriority) : -1;
                 var encounter = raid.Encounter(progress, raid_delivery_group_id);
                 if (raid.IsValid)
@@ -1003,14 +1000,14 @@ namespace RaidCrawler
 
         private void Progress_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Config.Progress = Progress.SelectedIndex;
+            //Config.Progress = Progress.SelectedIndex;
             SaveConfig();
             if (Raids.Count > 0) DisplayRaid(index);
         }
 
         private void EventProgress_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Config.EventProgress = EventProgress.SelectedIndex;
+            //Config.EventProgress = EventProgress.SelectedIndex;
             SaveConfig();
             if (Raids.Count > 0) DisplayRaid(index);
         }
@@ -1039,11 +1036,10 @@ namespace RaidCrawler
             }
         }
 
-        private void Game_SelectedIndexChanged(object sender, EventArgs e)
+        public void Game_SelectedIndexChanged()
         {
-            Raid.Game = Game.Text;
-            Config.Game = Game.Text;
-            SaveConfig();
+            Raid.Game = Config.Game;
+            Config.Game = Config.Game;
             if (Raids.Count > 0) DisplayRaid(index);
         }
 
