@@ -73,6 +73,7 @@
             this.GenderCheck = new System.Windows.Forms.CheckBox();
             this.Gender = new System.Windows.Forms.ComboBox();
             this.ECCheck = new System.Windows.Forms.CheckBox();
+            this.ECTooltip = new System.Windows.Forms.ToolTip();
             this.LabelBatchFilters = new System.Windows.Forms.Label();
             this.BatchFilters = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.Form)).BeginInit();
@@ -190,8 +191,13 @@
             this.ECCheck.Name = "ECCheck";
             this.ECCheck.Size = new System.Drawing.Size(60,19);
             this.ECCheck.TabIndex = 19;
-            this.ECCheck.Text = "EC%100?";
+            this.ECCheck.Text = "EC % 100 = 0?";
             this.ECCheck.UseVisualStyleBackColor = true;
+            this.ECTooltip.Active = true;
+            this.ECTooltip.AutoPopDelay = 8000;
+            this.ECTooltip.InitialDelay = 500;
+            this.ECTooltip.ReshowDelay = 500;
+            this.ECTooltip.SetToolTip(this.ECCheck, "This filters for Tandemaus and Dunsparce that will evolve into Maushold Family of 3 and Dudunsparce 3 Segment forms.");
             // 
             // Add
             // 
@@ -811,6 +817,7 @@
         private CheckBox GenderCheck;
         private ComboBox Gender;
         private CheckBox ECCheck;
+        private ToolTip ECTooltip;
         private Label LabelBatchFilters;
         private TextBox BatchFilters;
     }
