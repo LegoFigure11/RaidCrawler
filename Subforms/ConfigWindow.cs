@@ -63,6 +63,7 @@ namespace RaidCrawler.Subforms
         {
             DiscordWebhook.Enabled = EnableDiscordNotifications.Checked;
             DiscordMessageContent.Enabled = EnableDiscordNotifications.Checked;
+            labelWebhooks.Text = "Webhooks are " + (DiscordWebhook.Enabled ? "enabled." : "disabled.");
         }
 
         private void Save_Click(object sender, EventArgs e)
@@ -112,6 +113,19 @@ namespace RaidCrawler.Subforms
         {
             SystemDDownPresses.Enabled = !UseOvershoot.Checked;
             SystemOvershoot.Enabled = UseOvershoot.Checked;
+        }
+
+        private void btnTestWebHook_Click(object sender, EventArgs e)
+        {
+            c.InstanceName = InstanceName.Text;
+            c.DiscordMessageContent = DiscordMessageContent.Text;
+            c.IVsStyle = IVstyle.SelectedIndex;
+            c.IVsSpacer = IVspacer.Text;
+            c.VerboseIVs = IVverbose.Checked;
+            c.EnableEmoji = EnableEmoji.Checked;
+            c.ToggleDen = denToggle.Checked;
+            var mainForm = Application.OpenForms.OfType<MainWindow>().Single();
+            mainForm.TestWebhook();
         }
     }
 }

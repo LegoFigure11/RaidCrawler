@@ -1203,5 +1203,25 @@ namespace RaidCrawler
                 teraRaidView.textSearchTime.Text = time;
             }
         }
+
+        public void TestWebhook()
+        {
+            var filter = new RaidFilter();
+            filter.Name = "Test Webhook";
+            var satisfied_filters = new List<RaidFilter>();
+            satisfied_filters.Add(filter);
+
+            int i = ComboIndex.SelectedIndex;
+            if (i > -1 && Encounters[i] != null && Raids[i] != null)
+            {
+                var timeSpan = stopwatch.Elapsed;
+                string time = String.Format("{0:00}:{1:00}:{2:00}", timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
+                NotificationHandler.SendNotifications(Config, Encounters[i], Raids[i], satisfied_filters, time, RewardsList[i]);
+            }
+            else
+            {
+                MessageBox.Show("Please connect to your device and ensure a raid has been found.");
+            }
+        }
     }
 }
