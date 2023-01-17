@@ -102,6 +102,7 @@
             this.labelAppName = new System.Windows.Forms.Label();
             this.picAppIcon = new System.Windows.Forms.PictureBox();
             this.labelAppVersion = new System.Windows.Forms.Label();
+            this.labelDaySkip = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.BaseDelay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SystemDDownPresses)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NavigateToSettings)).BeginInit();
@@ -233,7 +234,7 @@
             // 
             this.Save.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.Save.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.Save.Location = new System.Drawing.Point(0, 444);
+            this.Save.Location = new System.Drawing.Point(0, 486);
             this.Save.Name = "Save";
             this.Save.Size = new System.Drawing.Size(433, 32);
             this.Save.TabIndex = 12;
@@ -538,7 +539,7 @@
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(433, 444);
+            this.tabControl1.Size = new System.Drawing.Size(433, 486);
             this.tabControl1.TabIndex = 41;
             // 
             // tabGeneral
@@ -557,7 +558,6 @@
             this.tabGeneral.TabIndex = 5;
             this.tabGeneral.Text = "General";
             this.tabGeneral.UseVisualStyleBackColor = true;
-            this.tabGeneral.Click += new System.EventHandler(this.tabGeneral_Click);
             // 
             // label23
             // 
@@ -657,6 +657,7 @@
             // 
             // tabAdvanceDate
             // 
+            this.tabAdvanceDate.Controls.Add(this.labelDaySkip);
             this.tabAdvanceDate.Controls.Add(this.label16);
             this.tabAdvanceDate.Controls.Add(this.SystemOvershoot);
             this.tabAdvanceDate.Controls.Add(this.UseOvershoot);
@@ -689,7 +690,7 @@
             this.tabAdvanceDate.Location = new System.Drawing.Point(4, 24);
             this.tabAdvanceDate.Name = "tabAdvanceDate";
             this.tabAdvanceDate.Padding = new System.Windows.Forms.Padding(3);
-            this.tabAdvanceDate.Size = new System.Drawing.Size(425, 416);
+            this.tabAdvanceDate.Size = new System.Drawing.Size(425, 458);
             this.tabAdvanceDate.TabIndex = 1;
             this.tabAdvanceDate.Text = "Advance Date";
             this.tabAdvanceDate.UseVisualStyleBackColor = true;
@@ -984,11 +985,20 @@
             this.labelAppVersion.Text = "v0.0.0-000000";
             this.labelAppVersion.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // labelDaySkip
+            // 
+            this.labelDaySkip.AutoSize = true;
+            this.labelDaySkip.Location = new System.Drawing.Point(8, 414);
+            this.labelDaySkip.Name = "labelDaySkip";
+            this.labelDaySkip.Size = new System.Drawing.Size(44, 15);
+            this.labelDaySkip.TabIndex = 41;
+            this.labelDaySkip.Text = "label24";
+            // 
             // ConfigWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(433, 476);
+            this.ClientSize = new System.Drawing.Size(433, 518);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.Save);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -1101,5 +1111,6 @@
         private ComboBox Game;
         private Label LabelStoryProgress;
         private ComboBox StoryProgress;
+        private Label labelDaySkip;
     }
 }

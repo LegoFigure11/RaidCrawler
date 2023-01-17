@@ -85,7 +85,6 @@
             this.SendScreenshot = new System.Windows.Forms.Button();
             this.SearchTimer = new System.Windows.Forms.Timer(this.components);
             this.SearchTime = new System.Windows.Forms.Label();
-            this.DaySkipSuccessRate = new System.Windows.Forms.Label();
             this.btnOpenMap = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.Sprite)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GemIcon)).BeginInit();
@@ -188,7 +187,7 @@
             // 
             this.LabelLoadedRaids.AutoSize = true;
             this.LabelLoadedRaids.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.LabelLoadedRaids.Location = new System.Drawing.Point(63, 145);
+            this.LabelLoadedRaids.Location = new System.Drawing.Point(220, 10);
             this.LabelLoadedRaids.Name = "LabelLoadedRaids";
             this.LabelLoadedRaids.Size = new System.Drawing.Size(97, 15);
             this.LabelLoadedRaids.TabIndex = 12;
@@ -639,15 +638,6 @@
             this.SearchTime.TabIndex = 122;
             this.SearchTime.Text = "Search Time: -";
             // 
-            // DaySkipSuccessRate
-            // 
-            this.DaySkipSuccessRate.AutoSize = true;
-            this.DaySkipSuccessRate.Location = new System.Drawing.Point(14, 183);
-            this.DaySkipSuccessRate.Name = "DaySkipSuccessRate";
-            this.DaySkipSuccessRate.Size = new System.Drawing.Size(131, 15);
-            this.DaySkipSuccessRate.TabIndex = 123;
-            this.DaySkipSuccessRate.Text = "Day skip success rate : -";
-            // 
             // btnOpenMap
             // 
             this.btnOpenMap.Location = new System.Drawing.Point(221, 273);
@@ -664,7 +654,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(640, 340);
             this.Controls.Add(this.btnOpenMap);
-            this.Controls.Add(this.DaySkipSuccessRate);
             this.Controls.Add(this.SearchTime);
             this.Controls.Add(this.SendScreenshot);
             this.Controls.Add(this.ComboIndex);
@@ -788,9 +777,6 @@
         private Button SendScreenshot;
         private System.Windows.Forms.Timer SearchTimer;
         private Label SearchTime;
-        private int DaySkipTries = 0;
-        private int DaySkipSuccess = 0;
-        private Label DaySkipSuccessRate;
         private Button btnOpenMap;
     }
 }

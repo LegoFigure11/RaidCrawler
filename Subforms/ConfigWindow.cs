@@ -7,9 +7,11 @@ namespace RaidCrawler.Subforms
     public partial class ConfigWindow : Form
     {
         private readonly Config c = new();
-        
+
+
         public ConfigWindow(Config c)
         {
+            var mainForm = Application.OpenForms.OfType<MainWindow>().Single();
             var assembly = System.Reflection.Assembly.GetEntryAssembly();
             var v = assembly.GetName().Version!;
             var gitVersionInformationType = assembly.GetType("GitVersionInformation");
@@ -69,6 +71,8 @@ namespace RaidCrawler.Subforms
             labelAppName.Left = ((tabAbout.Width - labelAppName.Width) / 2) + (picAppIcon.Width / 2) + 2;
             picAppIcon.Left = labelAppName.Left - picAppIcon.Width - 2;
             linkLabel1.Left = (tabAbout.Width - linkLabel1.Width) / 2;
+
+            labelDaySkip.Text = "Day Skip Successes " + mainForm.GetStatDaySkipSuccess() + " / " + mainForm.GetStatDaySkipTries() + " Total";
         }
 
         private void EnableAlert_CheckedChanged(object sender, EventArgs e)
@@ -141,6 +145,7 @@ namespace RaidCrawler.Subforms
             c.VerboseIVs = IVverbose.Checked;
             c.EnableEmoji = EnableEmoji.Checked;
             c.ToggleDen = denToggle.Checked;
+
             var mainForm = Application.OpenForms.OfType<MainWindow>().Single();
             mainForm.TestWebhook();
         }
@@ -148,11 +153,6 @@ namespace RaidCrawler.Subforms
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(((LinkLabel)sender).Text) { UseShellExecute = true });
-        }
-
-        private void tabGeneral_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void Game_SelectedIndexChanged(object sender, EventArgs e)

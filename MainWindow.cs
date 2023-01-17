@@ -34,6 +34,10 @@ namespace RaidCrawler
         // rewards
         private readonly List<List<(int, int, int)>?> RewardsList = new();
 
+        // statistics
+        public int StatDaySkipTries = 0;
+        public int StatDaySkipSuccess = 0;
+
         private int index = 0;
         private ulong offset;
         private bool IsReading = false;
@@ -852,8 +856,6 @@ namespace RaidCrawler
                 SearchTimer.Start();
                 stopwatch.Reset();
                 stopwatch.Start();
-                DaySkipTries = 0;
-                DaySkipSuccess = 0;
 
                 ButtonReadRaids.Enabled = false;
                 ButtonAdvanceDate.Enabled = false;
@@ -916,11 +918,10 @@ namespace RaidCrawler
                     sameraids = false;
             }
 
-            DaySkipTries++;
+            StatDaySkipTries++;
             if (!sameraids)
-                DaySkipSuccess++;
-            DaySkipSuccessRate.Text = $"Day skip success rate: {DaySkipSuccess}/{DaySkipTries}";
-
+                StatDaySkipSuccess++;
+            
             if (sameraids)
                 return true;
             if (RaidFilters.Any(z => z.FilterSatisfied(Encounters, Raids, RaidBoost.SelectedIndex)))
@@ -1218,6 +1219,16 @@ namespace RaidCrawler
             {
                 MessageBox.Show("Please connect to your device and ensure a raid has been found.");
             }
+        }
+
+        public int GetStatDaySkipTries()
+        {
+            return StatDaySkipTries;
+        }
+
+        public int GetStatDaySkipSuccess()
+        {
+            return StatDaySkipSuccess;
         }
     }
 }
