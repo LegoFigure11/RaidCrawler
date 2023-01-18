@@ -35,9 +35,7 @@
             this.CheckEnableFilters = new System.Windows.Forms.CheckBox();
             this.ButtonDisconnect = new System.Windows.Forms.Button();
             this.ButtonConnect = new System.Windows.Forms.Button();
-            this.ConnectionStatusText = new System.Windows.Forms.Label();
             this.InputSwitchIP = new System.Windows.Forms.TextBox();
-            this.LabelStatus = new System.Windows.Forms.Label();
             this.LabelSwitchIP = new System.Windows.Forms.Label();
             this.LabelLoadedRaids = new System.Windows.Forms.Label();
             this.TeraType = new System.Windows.Forms.TextBox();
@@ -55,8 +53,7 @@
             this.IVs = new System.Windows.Forms.TextBox();
             this.LabelIVs = new System.Windows.Forms.Label();
             this.ButtonReadRaids = new System.Windows.Forms.Button();
-            this.IsEvent = new System.Windows.Forms.CheckBox();
-            this.LabelIsEvent = new System.Windows.Forms.Label();
+            this.labelEvent = new System.Windows.Forms.Label();
             this.Difficulty = new System.Windows.Forms.TextBox();
             this.LabelDifficulty = new System.Windows.Forms.Label();
             this.ButtonViewRAM = new System.Windows.Forms.Button();
@@ -84,19 +81,23 @@
             this.ComboIndex = new System.Windows.Forms.ComboBox();
             this.SendScreenshot = new System.Windows.Forms.Button();
             this.SearchTimer = new System.Windows.Forms.Timer(this.components);
-            this.SearchTime = new System.Windows.Forms.Label();
             this.btnOpenMap = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatus = new System.Windows.Forms.ToolStripStatusLabel();
             ((System.ComponentModel.ISupportInitialize)(this.Sprite)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GemIcon)).BeginInit();
+            this.groupBox1.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // ButtonAdvanceDate
             // 
             this.ButtonAdvanceDate.Enabled = false;
-            this.ButtonAdvanceDate.Location = new System.Drawing.Point(117, 110);
+            this.ButtonAdvanceDate.Location = new System.Drawing.Point(84, 96);
             this.ButtonAdvanceDate.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.ButtonAdvanceDate.Name = "ButtonAdvanceDate";
-            this.ButtonAdvanceDate.Size = new System.Drawing.Size(97, 27);
+            this.ButtonAdvanceDate.Size = new System.Drawing.Size(129, 27);
             this.ButtonAdvanceDate.TabIndex = 81;
             this.ButtonAdvanceDate.Text = "Advance Date";
             this.toolTip.SetToolTip(this.ButtonAdvanceDate, "Advance Date performs one (1) time set.\r\n\r\nIf Stop Filters are defined, Advance D" +
@@ -109,7 +110,7 @@
             this.CheckEnableFilters.AutoSize = true;
             this.CheckEnableFilters.Checked = true;
             this.CheckEnableFilters.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.CheckEnableFilters.Location = new System.Drawing.Point(119, 254);
+            this.CheckEnableFilters.Location = new System.Drawing.Point(122, 277);
             this.CheckEnableFilters.Name = "CheckEnableFilters";
             this.CheckEnableFilters.Size = new System.Drawing.Size(95, 19);
             this.CheckEnableFilters.TabIndex = 119;
@@ -122,7 +123,7 @@
             // ButtonDisconnect
             // 
             this.ButtonDisconnect.Enabled = false;
-            this.ButtonDisconnect.Location = new System.Drawing.Point(117, 51);
+            this.ButtonDisconnect.Location = new System.Drawing.Point(117, 35);
             this.ButtonDisconnect.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.ButtonDisconnect.Name = "ButtonDisconnect";
             this.ButtonDisconnect.Size = new System.Drawing.Size(97, 27);
@@ -133,25 +134,14 @@
             // 
             // ButtonConnect
             // 
-            this.ButtonConnect.Location = new System.Drawing.Point(13, 51);
+            this.ButtonConnect.Location = new System.Drawing.Point(13, 35);
             this.ButtonConnect.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.ButtonConnect.Name = "ButtonConnect";
-            this.ButtonConnect.Size = new System.Drawing.Size(97, 27);
+            this.ButtonConnect.Size = new System.Drawing.Size(96, 27);
             this.ButtonConnect.TabIndex = 10;
             this.ButtonConnect.Text = "Connect";
             this.ButtonConnect.UseVisualStyleBackColor = true;
             this.ButtonConnect.Click += new System.EventHandler(this.ButtonConnect_Click);
-            // 
-            // ConnectionStatusText
-            // 
-            this.ConnectionStatusText.AutoSize = true;
-            this.ConnectionStatusText.Location = new System.Drawing.Point(84, 32);
-            this.ConnectionStatusText.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.ConnectionStatusText.Name = "ConnectionStatusText";
-            this.ConnectionStatusText.Size = new System.Drawing.Size(89, 15);
-            this.ConnectionStatusText.TabIndex = 9;
-            this.ConnectionStatusText.Text = "Not connected.";
-            this.ConnectionStatusText.TextChanged += new System.EventHandler(this.ConnectionStatusText_TextChanged);
             // 
             // InputSwitchIP
             // 
@@ -162,16 +152,6 @@
             this.InputSwitchIP.TabIndex = 8;
             this.InputSwitchIP.Text = "www.www.www.www";
             this.InputSwitchIP.TextChanged += new System.EventHandler(this.InputSwitchIP_Changed);
-            // 
-            // LabelStatus
-            // 
-            this.LabelStatus.AutoSize = true;
-            this.LabelStatus.Location = new System.Drawing.Point(30, 32);
-            this.LabelStatus.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.LabelStatus.Name = "LabelStatus";
-            this.LabelStatus.Size = new System.Drawing.Size(42, 15);
-            this.LabelStatus.TabIndex = 7;
-            this.LabelStatus.Text = "Status:";
             // 
             // LabelSwitchIP
             // 
@@ -186,36 +166,37 @@
             // LabelLoadedRaids
             // 
             this.LabelLoadedRaids.AutoSize = true;
-            this.LabelLoadedRaids.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.LabelLoadedRaids.Location = new System.Drawing.Point(220, 10);
+            this.LabelLoadedRaids.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.LabelLoadedRaids.Location = new System.Drawing.Point(21, 102);
             this.LabelLoadedRaids.Name = "LabelLoadedRaids";
-            this.LabelLoadedRaids.Size = new System.Drawing.Size(97, 15);
+            this.LabelLoadedRaids.Size = new System.Drawing.Size(50, 15);
             this.LabelLoadedRaids.TabIndex = 12;
-            this.LabelLoadedRaids.Text = "Raids: 0 | Shiny: 0";
+            this.LabelLoadedRaids.Text = "Shiny: 0";
             // 
             // TeraType
             // 
             this.TeraType.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.TeraType.Location = new System.Drawing.Point(532, 82);
+            this.TeraType.Location = new System.Drawing.Point(356, 110);
             this.TeraType.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.TeraType.Name = "TeraType";
             this.TeraType.ReadOnly = true;
-            this.TeraType.Size = new System.Drawing.Size(97, 22);
+            this.TeraType.Size = new System.Drawing.Size(95, 22);
             this.TeraType.TabIndex = 49;
             // 
             // LabelTeraType
             // 
             this.LabelTeraType.AutoSize = true;
-            this.LabelTeraType.Location = new System.Drawing.Point(467, 84);
+            this.LabelTeraType.Location = new System.Drawing.Point(292, 112);
             this.LabelTeraType.Name = "LabelTeraType";
             this.LabelTeraType.Size = new System.Drawing.Size(58, 15);
             this.LabelTeraType.TabIndex = 48;
             this.LabelTeraType.Text = "Tera Type:";
+            this.LabelTeraType.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // PID
             // 
             this.PID.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.PID.Location = new System.Drawing.Point(534, 112);
+            this.PID.Location = new System.Drawing.Point(356, 68);
             this.PID.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.PID.Name = "PID";
             this.PID.ReadOnly = true;
@@ -225,16 +206,17 @@
             // LabelPID
             // 
             this.LabelPID.AutoSize = true;
-            this.LabelPID.Location = new System.Drawing.Point(497, 114);
+            this.LabelPID.Location = new System.Drawing.Point(321, 70);
             this.LabelPID.Name = "LabelPID";
             this.LabelPID.Size = new System.Drawing.Size(28, 15);
             this.LabelPID.TabIndex = 46;
             this.LabelPID.Text = "PID:";
+            this.LabelPID.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // EC
             // 
             this.EC.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.EC.Location = new System.Drawing.Point(358, 110);
+            this.EC.Location = new System.Drawing.Point(356, 40);
             this.EC.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.EC.Name = "EC";
             this.EC.ReadOnly = true;
@@ -244,16 +226,17 @@
             // LabelEC
             // 
             this.LabelEC.AutoSize = true;
-            this.LabelEC.Location = new System.Drawing.Point(233, 112);
+            this.LabelEC.Location = new System.Drawing.Point(285, 35);
             this.LabelEC.Name = "LabelEC";
-            this.LabelEC.Size = new System.Drawing.Size(118, 15);
+            this.LabelEC.Size = new System.Drawing.Size(64, 30);
             this.LabelEC.TabIndex = 44;
-            this.LabelEC.Text = "Encryption Constant:";
+            this.LabelEC.Text = "Encryption\r\nConstant:";
+            this.LabelEC.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // Seed
             // 
             this.Seed.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Seed.Location = new System.Drawing.Point(358, 82);
+            this.Seed.Location = new System.Drawing.Point(356, 12);
             this.Seed.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Seed.Name = "Seed";
             this.Seed.ReadOnly = true;
@@ -264,16 +247,17 @@
             // LabelSeed
             // 
             this.LabelSeed.AutoSize = true;
-            this.LabelSeed.Location = new System.Drawing.Point(316, 84);
+            this.LabelSeed.Location = new System.Drawing.Point(314, 14);
             this.LabelSeed.Name = "LabelSeed";
             this.LabelSeed.Size = new System.Drawing.Size(35, 15);
             this.LabelSeed.TabIndex = 42;
             this.LabelSeed.Text = "Seed:";
+            this.LabelSeed.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // ButtonNext
             // 
             this.ButtonNext.Enabled = false;
-            this.ButtonNext.Location = new System.Drawing.Point(156, 80);
+            this.ButtonNext.Location = new System.Drawing.Point(164, 68);
             this.ButtonNext.Name = "ButtonNext";
             this.ButtonNext.Size = new System.Drawing.Size(33, 23);
             this.ButtonNext.TabIndex = 56;
@@ -284,7 +268,7 @@
             // ButtonPrevious
             // 
             this.ButtonPrevious.Enabled = false;
-            this.ButtonPrevious.Location = new System.Drawing.Point(37, 80);
+            this.ButtonPrevious.Location = new System.Drawing.Point(45, 68);
             this.ButtonPrevious.Name = "ButtonPrevious";
             this.ButtonPrevious.Size = new System.Drawing.Size(33, 23);
             this.ButtonPrevious.TabIndex = 55;
@@ -295,98 +279,95 @@
             // Area
             // 
             this.Area.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Area.Location = new System.Drawing.Point(358, 138);
+            this.Area.Location = new System.Drawing.Point(356, 138);
             this.Area.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Area.Name = "Area";
             this.Area.ReadOnly = true;
-            this.Area.Size = new System.Drawing.Size(270, 22);
+            this.Area.Size = new System.Drawing.Size(271, 22);
             this.Area.TabIndex = 61;
             this.Area.Click += new System.EventHandler(this.DisplayMap);
             // 
             // LabelUNK_2
             // 
             this.LabelUNK_2.AutoSize = true;
-            this.LabelUNK_2.Location = new System.Drawing.Point(317, 142);
+            this.LabelUNK_2.Location = new System.Drawing.Point(315, 142);
             this.LabelUNK_2.Name = "LabelUNK_2";
             this.LabelUNK_2.Size = new System.Drawing.Size(34, 15);
             this.LabelUNK_2.TabIndex = 60;
             this.LabelUNK_2.Text = "Area:";
+            this.LabelUNK_2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // IVs
             // 
             this.IVs.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.IVs.Location = new System.Drawing.Point(358, 222);
+            this.IVs.Location = new System.Drawing.Point(356, 222);
             this.IVs.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.IVs.Name = "IVs";
             this.IVs.ReadOnly = true;
-            this.IVs.Size = new System.Drawing.Size(270, 22);
+            this.IVs.Size = new System.Drawing.Size(271, 22);
             this.IVs.TabIndex = 69;
             // 
             // LabelIVs
             // 
             this.LabelIVs.AutoSize = true;
-            this.LabelIVs.Location = new System.Drawing.Point(326, 224);
+            this.LabelIVs.Location = new System.Drawing.Point(324, 224);
             this.LabelIVs.Name = "LabelIVs";
             this.LabelIVs.Size = new System.Drawing.Size(25, 15);
             this.LabelIVs.TabIndex = 68;
             this.LabelIVs.Text = "IVs:";
+            this.LabelIVs.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // ButtonReadRaids
             // 
             this.ButtonReadRaids.Enabled = false;
-            this.ButtonReadRaids.Location = new System.Drawing.Point(13, 109);
+            this.ButtonReadRaids.Location = new System.Drawing.Point(7, 22);
             this.ButtonReadRaids.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.ButtonReadRaids.Name = "ButtonReadRaids";
-            this.ButtonReadRaids.Size = new System.Drawing.Size(97, 27);
+            this.ButtonReadRaids.Size = new System.Drawing.Size(89, 25);
             this.ButtonReadRaids.TabIndex = 80;
             this.ButtonReadRaids.Text = "Read Raids";
             this.ButtonReadRaids.UseVisualStyleBackColor = true;
             this.ButtonReadRaids.Click += new System.EventHandler(this.ButtonReadRaids_Click);
             // 
-            // IsEvent
+            // labelEvent
             // 
-            this.IsEvent.AutoCheck = false;
-            this.IsEvent.AutoSize = true;
-            this.IsEvent.Location = new System.Drawing.Point(358, 62);
-            this.IsEvent.Name = "IsEvent";
-            this.IsEvent.Size = new System.Drawing.Size(15, 14);
-            this.IsEvent.TabIndex = 83;
-            this.IsEvent.UseVisualStyleBackColor = true;
-            // 
-            // LabelIsEvent
-            // 
-            this.LabelIsEvent.AutoSize = true;
-            this.LabelIsEvent.Location = new System.Drawing.Point(308, 61);
-            this.LabelIsEvent.Name = "LabelIsEvent";
-            this.LabelIsEvent.Size = new System.Drawing.Size(41, 15);
-            this.LabelIsEvent.TabIndex = 84;
-            this.LabelIsEvent.Text = "Event?";
+            this.labelEvent.AutoSize = true;
+            this.labelEvent.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point);
+            this.labelEvent.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.labelEvent.Location = new System.Drawing.Point(556, 64);
+            this.labelEvent.Name = "labelEvent";
+            this.labelEvent.Size = new System.Drawing.Size(73, 15);
+            this.labelEvent.TabIndex = 84;
+            this.labelEvent.Text = "~~Event~~";
+            this.labelEvent.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.labelEvent.Visible = false;
             // 
             // Difficulty
             // 
             this.Difficulty.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Difficulty.Location = new System.Drawing.Point(357, 194);
+            this.Difficulty.Location = new System.Drawing.Point(530, 109);
             this.Difficulty.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Difficulty.Name = "Difficulty";
             this.Difficulty.ReadOnly = true;
-            this.Difficulty.Size = new System.Drawing.Size(80, 22);
+            this.Difficulty.Size = new System.Drawing.Size(97, 22);
             this.Difficulty.TabIndex = 86;
             // 
             // LabelDifficulty
             // 
             this.LabelDifficulty.AutoSize = true;
-            this.LabelDifficulty.Location = new System.Drawing.Point(293, 197);
+            this.LabelDifficulty.Location = new System.Drawing.Point(465, 112);
             this.LabelDifficulty.Name = "LabelDifficulty";
             this.LabelDifficulty.Size = new System.Drawing.Size(58, 15);
             this.LabelDifficulty.TabIndex = 85;
             this.LabelDifficulty.Text = "Difficulty:";
+            this.LabelDifficulty.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // ButtonViewRAM
             // 
             this.ButtonViewRAM.Enabled = false;
-            this.ButtonViewRAM.Location = new System.Drawing.Point(545, 6);
+            this.ButtonViewRAM.Location = new System.Drawing.Point(104, 22);
             this.ButtonViewRAM.Name = "ButtonViewRAM";
-            this.ButtonViewRAM.Size = new System.Drawing.Size(83, 23);
+            this.ButtonViewRAM.Size = new System.Drawing.Size(90, 23);
             this.ButtonViewRAM.TabIndex = 89;
             this.ButtonViewRAM.Text = "Dump Raid";
             this.ButtonViewRAM.UseVisualStyleBackColor = true;
@@ -395,11 +376,11 @@
             // Species
             // 
             this.Species.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Species.Location = new System.Drawing.Point(357, 166);
+            this.Species.Location = new System.Drawing.Point(356, 166);
             this.Species.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Species.Name = "Species";
             this.Species.ReadOnly = true;
-            this.Species.Size = new System.Drawing.Size(270, 22);
+            this.Species.Size = new System.Drawing.Size(271, 22);
             this.Species.TabIndex = 93;
             // 
             // LabelSpecies
@@ -410,20 +391,22 @@
             this.LabelSpecies.Size = new System.Drawing.Size(49, 15);
             this.LabelSpecies.TabIndex = 92;
             this.LabelSpecies.Text = "Species:";
+            this.LabelSpecies.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // LabelMoves
             // 
             this.LabelMoves.AutoSize = true;
-            this.LabelMoves.Location = new System.Drawing.Point(306, 266);
+            this.LabelMoves.Location = new System.Drawing.Point(304, 266);
             this.LabelMoves.Name = "LabelMoves";
             this.LabelMoves.Size = new System.Drawing.Size(45, 15);
             this.LabelMoves.TabIndex = 94;
             this.LabelMoves.Text = "Moves:";
+            this.LabelMoves.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // Move1
             // 
             this.Move1.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Move1.Location = new System.Drawing.Point(358, 252);
+            this.Move1.Location = new System.Drawing.Point(356, 252);
             this.Move1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Move1.Name = "Move1";
             this.Move1.ReadOnly = true;
@@ -434,7 +417,7 @@
             // Move2
             // 
             this.Move2.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Move2.Location = new System.Drawing.Point(495, 252);
+            this.Move2.Location = new System.Drawing.Point(494, 252);
             this.Move2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Move2.Name = "Move2";
             this.Move2.ReadOnly = true;
@@ -445,7 +428,7 @@
             // Move4
             // 
             this.Move4.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Move4.Location = new System.Drawing.Point(495, 277);
+            this.Move4.Location = new System.Drawing.Point(494, 277);
             this.Move4.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Move4.Name = "Move4";
             this.Move4.ReadOnly = true;
@@ -456,7 +439,7 @@
             // Move3
             // 
             this.Move3.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Move3.Location = new System.Drawing.Point(358, 277);
+            this.Move3.Location = new System.Drawing.Point(356, 277);
             this.Move3.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Move3.Name = "Move3";
             this.Move3.ReadOnly = true;
@@ -467,7 +450,7 @@
             // Nature
             // 
             this.Nature.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Nature.Location = new System.Drawing.Point(531, 305);
+            this.Nature.Location = new System.Drawing.Point(530, 305);
             this.Nature.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Nature.Name = "Nature";
             this.Nature.ReadOnly = true;
@@ -477,16 +460,17 @@
             // LabelNature
             // 
             this.LabelNature.AutoSize = true;
-            this.LabelNature.Location = new System.Drawing.Point(466, 307);
+            this.LabelNature.Location = new System.Drawing.Point(477, 307);
             this.LabelNature.Name = "LabelNature";
             this.LabelNature.Size = new System.Drawing.Size(46, 15);
             this.LabelNature.TabIndex = 105;
             this.LabelNature.Text = "Nature:";
+            this.LabelNature.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // Gender
             // 
             this.Gender.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Gender.Location = new System.Drawing.Point(357, 305);
+            this.Gender.Location = new System.Drawing.Point(356, 305);
             this.Gender.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Gender.Name = "Gender";
             this.Gender.ReadOnly = true;
@@ -496,17 +480,18 @@
             // LabelGender
             // 
             this.LabelGender.AutoSize = true;
-            this.LabelGender.Location = new System.Drawing.Point(303, 307);
+            this.LabelGender.Location = new System.Drawing.Point(301, 307);
             this.LabelGender.Name = "LabelGender";
             this.LabelGender.Size = new System.Drawing.Size(48, 15);
             this.LabelGender.TabIndex = 103;
             this.LabelGender.Text = "Gender:";
+            this.LabelGender.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // StopFilter
             // 
-            this.StopFilter.Location = new System.Drawing.Point(13, 250);
+            this.StopFilter.Location = new System.Drawing.Point(12, 273);
             this.StopFilter.Name = "StopFilter";
-            this.StopFilter.Size = new System.Drawing.Size(97, 23);
+            this.StopFilter.Size = new System.Drawing.Size(101, 23);
             this.StopFilter.TabIndex = 107;
             this.StopFilter.Text = "Edit Filters";
             this.StopFilter.UseVisualStyleBackColor = true;
@@ -514,7 +499,7 @@
             // 
             // Sprite
             // 
-            this.Sprite.Location = new System.Drawing.Point(471, -1);
+            this.Sprite.Location = new System.Drawing.Point(558, 7);
             this.Sprite.Name = "Sprite";
             this.Sprite.Size = new System.Drawing.Size(68, 56);
             this.Sprite.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
@@ -524,37 +509,38 @@
             // Ability
             // 
             this.Ability.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Ability.Location = new System.Drawing.Point(495, 194);
+            this.Ability.Location = new System.Drawing.Point(356, 194);
             this.Ability.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Ability.Name = "Ability";
             this.Ability.ReadOnly = true;
-            this.Ability.Size = new System.Drawing.Size(132, 22);
+            this.Ability.Size = new System.Drawing.Size(271, 22);
             this.Ability.TabIndex = 110;
             // 
             // LabelAbility
             // 
             this.LabelAbility.AutoSize = true;
-            this.LabelAbility.Location = new System.Drawing.Point(444, 197);
+            this.LabelAbility.Location = new System.Drawing.Point(305, 196);
             this.LabelAbility.Name = "LabelAbility";
             this.LabelAbility.Size = new System.Drawing.Size(44, 15);
             this.LabelAbility.TabIndex = 109;
             this.LabelAbility.Text = "Ability:";
+            this.LabelAbility.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // GemIcon
             // 
-            this.GemIcon.Location = new System.Drawing.Point(405, -1);
+            this.GemIcon.Location = new System.Drawing.Point(496, 9);
             this.GemIcon.Name = "GemIcon";
-            this.GemIcon.Size = new System.Drawing.Size(60, 60);
-            this.GemIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.GemIcon.Size = new System.Drawing.Size(56, 56);
+            this.GemIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.GemIcon.TabIndex = 111;
             this.GemIcon.TabStop = false;
             // 
             // ButtonDownloadEvents
             // 
             this.ButtonDownloadEvents.Enabled = false;
-            this.ButtonDownloadEvents.Location = new System.Drawing.Point(545, 32);
+            this.ButtonDownloadEvents.Location = new System.Drawing.Point(104, 51);
             this.ButtonDownloadEvents.Name = "ButtonDownloadEvents";
-            this.ButtonDownloadEvents.Size = new System.Drawing.Size(83, 23);
+            this.ButtonDownloadEvents.Size = new System.Drawing.Size(90, 23);
             this.ButtonDownloadEvents.TabIndex = 112;
             this.ButtonDownloadEvents.Text = "Pull Events";
             this.ButtonDownloadEvents.UseVisualStyleBackColor = true;
@@ -562,9 +548,9 @@
             // 
             // ConfigSettings
             // 
-            this.ConfigSettings.Location = new System.Drawing.Point(13, 279);
+            this.ConfigSettings.Location = new System.Drawing.Point(12, 302);
             this.ConfigSettings.Name = "ConfigSettings";
-            this.ConfigSettings.Size = new System.Drawing.Size(199, 23);
+            this.ConfigSettings.Size = new System.Drawing.Size(203, 23);
             this.ConfigSettings.TabIndex = 115;
             this.ConfigSettings.Text = "Open Settings";
             this.ConfigSettings.UseVisualStyleBackColor = true;
@@ -572,9 +558,9 @@
             // 
             // Rewards
             // 
-            this.Rewards.Location = new System.Drawing.Point(221, 302);
+            this.Rewards.Location = new System.Drawing.Point(104, 80);
             this.Rewards.Name = "Rewards";
-            this.Rewards.Size = new System.Drawing.Size(76, 23);
+            this.Rewards.Size = new System.Drawing.Size(90, 23);
             this.Rewards.TabIndex = 116;
             this.Rewards.Text = "Rewards";
             this.Rewards.UseVisualStyleBackColor = true;
@@ -583,7 +569,7 @@
             // LabelSandwichBonus
             // 
             this.LabelSandwichBonus.AutoSize = true;
-            this.LabelSandwichBonus.Location = new System.Drawing.Point(12, 227);
+            this.LabelSandwichBonus.Location = new System.Drawing.Point(13, 248);
             this.LabelSandwichBonus.Name = "LabelSandwichBonus";
             this.LabelSandwichBonus.Size = new System.Drawing.Size(120, 15);
             this.LabelSandwichBonus.TabIndex = 118;
@@ -597,7 +583,7 @@
             "1",
             "2",
             "3"});
-            this.RaidBoost.Location = new System.Drawing.Point(164, 224);
+            this.RaidBoost.Location = new System.Drawing.Point(165, 245);
             this.RaidBoost.Name = "RaidBoost";
             this.RaidBoost.Size = new System.Drawing.Size(48, 23);
             this.RaidBoost.TabIndex = 117;
@@ -609,7 +595,7 @@
             this.ComboIndex.BackColor = System.Drawing.SystemColors.Window;
             this.ComboIndex.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ComboIndex.FormattingEnabled = true;
-            this.ComboIndex.Location = new System.Drawing.Point(76, 80);
+            this.ComboIndex.Location = new System.Drawing.Point(84, 68);
             this.ComboIndex.Name = "ComboIndex";
             this.ComboIndex.Size = new System.Drawing.Size(74, 23);
             this.ComboIndex.TabIndex = 120;
@@ -617,9 +603,9 @@
             // 
             // SendScreenshot
             // 
-            this.SendScreenshot.Location = new System.Drawing.Point(221, 244);
+            this.SendScreenshot.Location = new System.Drawing.Point(6, 51);
             this.SendScreenshot.Name = "SendScreenshot";
-            this.SendScreenshot.Size = new System.Drawing.Size(76, 23);
+            this.SendScreenshot.Size = new System.Drawing.Size(90, 23);
             this.SendScreenshot.TabIndex = 121;
             this.SendScreenshot.Text = "Screenshot";
             this.SendScreenshot.UseVisualStyleBackColor = true;
@@ -629,40 +615,60 @@
             // 
             this.SearchTimer.Tick += new System.EventHandler(this.SearchTimer_Tick);
             // 
-            // SearchTime
-            // 
-            this.SearchTime.AutoSize = true;
-            this.SearchTime.Location = new System.Drawing.Point(63, 168);
-            this.SearchTime.Name = "SearchTime";
-            this.SearchTime.Size = new System.Drawing.Size(82, 15);
-            this.SearchTime.TabIndex = 122;
-            this.SearchTime.Text = "Search Time: -";
-            // 
             // btnOpenMap
             // 
-            this.btnOpenMap.Location = new System.Drawing.Point(221, 273);
+            this.btnOpenMap.Location = new System.Drawing.Point(6, 77);
             this.btnOpenMap.Name = "btnOpenMap";
-            this.btnOpenMap.Size = new System.Drawing.Size(76, 23);
+            this.btnOpenMap.Size = new System.Drawing.Size(90, 23);
             this.btnOpenMap.TabIndex = 124;
             this.btnOpenMap.Text = "Open Map";
             this.btnOpenMap.UseVisualStyleBackColor = true;
             this.btnOpenMap.Click += new System.EventHandler(this.DisplayMap);
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.ButtonViewRAM);
+            this.groupBox1.Controls.Add(this.ButtonDownloadEvents);
+            this.groupBox1.Controls.Add(this.btnOpenMap);
+            this.groupBox1.Controls.Add(this.SendScreenshot);
+            this.groupBox1.Controls.Add(this.Rewards);
+            this.groupBox1.Controls.Add(this.ButtonReadRaids);
+            this.groupBox1.Location = new System.Drawing.Point(13, 129);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(200, 110);
+            this.groupBox1.TabIndex = 125;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Raid Controls";
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatus});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 335);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(640, 22);
+            this.statusStrip1.TabIndex = 126;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // toolStripStatus
+            // 
+            this.toolStripStatus.Name = "toolStripStatus";
+            this.toolStripStatus.Size = new System.Drawing.Size(84, 17);
+            this.toolStripStatus.Text = "toolStripStatus";
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(640, 340);
-            this.Controls.Add(this.btnOpenMap);
-            this.Controls.Add(this.SearchTime);
-            this.Controls.Add(this.SendScreenshot);
+            this.ClientSize = new System.Drawing.Size(640, 357);
+            this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.ComboIndex);
             this.Controls.Add(this.CheckEnableFilters);
             this.Controls.Add(this.LabelSandwichBonus);
+            this.Controls.Add(this.LabelLoadedRaids);
             this.Controls.Add(this.RaidBoost);
-            this.Controls.Add(this.Rewards);
             this.Controls.Add(this.ConfigSettings);
-            this.Controls.Add(this.ButtonDownloadEvents);
             this.Controls.Add(this.GemIcon);
             this.Controls.Add(this.Ability);
             this.Controls.Add(this.LabelAbility);
@@ -679,13 +685,10 @@
             this.Controls.Add(this.LabelMoves);
             this.Controls.Add(this.Species);
             this.Controls.Add(this.LabelSpecies);
-            this.Controls.Add(this.ButtonViewRAM);
             this.Controls.Add(this.Difficulty);
             this.Controls.Add(this.LabelDifficulty);
-            this.Controls.Add(this.LabelIsEvent);
-            this.Controls.Add(this.IsEvent);
+            this.Controls.Add(this.labelEvent);
             this.Controls.Add(this.ButtonAdvanceDate);
-            this.Controls.Add(this.ButtonReadRaids);
             this.Controls.Add(this.IVs);
             this.Controls.Add(this.LabelIVs);
             this.Controls.Add(this.Area);
@@ -700,12 +703,9 @@
             this.Controls.Add(this.LabelEC);
             this.Controls.Add(this.Seed);
             this.Controls.Add(this.LabelSeed);
-            this.Controls.Add(this.LabelLoadedRaids);
             this.Controls.Add(this.ButtonDisconnect);
             this.Controls.Add(this.ButtonConnect);
-            this.Controls.Add(this.ConnectionStatusText);
             this.Controls.Add(this.InputSwitchIP);
-            this.Controls.Add(this.LabelStatus);
             this.Controls.Add(this.LabelSwitchIP);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -715,6 +715,9 @@
             this.Load += new System.EventHandler(this.MainWindow_Load);
             ((System.ComponentModel.ISupportInitialize)(this.Sprite)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.GemIcon)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -725,9 +728,7 @@
         private ToolTip toolTip;
         private Button ButtonDisconnect;
         private Button ButtonConnect;
-        private Label ConnectionStatusText;
         private TextBox InputSwitchIP;
-        private Label LabelStatus;
         private Label LabelSwitchIP;
         private Label LabelLoadedRaids;
         private TextBox TeraType;
@@ -746,8 +747,7 @@
         private Label LabelIVs;
         private Button ButtonReadRaids;
         private Button ButtonAdvanceDate;
-        private CheckBox IsEvent;
-        private Label LabelIsEvent;
+        private Label labelEvent;
         private TextBox Difficulty;
         private Label LabelDifficulty;
         private Button ButtonViewRAM;
@@ -776,7 +776,9 @@
         private ComboBox ComboIndex;
         private Button SendScreenshot;
         private System.Windows.Forms.Timer SearchTimer;
-        private Label SearchTime;
         private Button btnOpenMap;
+        private GroupBox groupBox1;
+        private StatusStrip statusStrip1;
+        private ToolStripStatusLabel toolStripStatus;
     }
 }

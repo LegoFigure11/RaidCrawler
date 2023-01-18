@@ -12,12 +12,14 @@ using System.Text;
 using static RaidCrawler.Structures.Offsets;
 using static SysBot.Base.SwitchButton;
 using static System.Buffers.Binary.BinaryPrimitives;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace RaidCrawler
 {
     public partial class MainWindow : Form
     {
         private readonly Config Config = new();
+        private static Form mainForm = new();
 
         private readonly static SwitchConnectionConfig ConnectionConfig = new() { Protocol = SwitchProtocol.WiFi, IP = "192.168.0.0", Port = 6000 };
         private readonly static SwitchSocketAsync SwitchConnection = new(ConnectionConfig);
@@ -37,6 +39,7 @@ namespace RaidCrawler
         // statistics
         public int StatDaySkipTries = 0;
         public int StatDaySkipSuccess = 0;
+        public string formTitle;
 
         private int index = 0;
         private ulong offset;
@@ -84,8 +87,9 @@ namespace RaidCrawler
                 Config = new Config();
                 SaveConfig();
             }
-            Text = "RaidCrawler v" + v.Major + "." + v.Minor + "." + v.Build + build + " " + Config.InstanceName;
-
+            formTitle = "RaidCrawler v" + v.Major + "." + v.Minor + "." + v.Build + build + " " + Config.InstanceName;
+            Text = formTitle;
+            mainForm = this;
 
             // load rewards
             Raid.BaseFixedRewards = JsonConvert.DeserializeObject<List<RaidFixedRewards>>(Utils.GetStringResource("raid_fixed_reward_item_array.json") ?? "[]");
@@ -140,7 +144,7 @@ namespace RaidCrawler
         private void Disconnect_Click(object sender, EventArgs e)
         {
             Disconnect();
-            ConnectionStatusText.Text = "Disconnected.";
+            toolStripStatus.Text = "Disconnected.";
             stopwatch.Stop();
             ButtonConnect.Enabled = true;
             ButtonDisconnect.Enabled = false;
@@ -156,11 +160,11 @@ namespace RaidCrawler
             {
                 try
                 {
-                    ConnectionStatusText.Text = "Connecting...";
+                    toolStripStatus.Text = "Connecting...";
                     SwitchConnection.Connect();
-                    ConnectionStatusText.Text = "Connected!";
+                    toolStripStatus.Text = "Connected!";
                     IsReading = true;
-                    ConnectionStatusText.Text = "Detecting game version...";
+                    toolStripStatus.Text = "Detecting game version...";
                     string id = await GetGameID(CancellationToken.None);
                     if (id is ScarletID)
                     {
@@ -177,14 +181,14 @@ namespace RaidCrawler
                         IsReading = false;
                     }
 
-                    ConnectionStatusText.Text = "Reading story progress...";
+                    toolStripStatus.Text = "Reading story progress...";
                     Config.Progress = await GetStoryProgress(CancellationToken.None);
                     Config.EventProgress = Math.Min(Config.Progress-1, 3);
 
-                    ConnectionStatusText.Text = "Reading event raid status...";
+                    toolStripStatus.Text = "Reading event raid status...";
                     await ReadEventRaids();
 
-                    ConnectionStatusText.Text = "Reading raids...";
+                    toolStripStatus.Text = "Reading raids...";
                     await ReadRaids(CancellationToken.None);
 
                     IsReading = false;
@@ -201,7 +205,7 @@ namespace RaidCrawler
                     // a bit hacky but it works
                     if (err.Message.Contains("failed to respond") || err.Message.Contains("actively refused"))
                     {
-                        ConnectionStatusText.Text = "Unable to connect.";
+                        toolStripStatus.Text = "Unable to connect.";
                         MessageBox.Show(err.Message);
                     }
                 }
@@ -333,7 +337,7 @@ namespace RaidCrawler
                 EC.Text = !HideSeed ? $"{raid.EC:X8}" : "Hidden";
                 PID.Text = GetPIDString(raid, encounter);
                 Area.Text = $"{Areas.Area[raid.Area - 1]} - Den {raid.Den}";
-                IsEvent.Checked = raid.IsEvent;
+                labelEvent.Visible = raid.IsEvent;
 
                 var teratype = Raid.GetTeraType(encounter, raid);
                 TeraType.Text = Raid.strings.types[teratype];
@@ -792,7 +796,7 @@ namespace RaidCrawler
                 teraRaidView.startProgress();
             }
 
-            ConnectionStatusText.Text = "Changing date...";
+            toolStripStatus.Text = "Changing date...";
             int BaseDelay = (int)Config.BaseDelay;
             await Click(LSTICK, 0_050 + BaseDelay, token).ConfigureAwait(false); // Sometimes it seems like the first command doesn't go through so send this just in case
                                                                                  // HOME Menu
@@ -896,11 +900,13 @@ namespace RaidCrawler
                             NotificationHandler.SendNotifications(Config, Encounters[i], Raids[i], satisfied_filters, time, RewardsList[i]);
                     }
                     if (Config.EnableAlertWindow) MessageBox.Show(Config.AlertWindowMessage + "\n\nTime Spent: " + time, "Result found!", MessageBoxButtons.OK);
+                    RaidCrawler.MainWindow.ActiveForm.Text = formTitle+  " [Match Found in " + time + "]";
                 }
 
                 ButtonReadRaids.Enabled = true;
                 ButtonAdvanceDate.Enabled = true;
                 SearchTimer.Stop();
+
             }
         }
 
@@ -952,7 +958,7 @@ namespace RaidCrawler
 
         private async Task ReadRaids(CancellationToken token)
         {
-            ConnectionStatusText.Text = "Parsing pointer...";
+            toolStripStatus.Text = "Parsing pointer...";
             offset = await OffsetUtil.GetPointerAddress(RaidBlockPointer, CancellationToken.None);
 
             Raids.Clear();
@@ -960,7 +966,7 @@ namespace RaidCrawler
             RewardsList.Clear();
             index = 0;
 
-            ConnectionStatusText.Text = "Reading raid block...";
+            toolStripStatus.Text = "Reading raid block...";
             var Data = await SwitchConnection.ReadBytesAbsoluteAsync(offset + RaidBlock.HEADER_SIZE, (int)(RaidBlock.SIZE - RaidBlock.HEADER_SIZE), token);
             Raid raid;
             var count = Data.Length / Raid.SIZE;
@@ -981,8 +987,8 @@ namespace RaidCrawler
                     eventct++;
             }
 
-            ConnectionStatusText.Text = "Completed!";
-            LabelLoadedRaids.Text = $"Raids: {Raids.Count} | Shiny: {Enumerable.Range(0, Raids.Count).Where(i => Raid.CheckIsShiny(Raids[i], Encounters[i])).Count()}";
+            toolStripStatus.Text = "Completed!";
+            LabelLoadedRaids.Text = $"Shiny: {Enumerable.Range(0, Raids.Count).Where(i => Raid.CheckIsShiny(Raids[i], Encounters[i])).Count()}";
             if (Raids.Count > 0)
             {
                 ButtonPrevious.Enabled = true;
@@ -1185,7 +1191,7 @@ namespace RaidCrawler
         {
             if (Config.StreamerView)
             {
-                teraRaidView.debug.Text = ConnectionStatusText.Text;
+                teraRaidView.debug.Text = toolStripStatus.Text;
             }
         }
 
@@ -1194,7 +1200,7 @@ namespace RaidCrawler
             var timeSpan = stopwatch.Elapsed;
             string time = String.Format("{0:00}:{1:00}:{2:00}",
             timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
-            SearchTime.Text = "Search Time: " + time;
+            mainForm.Text = formTitle + " [Searching for " + time + "]";
             if (Config.StreamerView)
             {
                 teraRaidView.textSearchTime.Text = time;
