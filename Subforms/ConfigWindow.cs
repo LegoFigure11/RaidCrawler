@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
+using System.Data;
 using RaidCrawler.Structures;
 using System;
+using System.Windows.Forms;
 
 namespace RaidCrawler.Subforms
 {
@@ -74,6 +76,23 @@ namespace RaidCrawler.Subforms
 
             labelDaySkip.Text = "Day Skip Successes " + mainForm.GetStatDaySkipSuccess() + " / " + mainForm.GetStatDaySkipTries() + " Total";
         }
+
+        /*private DataTable EmojiLoad(Dictionary<string, string> emoji)
+        {
+            DataTable d = new DataTable();
+            d.Columns.Add("Emoji", typeof(string));
+            d.Columns.Add("Emoji Value", typeof(string));
+            emoji.ToList().ForEach(KeyValuePair => d.Rows.Add(new object[] {KeyValuePair.Key, KeyValuePair.Value}));
+            d.Columns[0].ReadOnly = true;
+            return d;
+        }*/
+
+        /*{private Dictionary<string, string> EmojiSave(DataTable emoji)
+
+            Dictionary<string, string> d = new Dictionary<string, string>();
+            emoji.AsEnumerable().ToList().ForEach(row => d.Add(row[0] as string, row[1] as string));
+            return d;
+        }*/
 
         private void EnableAlert_CheckedChanged(object sender, EventArgs e)
         {
@@ -159,6 +178,14 @@ namespace RaidCrawler.Subforms
         {
             var mainForm = Application.OpenForms.OfType<MainWindow>().Single();
             mainForm.Game_SelectedIndexChanged();
+        }
+        private void EmojiConfig_Click(object sender, EventArgs e)
+        {
+            EmojiConfig config = new EmojiConfig(c);
+            if (config.ShowDialog() == DialogResult.OK)
+            {
+                config.Show();
+            }
         }
     }
 }

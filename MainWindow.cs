@@ -615,7 +615,8 @@ namespace RaidCrawler
                             teraRaidView.labelSpicyHerba.ForeColor = Color.WhiteSmoke;
                         }
                     }
-                    teraRaidView.Controls["Shiny"].Visible = Raid.CheckIsShiny(raid, encounter) ? true : false;
+                    teraRaidView.Shiny.Visible = Raid.CheckIsShiny(raid, encounter) ? true : false;
+                    teraRaidView.picShinyAlert.Enabled = Raid.CheckIsShiny(raid, encounter) ? true : false;
                 }
                 else
                 {
