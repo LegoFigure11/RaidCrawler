@@ -37,17 +37,19 @@
             // 
             this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(12, 12);
+            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridView1.Location = new System.Drawing.Point(0, 0);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowTemplate.Height = 25;
-            this.dataGridView1.Size = new System.Drawing.Size(350, 398);
+            this.dataGridView1.Size = new System.Drawing.Size(374, 450);
             this.dataGridView1.TabIndex = 0;
             // 
             // Save
             // 
-            this.Save.Location = new System.Drawing.Point(12, 416);
+            this.Save.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.Save.Location = new System.Drawing.Point(0, 427);
             this.Save.Name = "Save";
-            this.Save.Size = new System.Drawing.Size(350, 23);
+            this.Save.Size = new System.Drawing.Size(374, 23);
             this.Save.TabIndex = 1;
             this.Save.Text = "Save";
             this.Save.UseVisualStyleBackColor = true;
