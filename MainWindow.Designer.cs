@@ -257,9 +257,9 @@
             // ButtonNext
             // 
             this.ButtonNext.Enabled = false;
-            this.ButtonNext.Location = new System.Drawing.Point(164, 68);
+            this.ButtonNext.Location = new System.Drawing.Point(153, 67);
             this.ButtonNext.Name = "ButtonNext";
-            this.ButtonNext.Size = new System.Drawing.Size(33, 23);
+            this.ButtonNext.Size = new System.Drawing.Size(45, 25);
             this.ButtonNext.TabIndex = 56;
             this.ButtonNext.Text = ">>";
             this.ButtonNext.UseVisualStyleBackColor = true;
@@ -268,9 +268,9 @@
             // ButtonPrevious
             // 
             this.ButtonPrevious.Enabled = false;
-            this.ButtonPrevious.Location = new System.Drawing.Point(45, 68);
+            this.ButtonPrevious.Location = new System.Drawing.Point(30, 68);
             this.ButtonPrevious.Name = "ButtonPrevious";
-            this.ButtonPrevious.Size = new System.Drawing.Size(33, 23);
+            this.ButtonPrevious.Size = new System.Drawing.Size(45, 25);
             this.ButtonPrevious.TabIndex = 55;
             this.ButtonPrevious.Text = "<<";
             this.ButtonPrevious.UseVisualStyleBackColor = true;
@@ -595,9 +595,9 @@
             this.ComboIndex.BackColor = System.Drawing.SystemColors.Window;
             this.ComboIndex.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ComboIndex.FormattingEnabled = true;
-            this.ComboIndex.Location = new System.Drawing.Point(84, 68);
+            this.ComboIndex.Location = new System.Drawing.Point(81, 68);
             this.ComboIndex.Name = "ComboIndex";
-            this.ComboIndex.Size = new System.Drawing.Size(74, 23);
+            this.ComboIndex.Size = new System.Drawing.Size(64, 23);
             this.ComboIndex.TabIndex = 120;
             this.ComboIndex.SelectedIndexChanged += new System.EventHandler(this.ComboIndex_SelectedIndexChanged);
             // 
