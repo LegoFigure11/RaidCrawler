@@ -65,6 +65,7 @@ namespace RaidCrawler.Subforms
             GenderCheck.Checked = filter.Gender != null;
             ShinyCheck.Checked = filter.Shiny;
             SquareCheck.Checked = filter.Square;
+            ECCheck.Checked = filter.ECCheck;
             CheckRewards.Checked = filter.RewardItems != null && filter.RewardsCount > 0;
             Rewards.Text = filter.RewardItems != null ? string.Join(",", filter.RewardItems.Select(x => x.ToString()).ToArray())
                                                         : "645,795,1606,1904,1905,1906,1907,1908";
@@ -148,6 +149,7 @@ namespace RaidCrawler.Subforms
             filter.Gender = GenderCheck.Checked ? Gender.SelectedIndex : null;
             filter.Shiny = ShinyCheck.Checked;
             filter.Square = SquareCheck.Checked;
+            filter.ECCheck = ECCheck.Checked;
             filter.IVBin = ivbin;
             filter.IVVals = ivvals;
             filter.IVComps = ivcomps;
