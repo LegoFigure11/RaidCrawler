@@ -66,6 +66,7 @@
             this.Moveset3 = new System.Windows.Forms.TextBox();
             this.Moveset1 = new System.Windows.Forms.TextBox();
             this.Moveset2 = new System.Windows.Forms.TextBox();
+            this.picShinyAlert = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.picBottleCap = new System.Windows.Forms.PictureBox();
@@ -100,6 +101,7 @@
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picShinyAlert)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBottleCap)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSaltyHerba)).BeginInit();
@@ -557,6 +559,18 @@
             this.Moveset2.Size = new System.Drawing.Size(200, 25);
             this.Moveset2.TabIndex = 122;
             // 
+            // picShinyAlert
+            // 
+            this.picShinyAlert.BackColor = System.Drawing.Color.Transparent;
+            this.picShinyAlert.Enabled = false;
+            this.picShinyAlert.Image = ((System.Drawing.Image)(resources.GetObject("picShinyAlert.Image")));
+            this.picShinyAlert.Location = new System.Drawing.Point(300, 92);
+            this.picShinyAlert.Name = "picShinyAlert";
+            this.picShinyAlert.Size = new System.Drawing.Size(79, 77);
+            this.picShinyAlert.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.picShinyAlert.TabIndex = 160;
+            this.picShinyAlert.TabStop = false;
+            // 
             // pictureBox1
             // 
             this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
@@ -920,6 +934,7 @@
             this.Controls.Add(this.Area);
             this.Controls.Add(this.labelSearchTime);
             this.Controls.Add(this.Map);
+            this.Controls.Add(this.picShinyAlert);
             this.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -938,6 +953,7 @@
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picShinyAlert)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBottleCap)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSaltyHerba)).EndInit();
@@ -956,7 +972,6 @@
         public TextBox Area;
         public TextBox Difficulty;
         public TextBox Species;
-        private Label Shiny;
         public PictureBox picBoxPokemon;
         public TextBox Gender;
         public TextBox debug;
@@ -1017,5 +1032,7 @@
         public PictureBox picBitterHerba;
         public Label labelBitterHerba;
         public Label labelAbilityCapsule;
+        public PictureBox picShinyAlert;
+        public Label Shiny;
     }
 }

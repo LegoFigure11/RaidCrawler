@@ -1,18 +1,33 @@
 ﻿using Newtonsoft.Json;
+using System.Data;
 using RaidCrawler.Structures;
+using System;
+using System.Windows.Forms;
 
 namespace RaidCrawler.Subforms
 {
     public partial class ConfigWindow : Form
     {
         private readonly Config c = new();
+
+
         public ConfigWindow(Config c)
         {
+            var mainForm = Application.OpenForms.OfType<MainWindow>().Single();
+            var assembly = System.Reflection.Assembly.GetEntryAssembly();
+            var v = assembly.GetName().Version!;
+            var gitVersionInformationType = assembly.GetType("GitVersionInformation");
+            var shaField = gitVersionInformationType.GetField("ShortSha");
+
             InitializeComponent();
 
             this.c = c;
 
             InstanceName.Text = c.InstanceName;
+            StoryProgress.SelectedIndex = c.Progress;
+            EventProgress.SelectedIndex = c.EventProgress;
+            Game.SelectedIndex = Game.FindString(c.Game);
+
 
             PlayTone.Checked = c.PlaySound;
             FocusWindow.Checked = c.FocusWindow;
@@ -52,7 +67,32 @@ namespace RaidCrawler.Subforms
             EnableEmoji.Checked = c.EnableEmoji;
 
             ExperimentalView.Checked = c.StreamerView;
+
+            labelAppVersion.Text = "v" + v.Major + "." + v.Minor + "." + v.Build + "-" + shaField.GetValue(null);
+            labelAppVersion.Left = (tabAbout.Width - labelAppVersion.Width) / 2;
+            labelAppName.Left = ((tabAbout.Width - labelAppName.Width) / 2) + (picAppIcon.Width / 2) + 2;
+            picAppIcon.Left = labelAppName.Left - picAppIcon.Width - 2;
+            linkLabel1.Left = (tabAbout.Width - linkLabel1.Width) / 2;
+
+            labelDaySkip.Text = "Day Skip Successes " + mainForm.GetStatDaySkipSuccess() + " / " + mainForm.GetStatDaySkipTries() + " Total";
         }
+
+        /*private DataTable EmojiLoad(Dictionary<string, string> emoji)
+        {
+            DataTable d = new DataTable();
+            d.Columns.Add("Emoji", typeof(string));
+            d.Columns.Add("Emoji Value", typeof(string));
+            emoji.ToList().ForEach(KeyValuePair => d.Rows.Add(new object[] {KeyValuePair.Key, KeyValuePair.Value}));
+            d.Columns[0].ReadOnly = true;
+            return d;
+        }*/
+
+        /*{private Dictionary<string, string> EmojiSave(DataTable emoji)
+
+            Dictionary<string, string> d = new Dictionary<string, string>();
+            emoji.AsEnumerable().ToList().ForEach(row => d.Add(row[0] as string, row[1] as string));
+            return d;
+        }*/
 
         private void EnableAlert_CheckedChanged(object sender, EventArgs e)
         {
@@ -63,6 +103,7 @@ namespace RaidCrawler.Subforms
         {
             DiscordWebhook.Enabled = EnableDiscordNotifications.Checked;
             DiscordMessageContent.Enabled = EnableDiscordNotifications.Checked;
+            labelWebhooks.Text = "Webhooks are " + (DiscordWebhook.Enabled ? "enabled." : "disabled.");
         }
 
         private void Save_Click(object sender, EventArgs e)
@@ -112,6 +153,39 @@ namespace RaidCrawler.Subforms
         {
             SystemDDownPresses.Enabled = !UseOvershoot.Checked;
             SystemOvershoot.Enabled = UseOvershoot.Checked;
+        }
+
+        private void btnTestWebHook_Click(object sender, EventArgs e)
+        {
+            c.InstanceName = InstanceName.Text;
+            c.DiscordMessageContent = DiscordMessageContent.Text;
+            c.IVsStyle = IVstyle.SelectedIndex;
+            c.IVsSpacer = IVspacer.Text;
+            c.VerboseIVs = IVverbose.Checked;
+            c.EnableEmoji = EnableEmoji.Checked;
+            c.ToggleDen = denToggle.Checked;
+
+            var mainForm = Application.OpenForms.OfType<MainWindow>().Single();
+            mainForm.TestWebhook();
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(((LinkLabel)sender).Text) { UseShellExecute = true });
+        }
+
+        private void Game_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var mainForm = Application.OpenForms.OfType<MainWindow>().Single();
+            mainForm.Game_SelectedIndexChanged();
+        }
+        private void EmojiConfig_Click(object sender, EventArgs e)
+        {
+            EmojiConfig config = new EmojiConfig(c);
+            if (config.ShowDialog() == DialogResult.OK)
+            {
+                config.Show();
+            }
         }
     }
 }

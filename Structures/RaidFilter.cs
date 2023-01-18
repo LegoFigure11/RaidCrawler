@@ -9,6 +9,7 @@ namespace RaidCrawler.Structures
         public int? Stars { get; set; }
         public int StarsComp { get; set; }
         public bool Shiny { get; set; }
+        public bool Square { get; set; }
         public int? Nature { get; set; }
         public int? TeraType { get; set; }
         public int? Gender { get; set; }
@@ -24,7 +25,7 @@ namespace RaidCrawler.Structures
 
         public bool IsFilterSet()
         {
-            if (Species == null && Form == null && Stars == null && Shiny == false && Nature == null && TeraType == null && Gender == null && IVBin == 0 && (RewardItems == null || RewardsCount == 0) && BatchFilters == null && ECCheck == false)
+            if (Species == null && Form == null && Stars == null && Shiny == false && Square == false && ECCheck == false && Nature == null && TeraType == null && Gender == null && IVBin == 0 && (RewardItems == null || RewardsCount == 0) && BatchFilters == null)
                 return false;
             return true;
         }
@@ -88,6 +89,19 @@ namespace RaidCrawler.Structures
             if (Shiny == false)
                 return true;
             return Raid.CheckIsShiny(raid, encounter) == true;
+        }
+
+        public bool IsSquareSatisfied(ITeraRaid? encounter, Raid raid)
+        {
+            if (Square == false)
+                return true;
+            var pi = PersonalTable.SV.GetFormEntry(encounter.Species, encounter.Form);
+            var param = Raid.GetParam(encounter);
+            var blank = new PK9();
+            blank.Species = encounter.Species;
+            blank.Form = encounter.Form;
+            Encounter9RNG.GenerateData(blank, param, EncounterCriteria.Unrestricted, raid.Seed);
+            return (Raid.CheckIsShiny(raid, encounter) && ShinyExtensions.IsSquareShinyExist(blank)) == true;
         }
 
         public bool IsTeraTypeSatisfied(Raid raid)
@@ -168,17 +182,17 @@ namespace RaidCrawler.Structures
             Encounter9RNG.GenerateData(blank, param, EncounterCriteria.Unrestricted, raid.Seed);
             return blank.Gender == Gender;
         }
-        
+
         public bool IsECCheckSatisfied(ITeraRaid? encounter, Raid raid)
         {
             if (ECCheck == false)
                 return true;
             if (encounter == null)
                 return false;
-            if (raid.EC % 100 == 0 )
+            if (raid.EC % 100 == 0)
                 return true;
             return false;
-            
+
         }
 
         public bool IsBatchFilterSatisfied(ITeraRaid? encounter, Raid raid)
@@ -201,7 +215,7 @@ namespace RaidCrawler.Structures
 
         public bool FilterSatisfied(ITeraRaid? encounter, Raid raid, int SandwichBoost)
         {
-            return Enabled && IsIVsSatisfied(encounter, raid) && IsShinySatisfied(encounter, raid) && IsSpeciesSatisfied(encounter) && IsFormSatisfied(encounter)
+            return Enabled && IsIVsSatisfied(encounter, raid) && IsShinySatisfied(encounter, raid) && IsSquareSatisfied(encounter, raid) && IsSpeciesSatisfied(encounter) && IsFormSatisfied(encounter)
                 && IsNatureSatisfied(encounter, raid) && IsStarsSatisfied(encounter) && IsTeraTypeSatisfied(raid)
                 && IsRewardsSatisfied(encounter, raid, SandwichBoost) && IsGenderSatisfied(encounter, raid) && IsBatchFilterSatisfied(encounter, raid)
                 && IsECCheckSatisfied(encounter, raid);
