@@ -355,7 +355,7 @@
             // LabelDifficulty
             // 
             this.LabelDifficulty.AutoSize = true;
-            this.LabelDifficulty.Location = new System.Drawing.Point(465, 112);
+            this.LabelDifficulty.Location = new System.Drawing.Point(465, 111);
             this.LabelDifficulty.Name = "LabelDifficulty";
             this.LabelDifficulty.Size = new System.Drawing.Size(58, 15);
             this.LabelDifficulty.TabIndex = 85;
