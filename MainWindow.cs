@@ -357,7 +357,7 @@ namespace RaidCrawler
                     img = ApplyTeraColor((byte)teratype, img, SpriteBackgroundType.BottomStripe);
                     Species.Text = $"{Raid.strings.Species[encounter.Species]}{(encounter.Form != 0 ? $"-{encounter.Form}" : "")}";
                     Sprite.Image = img;
-                    GemIcon.Image = PKHeX.Drawing.Misc.TypeSpriteUtil.GetTypeSpriteGem((byte)teratype);
+                    GemIcon.Image = GetDisplayGemImage(teratype, raid);
                     Gender.Text = $"{(Gender)blank.Gender}";
                     var nature = blank.Nature;
                     Nature.Text = $"{Raid.strings.Natures[nature]}";
@@ -392,6 +392,37 @@ namespace RaidCrawler
             {
                 MessageBox.Show($"Unable to display raid at index {index}. Ensure there are no cheats running or anything else that might shift RAM (Edizon, overlays, etc.), then reboot your console and try again.");
             }
+        }
+
+        private static Image? GetDisplayGemImage(int teratype, Raid raid)
+        {
+            var baseImg = PKHeX.Drawing.Misc.TypeSpriteUtil.GetTypeSpriteGem((byte)teratype);
+            if (baseImg == null)
+                return null;
+            var pixels = ImageUtil.GetPixelData((Bitmap)baseImg);
+            for (int i = 0; i < pixels.Length; i += 4)
+            {
+                if (pixels[i+3] == 0)
+                {
+                    pixels[i] = 0;
+                    pixels[i+1] = 0;
+                    pixels[i+2] = 0;
+                }
+            }
+            baseImg = ImageUtil.GetBitmap(pixels, baseImg.Width, baseImg.Height, baseImg.PixelFormat);
+            if (raid.IsBlack || raid.Flags == 3)
+            {
+                var color = Color.Indigo;
+                SpriteUtil.GetSpriteGlow(baseImg, color.B, color.G, color.R, out var glow, false);
+                baseImg = ImageUtil.LayerImage(ImageUtil.GetBitmap(glow, baseImg.Width, baseImg.Height, baseImg.PixelFormat), baseImg, 0, 0);
+            }
+            else if (raid.IsEvent)
+            {
+                var color = Color.DarkTurquoise;
+                SpriteUtil.GetSpriteGlow(baseImg, color.B, color.G, color.R, out var glow, true);
+                baseImg = ImageUtil.LayerImage(ImageUtil.GetBitmap(glow, baseImg.Width, baseImg.Height, baseImg.PixelFormat), baseImg, 0, 0);
+            }
+            return baseImg;
         }
 
         private void DisplayPrettyRaid(int index)

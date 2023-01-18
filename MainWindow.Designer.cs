@@ -647,14 +647,15 @@
             this.statusStrip1.Location = new System.Drawing.Point(0, 335);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(640, 22);
+            this.statusStrip1.SizingGrip = false;
             this.statusStrip1.TabIndex = 126;
             this.statusStrip1.Text = "statusStrip1";
             // 
             // toolStripStatus
             // 
             this.toolStripStatus.Name = "toolStripStatus";
-            this.toolStripStatus.Size = new System.Drawing.Size(84, 17);
-            this.toolStripStatus.Text = "toolStripStatus";
+            this.toolStripStatus.Size = new System.Drawing.Size(39, 17);
+            this.toolStripStatus.Text = "Status";
             // 
             // MainWindow
             // 
