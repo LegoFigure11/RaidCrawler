@@ -66,24 +66,24 @@ namespace RaidCrawler.Structures
             var emoji = c.EnableEmoji;
             var isevent = raid.IsEvent;
             var species = $"{Raid.strings.Species[encounter.Species]}{(encounter.Form != 0 ? $"-{encounter.Form}" : "")}";
-            var difficulty = Difficulty(encounter.Stars, isevent, emoji);
+            var difficulty = Difficulty(c, encounter.Stars, isevent, emoji);
             var nature = $"{Raid.strings.Natures[blank.Nature]}";
             var ability = $"{Raid.strings.Ability[blank.Ability]}";
-            var shiny = Raid.CheckIsShiny(raid, encounter);
-            var gender = Gender(blank.Gender, emoji);
+            var shiny = Shiny(c, Raid.CheckIsShiny(raid, encounter), ShinyExtensions.IsSquareShinyExist(blank), emoji);
+            var gender = Gender(c, blank.Gender, emoji);
             var teratype = Raid.GetTeraType(encounter, raid);
             var color = TypeColor.GetTypeSpriteColor((byte)teratype);
             var hexcolor = $"{color.R:X2}{color.G:X2}{color.B:X2}";
             var tera = $"{Raid.strings.types[teratype]}";
-            var teraemoji = TeraEmoji($"{Raid.strings.types[teratype]}", emoji);
-            var ivs = IVsStringEmoji(ToSpeedLast(blank.IVs), c.IVsStyle, c.IVsSpacer, c.VerboseIVs, emoji);
-            var sprite_name = SpriteName.GetResourceStringSprite(blank.Species, blank.Form, blank.Gender, blank.FormArgument, blank.Generation, shiny);
+            var teraemoji = TeraEmoji(c, $"{Raid.strings.types[teratype]}", emoji);
+            var ivs = IVsStringEmoji(c, ToSpeedLast(blank.IVs), c.IVsStyle, c.IVsSpacer, c.VerboseIVs, emoji);
+            var sprite_name = SpriteName.GetResourceStringSprite(blank.Species, blank.Form, blank.Gender, blank.FormArgument, blank.Generation, Raid.CheckIsShiny(raid,encounter));
             var moves = new ushort[4] { encounter.Move1, encounter.Move2, encounter.Move3, encounter.Move4 };
             var movestr = string.Concat(moves.Where(z => z != 0).Select(z => $"{Raid.strings.Move[z]}ㅤ\n")).Trim();
             var extramoves = string.Concat(encounter.ExtraMoves.Where(z => z != 0).Select(z => $"{Raid.strings.Move[z]}ㅤ\n")).Trim();
             var area = $"{Areas.Area[raid.Area - 1]}" + (c.ToggleDen ? $" [Den {raid.Den}]ㅤ" : "ㅤ");
             var instance = " " + c.InstanceName;
-            var rewards = GetRewards(RewardsList, emoji);
+            var rewards = GetRewards(c, RewardsList, emoji);
             var SuccessWebHook = new
             {
                 username = $"RaidCrawler" + instance,
@@ -93,7 +93,7 @@ namespace RaidCrawler.Structures
                 {
                     new
                     {
-                        title = $"{(shiny ? (emoji ? "<:shiny:1064845915036323840>" : "Shiny") : "")} {species} {gender} {teraemoji}",
+                        title = $"{shiny} {species} {gender} {teraemoji}",
                         description = $"",
                         color = int.Parse(hexcolor, System.Globalization.NumberStyles.HexNumber),
                         thumbnail = new
@@ -122,29 +122,29 @@ namespace RaidCrawler.Structures
             return SuccessWebHook;
         }
 
-        private static string Difficulty(byte stars, bool isevent, bool emoji)
+        private static string Difficulty(Config c, byte stars, bool isevent, bool emoji)
         {
             string s = string.Empty;
-            string mstar = (emoji ? "<:pinkstar:1064538642934140978>" : ":star:");
-            string bstar = (emoji ? "<:bluestar:1064538604409471016>" : ":star:");
-            string ystar = (emoji ? "<:yellowstar:1064538672113922109>" : ":star:");
+            string mstar = (emoji ? c.Emoji["7 Star"] : ":star");
+            string bstar = (emoji ? c.Emoji["Event Star"] : ":star");
+            string ystar = (emoji ? c.Emoji["Star"] : ":star");
             s = (stars == 7) ? string.Concat(Enumerable.Repeat(mstar, stars)) :
                 (isevent) ? string.Concat(Enumerable.Repeat(bstar, stars)) : string.Concat(Enumerable.Repeat(ystar, stars));
             return s;
         }
-        private static string Gender(int genderInt, bool emoji)
+        private static string Gender(Config c, int genderInt, bool emoji)
         {
             string gender = string.Empty;
             switch (genderInt)
             {
-                case 0: gender = (emoji ? "<:male:1064844611341795398>" : ":male_sign:"); break;
-                case 1: gender = (emoji ? "<:female:1064844510636552212>" : ":female_sign:"); break;
+                case 0: gender = (emoji ? c.Emoji["Male"] : ":male_sign:"); break;
+                case 1: gender = (emoji ? c.Emoji["Female"] : ":female_sign:"); break;
                 case 2: gender = ""; break;
             }
             return gender;
         }
 
-        private static string GetRewards(List<(int, int, int)>? rewards, bool emoji)
+        private static string GetRewards(Config c, List<(int, int, int)>? rewards, bool emoji)
         {
             string s = string.Empty;
             int abilitycapsule = 0;
@@ -171,37 +171,24 @@ namespace RaidCrawler.Structures
                 }
             }
 
-            s += (abilitycapsule > 0) ? (emoji ? $"`{abilitycapsule}`<:abilitycapsule:1064541406921752737> " : $"`{abilitycapsule}` Ability Capsule  ") : "";
-            s += (bottlecap > 0) ? (emoji ? $"`{bottlecap}`<:bottlecap:1064537470370320495> " : $"`{bottlecap}` Bottle Cap  ") : "";
-            s += (abilitypatch > 0) ? (emoji ? $"`{abilitypatch}`<:abilitypatch:1064538087763476522> " : $"`{abilitypatch}` Ability Patch  ") : "";
-            s += (sweetherba > 0) ? (emoji ? $"`{sweetherba}`<:sweetherba:1064541764163227759> " : $"`{sweetherba}` Sweet Herba  ") : "";
-            s += (saltyherba > 0) ? (emoji ? $"`{saltyherba}`<:saltyherba:1064541768147796038> " : $"`{saltyherba}` Salty Herba  ") : "";
-            s += (sourherba > 0) ? (emoji ? $"`{sourherba}`<:sourherba:1064541770148483073> " : $"`{sourherba}` Sour Herba  ") : "";
-            s += (bitterherba > 0) ? (emoji ? $"`{bitterherba}`<:bitterherba:1064541773763977256> " : $"`{bitterherba}` Bitter Herba  ") : "";
-            s += (spicyherba > 0) ? (emoji ? $"`{spicyherba}`<:spicyherba:1064541776699994132> " : $"`{spicyherba}` Spicy Herba  ") : "";
+            s += (abilitycapsule > 0) ? (emoji ? $"`{abilitycapsule}`{c.Emoji["Ability Capsule"]} " : $"`{abilitycapsule}` Ability Capsule  ") : "";
+            s += (bottlecap > 0) ? (emoji ? $"`{bottlecap}`{c.Emoji["Bottle Cap"]} " : $"`{bottlecap}` Bottle Cap  ") : "";
+            s += (abilitypatch > 0) ? (emoji ? $"`{abilitypatch}`{c.Emoji["Ability Patch"]} " : $"`{abilitypatch}` Ability Patch  ") : "";
+            s += (sweetherba > 0) ? (emoji ? $"`{sweetherba}`{c.Emoji["Sweet Herba"]} " : $"`{sweetherba}` Sweet Herba  ") : "";
+            s += (saltyherba > 0) ? (emoji ? $"`{saltyherba}`{c.Emoji["Salty Herba"]} " : $"`{saltyherba}` Salty Herba  ") : "";
+            s += (sourherba > 0) ? (emoji ? $"`{sourherba}`{c.Emoji["Sour Herba"]} " : $"`{sourherba}` Sour Herba  ") : "";
+            s += (bitterherba > 0) ? (emoji ? $"`{bitterherba}`{c.Emoji["Bitter Herba"]} " : $"`{bitterherba}` Bitter Herba  ") : "";
+            s += (spicyherba > 0) ? (emoji ? $"`{spicyherba}`{c.Emoji["Spicy Herba"]} " : $"`{spicyherba}` Spicy Herba  ") : "";
 
             return s;
         }
 
-        private static string IVsString(int[] ivs, bool verbose)
+        private static string IVsStringEmoji(Config c, int[] ivs, int style, string spacer, bool verbose, bool emoji)
         {
             string s = string.Empty;
             var stats = new[] { "HP", "Atk", "Def", "SpA", "SpD", "Spe" };
-            for (int i = 0; i < ivs.Length; i++)
-            {
-                s += $"{ivs[i]:D2}{(verbose ? " " + stats[i] : string.Empty)}";
-                if (i < 5)
-                    s += "/";
-            }
-            return s;
-        }
-
-        private static string IVsStringEmoji(int[] ivs, int style, string spacer, bool verbose, bool emoji)
-        {
-            string s = string.Empty;
-            var stats = new[] { "HP", "Atk", "Def", "SpA", "SpD", "Spe" };
-            var iv0 = new[] { "<:h0:1064842950573572126>", "<:a0:1064842895712075796>", "<:b0:1064842811196833832>", "<:c0:1064842749272133752>", "<:d0:1064842668624068608>", "<:s0:1064842545953243176>" };
-            var iv31 = new[] { "<:h31:1064726680628895784>", "<:a31:1064726668419289138>", "<:b31:1064726671703429220>", "<:c31:1064726673649582121>", "<:d31:1064726677176987832>", "<:s31:1064726682721865818>" };
+            var iv0 = new[] { c.Emoji["Health 0"], c.Emoji["Attack 0"], c.Emoji["Defense 0"], c.Emoji["SpAttack 0"], c.Emoji["SpDefense 0"], c.Emoji["Speed 0"] };
+            var iv31 = new[] { c.Emoji["Health 31"], c.Emoji["Attack 31"], c.Emoji["Defense 31"], c.Emoji["SpAttack 31"], c.Emoji["SpDefense 31"], c.Emoji["Speed 31"] };
             for (int i = 0; i < ivs.Length; i++)
             {
                 switch (style)
@@ -231,6 +218,26 @@ namespace RaidCrawler.Structures
             return s;
         }
 
+        private static string Shiny(Config c, bool shiny, bool square, bool emoji)
+        {
+            string s = string.Empty;
+
+            if (square && shiny)
+            {
+                s = $"{(emoji ? c.Emoji["Square Shiny"] : "Square shiny")}";
+            }
+            else if (shiny)
+            {
+                s = $"{(emoji ? c.Emoji["Shiny"] : "Shiny")}";
+            }
+            else
+            {
+                s = "";
+            }
+
+            return s;
+            }
+
         private static int[] ToSpeedLast(int[] ivs)
         {
             var res = new int[6];
@@ -243,29 +250,29 @@ namespace RaidCrawler.Structures
             return res;
         }
 
-        private static string TeraEmoji(string tera, bool emoji)
+        private static string TeraEmoji(Config c, string tera, bool emoji)
         {
             string s = string.Empty;
             switch (tera)
             {
-                case "Bug": s = (emoji ? "<:bug:1064546304048496812>" : tera); break;
-                case "Dark": s = (emoji ? "<:dark:1064557656079085588>" : tera); break;
-                case "Dragon": s = (emoji ? "<:dragon:1064557631890538566>" : tera); break;
-                case "Electric": s = (emoji ? "<:electric:1064557559563943956>" : tera); break;
-                case "Fairy": s = (emoji ? "<:fairy:1064557682566123701>" : tera); break;
-                case "Fighting": s = (emoji ? "<:fighting:1064546289406189648>" : tera); break;
-                case "Fire": s = (emoji ? "<:fire:1064557482468446230>" : tera); break;
-                case "Flying": s = (emoji ? "<:flying:1064546291239104623>" : tera); break;
-                case "Ghost": s = (emoji ? "<:ghost:1064546307848536115>" : tera); break;
-                case "Grass": s = (emoji ? "<:grass:1064557534096130099>" : tera); break;
-                case "Ground": s = (emoji ? "<:ground:1064546296725241988>" : tera); break;
-                case "Ice": s = (emoji ? "<:ice:1064557609857863770>" : tera); break;
-                case "Normal": s = (emoji ? "<:normal:1064546286247886938>" : tera); break;
-                case "Poison": s = (emoji ? "<:poison:1064546294854586400>" : tera); break;
-                case "Psychic": s = (emoji ? "<:psychic:1064557585124049006>" : tera); break;
-                case "Rock": s = (emoji ? "<:rock:1064546299992625242>" : tera); break;
-                case "Steel": s = (emoji ? "<:steel:1064557443742453790>" : tera); break;
-                case "Water": s = (emoji ? "<:water:1064557509404270642>" : tera); break;
+                case "Bug": s = (emoji ? c.Emoji["Bug"] : tera); break;
+                case "Dark": s = (emoji ? c.Emoji["Dark"] : tera); break;
+                case "Dragon": s = (emoji ? c.Emoji["Dragon"] : tera); break;
+                case "Electric": s = (emoji ? c.Emoji["Electric"] : tera); break;
+                case "Fairy": s = (emoji ? c.Emoji["Fairy"] : tera); break;
+                case "Fighting": s = (emoji ? c.Emoji["Fighting"] : tera); break;
+                case "Fire": s = (emoji ? c.Emoji["Fire"] : tera); break;
+                case "Flying": s = (emoji ? c.Emoji["Flying"] : tera); break;
+                case "Ghost": s = (emoji ? c.Emoji["Ghost"] : tera); break;
+                case "Grass": s = (emoji ? c.Emoji["Grass"] : tera); break;
+                case "Ground": s = (emoji ? c.Emoji["Ground"] : tera); break;
+                case "Ice": s = (emoji ? c.Emoji["Ice"] : tera); break;
+                case "Normal": s = (emoji ? c.Emoji["Normal"] : tera); break;
+                case "Poison": s = (emoji ? c.Emoji["Poison"] : tera); break;
+                case "Psychic": s = (emoji ? c.Emoji["Psychic"] : tera); break;
+                case "Rock": s = (emoji ? c.Emoji["Rock"] : tera); break;
+                case "Steel": s = (emoji ? c.Emoji["Steel"] : tera); break;
+                case "Water": s = (emoji ? c.Emoji["Water"] : tera); break;
             }
             return s;
         }
