@@ -528,7 +528,7 @@
             // 
             // GemIcon
             // 
-            this.GemIcon.Location = new System.Drawing.Point(496, 9);
+            this.GemIcon.Location = new System.Drawing.Point(494, 7);
             this.GemIcon.Name = "GemIcon";
             this.GemIcon.Size = new System.Drawing.Size(56, 56);
             this.GemIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -538,7 +538,7 @@
             // ButtonDownloadEvents
             // 
             this.ButtonDownloadEvents.Enabled = false;
-            this.ButtonDownloadEvents.Location = new System.Drawing.Point(104, 51);
+            this.ButtonDownloadEvents.Location = new System.Drawing.Point(104, 50);
             this.ButtonDownloadEvents.Name = "ButtonDownloadEvents";
             this.ButtonDownloadEvents.Size = new System.Drawing.Size(90, 23);
             this.ButtonDownloadEvents.TabIndex = 112;
@@ -603,7 +603,7 @@
             // 
             // SendScreenshot
             // 
-            this.SendScreenshot.Location = new System.Drawing.Point(6, 51);
+            this.SendScreenshot.Location = new System.Drawing.Point(6, 50);
             this.SendScreenshot.Name = "SendScreenshot";
             this.SendScreenshot.Size = new System.Drawing.Size(90, 23);
             this.SendScreenshot.TabIndex = 121;
