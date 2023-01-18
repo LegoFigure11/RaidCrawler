@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.Species = new System.Windows.Forms.ComboBox();
             this.SpeciesCheck = new System.Windows.Forms.CheckBox();
             this.Form = new System.Windows.Forms.NumericUpDown();
@@ -73,7 +74,7 @@
             this.GenderCheck = new System.Windows.Forms.CheckBox();
             this.Gender = new System.Windows.Forms.ComboBox();
             this.ECCheck = new System.Windows.Forms.CheckBox();
-            this.ECTooltip = new System.Windows.Forms.ToolTip();
+            this.ECTooltip = new System.Windows.Forms.ToolTip(this.components);
             this.LabelBatchFilters = new System.Windows.Forms.Label();
             this.BatchFilters = new System.Windows.Forms.TextBox();
             this.SquareCheck = new System.Windows.Forms.CheckBox();
@@ -184,25 +185,10 @@
             this.ShinyCheck.TabIndex = 6;
             this.ShinyCheck.Text = "Shiny?";
             this.ShinyCheck.UseVisualStyleBackColor = true;
-            //
-            // ECCheck
-            //
-            this.ECCheck.AutoSize = true;
-            this.ECCheck.Location = new System.Drawing.Point(104, 285);
-            this.ECCheck.Name = "ECCheck";
-            this.ECCheck.Size = new System.Drawing.Size(60,19);
-            this.ECCheck.TabIndex = 19;
-            this.ECCheck.Text = "EC % 100 = 0?";
-            this.ECCheck.UseVisualStyleBackColor = true;
-            this.ECTooltip.Active = true;
-            this.ECTooltip.AutoPopDelay = 8000;
-            this.ECTooltip.InitialDelay = 500;
-            this.ECTooltip.ReshowDelay = 500;
-            this.ECTooltip.SetToolTip(this.ECCheck, "This filters for Tandemaus and Dunsparce that will evolve into Maushold Family of 3 and Dudunsparce 3 Segment forms.");
             // 
             // Add
             // 
-            this.Add.Location = new System.Drawing.Point(12, 440);
+            this.Add.Location = new System.Drawing.Point(12, 503);
             this.Add.Name = "Add";
             this.Add.Size = new System.Drawing.Size(111, 23);
             this.Add.TabIndex = 9;
@@ -230,7 +216,7 @@
             this.PerfectIVFilterGroup.Controls.Add(this.Def);
             this.PerfectIVFilterGroup.Controls.Add(this.Atk);
             this.PerfectIVFilterGroup.Controls.Add(this.HP);
-            this.PerfectIVFilterGroup.Location = new System.Drawing.Point(12, 310);
+            this.PerfectIVFilterGroup.Location = new System.Drawing.Point(12, 373);
             this.PerfectIVFilterGroup.Name = "PerfectIVFilterGroup";
             this.PerfectIVFilterGroup.Size = new System.Drawing.Size(231, 124);
             this.PerfectIVFilterGroup.TabIndex = 10;
@@ -552,7 +538,7 @@
             this.ActiveFilters.FormattingEnabled = true;
             this.ActiveFilters.Location = new System.Drawing.Point(257, 23);
             this.ActiveFilters.Name = "ActiveFilters";
-            this.ActiveFilters.Size = new System.Drawing.Size(185, 256);
+            this.ActiveFilters.Size = new System.Drawing.Size(185, 310);
             this.ActiveFilters.TabIndex = 20;
             this.ActiveFilters.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.ActiveFilters_ItemCheck);
             this.ActiveFilters.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.ActiveFilters_DrawItem);
@@ -578,7 +564,7 @@
             // 
             // Remove
             // 
-            this.Remove.Location = new System.Drawing.Point(132, 440);
+            this.Remove.Location = new System.Drawing.Point(132, 503);
             this.Remove.Name = "Remove";
             this.Remove.Size = new System.Drawing.Size(111, 23);
             this.Remove.TabIndex = 23;
@@ -695,10 +681,28 @@
             this.Gender.Size = new System.Drawing.Size(121, 23);
             this.Gender.TabIndex = 32;
             // 
+            // ECCheck
+            // 
+            this.ECCheck.AutoSize = true;
+            this.ECCheck.Location = new System.Drawing.Point(15, 314);
+            this.ECCheck.Name = "ECCheck";
+            this.ECCheck.Size = new System.Drawing.Size(99, 19);
+            this.ECCheck.TabIndex = 19;
+            this.ECCheck.Text = "EC % 100 = 0?";
+            this.ECTooltip.SetToolTip(this.ECCheck, "This filters for Tandemaus and Dunsparce that will evolve into Maushold Family of" +
+        " 3 and Dudunsparce 3 Segment forms.");
+            this.ECCheck.UseVisualStyleBackColor = true;
+            // 
+            // ECTooltip
+            // 
+            this.ECTooltip.AutoPopDelay = 8000;
+            this.ECTooltip.InitialDelay = 500;
+            this.ECTooltip.ReshowDelay = 500;
+            // 
             // LabelBatchFilters
             // 
             this.LabelBatchFilters.AutoSize = true;
-            this.LabelBatchFilters.Location = new System.Drawing.Point(257, 285);
+            this.LabelBatchFilters.Location = new System.Drawing.Point(257, 349);
             this.LabelBatchFilters.Name = "LabelBatchFilters";
             this.LabelBatchFilters.Size = new System.Drawing.Size(71, 15);
             this.LabelBatchFilters.TabIndex = 34;
@@ -707,7 +711,7 @@
             // BatchFilters
             // 
             this.BatchFilters.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.BatchFilters.Location = new System.Drawing.Point(257, 305);
+            this.BatchFilters.Location = new System.Drawing.Point(257, 369);
             this.BatchFilters.Multiline = true;
             this.BatchFilters.Name = "BatchFilters";
             this.BatchFilters.Size = new System.Drawing.Size(185, 157);
@@ -716,7 +720,7 @@
             // SquareCheck
             // 
             this.SquareCheck.AutoSize = true;
-            this.SquareCheck.Location = new System.Drawing.Point(91, 285);
+            this.SquareCheck.Location = new System.Drawing.Point(104, 285);
             this.SquareCheck.Name = "SquareCheck";
             this.SquareCheck.Size = new System.Drawing.Size(99, 19);
             this.SquareCheck.TabIndex = 36;
@@ -727,7 +731,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(454, 474);
+            this.ClientSize = new System.Drawing.Size(454, 558);
             this.Controls.Add(this.SquareCheck);
             this.Controls.Add(this.BatchFilters);
             this.Controls.Add(this.LabelBatchFilters);

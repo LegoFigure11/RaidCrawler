@@ -182,17 +182,17 @@ namespace RaidCrawler.Structures
             Encounter9RNG.GenerateData(blank, param, EncounterCriteria.Unrestricted, raid.Seed);
             return blank.Gender == Gender;
         }
-        
+
         public bool IsECCheckSatisfied(ITeraRaid? encounter, Raid raid)
         {
             if (ECCheck == false)
                 return true;
             if (encounter == null)
                 return false;
-            if (raid.EC % 100 == 0 )
+            if (raid.EC % 100 == 0)
                 return true;
             return false;
-            
+
         }
 
         public bool IsBatchFilterSatisfied(ITeraRaid? encounter, Raid raid)
