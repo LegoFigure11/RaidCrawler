@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.Species = new System.Windows.Forms.ComboBox();
             this.SpeciesCheck = new System.Windows.Forms.CheckBox();
             this.Form = new System.Windows.Forms.NumericUpDown();
@@ -75,6 +76,7 @@
             this.LabelBatchFilters = new System.Windows.Forms.Label();
             this.BatchFilters = new System.Windows.Forms.TextBox();
             this.SquareCheck = new System.Windows.Forms.CheckBox();
+            this.Tooltip = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.Form)).BeginInit();
             this.PerfectIVFilterGroup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.IVSPE)).BeginInit();
@@ -182,6 +184,7 @@
             this.ShinyCheck.TabIndex = 6;
             this.ShinyCheck.Text = "Shiny?";
             this.ShinyCheck.UseVisualStyleBackColor = true;
+            this.ShinyCheck.CheckedChanged += new System.EventHandler(this.ShinyCheck_CheckedChanged);
             // 
             // Add
             // 
@@ -699,11 +702,14 @@
             // SquareCheck
             // 
             this.SquareCheck.AutoSize = true;
-            this.SquareCheck.Location = new System.Drawing.Point(91, 285);
+            this.SquareCheck.Location = new System.Drawing.Point(104, 285);
             this.SquareCheck.Name = "SquareCheck";
-            this.SquareCheck.Size = new System.Drawing.Size(99, 19);
+            this.SquareCheck.Size = new System.Drawing.Size(69, 19);
             this.SquareCheck.TabIndex = 36;
-            this.SquareCheck.Text = "Square Shiny?";
+            this.SquareCheck.Text = "XOR = 0";
+            this.Tooltip.SetToolTip(this.SquareCheck, "If checked, only stop on \"Square\" shinies.\r\nThere is no display difference " +
+        "for these in SV, but they will appear\r\nas Square shiny in SwSh or any futu" +
+        "re game that supports them.");
             this.SquareCheck.UseVisualStyleBackColor = true;
             // 
             // FilterSettings
@@ -811,5 +817,6 @@
         private Label LabelBatchFilters;
         private TextBox BatchFilters;
         private CheckBox SquareCheck;
+        private ToolTip Tooltip;
     }
 }

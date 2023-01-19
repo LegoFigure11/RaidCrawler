@@ -334,5 +334,11 @@ namespace RaidCrawler.Subforms
 
             e.DrawFocusRectangle();
         }
+
+        private void ShinyCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            SquareCheck.Enabled = ShinyCheck.Checked;
+            if (!ShinyCheck.Checked) SquareCheck.Checked = false;
+        }
     }
 }
