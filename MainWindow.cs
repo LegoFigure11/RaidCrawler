@@ -183,7 +183,7 @@ namespace RaidCrawler
 
                     toolStripStatus.Text = "Reading story progress...";
                     Config.Progress = await GetStoryProgress(CancellationToken.None);
-                    Config.EventProgress = Math.Min(Config.Progress-1, 3);
+                    Config.EventProgress = Math.Min(Config.Progress, 3);
 
                     toolStripStatus.Text = "Reading event raid status...";
                     await ReadEventRaids();
@@ -396,9 +396,13 @@ namespace RaidCrawler
 
         private static Image? GetDisplayGemImage(int teratype, Raid raid)
         {
-            var baseImg = PKHeX.Drawing.Misc.TypeSpriteUtil.GetTypeSpriteGem((byte)teratype);
+            var display_black = raid.IsBlack || raid.Flags == 3;
+            var baseImg = display_black ? (Image?)Properties.Resources.ResourceManager.GetObject($"black_{teratype:D2}") 
+                                        : (Image?)Properties.Resources.ResourceManager.GetObject($"gem_{teratype:D2}");
             if (baseImg == null)
                 return null;
+            var backlayer = new Bitmap(baseImg.Width + 10, baseImg.Height + 10, baseImg.PixelFormat);
+            baseImg = ImageUtil.LayerImage(backlayer, baseImg, 5, 5);
             var pixels = ImageUtil.GetPixelData((Bitmap)baseImg);
             for (int i = 0; i < pixels.Length; i += 4)
             {
@@ -410,7 +414,7 @@ namespace RaidCrawler
                 }
             }
             baseImg = ImageUtil.GetBitmap(pixels, baseImg.Width, baseImg.Height, baseImg.PixelFormat);
-            if (raid.IsBlack || raid.Flags == 3)
+            if (display_black)
             {
                 var color = Color.Indigo;
                 SpriteUtil.GetSpriteGlow(baseImg, color.B, color.G, color.R, out var glow, false);
@@ -419,7 +423,7 @@ namespace RaidCrawler
             else if (raid.IsEvent)
             {
                 var color = Color.DarkTurquoise;
-                SpriteUtil.GetSpriteGlow(baseImg, color.B, color.G, color.R, out var glow, true);
+                SpriteUtil.GetSpriteGlow(baseImg, color.B, color.G, color.R, out var glow, false);
                 baseImg = ImageUtil.LayerImage(ImageUtil.GetBitmap(glow, baseImg.Width, baseImg.Height, baseImg.PixelFormat), baseImg, 0, 0);
             }
             return baseImg;
@@ -1006,7 +1010,7 @@ namespace RaidCrawler
             for (int i = 0; i < count; i++)
             {
                 raid = new Raid(Data.Skip(i * Raid.SIZE).Take(Raid.SIZE).ToArray());
-                var progress = raid.IsEvent ? Config.EventProgress -1 : Config.Progress -1 ;
+                var progress = raid.IsEvent ? Config.EventProgress : Config.Progress;
                 var raid_delivery_group_id = raid.IsEvent ? TeraDistribution.GetDeliveryGroupID(eventct, Raid.DeliveryRaidPriority) : -1;
                 var encounter = raid.Encounter(progress, raid_delivery_group_id);
                 if (raid.IsValid)

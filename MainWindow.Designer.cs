@@ -94,10 +94,10 @@
             // ButtonAdvanceDate
             // 
             this.ButtonAdvanceDate.Enabled = false;
-            this.ButtonAdvanceDate.Location = new System.Drawing.Point(84, 96);
+            this.ButtonAdvanceDate.Location = new System.Drawing.Point(117, 98);
             this.ButtonAdvanceDate.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.ButtonAdvanceDate.Name = "ButtonAdvanceDate";
-            this.ButtonAdvanceDate.Size = new System.Drawing.Size(129, 27);
+            this.ButtonAdvanceDate.Size = new System.Drawing.Size(96, 27);
             this.ButtonAdvanceDate.TabIndex = 81;
             this.ButtonAdvanceDate.Text = "Advance Date";
             this.toolTip.SetToolTip(this.ButtonAdvanceDate, "Advance Date performs one (1) time set.\r\n\r\nIf Stop Filters are defined, Advance D" +
@@ -110,7 +110,7 @@
             this.CheckEnableFilters.AutoSize = true;
             this.CheckEnableFilters.Checked = true;
             this.CheckEnableFilters.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.CheckEnableFilters.Location = new System.Drawing.Point(122, 277);
+            this.CheckEnableFilters.Location = new System.Drawing.Point(117, 276);
             this.CheckEnableFilters.Name = "CheckEnableFilters";
             this.CheckEnableFilters.Size = new System.Drawing.Size(95, 19);
             this.CheckEnableFilters.TabIndex = 119;
@@ -137,7 +137,7 @@
             this.ButtonConnect.Location = new System.Drawing.Point(13, 35);
             this.ButtonConnect.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.ButtonConnect.Name = "ButtonConnect";
-            this.ButtonConnect.Size = new System.Drawing.Size(96, 27);
+            this.ButtonConnect.Size = new System.Drawing.Size(97, 27);
             this.ButtonConnect.TabIndex = 10;
             this.ButtonConnect.Text = "Connect";
             this.ButtonConnect.UseVisualStyleBackColor = true;
@@ -167,7 +167,7 @@
             // 
             this.LabelLoadedRaids.AutoSize = true;
             this.LabelLoadedRaids.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.LabelLoadedRaids.Location = new System.Drawing.Point(21, 102);
+            this.LabelLoadedRaids.Location = new System.Drawing.Point(12, 103);
             this.LabelLoadedRaids.Name = "LabelLoadedRaids";
             this.LabelLoadedRaids.Size = new System.Drawing.Size(50, 15);
             this.LabelLoadedRaids.TabIndex = 12;
@@ -176,7 +176,7 @@
             // TeraType
             // 
             this.TeraType.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.TeraType.Location = new System.Drawing.Point(356, 110);
+            this.TeraType.Location = new System.Drawing.Point(356, 152);
             this.TeraType.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.TeraType.Name = "TeraType";
             this.TeraType.ReadOnly = true;
@@ -186,7 +186,7 @@
             // LabelTeraType
             // 
             this.LabelTeraType.AutoSize = true;
-            this.LabelTeraType.Location = new System.Drawing.Point(292, 112);
+            this.LabelTeraType.Location = new System.Drawing.Point(292, 156);
             this.LabelTeraType.Name = "LabelTeraType";
             this.LabelTeraType.Size = new System.Drawing.Size(58, 15);
             this.LabelTeraType.TabIndex = 48;
@@ -226,11 +226,11 @@
             // LabelEC
             // 
             this.LabelEC.AutoSize = true;
-            this.LabelEC.Location = new System.Drawing.Point(285, 35);
+            this.LabelEC.Location = new System.Drawing.Point(325, 42);
             this.LabelEC.Name = "LabelEC";
-            this.LabelEC.Size = new System.Drawing.Size(64, 30);
+            this.LabelEC.Size = new System.Drawing.Size(24, 15);
             this.LabelEC.TabIndex = 44;
-            this.LabelEC.Text = "Encryption\r\nConstant:";
+            this.LabelEC.Text = "EC:";
             this.LabelEC.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // Seed
@@ -257,7 +257,7 @@
             // ButtonNext
             // 
             this.ButtonNext.Enabled = false;
-            this.ButtonNext.Location = new System.Drawing.Point(153, 67);
+            this.ButtonNext.Location = new System.Drawing.Point(149, 68);
             this.ButtonNext.Name = "ButtonNext";
             this.ButtonNext.Size = new System.Drawing.Size(45, 25);
             this.ButtonNext.TabIndex = 56;
@@ -279,7 +279,7 @@
             // Area
             // 
             this.Area.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Area.Location = new System.Drawing.Point(356, 138);
+            this.Area.Location = new System.Drawing.Point(356, 236);
             this.Area.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Area.Name = "Area";
             this.Area.ReadOnly = true;
@@ -290,7 +290,7 @@
             // LabelUNK_2
             // 
             this.LabelUNK_2.AutoSize = true;
-            this.LabelUNK_2.Location = new System.Drawing.Point(315, 142);
+            this.LabelUNK_2.Location = new System.Drawing.Point(316, 240);
             this.LabelUNK_2.Name = "LabelUNK_2";
             this.LabelUNK_2.Size = new System.Drawing.Size(34, 15);
             this.LabelUNK_2.TabIndex = 60;
@@ -300,7 +300,7 @@
             // IVs
             // 
             this.IVs.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.IVs.Location = new System.Drawing.Point(356, 222);
+            this.IVs.Location = new System.Drawing.Point(356, 208);
             this.IVs.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.IVs.Name = "IVs";
             this.IVs.ReadOnly = true;
@@ -310,7 +310,7 @@
             // LabelIVs
             // 
             this.LabelIVs.AutoSize = true;
-            this.LabelIVs.Location = new System.Drawing.Point(324, 224);
+            this.LabelIVs.Location = new System.Drawing.Point(325, 212);
             this.LabelIVs.Name = "LabelIVs";
             this.LabelIVs.Size = new System.Drawing.Size(25, 15);
             this.LabelIVs.TabIndex = 68;
@@ -320,10 +320,10 @@
             // ButtonReadRaids
             // 
             this.ButtonReadRaids.Enabled = false;
-            this.ButtonReadRaids.Location = new System.Drawing.Point(7, 22);
+            this.ButtonReadRaids.Location = new System.Drawing.Point(6, 22);
             this.ButtonReadRaids.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.ButtonReadRaids.Name = "ButtonReadRaids";
-            this.ButtonReadRaids.Size = new System.Drawing.Size(89, 25);
+            this.ButtonReadRaids.Size = new System.Drawing.Size(90, 25);
             this.ButtonReadRaids.TabIndex = 80;
             this.ButtonReadRaids.Text = "Read Raids";
             this.ButtonReadRaids.UseVisualStyleBackColor = true;
@@ -345,7 +345,7 @@
             // Difficulty
             // 
             this.Difficulty.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Difficulty.Location = new System.Drawing.Point(530, 109);
+            this.Difficulty.Location = new System.Drawing.Point(530, 152);
             this.Difficulty.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Difficulty.Name = "Difficulty";
             this.Difficulty.ReadOnly = true;
@@ -355,7 +355,7 @@
             // LabelDifficulty
             // 
             this.LabelDifficulty.AutoSize = true;
-            this.LabelDifficulty.Location = new System.Drawing.Point(465, 111);
+            this.LabelDifficulty.Location = new System.Drawing.Point(465, 156);
             this.LabelDifficulty.Name = "LabelDifficulty";
             this.LabelDifficulty.Size = new System.Drawing.Size(58, 15);
             this.LabelDifficulty.TabIndex = 85;
@@ -367,7 +367,7 @@
             this.ButtonViewRAM.Enabled = false;
             this.ButtonViewRAM.Location = new System.Drawing.Point(104, 22);
             this.ButtonViewRAM.Name = "ButtonViewRAM";
-            this.ButtonViewRAM.Size = new System.Drawing.Size(90, 23);
+            this.ButtonViewRAM.Size = new System.Drawing.Size(90, 25);
             this.ButtonViewRAM.TabIndex = 89;
             this.ButtonViewRAM.Text = "Dump Raid";
             this.ButtonViewRAM.UseVisualStyleBackColor = true;
@@ -376,7 +376,7 @@
             // Species
             // 
             this.Species.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Species.Location = new System.Drawing.Point(356, 166);
+            this.Species.Location = new System.Drawing.Point(356, 96);
             this.Species.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Species.Name = "Species";
             this.Species.ReadOnly = true;
@@ -386,7 +386,7 @@
             // LabelSpecies
             // 
             this.LabelSpecies.AutoSize = true;
-            this.LabelSpecies.Location = new System.Drawing.Point(301, 168);
+            this.LabelSpecies.Location = new System.Drawing.Point(301, 100);
             this.LabelSpecies.Name = "LabelSpecies";
             this.LabelSpecies.Size = new System.Drawing.Size(49, 15);
             this.LabelSpecies.TabIndex = 92;
@@ -396,7 +396,7 @@
             // LabelMoves
             // 
             this.LabelMoves.AutoSize = true;
-            this.LabelMoves.Location = new System.Drawing.Point(304, 266);
+            this.LabelMoves.Location = new System.Drawing.Point(304, 280);
             this.LabelMoves.Name = "LabelMoves";
             this.LabelMoves.Size = new System.Drawing.Size(45, 15);
             this.LabelMoves.TabIndex = 94;
@@ -406,7 +406,7 @@
             // Move1
             // 
             this.Move1.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Move1.Location = new System.Drawing.Point(356, 252);
+            this.Move1.Location = new System.Drawing.Point(356, 264);
             this.Move1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Move1.Name = "Move1";
             this.Move1.ReadOnly = true;
@@ -417,7 +417,7 @@
             // Move2
             // 
             this.Move2.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Move2.Location = new System.Drawing.Point(494, 252);
+            this.Move2.Location = new System.Drawing.Point(494, 264);
             this.Move2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Move2.Name = "Move2";
             this.Move2.ReadOnly = true;
@@ -428,7 +428,7 @@
             // Move4
             // 
             this.Move4.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Move4.Location = new System.Drawing.Point(494, 277);
+            this.Move4.Location = new System.Drawing.Point(494, 292);
             this.Move4.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Move4.Name = "Move4";
             this.Move4.ReadOnly = true;
@@ -439,7 +439,7 @@
             // Move3
             // 
             this.Move3.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Move3.Location = new System.Drawing.Point(356, 277);
+            this.Move3.Location = new System.Drawing.Point(356, 292);
             this.Move3.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Move3.Name = "Move3";
             this.Move3.ReadOnly = true;
@@ -450,7 +450,7 @@
             // Nature
             // 
             this.Nature.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Nature.Location = new System.Drawing.Point(530, 305);
+            this.Nature.Location = new System.Drawing.Point(530, 180);
             this.Nature.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Nature.Name = "Nature";
             this.Nature.ReadOnly = true;
@@ -460,7 +460,7 @@
             // LabelNature
             // 
             this.LabelNature.AutoSize = true;
-            this.LabelNature.Location = new System.Drawing.Point(477, 307);
+            this.LabelNature.Location = new System.Drawing.Point(477, 184);
             this.LabelNature.Name = "LabelNature";
             this.LabelNature.Size = new System.Drawing.Size(46, 15);
             this.LabelNature.TabIndex = 105;
@@ -470,7 +470,7 @@
             // Gender
             // 
             this.Gender.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Gender.Location = new System.Drawing.Point(356, 305);
+            this.Gender.Location = new System.Drawing.Point(356, 180);
             this.Gender.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Gender.Name = "Gender";
             this.Gender.ReadOnly = true;
@@ -480,7 +480,7 @@
             // LabelGender
             // 
             this.LabelGender.AutoSize = true;
-            this.LabelGender.Location = new System.Drawing.Point(301, 307);
+            this.LabelGender.Location = new System.Drawing.Point(301, 184);
             this.LabelGender.Name = "LabelGender";
             this.LabelGender.Size = new System.Drawing.Size(48, 15);
             this.LabelGender.TabIndex = 103;
@@ -491,7 +491,7 @@
             // 
             this.StopFilter.Location = new System.Drawing.Point(12, 273);
             this.StopFilter.Name = "StopFilter";
-            this.StopFilter.Size = new System.Drawing.Size(101, 23);
+            this.StopFilter.Size = new System.Drawing.Size(97, 23);
             this.StopFilter.TabIndex = 107;
             this.StopFilter.Text = "Edit Filters";
             this.StopFilter.UseVisualStyleBackColor = true;
@@ -509,7 +509,7 @@
             // Ability
             // 
             this.Ability.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Ability.Location = new System.Drawing.Point(356, 194);
+            this.Ability.Location = new System.Drawing.Point(356, 124);
             this.Ability.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Ability.Name = "Ability";
             this.Ability.ReadOnly = true;
@@ -519,7 +519,7 @@
             // LabelAbility
             // 
             this.LabelAbility.AutoSize = true;
-            this.LabelAbility.Location = new System.Drawing.Point(305, 196);
+            this.LabelAbility.Location = new System.Drawing.Point(305, 127);
             this.LabelAbility.Name = "LabelAbility";
             this.LabelAbility.Size = new System.Drawing.Size(44, 15);
             this.LabelAbility.TabIndex = 109;
@@ -540,7 +540,7 @@
             this.ButtonDownloadEvents.Enabled = false;
             this.ButtonDownloadEvents.Location = new System.Drawing.Point(104, 50);
             this.ButtonDownloadEvents.Name = "ButtonDownloadEvents";
-            this.ButtonDownloadEvents.Size = new System.Drawing.Size(90, 23);
+            this.ButtonDownloadEvents.Size = new System.Drawing.Size(90, 25);
             this.ButtonDownloadEvents.TabIndex = 112;
             this.ButtonDownloadEvents.Text = "Pull Events";
             this.ButtonDownloadEvents.UseVisualStyleBackColor = true;
@@ -558,9 +558,9 @@
             // 
             // Rewards
             // 
-            this.Rewards.Location = new System.Drawing.Point(104, 77);
+            this.Rewards.Location = new System.Drawing.Point(104, 78);
             this.Rewards.Name = "Rewards";
-            this.Rewards.Size = new System.Drawing.Size(90, 23);
+            this.Rewards.Size = new System.Drawing.Size(90, 25);
             this.Rewards.TabIndex = 116;
             this.Rewards.Text = "Rewards";
             this.Rewards.UseVisualStyleBackColor = true;
@@ -595,7 +595,7 @@
             this.ComboIndex.BackColor = System.Drawing.SystemColors.Window;
             this.ComboIndex.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ComboIndex.FormattingEnabled = true;
-            this.ComboIndex.Location = new System.Drawing.Point(81, 68);
+            this.ComboIndex.Location = new System.Drawing.Point(80, 68);
             this.ComboIndex.Name = "ComboIndex";
             this.ComboIndex.Size = new System.Drawing.Size(64, 23);
             this.ComboIndex.TabIndex = 120;
@@ -605,7 +605,7 @@
             // 
             this.SendScreenshot.Location = new System.Drawing.Point(6, 50);
             this.SendScreenshot.Name = "SendScreenshot";
-            this.SendScreenshot.Size = new System.Drawing.Size(90, 23);
+            this.SendScreenshot.Size = new System.Drawing.Size(90, 25);
             this.SendScreenshot.TabIndex = 121;
             this.SendScreenshot.Text = "Screenshot";
             this.SendScreenshot.UseVisualStyleBackColor = true;
@@ -617,9 +617,9 @@
             // 
             // btnOpenMap
             // 
-            this.btnOpenMap.Location = new System.Drawing.Point(6, 77);
+            this.btnOpenMap.Location = new System.Drawing.Point(6, 78);
             this.btnOpenMap.Name = "btnOpenMap";
-            this.btnOpenMap.Size = new System.Drawing.Size(90, 23);
+            this.btnOpenMap.Size = new System.Drawing.Size(90, 25);
             this.btnOpenMap.TabIndex = 124;
             this.btnOpenMap.Text = "Open Map";
             this.btnOpenMap.UseVisualStyleBackColor = true;
