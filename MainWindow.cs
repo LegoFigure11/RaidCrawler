@@ -12,7 +12,6 @@ using System.Text;
 using static RaidCrawler.Structures.Offsets;
 using static SysBot.Base.SwitchButton;
 using static System.Buffers.Binary.BinaryPrimitives;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace RaidCrawler
 {
@@ -397,7 +396,7 @@ namespace RaidCrawler
         private static Image? GetDisplayGemImage(int teratype, Raid raid)
         {
             var display_black = raid.IsBlack || raid.Flags == 3;
-            var baseImg = display_black ? (Image?)Properties.Resources.ResourceManager.GetObject($"black_{teratype:D2}") 
+            var baseImg = display_black ? (Image?)Properties.Resources.ResourceManager.GetObject($"black_{teratype:D2}")
                                         : (Image?)Properties.Resources.ResourceManager.GetObject($"gem_{teratype:D2}");
             if (baseImg == null)
                 return null;
@@ -406,11 +405,11 @@ namespace RaidCrawler
             var pixels = ImageUtil.GetPixelData((Bitmap)baseImg);
             for (int i = 0; i < pixels.Length; i += 4)
             {
-                if (pixels[i+3] == 0)
+                if (pixels[i + 3] == 0)
                 {
                     pixels[i] = 0;
-                    pixels[i+1] = 0;
-                    pixels[i+2] = 0;
+                    pixels[i + 1] = 0;
+                    pixels[i + 2] = 0;
                 }
             }
             baseImg = ImageUtil.GetBitmap(pixels, baseImg.Width, baseImg.Height, baseImg.PixelFormat);
@@ -936,7 +935,7 @@ namespace RaidCrawler
                             NotificationHandler.SendNotifications(Config, Encounters[i], Raids[i], satisfied_filters, time, RewardsList[i]);
                     }
                     if (Config.EnableAlertWindow) MessageBox.Show(Config.AlertWindowMessage + "\n\nTime Spent: " + time, "Result found!", MessageBoxButtons.OK);
-                    RaidCrawler.MainWindow.ActiveForm.Text = formTitle+  " [Match Found in " + time + "]";
+                    RaidCrawler.MainWindow.ActiveForm.Text = formTitle + " [Match Found in " + time + "]";
                 }
 
                 ButtonReadRaids.Enabled = true;
@@ -963,7 +962,7 @@ namespace RaidCrawler
             StatDaySkipTries++;
             if (!sameraids)
                 StatDaySkipSuccess++;
-            
+
             if (sameraids)
                 return true;
             if (RaidFilters.Any(z => z.FilterSatisfied(Encounters, Raids, RaidBoost.SelectedIndex)))

@@ -77,7 +77,7 @@ namespace RaidCrawler.Structures
             var tera = $"{Raid.strings.types[teratype]}";
             var teraemoji = TeraEmoji(c, $"{Raid.strings.types[teratype]}", emoji);
             var ivs = IVsStringEmoji(c, ToSpeedLast(blank.IVs), c.IVsStyle, c.IVsSpacer, c.VerboseIVs, emoji);
-            var sprite_name = SpriteName.GetResourceStringSprite(blank.Species, blank.Form, blank.Gender, blank.FormArgument, blank.Generation, Raid.CheckIsShiny(raid,encounter));
+            var sprite_name = SpriteName.GetResourceStringSprite(blank.Species, blank.Form, blank.Gender, blank.FormArgument, blank.Generation, Raid.CheckIsShiny(raid, encounter));
             var moves = new ushort[4] { encounter.Move1, encounter.Move2, encounter.Move3, encounter.Move4 };
             var movestr = string.Concat(moves.Where(z => z != 0).Select(z => $"{Raid.strings.Move[z]}ㅤ\n")).Trim();
             var extramoves = string.Concat(encounter.ExtraMoves.Where(z => z != 0).Select(z => $"{Raid.strings.Move[z]}ㅤ\n")).Trim();
@@ -236,7 +236,7 @@ namespace RaidCrawler.Structures
             }
 
             return s;
-            }
+        }
 
         private static int[] ToSpeedLast(int[] ivs)
         {

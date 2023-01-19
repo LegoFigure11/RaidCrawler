@@ -1,8 +1,5 @@
 ﻿using Newtonsoft.Json;
-using System.Data;
 using RaidCrawler.Structures;
-using System;
-using System.Windows.Forms;
 
 namespace RaidCrawler.Subforms
 {

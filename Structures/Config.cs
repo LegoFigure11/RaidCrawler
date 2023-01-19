@@ -41,7 +41,7 @@
         public int IVsStyle { get; set; } = 0;
         public string IVsSpacer { get; set; } = " ";
         public bool ToggleDen { get; set; } = true;
-		public Dictionary<string, string> Emoji { get; set; } = new Dictionary<string, string>
+        public Dictionary<string, string> Emoji { get; set; } = new Dictionary<string, string>
         {
             { "Bug", "<:bug:1064546304048496812>" }, { "Dark", "<:dark:1064557656079085588>" }, { "Dragon", "<:dragon:1064557631890538566>"}, { "Electric", "<:electric:1064557559563943956>"},
             { "Fairy", "<:fairy:1064557682566123701>"}, { "Fighting", "<:fighting:1064546289406189648>"}, { "Fire", "<:fire:1064557482468446230>"}, { "Flying", "<:flying:1064546291239104623>"},
