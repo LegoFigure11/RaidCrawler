@@ -443,7 +443,7 @@ namespace RaidCrawler
                 teraRaidView.TeraType.Image = (Bitmap)Properties.Resources.ResourceManager.GetObject("gem_text_" + teratype);
                 // IsEvent.Checked = raid.IsEvent;
 
-                int StarCount = encounter is TeraDistribution ? encounter.Stars : Raid.GetStarCount(raid.Difficulty, Config.Progress-1, raid.IsBlack);
+                int StarCount = encounter is TeraDistribution ? encounter.Stars : Raid.GetStarCount(raid.Difficulty, Config.Progress, raid.IsBlack);
                 teraRaidView.Difficulty.Text = string.Concat(Enumerable.Repeat("⭐", StarCount));
 
                 if (encounter != null)
