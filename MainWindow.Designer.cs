@@ -176,7 +176,7 @@
             // TeraType
             // 
             this.TeraType.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.TeraType.Location = new System.Drawing.Point(356, 152);
+            this.TeraType.Location = new System.Drawing.Point(296, 152);
             this.TeraType.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.TeraType.Name = "TeraType";
             this.TeraType.ReadOnly = true;
@@ -186,7 +186,7 @@
             // LabelTeraType
             // 
             this.LabelTeraType.AutoSize = true;
-            this.LabelTeraType.Location = new System.Drawing.Point(292, 156);
+            this.LabelTeraType.Location = new System.Drawing.Point(232, 156);
             this.LabelTeraType.Name = "LabelTeraType";
             this.LabelTeraType.Size = new System.Drawing.Size(58, 15);
             this.LabelTeraType.TabIndex = 48;
@@ -196,7 +196,7 @@
             // PID
             // 
             this.PID.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.PID.Location = new System.Drawing.Point(356, 68);
+            this.PID.Location = new System.Drawing.Point(296, 68);
             this.PID.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.PID.Name = "PID";
             this.PID.ReadOnly = true;
@@ -206,7 +206,7 @@
             // LabelPID
             // 
             this.LabelPID.AutoSize = true;
-            this.LabelPID.Location = new System.Drawing.Point(321, 70);
+            this.LabelPID.Location = new System.Drawing.Point(261, 70);
             this.LabelPID.Name = "LabelPID";
             this.LabelPID.Size = new System.Drawing.Size(28, 15);
             this.LabelPID.TabIndex = 46;
@@ -216,7 +216,7 @@
             // EC
             // 
             this.EC.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.EC.Location = new System.Drawing.Point(356, 40);
+            this.EC.Location = new System.Drawing.Point(296, 40);
             this.EC.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.EC.Name = "EC";
             this.EC.ReadOnly = true;
@@ -226,7 +226,7 @@
             // LabelEC
             // 
             this.LabelEC.AutoSize = true;
-            this.LabelEC.Location = new System.Drawing.Point(325, 42);
+            this.LabelEC.Location = new System.Drawing.Point(265, 42);
             this.LabelEC.Name = "LabelEC";
             this.LabelEC.Size = new System.Drawing.Size(24, 15);
             this.LabelEC.TabIndex = 44;
@@ -236,7 +236,7 @@
             // Seed
             // 
             this.Seed.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Seed.Location = new System.Drawing.Point(356, 12);
+            this.Seed.Location = new System.Drawing.Point(296, 12);
             this.Seed.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Seed.Name = "Seed";
             this.Seed.ReadOnly = true;
@@ -247,7 +247,7 @@
             // LabelSeed
             // 
             this.LabelSeed.AutoSize = true;
-            this.LabelSeed.Location = new System.Drawing.Point(314, 14);
+            this.LabelSeed.Location = new System.Drawing.Point(254, 14);
             this.LabelSeed.Name = "LabelSeed";
             this.LabelSeed.Size = new System.Drawing.Size(35, 15);
             this.LabelSeed.TabIndex = 42;
@@ -279,7 +279,7 @@
             // Area
             // 
             this.Area.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Area.Location = new System.Drawing.Point(356, 236);
+            this.Area.Location = new System.Drawing.Point(296, 236);
             this.Area.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Area.Name = "Area";
             this.Area.ReadOnly = true;
@@ -290,7 +290,7 @@
             // LabelUNK_2
             // 
             this.LabelUNK_2.AutoSize = true;
-            this.LabelUNK_2.Location = new System.Drawing.Point(316, 240);
+            this.LabelUNK_2.Location = new System.Drawing.Point(256, 240);
             this.LabelUNK_2.Name = "LabelUNK_2";
             this.LabelUNK_2.Size = new System.Drawing.Size(34, 15);
             this.LabelUNK_2.TabIndex = 60;
@@ -300,7 +300,7 @@
             // IVs
             // 
             this.IVs.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.IVs.Location = new System.Drawing.Point(356, 208);
+            this.IVs.Location = new System.Drawing.Point(296, 208);
             this.IVs.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.IVs.Name = "IVs";
             this.IVs.ReadOnly = true;
@@ -310,7 +310,7 @@
             // LabelIVs
             // 
             this.LabelIVs.AutoSize = true;
-            this.LabelIVs.Location = new System.Drawing.Point(325, 212);
+            this.LabelIVs.Location = new System.Drawing.Point(265, 212);
             this.LabelIVs.Name = "LabelIVs";
             this.LabelIVs.Size = new System.Drawing.Size(25, 15);
             this.LabelIVs.TabIndex = 68;
@@ -334,7 +334,7 @@
             this.labelEvent.AutoSize = true;
             this.labelEvent.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point);
             this.labelEvent.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.labelEvent.Location = new System.Drawing.Point(556, 64);
+            this.labelEvent.Location = new System.Drawing.Point(496, 64);
             this.labelEvent.Name = "labelEvent";
             this.labelEvent.Size = new System.Drawing.Size(73, 15);
             this.labelEvent.TabIndex = 84;
@@ -345,7 +345,7 @@
             // Difficulty
             // 
             this.Difficulty.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Difficulty.Location = new System.Drawing.Point(530, 152);
+            this.Difficulty.Location = new System.Drawing.Point(470, 152);
             this.Difficulty.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Difficulty.Name = "Difficulty";
             this.Difficulty.ReadOnly = true;
@@ -355,7 +355,7 @@
             // LabelDifficulty
             // 
             this.LabelDifficulty.AutoSize = true;
-            this.LabelDifficulty.Location = new System.Drawing.Point(465, 156);
+            this.LabelDifficulty.Location = new System.Drawing.Point(405, 156);
             this.LabelDifficulty.Name = "LabelDifficulty";
             this.LabelDifficulty.Size = new System.Drawing.Size(58, 15);
             this.LabelDifficulty.TabIndex = 85;
@@ -376,7 +376,7 @@
             // Species
             // 
             this.Species.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Species.Location = new System.Drawing.Point(356, 96);
+            this.Species.Location = new System.Drawing.Point(296, 96);
             this.Species.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Species.Name = "Species";
             this.Species.ReadOnly = true;
@@ -386,7 +386,7 @@
             // LabelSpecies
             // 
             this.LabelSpecies.AutoSize = true;
-            this.LabelSpecies.Location = new System.Drawing.Point(301, 100);
+            this.LabelSpecies.Location = new System.Drawing.Point(241, 100);
             this.LabelSpecies.Name = "LabelSpecies";
             this.LabelSpecies.Size = new System.Drawing.Size(49, 15);
             this.LabelSpecies.TabIndex = 92;
@@ -396,7 +396,7 @@
             // LabelMoves
             // 
             this.LabelMoves.AutoSize = true;
-            this.LabelMoves.Location = new System.Drawing.Point(304, 280);
+            this.LabelMoves.Location = new System.Drawing.Point(244, 280);
             this.LabelMoves.Name = "LabelMoves";
             this.LabelMoves.Size = new System.Drawing.Size(45, 15);
             this.LabelMoves.TabIndex = 94;
@@ -406,7 +406,7 @@
             // Move1
             // 
             this.Move1.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Move1.Location = new System.Drawing.Point(356, 264);
+            this.Move1.Location = new System.Drawing.Point(296, 264);
             this.Move1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Move1.Name = "Move1";
             this.Move1.ReadOnly = true;
@@ -417,7 +417,7 @@
             // Move2
             // 
             this.Move2.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Move2.Location = new System.Drawing.Point(494, 264);
+            this.Move2.Location = new System.Drawing.Point(434, 264);
             this.Move2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Move2.Name = "Move2";
             this.Move2.ReadOnly = true;
@@ -428,7 +428,7 @@
             // Move4
             // 
             this.Move4.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Move4.Location = new System.Drawing.Point(494, 292);
+            this.Move4.Location = new System.Drawing.Point(434, 292);
             this.Move4.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Move4.Name = "Move4";
             this.Move4.ReadOnly = true;
@@ -439,7 +439,7 @@
             // Move3
             // 
             this.Move3.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Move3.Location = new System.Drawing.Point(356, 292);
+            this.Move3.Location = new System.Drawing.Point(296, 292);
             this.Move3.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Move3.Name = "Move3";
             this.Move3.ReadOnly = true;
@@ -450,7 +450,7 @@
             // Nature
             // 
             this.Nature.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Nature.Location = new System.Drawing.Point(530, 180);
+            this.Nature.Location = new System.Drawing.Point(470, 180);
             this.Nature.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Nature.Name = "Nature";
             this.Nature.ReadOnly = true;
@@ -460,7 +460,7 @@
             // LabelNature
             // 
             this.LabelNature.AutoSize = true;
-            this.LabelNature.Location = new System.Drawing.Point(477, 184);
+            this.LabelNature.Location = new System.Drawing.Point(417, 184);
             this.LabelNature.Name = "LabelNature";
             this.LabelNature.Size = new System.Drawing.Size(46, 15);
             this.LabelNature.TabIndex = 105;
@@ -470,7 +470,7 @@
             // Gender
             // 
             this.Gender.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Gender.Location = new System.Drawing.Point(356, 180);
+            this.Gender.Location = new System.Drawing.Point(296, 180);
             this.Gender.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Gender.Name = "Gender";
             this.Gender.ReadOnly = true;
@@ -480,7 +480,7 @@
             // LabelGender
             // 
             this.LabelGender.AutoSize = true;
-            this.LabelGender.Location = new System.Drawing.Point(301, 184);
+            this.LabelGender.Location = new System.Drawing.Point(241, 184);
             this.LabelGender.Name = "LabelGender";
             this.LabelGender.Size = new System.Drawing.Size(48, 15);
             this.LabelGender.TabIndex = 103;
@@ -499,7 +499,7 @@
             // 
             // Sprite
             // 
-            this.Sprite.Location = new System.Drawing.Point(558, 7);
+            this.Sprite.Location = new System.Drawing.Point(498, 7);
             this.Sprite.Name = "Sprite";
             this.Sprite.Size = new System.Drawing.Size(68, 56);
             this.Sprite.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
@@ -509,7 +509,7 @@
             // Ability
             // 
             this.Ability.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Ability.Location = new System.Drawing.Point(356, 124);
+            this.Ability.Location = new System.Drawing.Point(296, 124);
             this.Ability.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Ability.Name = "Ability";
             this.Ability.ReadOnly = true;
@@ -519,7 +519,7 @@
             // LabelAbility
             // 
             this.LabelAbility.AutoSize = true;
-            this.LabelAbility.Location = new System.Drawing.Point(305, 127);
+            this.LabelAbility.Location = new System.Drawing.Point(245, 127);
             this.LabelAbility.Name = "LabelAbility";
             this.LabelAbility.Size = new System.Drawing.Size(44, 15);
             this.LabelAbility.TabIndex = 109;
@@ -528,7 +528,7 @@
             // 
             // GemIcon
             // 
-            this.GemIcon.Location = new System.Drawing.Point(494, 7);
+            this.GemIcon.Location = new System.Drawing.Point(434, 7);
             this.GemIcon.Name = "GemIcon";
             this.GemIcon.Size = new System.Drawing.Size(56, 56);
             this.GemIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -646,7 +646,7 @@
             this.toolStripStatus});
             this.statusStrip1.Location = new System.Drawing.Point(0, 335);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(640, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(580, 22);
             this.statusStrip1.SizingGrip = false;
             this.statusStrip1.TabIndex = 126;
             this.statusStrip1.Text = "statusStrip1";
@@ -661,7 +661,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(640, 357);
+            this.ClientSize = new System.Drawing.Size(580, 357);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.ComboIndex);
