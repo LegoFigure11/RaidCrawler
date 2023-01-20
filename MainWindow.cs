@@ -1176,8 +1176,8 @@ namespace RaidCrawler
             }
         }
 
-        Point Default = new(305, 245);
-        Point ShowExtra = new(314, 245);
+        Point Default = new(244, 280);
+        Point ShowExtra = new(253, 280);
         private void Move_Clicked(object sender, EventArgs e)
         {
             if (Raids.Count == 0)
