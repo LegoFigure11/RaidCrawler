@@ -125,9 +125,9 @@ namespace RaidCrawler.Structures
         private static string Difficulty(Config c, byte stars, bool isevent, bool emoji)
         {
             string s = string.Empty;
-            string mstar = (emoji ? c.Emoji["7 Star"] : ":star");
-            string bstar = (emoji ? c.Emoji["Event Star"] : ":star");
-            string ystar = (emoji ? c.Emoji["Star"] : ":star");
+            string mstar = (emoji ? c.Emoji["7 Star"] : ":star:");
+            string bstar = (emoji ? c.Emoji["Event Star"] : ":star:");
+            string ystar = (emoji ? c.Emoji["Star"] : ":star:");
             s = (stars == 7) ? string.Concat(Enumerable.Repeat(mstar, stars)) :
                 (isevent) ? string.Concat(Enumerable.Repeat(bstar, stars)) : string.Concat(Enumerable.Repeat(ystar, stars));
             return s;
