@@ -1021,9 +1021,12 @@ namespace RaidCrawler
                 if (raid.IsEvent)
                     eventct++;
             }
+            var filterMatchCount = Enumerable.Range(0, Raids.Count).Count(i => RaidFilters.Any(z => z.FilterSatisfied(Encounters[i], Raids[i], RaidBoost.SelectedIndex)));
+            var shinyCount = Enumerable.Range(0, Raids.Count).Count(i => Raid.CheckIsShiny(Raids[i], Encounters[i]));
 
             toolStripStatus.Text = "Completed!";
-            LabelLoadedRaids.Text = $"Shiny: {Enumerable.Range(0, Raids.Count).Where(i => Raid.CheckIsShiny(Raids[i], Encounters[i])).Count()}";
+            LabelLoadedRaids.Text = $"Shiny: {shinyCount} Match: {filterMatchCount}";
+
             if (Raids.Count > 0)
             {
                 ButtonPrevious.Enabled = true;
