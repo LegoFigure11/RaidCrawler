@@ -1273,10 +1273,5 @@ namespace RaidCrawler
         {
             return StatDaySkipSuccess;
         }
-
-        private void Map_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }

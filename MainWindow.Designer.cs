@@ -701,7 +701,6 @@
             this.Map.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.Map.TabIndex = 127;
             this.Map.TabStop = false;
-            this.Map.Click += new System.EventHandler(this.Map_Click);
             // 
             // MainWindow
             // 
