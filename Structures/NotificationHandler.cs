@@ -54,6 +54,44 @@ namespace RaidCrawler.Structures
                 Client.PostAsync(url.Trim(), content).Wait();
         }
 
+        public static string GeneratePasteAnnounce(Config c, ITeraRaid encounter, Raid raid, List<(int, int, int)>? rewardsList)
+        {
+            var param = Raid.GetParam(encounter);
+            var blank = new PK9
+            {
+                Species = encounter.Species,
+                Form = encounter.Form
+            };
+            Encounter9RNG.GenerateData(blank, param, EncounterCriteria.Unrestricted, raid.Seed);
+
+            var shiny = Shiny(c, Raid.CheckIsShiny(raid, encounter), ShinyExtensions.IsSquareShinyExist(blank), false);
+            var teratype = Raid.GetTeraType(encounter, raid);
+            var terastring = Raid.strings.types[teratype];
+            var species = $"{Raid.strings.Species[encounter.Species]}{(encounter.Form != 0 ? $"-{encounter.Form}" : "")}";
+            var gender = Gender(c, blank.Gender, false);
+            var nature = $"{Raid.strings.Natures[blank.Nature]}";
+            var ivs = IVsStringEmoji(c, ToSpeedLast(blank.IVs), c.IVsStyle, c.IVsSpacer, c.VerboseIVs, false);
+            var perfIvCount = blank.IVs.Count(iv => iv == 31);
+            var ability = $"{Raid.strings.Ability[blank.Ability]}";
+            var moves = new ushort[4] { encounter.Move1, encounter.Move2, encounter.Move3, encounter.Move4 };
+            var movestr = string.Concat(moves.Where(z => z != 0).Select(z => $"{Raid.strings.Move[z]}ㅤ\n")).Trim();
+            var extramoves = string.Concat(encounter.ExtraMoves.Where(z => z != 0).Select(z => $"{Raid.strings.Move[z]}ㅤ\n")).Trim();
+            var extramovesstr = extramoves == string.Empty ? "None" : extramoves;
+            var rewards = GetRewards(c, rewardsList, false);
+            var isevent = raid.IsEvent;
+            var difficulty = Difficulty(c, encounter.Stars, isevent, false);
+
+            var announce = $"{difficulty} {shiny} {terastring} Tera **{species}** {gender}\n\n" +
+                           $">>> :book: It is **{nature}**, has **{perfIvCount}** Perfect IVs: {ivs}\n" +
+                           $":dart: **Ability:** {ability}\n" +
+                           $":crossed_swords: **Moveset:** {movestr}\n\n" +
+                           $":crossed_swords: **Extra Moves:** {extramovesstr}\n\n" +
+                           $":gift: **Rewards:** {rewards}\n" +
+                           $":key: **Code:** ";
+
+            return announce;
+        }
+
         public static object GenerateWebhook(Config c, ITeraRaid encounter, Raid raid, IEnumerable<RaidFilter> filters, String time, List<(int, int, int)>? RewardsList)
         {
             var param = Raid.GetParam(encounter);

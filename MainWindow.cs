@@ -51,6 +51,8 @@ namespace RaidCrawler
         private Stopwatch stopwatch = new Stopwatch();
         private TeraRaidView teraRaidView;
 
+        private bool stopRequested = false;
+
         public MainWindow()
         {
             string build = string.Empty;
@@ -149,6 +151,7 @@ namespace RaidCrawler
             ButtonDisconnect.Enabled = false;
             ButtonReadRaids.Enabled = false;
             ButtonAdvanceDate.Enabled = false;
+            ButtonStopCrawl.Enabled = false;
             ButtonViewRAM.Enabled = false;
             ButtonDownloadEvents.Enabled = false;
         }
@@ -898,6 +901,7 @@ namespace RaidCrawler
 
                 ButtonReadRaids.Enabled = false;
                 ButtonAdvanceDate.Enabled = false;
+                ButtonStopCrawl.Enabled = true;
                 _WindowState = WindowState;
                 var prompt = false;
                 do
@@ -936,6 +940,7 @@ namespace RaidCrawler
                     }
                     if (Config.EnableAlertWindow) MessageBox.Show(Config.AlertWindowMessage + "\n\nTime Spent: " + time, "Result found!", MessageBoxButtons.OK);
                     RaidCrawler.MainWindow.ActiveForm.Text = formTitle + " [Match Found in " + time + "]";
+                    ButtonStopCrawl.Enabled = false;
                 }
 
                 ButtonReadRaids.Enabled = true;
@@ -967,6 +972,11 @@ namespace RaidCrawler
                 return true;
             if (RaidFilters.Any(z => z.FilterSatisfied(Encounters, Raids, RaidBoost.SelectedIndex)))
                 prompt = true;
+            if (stopRequested)
+            {
+                stopRequested = false;
+                return false;
+            }
             if (StopAdvances || prompt == true)
                 return false;
             return true;
@@ -1214,6 +1224,11 @@ namespace RaidCrawler
             }
         }
 
+        private void CopyAnnounce_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(NotificationHandler.GeneratePasteAnnounce(Config, Encounters[index], Raids[index], RewardsList[index]));
+        }
+
         private void SendScreenshot_Click(object sender, EventArgs e)
         {
             if (!SwitchConnection.Connected)
@@ -1273,6 +1288,12 @@ namespace RaidCrawler
         public int GetStatDaySkipSuccess()
         {
             return StatDaySkipSuccess;
+        }
+
+        private void StopCrawl(object sender, EventArgs e)
+        {
+            this.ButtonStopCrawl.Enabled = false;
+            stopRequested = true;
         }
     }
 }
