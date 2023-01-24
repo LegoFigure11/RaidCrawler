@@ -345,6 +345,8 @@ namespace RaidCrawler
 
                 if (encounter != null)
                 {
+                    var map = GenerateMap(raid, teratype);
+                    this.Map.Image = map;
                     var param = Raid.GetParam(encounter);
                     var blank = new PK9
                     {
@@ -1270,6 +1272,11 @@ namespace RaidCrawler
         public int GetStatDaySkipSuccess()
         {
             return StatDaySkipSuccess;
+        }
+
+        private void Map_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
