@@ -171,7 +171,7 @@
             this.LabelLoadedRaids.Name = "LabelLoadedRaids";
             this.LabelLoadedRaids.Size = new System.Drawing.Size(50, 15);
             this.LabelLoadedRaids.TabIndex = 12;
-            this.LabelLoadedRaids.Text = "Shiny: 0";
+            this.LabelLoadedRaids.Text = "Matches: 0";
             // 
             // TeraType
             // 
