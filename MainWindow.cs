@@ -51,6 +51,8 @@ namespace RaidCrawler
         private Stopwatch stopwatch = new Stopwatch();
         private TeraRaidView teraRaidView;
 
+        private CancellationTokenSource AdvanceDateCancellationTokenSource;
+
         public MainWindow()
         {
             string build = string.Empty;
@@ -142,11 +144,14 @@ namespace RaidCrawler
 
         private void Disconnect_Click(object sender, EventArgs e)
         {
+            if (AdvanceDateCancellationTokenSource != null)
+                AdvanceDateCancellationTokenSource.Cancel(true);
             Disconnect();
             toolStripStatus.Text = "Disconnected.";
             stopwatch.Stop();
             ButtonConnect.Enabled = true;
             ButtonDisconnect.Enabled = false;
+            ButtonStopAdvance.Enabled = false;
             ButtonReadRaids.Enabled = false;
             ButtonAdvanceDate.Enabled = false;
             ButtonViewRAM.Enabled = false;
@@ -888,6 +893,12 @@ namespace RaidCrawler
             await Click(HOME, (int)Config.ReturnGame + BaseDelay, token).ConfigureAwait(false);
         }
 
+        private async void ButtonStopAdvance_Click(object sender, EventArgs e)
+        {
+            AdvanceDateCancellationTokenSource.Cancel(true);
+            ButtonStopAdvance.Enabled = false;
+        }
+
         private async void ButtonAdvanceDate_Click(object sender, EventArgs e)
         {
             if (SwitchConnection.Connected)
@@ -898,14 +909,27 @@ namespace RaidCrawler
 
                 ButtonReadRaids.Enabled = false;
                 ButtonAdvanceDate.Enabled = false;
+                ButtonStopAdvance.Enabled = true;
                 _WindowState = WindowState;
                 var prompt = false;
+
                 do
                 {
+                    // average run takes between 15-18secs on a v1 switch, undocked
+                    // if a single run of the loop takes more than a minute, stop it, something is wrong
+                    AdvanceDateCancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(60));
+
                     prev = Raids.Select(z => z.Seed).ToList();
-                    await AdvanceDate(CancellationToken.None);
-                    await ReadRaids(CancellationToken.None);
-                } while (CheckAdvanceDate(out prompt));
+                    try
+                    {
+                        await AdvanceDate(AdvanceDateCancellationTokenSource.Token);
+                        await ReadRaids(AdvanceDateCancellationTokenSource.Token);
+                    }
+                    catch (TaskCanceledException)
+                    {
+                        // Stop button was pressed or timed out
+                    }
+                } while (CheckAdvanceDate(AdvanceDateCancellationTokenSource.Token, out prompt));
                 if (prompt)
                 {
                     stopwatch.Stop();
@@ -945,10 +969,11 @@ namespace RaidCrawler
             }
         }
 
-        private bool CheckAdvanceDate(out bool prompt)
+        private bool CheckAdvanceDate(CancellationToken cancellationToken, out bool prompt)
         {
             prompt = false;
-            if (!CheckEnableFilters.Checked)
+            
+            if (cancellationToken.IsCancellationRequested || !CheckEnableFilters.Checked)
                 return false;
             if (prev.Count != Raids.Count)
                 return true;

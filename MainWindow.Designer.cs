@@ -85,7 +85,7 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.StopAdvanceButton = new System.Windows.Forms.Button();
+            this.ButtonStopAdvance = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.Sprite)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GemIcon)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -691,24 +691,25 @@
             this.toolStripStatus.Size = new System.Drawing.Size(60, 25);
             this.toolStripStatus.Text = "Status";
             // 
-            // StopAdvanceButton
+            // ButtonStopAdvance
             // 
-            this.StopAdvanceButton.Enabled = false;
-            this.StopAdvanceButton.Location = new System.Drawing.Point(26, 163);
-            this.StopAdvanceButton.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
-            this.StopAdvanceButton.Name = "StopAdvanceButton";
-            this.StopAdvanceButton.Size = new System.Drawing.Size(137, 45);
-            this.StopAdvanceButton.TabIndex = 127;
-            this.StopAdvanceButton.Text = "Stop";
-            this.toolTip.SetToolTip(this.StopAdvanceButton, "Stops advancing date after the current iteration ends.");
-            this.StopAdvanceButton.UseVisualStyleBackColor = true;
+            this.ButtonStopAdvance.Enabled = false;
+            this.ButtonStopAdvance.Location = new System.Drawing.Point(26, 163);
+            this.ButtonStopAdvance.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
+            this.ButtonStopAdvance.Name = "ButtonStopAdvance";
+            this.ButtonStopAdvance.Size = new System.Drawing.Size(137, 45);
+            this.ButtonStopAdvance.TabIndex = 127;
+            this.ButtonStopAdvance.Text = "Stop";
+            this.toolTip.SetToolTip(this.ButtonStopAdvance, "Stops advancing date after the current iteration ends.");
+            this.ButtonStopAdvance.UseVisualStyleBackColor = true;
+            this.ButtonStopAdvance.Click += new System.EventHandler(this.ButtonStopAdvance_Click);
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(829, 630);
-            this.Controls.Add(this.StopAdvanceButton);
+            this.Controls.Add(this.ButtonStopAdvance);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.ComboIndex);
@@ -829,6 +830,6 @@
         private GroupBox groupBox1;
         private StatusStrip statusStrip1;
         private ToolStripStatusLabel toolStripStatus;
-        private Button StopAdvanceButton;
+        private Button ButtonStopAdvance;
     }
 }
