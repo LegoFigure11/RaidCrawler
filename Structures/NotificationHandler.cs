@@ -34,12 +34,25 @@ namespace RaidCrawler.Structures
                 Client.PostAsync(url.Trim(), content).Wait();
         }
 
-        public static void SendScreenshot(Config c, SwitchSocketAsync nx)
+        public static void SendScreenshot(Config c, SwitchSocketAsync nx, Bitmap? raidView = null)
         {
             DiscordWebhooks = c.EnableNotification ? c.DiscordWebhook.Split(',') : null;
             if (DiscordWebhooks == null)
                 return;
             var screenshot = SysBot.Base.Decoder.ConvertHexByteStringToBytes(nx.PixelPeek(new CancellationToken()).Result);
+
+            if (raidView != null)
+            {
+                using var switchStream = new MemoryStream(screenshot);
+                var switchBitmap = new Bitmap(switchStream);
+                var merged = MergeTwoImages(raidView, switchBitmap);
+
+                using var mergeStream = new MemoryStream();
+                merged.Save(mergeStream, System.Drawing.Imaging.ImageFormat.Png);
+                Clipboard.SetImage(merged);
+                screenshot = mergeStream.ToArray();
+            }
+
             var content = new MultipartFormDataContent();
             var info = new
             {
@@ -52,6 +65,35 @@ namespace RaidCrawler.Structures
             content.Add(new ByteArrayContent(screenshot), "screenshot.jpg", "screenshot.jpg");
             foreach (var url in DiscordWebhooks)
                 Client.PostAsync(url.Trim(), content).Wait();
+        }
+
+        private static Bitmap MergeTwoImages(Image firstImage, Image secondImage)
+        {
+            if (firstImage == null)
+            {
+                throw new ArgumentNullException("firstImage");
+            }
+
+            if (secondImage == null)
+            {
+                throw new ArgumentNullException("secondImage");
+            }
+
+            int outputImageWidth = firstImage.Width > secondImage.Width ? firstImage.Width : secondImage.Width;
+
+            int outputImageHeight = firstImage.Height + secondImage.Height + 1;
+
+            Bitmap outputImage = new Bitmap(outputImageWidth, outputImageHeight, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+            using (Graphics graphics = Graphics.FromImage(outputImage))
+            {
+                graphics.DrawImage(firstImage, new Rectangle(new Point(), firstImage.Size),
+                    new Rectangle(new Point(), firstImage.Size), GraphicsUnit.Pixel);
+                graphics.DrawImage(secondImage, new Rectangle(new Point(0, firstImage.Height + 1), secondImage.Size),
+                    new Rectangle(new Point(), secondImage.Size), GraphicsUnit.Pixel);
+            }
+
+            return outputImage;
         }
 
         public static object GenerateWebhook(Config c, ITeraRaid encounter, Raid raid, IEnumerable<RaidFilter> filters, String time, List<(int, int, int)>? RewardsList)

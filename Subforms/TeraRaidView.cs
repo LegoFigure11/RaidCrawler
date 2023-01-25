@@ -1,4 +1,6 @@
-﻿namespace RaidCrawler.Subforms
+﻿using System.Drawing.Imaging;
+
+namespace RaidCrawler.Subforms
 {
     public partial class TeraRaidView : Form
     {
@@ -103,6 +105,18 @@
         private void TeraRaidView_DoubleClick(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        public Bitmap screenshot()
+        {
+            var bounds = this.Bounds;
+            var bitmap = new Bitmap(bounds.Width, bounds.Height);
+            
+            using (Graphics g = Graphics.FromImage(bitmap))
+            {
+                g.CopyFromScreen(Point.Empty, Point.Empty, bitmap.Size);
+            }
+            return bitmap;
         }
     }
 }

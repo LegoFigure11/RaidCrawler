@@ -1218,8 +1218,13 @@ namespace RaidCrawler
                 MessageBox.Show("Cannot send a screenshot since switch is not connected.");
                 return;
             }
+            Bitmap? screenshot = null;
+            if (Config.StreamerView)
+            {
+                screenshot = teraRaidView.screenshot();
+            }
 
-            NotificationHandler.SendScreenshot(Config, SwitchConnection);
+            NotificationHandler.SendScreenshot(Config, SwitchConnection, screenshot);
         }
 
         private void ConnectionStatusText_TextChanged(object sender, EventArgs e)
