@@ -978,7 +978,7 @@
             // 
             this.labelMaterials.AutoSize = true;
             this.labelMaterials.ForeColor = System.Drawing.Color.Silver;
-            this.labelMaterials.Location = new System.Drawing.Point(889, 401);
+            this.labelMaterials.Location = new System.Drawing.Point(889, 404);
             this.labelMaterials.Name = "labelMaterials";
             this.labelMaterials.Size = new System.Drawing.Size(55, 15);
             this.labelMaterials.TabIndex = 174;
