@@ -79,6 +79,15 @@
             }
         }
 
+        private void TeraType_DoubleClicked(object sender, MouseEventArgs e)
+        {
+            if (ModifierKeys == Keys.Shift)
+            {
+                var mainForm = Application.OpenForms.OfType<MainWindow>().Single();
+                mainForm.funcAdvanceDate(sender, e);
+            }
+        }
+
         private void rewards_TextChanged(object sender, EventArgs e)
         {
             int value;
@@ -98,11 +107,6 @@
         private void TeraRaidView_MouseUp(object sender, MouseEventArgs e)
         {
             drag = false;
-        }
-
-        private void TeraRaidView_DoubleClick(object sender, EventArgs e)
-        {
-            this.Close();
         }
     }
 }

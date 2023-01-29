@@ -234,6 +234,7 @@
             this.TeraType.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.TeraType.TabIndex = 120;
             this.TeraType.TabStop = false;
+            this.TeraType.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.TeraType_DoubleClicked);
             // 
             // Ability
             // 
@@ -580,7 +581,7 @@
             this.picShinyAlert.BackColor = System.Drawing.Color.Transparent;
             this.picShinyAlert.Enabled = false;
             this.picShinyAlert.Image = ((System.Drawing.Image)(resources.GetObject("picShinyAlert.Image")));
-            this.picShinyAlert.Location = new System.Drawing.Point(300, 83);
+            this.picShinyAlert.Location = new System.Drawing.Point(308, 83);
             this.picShinyAlert.Name = "picShinyAlert";
             this.picShinyAlert.Size = new System.Drawing.Size(80, 80);
             this.picShinyAlert.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -958,7 +959,7 @@
             this.textCash.ForeColor = System.Drawing.Color.White;
             this.textCash.Location = new System.Drawing.Point(632, 419);
             this.textCash.Name = "textCash";
-            this.textCash.PlaceholderText = "00";
+            this.textCash.PlaceholderText = "00000";
             this.textCash.Size = new System.Drawing.Size(55, 25);
             this.textCash.TabIndex = 176;
             this.textCash.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -1005,7 +1006,7 @@
             this.labelXP.Name = "labelXP";
             this.labelXP.Size = new System.Drawing.Size(71, 15);
             this.labelXP.TabIndex = 172;
-            this.labelXP.Text = "XP";
+            this.labelXP.Text = "Exp Candies";
             this.labelXP.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // textXP
@@ -1014,9 +1015,9 @@
             this.textXP.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textXP.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.textXP.ForeColor = System.Drawing.Color.White;
-            this.textXP.Location = new System.Drawing.Point(754, 419);
+            this.textXP.Location = new System.Drawing.Point(756, 419);
             this.textXP.Name = "textXP";
-            this.textXP.PlaceholderText = "00";
+            this.textXP.PlaceholderText = "000000";
             this.textXP.Size = new System.Drawing.Size(67, 25);
             this.textXP.TabIndex = 171;
             this.textXP.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -1034,7 +1035,7 @@
             // picXP
             // 
             this.picXP.Image = global::RaidCrawler.Properties.Resources.item_1128;
-            this.picXP.Location = new System.Drawing.Point(708, 400);
+            this.picXP.Location = new System.Drawing.Point(700, 400);
             this.picXP.Name = "picXP";
             this.picXP.Size = new System.Drawing.Size(48, 48);
             this.picXP.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1104,7 +1105,6 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "TeraRaidView";
             this.Text = "TeraRaidView";
-            this.DoubleClick += new System.EventHandler(this.TeraRaidView_DoubleClick);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TeraRaidView_MouseDown);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.TeraRaidView_MouseMove);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.TeraRaidView_MouseUp);
