@@ -184,5 +184,20 @@ namespace RaidCrawler.Subforms
                 config.Show();
             }
         }
+
+        private void buttonTeraRaidView_Click(object sender, EventArgs e)
+        {
+            var mainForm = Application.OpenForms.OfType<MainWindow>().Single();
+            mainForm.toggleTeraRaidView();
+        }
+
+        private void ExperimentalView_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ExperimentalView.Checked)
+            {
+                var mainForm = Application.OpenForms.OfType<MainWindow>().Single();
+                mainForm.showTeraRaidView();
+            }
+        }
     }
 }

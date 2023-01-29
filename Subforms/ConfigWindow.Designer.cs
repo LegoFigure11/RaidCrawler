@@ -97,6 +97,7 @@
             this.label18 = new System.Windows.Forms.Label();
             this.EnableEmoji = new System.Windows.Forms.CheckBox();
             this.tabExperimental = new System.Windows.Forms.TabPage();
+            this.buttonTeraRaidView = new System.Windows.Forms.Button();
             this.InstanceName = new System.Windows.Forms.TextBox();
             this.label17 = new System.Windows.Forms.Label();
             this.tabAbout = new System.Windows.Forms.TabPage();
@@ -523,10 +524,11 @@
             this.ExperimentalView.AutoSize = true;
             this.ExperimentalView.Location = new System.Drawing.Point(8, 23);
             this.ExperimentalView.Name = "ExperimentalView";
-            this.ExperimentalView.Size = new System.Drawing.Size(241, 19);
+            this.ExperimentalView.Size = new System.Drawing.Size(101, 19);
             this.ExperimentalView.TabIndex = 40;
-            this.ExperimentalView.Text = "Experimental Raid View  (requires restart)";
+            this.ExperimentalView.Text = "Streamer View";
             this.ExperimentalView.UseVisualStyleBackColor = true;
+            this.ExperimentalView.CheckedChanged += new System.EventHandler(this.ExperimentalView_CheckedChanged);
             // 
             // tabControl1
             // 
@@ -923,6 +925,7 @@
             // 
             // tabExperimental
             // 
+            this.tabExperimental.Controls.Add(this.buttonTeraRaidView);
             this.tabExperimental.Controls.Add(this.InstanceName);
             this.tabExperimental.Controls.Add(this.label17);
             this.tabExperimental.Controls.Add(this.label13);
@@ -934,6 +937,16 @@
             this.tabExperimental.TabIndex = 2;
             this.tabExperimental.Text = "Experimental";
             this.tabExperimental.UseVisualStyleBackColor = true;
+            // 
+            // buttonTeraRaidView
+            // 
+            this.buttonTeraRaidView.Location = new System.Drawing.Point(259, 19);
+            this.buttonTeraRaidView.Name = "buttonTeraRaidView";
+            this.buttonTeraRaidView.Size = new System.Drawing.Size(105, 23);
+            this.buttonTeraRaidView.TabIndex = 43;
+            this.buttonTeraRaidView.Text = "Toggle Window";
+            this.buttonTeraRaidView.UseVisualStyleBackColor = true;
+            this.buttonTeraRaidView.Click += new System.EventHandler(this.buttonTeraRaidView_Click);
             // 
             // InstanceName
             // 
@@ -1125,5 +1138,6 @@
         private ComboBox StoryProgress;
         private Label labelDaySkip;
         private Button EmojiConfig;
+        private Button buttonTeraRaidView;
     }
 }
