@@ -665,7 +665,7 @@
             // 
             this.labelAbilityPatch.AutoSize = true;
             this.labelAbilityPatch.ForeColor = System.Drawing.Color.Silver;
-            this.labelAbilityPatch.Location = new System.Drawing.Point(73, 450);
+            this.labelAbilityPatch.Location = new System.Drawing.Point(73, 452);
             this.labelAbilityPatch.Name = "labelAbilityPatch";
             this.labelAbilityPatch.Size = new System.Drawing.Size(37, 15);
             this.labelAbilityPatch.TabIndex = 135;
@@ -690,7 +690,7 @@
             // 
             this.labelSweetHerba.AutoSize = true;
             this.labelSweetHerba.ForeColor = System.Drawing.Color.Silver;
-            this.labelSweetHerba.Location = new System.Drawing.Point(485, 450);
+            this.labelSweetHerba.Location = new System.Drawing.Point(485, 452);
             this.labelSweetHerba.Name = "labelSweetHerba";
             this.labelSweetHerba.Size = new System.Drawing.Size(38, 15);
             this.labelSweetHerba.TabIndex = 143;
@@ -715,7 +715,7 @@
             // 
             this.labelSaltyHerba.AutoSize = true;
             this.labelSaltyHerba.ForeColor = System.Drawing.Color.Silver;
-            this.labelSaltyHerba.Location = new System.Drawing.Point(592, 450);
+            this.labelSaltyHerba.Location = new System.Drawing.Point(592, 452);
             this.labelSaltyHerba.Name = "labelSaltyHerba";
             this.labelSaltyHerba.Size = new System.Drawing.Size(32, 15);
             this.labelSaltyHerba.TabIndex = 145;
@@ -740,7 +740,7 @@
             // 
             this.labelBottleCap.AutoSize = true;
             this.labelBottleCap.ForeColor = System.Drawing.Color.Silver;
-            this.labelBottleCap.Location = new System.Drawing.Point(283, 451);
+            this.labelBottleCap.Location = new System.Drawing.Point(283, 452);
             this.labelBottleCap.Name = "labelBottleCap";
             this.labelBottleCap.Size = new System.Drawing.Size(33, 15);
             this.labelBottleCap.TabIndex = 147;
@@ -753,7 +753,7 @@
             this.textBottleCap.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBottleCap.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.textBottleCap.ForeColor = System.Drawing.Color.White;
-            this.textBottleCap.Location = new System.Drawing.Point(271, 466);
+            this.textBottleCap.Location = new System.Drawing.Point(271, 465);
             this.textBottleCap.Name = "textBottleCap";
             this.textBottleCap.PlaceholderText = "00";
             this.textBottleCap.Size = new System.Drawing.Size(55, 25);
@@ -778,7 +778,7 @@
             this.textSourHerba.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textSourHerba.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.textSourHerba.ForeColor = System.Drawing.Color.White;
-            this.textSourHerba.Location = new System.Drawing.Point(786, 467);
+            this.textSourHerba.Location = new System.Drawing.Point(786, 465);
             this.textSourHerba.Name = "textSourHerba";
             this.textSourHerba.PlaceholderText = "00";
             this.textSourHerba.Size = new System.Drawing.Size(55, 25);
@@ -790,7 +790,7 @@
             // 
             this.labelSpicyHerba.AutoSize = true;
             this.labelSpicyHerba.ForeColor = System.Drawing.Color.Silver;
-            this.labelSpicyHerba.Location = new System.Drawing.Point(898, 450);
+            this.labelSpicyHerba.Location = new System.Drawing.Point(898, 452);
             this.labelSpicyHerba.Name = "labelSpicyHerba";
             this.labelSpicyHerba.Size = new System.Drawing.Size(35, 15);
             this.labelSpicyHerba.TabIndex = 151;
@@ -803,7 +803,7 @@
             this.textSpicyHerba.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textSpicyHerba.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.textSpicyHerba.ForeColor = System.Drawing.Color.White;
-            this.textSpicyHerba.Location = new System.Drawing.Point(889, 467);
+            this.textSpicyHerba.Location = new System.Drawing.Point(889, 465);
             this.textSpicyHerba.Name = "textSpicyHerba";
             this.textSpicyHerba.PlaceholderText = "00";
             this.textSpicyHerba.Size = new System.Drawing.Size(55, 25);
@@ -875,7 +875,7 @@
             this.textBitterHerba.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBitterHerba.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.textBitterHerba.ForeColor = System.Drawing.Color.White;
-            this.textBitterHerba.Location = new System.Drawing.Point(683, 467);
+            this.textBitterHerba.Location = new System.Drawing.Point(683, 465);
             this.textBitterHerba.Name = "textBitterHerba";
             this.textBitterHerba.PlaceholderText = "00";
             this.textBitterHerba.Size = new System.Drawing.Size(55, 25);
@@ -886,7 +886,7 @@
             // 
             this.labelAbilityCapsule.AutoSize = true;
             this.labelAbilityCapsule.ForeColor = System.Drawing.Color.Silver;
-            this.labelAbilityCapsule.Location = new System.Drawing.Point(171, 450);
+            this.labelAbilityCapsule.Location = new System.Drawing.Point(171, 452);
             this.labelAbilityCapsule.Name = "labelAbilityCapsule";
             this.labelAbilityCapsule.Size = new System.Drawing.Size(49, 15);
             this.labelAbilityCapsule.TabIndex = 157;
@@ -933,7 +933,7 @@
             this.textShards.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textShards.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.textShards.ForeColor = System.Drawing.Color.White;
-            this.textShards.Location = new System.Drawing.Point(374, 467);
+            this.textShards.Location = new System.Drawing.Point(374, 465);
             this.textShards.Name = "textShards";
             this.textShards.PlaceholderText = "00";
             this.textShards.Size = new System.Drawing.Size(55, 25);
@@ -957,7 +957,7 @@
             this.textCash.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textCash.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.textCash.ForeColor = System.Drawing.Color.White;
-            this.textCash.Location = new System.Drawing.Point(632, 419);
+            this.textCash.Location = new System.Drawing.Point(632, 417);
             this.textCash.Name = "textCash";
             this.textCash.PlaceholderText = "00000";
             this.textCash.Size = new System.Drawing.Size(55, 25);
@@ -991,7 +991,7 @@
             this.textMaterials.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textMaterials.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.textMaterials.ForeColor = System.Drawing.Color.White;
-            this.textMaterials.Location = new System.Drawing.Point(900, 419);
+            this.textMaterials.Location = new System.Drawing.Point(900, 417);
             this.textMaterials.Name = "textMaterials";
             this.textMaterials.PlaceholderText = "00";
             this.textMaterials.Size = new System.Drawing.Size(30, 25);
@@ -1015,7 +1015,7 @@
             this.textXP.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textXP.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.textXP.ForeColor = System.Drawing.Color.White;
-            this.textXP.Location = new System.Drawing.Point(756, 419);
+            this.textXP.Location = new System.Drawing.Point(756, 417);
             this.textXP.Name = "textXP";
             this.textXP.PlaceholderText = "000000";
             this.textXP.Size = new System.Drawing.Size(67, 25);
