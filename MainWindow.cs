@@ -7,6 +7,7 @@ using RaidCrawler.Subforms;
 using SysBot.Base;
 using System.Data;
 using System.Diagnostics;
+using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using static RaidCrawler.Structures.Offsets;
@@ -125,7 +126,7 @@ namespace RaidCrawler
             if (Config.StreamerView)
             {
                 teraRaidView.Map.Image = map;
-                teraRaidView.Show();
+                toggleTeraRaidView();
             }
         }
 
@@ -596,59 +597,138 @@ namespace RaidCrawler
                     teraRaidView.textSpicyHerba.ForeColor = Color.DimGray;
                     teraRaidView.labelSpicyHerba.ForeColor = Color.DimGray;
 
+                    // Bulk
+                    int xp = 0;
+                    int cash = 0;
+                    int materials = 0;
+                    int shards = 0;
+
                     for (int i = 0; i < rewards!.Count; i++)
                     {
-                        if (rewards[i].Item1 == 645)
+                        if (rewards[i].Item3 == 2 || rewards[i].Item3 == 0) // Only count Client Rewards
                         {
-                            teraRaidView.textAbilityCapsule.Text = (int.Parse(teraRaidView.textAbilityCapsule.Text) + 1).ToString();
-                            teraRaidView.textAbilityCapsule.ForeColor = Color.White;
-                            teraRaidView.labelAbilityCapsule.ForeColor = Color.WhiteSmoke;
-                        }
-                        if (rewards[i].Item1 == 795)
-                        {
-                            teraRaidView.textBottleCap.Text = (int.Parse(teraRaidView.textBottleCap.Text) + 1).ToString();
-                            teraRaidView.textBottleCap.ForeColor = Color.White;
-                            teraRaidView.labelBottleCap.ForeColor = Color.WhiteSmoke;
-                        }
-                        if (rewards[i].Item1 == 1606)
-                        {
-                            teraRaidView.textAbilityPatch.Text = (int.Parse(teraRaidView.textAbilityPatch.Text) + 1).ToString();
-                            teraRaidView.textAbilityPatch.ForeColor = Color.White;
-                            teraRaidView.labelAbilityPatch.ForeColor = Color.WhiteSmoke;
-                        }
-                        if (rewards[i].Item1 == 1904)
-                        {
-                            teraRaidView.textSweetHerba.Text = (int.Parse(teraRaidView.textSweetHerba.Text) + 1).ToString();
-                            teraRaidView.textSweetHerba.ForeColor = Color.White;
-                            teraRaidView.labelSweetHerba.ForeColor = Color.WhiteSmoke;
-                        }
-                        if (rewards[i].Item1 == 1905)
-                        {
-                            teraRaidView.textSaltyHerba.Text = (int.Parse(teraRaidView.textSaltyHerba.Text) + 1).ToString();
-                            teraRaidView.textSaltyHerba.ForeColor = Color.White;
-                            teraRaidView.labelSaltyHerba.ForeColor = Color.WhiteSmoke;
-                        }
-                        if (rewards[i].Item1 == 1906)
-                        {
-                            teraRaidView.textSourHerba.Text = (int.Parse(teraRaidView.textSourHerba.Text) + 1).ToString();
-                            teraRaidView.textSourHerba.ForeColor = Color.White;
-                            teraRaidView.labelSourHerba.ForeColor = Color.WhiteSmoke;
-                        }
-                        if (rewards[i].Item1 == 1907)
-                        {
-                            teraRaidView.textBitterHerba.Text = (int.Parse(teraRaidView.textBitterHerba.Text) + 1).ToString();
-                            teraRaidView.textBitterHerba.ForeColor = Color.White;
-                            teraRaidView.labelBitterHerba.ForeColor = Color.WhiteSmoke;
-                        }
-                        if (rewards[i].Item1 == 1908)
-                        {
-                            teraRaidView.textSpicyHerba.Text = (int.Parse(teraRaidView.textSpicyHerba.Text) + 1).ToString();
-                            teraRaidView.textSpicyHerba.ForeColor = Color.White;
-                            teraRaidView.labelSpicyHerba.ForeColor = Color.WhiteSmoke;
+                            if (rewards[i].Item1 == 645)
+                            {
+                                teraRaidView.textAbilityCapsule.Text = (int.Parse(teraRaidView.textAbilityCapsule.Text) + 1).ToString();
+                                teraRaidView.textAbilityCapsule.ForeColor = Color.White;
+                                teraRaidView.labelAbilityCapsule.ForeColor = Color.WhiteSmoke;
+                            }
+                            if (rewards[i].Item1 == 795)
+                            {
+                                teraRaidView.textBottleCap.Text = (int.Parse(teraRaidView.textBottleCap.Text) + 1).ToString();
+                                teraRaidView.textBottleCap.ForeColor = Color.White;
+                                teraRaidView.labelBottleCap.ForeColor = Color.WhiteSmoke;
+                            }
+                            if (rewards[i].Item1 == 1606)
+                            {
+                                teraRaidView.textAbilityPatch.Text = (int.Parse(teraRaidView.textAbilityPatch.Text) + 1).ToString();
+                                teraRaidView.textAbilityPatch.ForeColor = Color.White;
+                                teraRaidView.labelAbilityPatch.ForeColor = Color.WhiteSmoke;
+                            }
+                            if (rewards[i].Item1 == 1904)
+                            {
+                                teraRaidView.textSweetHerba.Text = (int.Parse(teraRaidView.textSweetHerba.Text) + 1).ToString();
+                                teraRaidView.textSweetHerba.ForeColor = Color.White;
+                                teraRaidView.labelSweetHerba.ForeColor = Color.WhiteSmoke;
+                            }
+                            if (rewards[i].Item1 == 1905)
+                            {
+                                teraRaidView.textSaltyHerba.Text = (int.Parse(teraRaidView.textSaltyHerba.Text) + 1).ToString();
+                                teraRaidView.textSaltyHerba.ForeColor = Color.White;
+                                teraRaidView.labelSaltyHerba.ForeColor = Color.WhiteSmoke;
+                            }
+                            if (rewards[i].Item1 == 1906)
+                            {
+                                teraRaidView.textSourHerba.Text = (int.Parse(teraRaidView.textSourHerba.Text) + 1).ToString();
+                                teraRaidView.textSourHerba.ForeColor = Color.White;
+                                teraRaidView.labelSourHerba.ForeColor = Color.WhiteSmoke;
+                            }
+                            if (rewards[i].Item1 == 1907)
+                            {
+                                teraRaidView.textBitterHerba.Text = (int.Parse(teraRaidView.textBitterHerba.Text) + 1).ToString();
+                                teraRaidView.textBitterHerba.ForeColor = Color.White;
+                                teraRaidView.labelBitterHerba.ForeColor = Color.WhiteSmoke;
+                            }
+                            if (rewards[i].Item1 == 1908)
+                            {
+                                teraRaidView.textSpicyHerba.Text = (int.Parse(teraRaidView.textSpicyHerba.Text) + 1).ToString();
+                                teraRaidView.textSpicyHerba.ForeColor = Color.White;
+                                teraRaidView.labelSpicyHerba.ForeColor = Color.WhiteSmoke;
+                            }
+
+                            switch (rewards[i].Item1)
+                            {
+                                case 86:  // Tiny Mushroom
+                                    cash += 250 * rewards[i].Item2;
+                                    break;
+                                case 87:  // Big Mushroom
+                                    cash += 2500 * rewards[i].Item2;
+                                    break;
+                                case 88:  // Pearl
+                                    cash += 1000 * rewards[i].Item2;
+                                    break;
+                                case 89:  // Big Pearl
+                                    cash += 4000 * rewards[i].Item2;
+                                    break;
+                                case 90:  // Stardust
+                                    cash += 1500 * rewards[i].Item2;
+                                    break;
+                                case 91:  // Star Piece
+                                    cash += 6000 * rewards[i].Item2;
+                                    break;
+                                case 92:  // Nugget
+                                    cash += 5000 * rewards[i].Item2;
+                                    break;
+                                case 580:  // Balm Mushroom
+                                    cash += 7500 * rewards[i].Item2;
+                                    break;
+                                case 582:  // Pearl String
+                                    cash += 10000 * rewards[i].Item2;
+                                    break;
+                                case 583:  // Comet Shard
+                                    cash += 12500 * rewards[i].Item2;
+                                    break;
+
+                                //Candies
+                                case 1124:  // XS
+                                    xp += 100 * rewards[i].Item2;
+                                    break;
+                                case 1125:  // S
+                                    xp += 800 * rewards[i].Item2;
+                                    break;
+                                case 1126:  // M
+                                    xp += 3000 * rewards[i].Item2;
+                                    break;
+                                case 1127:  // L
+                                    xp += 10000 * rewards[i].Item2;
+                                    break;
+                                case 1128:  // XL
+                                    xp += 30000 * rewards[i].Item2;
+                                    break;
+                            }
+
+                            materials = rewards[i].Item1 switch
+                            {
+                                >= 1956 and <= 2159 => materials += rewards[i].Item2,
+                                _ => materials,
+                            };
+
+                            shards = rewards[i].Item1 switch
+                            {
+                                >= 1862 and <= 1879 => shards += rewards[i].Item2,
+                                _ => shards,
+                            };
                         }
                     }
+
+                    teraRaidView.textCash.Text = cash > 0 ? cash.ToString() : "";
+                    teraRaidView.textXP.Text = xp > 0 ? xp.ToString() : "";
+                    teraRaidView.textMaterials.Text = materials > 0 ? materials.ToString() : "";
+                    teraRaidView.textShards.Text = shards > 0 ? shards.ToString() : "";
+
                     teraRaidView.Shiny.Visible = Raid.CheckIsShiny(raid, encounter);
                     teraRaidView.picShinyAlert.Enabled = Raid.CheckIsShiny(raid, encounter);
+
                 }
                 else
                 {
@@ -1273,6 +1353,24 @@ namespace RaidCrawler
         public int GetStatDaySkipSuccess()
         {
             return StatDaySkipSuccess;
+        }
+
+        public void toggleTeraRaidView()
+        {
+            teraRaidView.Visible = !teraRaidView.Visible;
+        }
+
+        public void showTeraRaidView()
+        {
+            teraRaidView.Show();
+        }
+
+        public void funcAdvanceDate(object sender, EventArgs e)
+        {
+            if (ButtonAdvanceDate.Enabled)
+            {
+                ButtonAdvanceDate_Click(sender, e);
+            }
         }
     }
 }

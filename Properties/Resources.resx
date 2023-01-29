@@ -280,14 +280,23 @@
   <data name="gem_text_9" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\gem-text-9.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="item_0050" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\item_0050.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="item_0645_hires" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\item_0645_hires.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="item_0795_hires" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\item_0795_hires.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="item_1128" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\item_1128.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="item_1606_hires" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\item_1606_hires.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="item_1862" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\item_1862.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="item_1904" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\item_1904.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -319,8 +328,14 @@
   <data name="item_1908_hires" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\item_1908_hires.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="item_1956" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\item_1956.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="material" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\material.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="money" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icon_money_00.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="shard" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\shard.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
