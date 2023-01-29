@@ -153,9 +153,9 @@
             // 
             // picBoxPokemon
             // 
-            this.picBoxPokemon.Location = new System.Drawing.Point(396, 20);
+            this.picBoxPokemon.Location = new System.Drawing.Point(395, 12);
             this.picBoxPokemon.Name = "picBoxPokemon";
-            this.picBoxPokemon.Size = new System.Drawing.Size(128, 114);
+            this.picBoxPokemon.Size = new System.Drawing.Size(128, 128);
             this.picBoxPokemon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.picBoxPokemon.TabIndex = 112;
             this.picBoxPokemon.TabStop = false;
@@ -230,7 +230,7 @@
             // 
             this.TeraType.Location = new System.Drawing.Point(86, 83);
             this.TeraType.Name = "TeraType";
-            this.TeraType.Size = new System.Drawing.Size(200, 34);
+            this.TeraType.Size = new System.Drawing.Size(200, 48);
             this.TeraType.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.TeraType.TabIndex = 120;
             this.TeraType.TabStop = false;
@@ -582,7 +582,7 @@
             this.picShinyAlert.Image = ((System.Drawing.Image)(resources.GetObject("picShinyAlert.Image")));
             this.picShinyAlert.Location = new System.Drawing.Point(300, 83);
             this.picShinyAlert.Name = "picShinyAlert";
-            this.picShinyAlert.Size = new System.Drawing.Size(79, 63);
+            this.picShinyAlert.Size = new System.Drawing.Size(80, 80);
             this.picShinyAlert.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.picShinyAlert.TabIndex = 160;
             this.picShinyAlert.TabStop = false;
@@ -943,7 +943,7 @@
             // 
             this.labelCash.AutoSize = true;
             this.labelCash.ForeColor = System.Drawing.Color.Silver;
-            this.labelCash.Location = new System.Drawing.Point(637, 404);
+            this.labelCash.Location = new System.Drawing.Point(632, 404);
             this.labelCash.Name = "labelCash";
             this.labelCash.Size = new System.Drawing.Size(55, 15);
             this.labelCash.TabIndex = 177;
@@ -956,7 +956,7 @@
             this.textCash.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textCash.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.textCash.ForeColor = System.Drawing.Color.White;
-            this.textCash.Location = new System.Drawing.Point(637, 419);
+            this.textCash.Location = new System.Drawing.Point(632, 419);
             this.textCash.Name = "textCash";
             this.textCash.PlaceholderText = "00";
             this.textCash.Size = new System.Drawing.Size(55, 25);
@@ -966,7 +966,7 @@
             // picCash
             // 
             this.picCash.Image = global::RaidCrawler.Properties.Resources.money;
-            this.picCash.Location = new System.Drawing.Point(580, 400);
+            this.picCash.Location = new System.Drawing.Point(575, 400);
             this.picCash.Name = "picCash";
             this.picCash.Size = new System.Drawing.Size(48, 48);
             this.picCash.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -977,7 +977,7 @@
             // 
             this.labelMaterials.AutoSize = true;
             this.labelMaterials.ForeColor = System.Drawing.Color.Silver;
-            this.labelMaterials.Location = new System.Drawing.Point(877, 402);
+            this.labelMaterials.Location = new System.Drawing.Point(889, 401);
             this.labelMaterials.Name = "labelMaterials";
             this.labelMaterials.Size = new System.Drawing.Size(55, 15);
             this.labelMaterials.TabIndex = 174;
@@ -990,7 +990,7 @@
             this.textMaterials.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textMaterials.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.textMaterials.ForeColor = System.Drawing.Color.White;
-            this.textMaterials.Location = new System.Drawing.Point(890, 419);
+            this.textMaterials.Location = new System.Drawing.Point(900, 419);
             this.textMaterials.Name = "textMaterials";
             this.textMaterials.PlaceholderText = "00";
             this.textMaterials.Size = new System.Drawing.Size(30, 25);
@@ -1001,9 +1001,9 @@
             // 
             this.labelXP.AutoSize = true;
             this.labelXP.ForeColor = System.Drawing.Color.Silver;
-            this.labelXP.Location = new System.Drawing.Point(777, 404);
+            this.labelXP.Location = new System.Drawing.Point(754, 404);
             this.labelXP.Name = "labelXP";
-            this.labelXP.Size = new System.Drawing.Size(21, 15);
+            this.labelXP.Size = new System.Drawing.Size(71, 15);
             this.labelXP.TabIndex = 172;
             this.labelXP.Text = "XP";
             this.labelXP.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -1014,17 +1014,17 @@
             this.textXP.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textXP.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.textXP.ForeColor = System.Drawing.Color.White;
-            this.textXP.Location = new System.Drawing.Point(762, 419);
+            this.textXP.Location = new System.Drawing.Point(754, 419);
             this.textXP.Name = "textXP";
             this.textXP.PlaceholderText = "00";
-            this.textXP.Size = new System.Drawing.Size(49, 25);
+            this.textXP.Size = new System.Drawing.Size(67, 25);
             this.textXP.TabIndex = 171;
             this.textXP.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // picMaterials
             // 
             this.picMaterials.Image = global::RaidCrawler.Properties.Resources.item_1956;
-            this.picMaterials.Location = new System.Drawing.Point(826, 400);
+            this.picMaterials.Location = new System.Drawing.Point(835, 400);
             this.picMaterials.Name = "picMaterials";
             this.picMaterials.Size = new System.Drawing.Size(48, 48);
             this.picMaterials.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
