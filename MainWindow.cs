@@ -48,8 +48,8 @@ namespace RaidCrawler
 
         private Color DefaultColor;
         private FormWindowState _WindowState;
-        private Stopwatch stopwatch = new Stopwatch();
-        private TeraRaidView teraRaidView;
+        private readonly Stopwatch stopwatch = new();
+        private readonly TeraRaidView teraRaidView;
 
         public MainWindow()
         {
@@ -246,7 +246,7 @@ namespace RaidCrawler
             var header_ofs = await OffsetUtil.GetPointerAddress($"[{SaveBlockPointer}+{offset + 8:X}]", token);
             var header = await SwitchConnection.ReadBytesAbsoluteAsync(header_ofs, 5, token);
             header = DecryptBlock(key, header);
-            var size = ReadUInt32LittleEndian(header[1..]);
+            var size = ReadUInt32LittleEndian(header.AsSpan()[1..]);
             var obj = await SwitchConnection.ReadBytesAbsoluteAsync(header_ofs, 5 + (int)size, token);
             return DecryptBlock(key, obj)[5..];
         }
@@ -363,7 +363,7 @@ namespace RaidCrawler
                     Ability.Text = $"{Raid.strings.Ability[blank.Ability]}";
                     var extra_moves = new ushort[] { 0, 0, 0, 0 };
                     for (int i = 0; i < encounter.ExtraMoves.Length; i++)
-                        if (i < extra_moves.Count()) extra_moves[i] = encounter.ExtraMoves[i];
+                        if (i < extra_moves.Length) extra_moves[i] = encounter.ExtraMoves[i];
                     Move1.Text = ShowExtraMoves ? Raid.strings.Move[extra_moves[0]] : Raid.strings.Move[encounter.Move1];
                     Move2.Text = ShowExtraMoves ? Raid.strings.Move[extra_moves[1]] : Raid.strings.Move[encounter.Move2];
                     Move3.Text = ShowExtraMoves ? Raid.strings.Move[extra_moves[2]] : Raid.strings.Move[encounter.Move3];
@@ -438,9 +438,7 @@ namespace RaidCrawler
                 teraRaidView.Area.Text = $"{Areas.Area[raid.Area - 1]} - Den {raid.Den}";
 
                 var teratype = Raid.GetTeraType(encounter, raid);
-                var tempTeraType = teratype + 1;
-                teraRaidView.TeraType.Image = (Bitmap)Properties.Resources.ResourceManager.GetObject("gem_text_" + teratype);
-                // IsEvent.Checked = raid.IsEvent;
+                teraRaidView.TeraType.Image = (Bitmap)Properties.Resources.ResourceManager.GetObject("gem_text_" + teratype)!;
 
                 int StarCount = encounter is TeraDistribution ? encounter.Stars : Raid.GetStarCount(raid.Difficulty, Config.Progress, raid.IsBlack);
                 teraRaidView.Difficulty.Text = string.Concat(Enumerable.Repeat("⭐", StarCount));
@@ -474,7 +472,7 @@ namespace RaidCrawler
 
                     var extra_moves = new ushort[] { 0, 0, 0, 0 };
                     for (int i = 0; i < encounter.ExtraMoves.Length; i++)
-                        if (i < extra_moves.Count()) extra_moves[i] = encounter.ExtraMoves[i];
+                        if (i < extra_moves.Length) extra_moves[i] = encounter.ExtraMoves[i];
                     teraRaidView.Moveset5.Text = (encounter.ExtraMoves.Length > 0) ? Raid.strings.Move[extra_moves[0]] : "---";
                     teraRaidView.Moveset6.Text = (encounter.ExtraMoves.Length > 1) ? Raid.strings.Move[extra_moves[1]] : "---";
                     teraRaidView.Moveset7.Text = (encounter.ExtraMoves.Length > 2) ? Raid.strings.Move[extra_moves[2]] : "---";
@@ -598,7 +596,7 @@ namespace RaidCrawler
                     teraRaidView.textSpicyHerba.ForeColor = Color.DimGray;
                     teraRaidView.labelSpicyHerba.ForeColor = Color.DimGray;
 
-                    for (int i = 0; i < rewards.Count; i++)
+                    for (int i = 0; i < rewards!.Count; i++)
                     {
                         if (rewards[i].Item1 == 645)
                         {
@@ -649,8 +647,8 @@ namespace RaidCrawler
                             teraRaidView.labelSpicyHerba.ForeColor = Color.WhiteSmoke;
                         }
                     }
-                    teraRaidView.Shiny.Visible = Raid.CheckIsShiny(raid, encounter) ? true : false;
-                    teraRaidView.picShinyAlert.Enabled = Raid.CheckIsShiny(raid, encounter) ? true : false;
+                    teraRaidView.Shiny.Visible = Raid.CheckIsShiny(raid, encounter);
+                    teraRaidView.picShinyAlert.Enabled = Raid.CheckIsShiny(raid, encounter);
                 }
                 else
                 {
@@ -746,9 +744,9 @@ namespace RaidCrawler
                 var x = (den_locations[$"{raid.Area}-{raid.Den}"][0] + 2.072021484) * 512 / 5000;
                 var y = (den_locations[$"{raid.Area}-{raid.Den}"][2] + 5255.240018) * 512 / 5000;
                 var mapimg = ImageUtil.LayerImage(map, gem, (int)x, (int)y);
-                if (den_locations.ContainsKey($"{raid.Area}-{raid.Den}_"))
+                if (den_locations.TryGetValue($"{raid.Area}-{raid.Den}_", out float[]? value))
                 {
-                    x = (den_locations[$"{raid.Area}-{raid.Den}_"][0] + 2.072021484) * 512 / 5000;
+                    x = (value[0] + 2.072021484) * 512 / 5000;
                     x = (den_locations[$"{raid.Area}-{raid.Den}_"][0] + 2.072021484) * 512 / 5000;
                     mapimg = ImageUtil.LayerImage(mapimg, gem, (int)x, (int)y);
                 }
@@ -935,7 +933,7 @@ namespace RaidCrawler
                             NotificationHandler.SendNotifications(Config, Encounters[i], Raids[i], satisfied_filters, time, RewardsList[i]);
                     }
                     if (Config.EnableAlertWindow) MessageBox.Show(Config.AlertWindowMessage + "\n\nTime Spent: " + time, "Result found!", MessageBoxButtons.OK);
-                    RaidCrawler.MainWindow.ActiveForm.Text = formTitle + " [Match Found in " + time + "]";
+                    Text = formTitle + " [Match Found in " + time + "]";
                 }
 
                 ButtonReadRaids.Enabled = true;
@@ -1193,7 +1191,7 @@ namespace RaidCrawler
             LabelMoves.Location = ShowExtraMoves ? ShowExtra : Default;
             var extra_moves = new ushort[] { 0, 0, 0, 0 };
             for (int i = 0; i < encounter.ExtraMoves.Length; i++)
-                if (i < extra_moves.Count()) extra_moves[i] = encounter.ExtraMoves[i];
+                if (i < extra_moves.Length) extra_moves[i] = encounter.ExtraMoves[i];
             Move1.Text = ShowExtraMoves ? Raid.strings.Move[extra_moves[0]] : Raid.strings.Move[encounter.Move1];
             Move2.Text = ShowExtraMoves ? Raid.strings.Move[extra_moves[1]] : Raid.strings.Move[encounter.Move2];
             Move3.Text = ShowExtraMoves ? Raid.strings.Move[extra_moves[2]] : Raid.strings.Move[encounter.Move3];
@@ -1244,10 +1242,8 @@ namespace RaidCrawler
 
         public void TestWebhook()
         {
-            var filter = new RaidFilter();
-            filter.Name = "Test Webhook";
-            var satisfied_filters = new List<RaidFilter>();
-            satisfied_filters.Add(filter);
+            var filter = new RaidFilter { Name = "Test Webhook" };
+            var satisfied_filters = new List<RaidFilter> { filter };
 
             int i = ComboIndex.SelectedIndex;
             if (i > -1 && Encounters[i] != null && Raids[i] != null)

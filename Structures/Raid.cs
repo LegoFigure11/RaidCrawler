@@ -172,8 +172,8 @@ namespace RaidCrawler.Structures
         {
             var gender = GetGender(encounter);
             if (encounter is TeraDistribution td && td.Entity is EncounterMight9 em)
-                return new GenerateParam9(gender, em.FlawlessIVCount, 1, 0, 0, em.Scale, em.Ability, em.Shiny, em.Nature, em.IVs);
-            return new GenerateParam9(gender, encounter.FlawlessIVCount, 1, 0, 0, 0, encounter.Ability, encounter.Shiny);
+                return new GenerateParam9(em.Species, gender, em.FlawlessIVCount, 1, 0, 0, em.Scale, em.Ability, em.Shiny, em.Nature, em.IVs);
+            return new GenerateParam9(encounter.Species, gender, encounter.FlawlessIVCount, 1, 0, 0, 0, encounter.Ability, encounter.Shiny);
         }
 
         private static byte GetGender(ITeraRaid enc)

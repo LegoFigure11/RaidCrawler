@@ -13,13 +13,12 @@ namespace RaidCrawler.Structures
         {
             get
             {
-                if (_client == null)
-                    _client = new HttpClient();
+                _client ??= new HttpClient();
                 return _client;
             }
         }
 
-        public static string[]? DiscordWebhooks;
+        private static string[]? DiscordWebhooks;
 
         public static void SendNotifications(Config c, ITeraRaid? encounter, Raid raid, IEnumerable<RaidFilter> filters, String time, List<(int, int, int)>? RewardsList)
         {
@@ -54,7 +53,7 @@ namespace RaidCrawler.Structures
                 Client.PostAsync(url.Trim(), content).Wait();
         }
 
-        public static object GenerateWebhook(Config c, ITeraRaid encounter, Raid raid, IEnumerable<RaidFilter> filters, String time, List<(int, int, int)>? RewardsList)
+        public static object GenerateWebhook(Config c, ITeraRaid encounter, Raid raid, IEnumerable<RaidFilter> filters, string time, List<(int, int, int)>? RewardsList)
         {
             var param = Raid.GetParam(encounter);
             var blank = new PK9
@@ -77,7 +76,7 @@ namespace RaidCrawler.Structures
             var tera = $"{Raid.strings.types[teratype]}";
             var teraemoji = TeraEmoji(c, $"{Raid.strings.types[teratype]}", emoji);
             var ivs = IVsStringEmoji(c, ToSpeedLast(blank.IVs), c.IVsStyle, c.IVsSpacer, c.VerboseIVs, emoji);
-            var sprite_name = SpriteName.GetResourceStringSprite(blank.Species, blank.Form, blank.Gender, blank.FormArgument, blank.Generation, Raid.CheckIsShiny(raid, encounter));
+            var sprite_name = SpriteName.GetResourceStringSprite(blank.Species, blank.Form, blank.Gender, blank.FormArgument, EntityContext.Gen9, Raid.CheckIsShiny(raid, encounter));
             var moves = new ushort[4] { encounter.Move1, encounter.Move2, encounter.Move3, encounter.Move4 };
             var movestr = string.Concat(moves.Where(z => z != 0).Select(z => $"{Raid.strings.Move[z]}ㅤ\n")).Trim();
             var extramoves = string.Concat(encounter.ExtraMoves.Where(z => z != 0).Select(z => $"{Raid.strings.Move[z]}ㅤ\n")).Trim();
@@ -156,7 +155,7 @@ namespace RaidCrawler.Structures
             int bitterherba = 0;
             int spicyherba = 0;
 
-            for (int i = 0; i < rewards.Count; i++)
+            for (int i = 0; i < rewards!.Count; i++)
             {
                 switch (rewards[i].Item1)
                 {

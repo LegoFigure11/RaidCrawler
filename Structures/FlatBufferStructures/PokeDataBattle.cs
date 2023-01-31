@@ -68,7 +68,7 @@ public class PokeDataBattle
         if (BallId != 0)
             throw new ArgumentOutOfRangeException($"No {BallId} allowed!");
 
-        bw.Write(DevId);
+        bw.Write(SpeciesConverterSV.GetNational9(DevId));
         bw.Write((byte)FormId);
         bw.Write((byte)Sex);
 

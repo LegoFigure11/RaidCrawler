@@ -94,11 +94,13 @@ namespace RaidCrawler.Structures
         {
             if (Square == false)
                 return true;
-            var pi = PersonalTable.SV.GetFormEntry(encounter.Species, encounter.Form);
+            _ = PersonalTable.SV.GetFormEntry(encounter!.Species, encounter.Form);
             var param = Raid.GetParam(encounter);
-            var blank = new PK9();
-            blank.Species = encounter.Species;
-            blank.Form = encounter.Form;
+            PK9 blank = new()
+            {
+                Species = encounter.Species,
+                Form = encounter.Form
+            };
             Encounter9RNG.GenerateData(blank, param, EncounterCriteria.Unrestricted, raid.Seed);
             return (Raid.CheckIsShiny(raid, encounter) && ShinyExtensions.IsSquareShinyExist(blank)) == true;
         }
@@ -116,11 +118,13 @@ namespace RaidCrawler.Structures
                 return true;
             if (encounter == null)
                 return false;
-            var pi = PersonalTable.SV.GetFormEntry(encounter.Species, encounter.Form);
+            _ = PersonalTable.SV.GetFormEntry(encounter.Species, encounter.Form);
             var param = Raid.GetParam(encounter);
-            var blank = new PK9();
-            blank.Species = encounter.Species;
-            blank.Form = encounter.Form;
+            PK9 blank = new()
+            {
+                Species = encounter.Species,
+                Form = encounter.Form
+            };
             Encounter9RNG.GenerateData(blank, param, EncounterCriteria.Unrestricted, raid.Seed);
             return blank.Nature == (int)Nature;
         }
@@ -175,9 +179,11 @@ namespace RaidCrawler.Structures
             if (encounter.Gender <= 2 && encounter.Gender == Gender)
                 return true;
             var param = Raid.GetParam(encounter);
-            var blank = new PK9();
-            blank.Species = encounter.Species;
-            blank.Form = encounter.Form;
+            PK9 blank = new()
+            {
+                Species = encounter.Species,
+                Form = encounter.Form
+            };
             Encounter9RNG.GenerateData(blank, param, EncounterCriteria.Unrestricted, raid.Seed);
             return blank.Gender == Gender;
         }
@@ -188,14 +194,16 @@ namespace RaidCrawler.Structures
                 return true;
             if (encounter == null)
                 return false;
-            var filters = StringInstruction.GetFilters(BatchFilters);
-            if (filters.Count() == 0)
+            var filters = StringInstruction.GetFilters(BatchFilters.AsSpan());
+            if (filters.Count == 0)
                 return true;
             BatchEditing.ScreenStrings(filters);
             var param = Raid.GetParam(encounter);
-            var blank = new PK9();
-            blank.Species = encounter.Species;
-            blank.Form = encounter.Form;
+            PK9 blank = new()
+            {
+                Species = encounter.Species,
+                Form = encounter.Form
+            };
             Encounter9RNG.GenerateData(blank, param, EncounterCriteria.Unrestricted, raid.Seed);
             return BatchEditing.IsFilterMatch(filters, blank);
         }
