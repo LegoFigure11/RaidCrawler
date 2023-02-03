@@ -27,6 +27,23 @@ namespace RaidCrawler.Structures
         public byte RandRate => Entity is ITeraRaid9 t9 ? t9.RandRate : (byte)0;
         ushort[] ITeraRaid.ExtraMoves => ExtraMoves;
 
+        public static bool AvailableInGame(EncounterStatic enc, string game)
+        {
+            if (enc is EncounterDist9 encd)
+            {
+                if (game == "Scarlet") return encd.RandRate0TotalScarlet + encd.RandRate1TotalScarlet + encd.RandRate2TotalScarlet + encd.RandRate3TotalScarlet != 0;
+                else if (game == "Violet") return encd.RandRate0TotalViolet + encd.RandRate1TotalViolet + encd.RandRate2TotalViolet + encd.RandRate3TotalViolet != 0;
+                return false;
+            }
+            else if (enc is EncounterMight9 encm)
+            {
+                if (game == "Scarlet") return encm.RandRate0TotalScarlet + encm.RandRate1TotalScarlet + encm.RandRate2TotalScarlet + encm.RandRate3TotalScarlet != 0;
+                else if (game == "Violet") return encm.RandRate0TotalViolet + encm.RandRate1TotalViolet + encm.RandRate2TotalViolet + encm.RandRate3TotalViolet != 0;
+                return false;
+            }
+            return false;
+        }
+
         public TeraDistribution(EncounterStatic enc, ulong fixedrewards, ulong lotteryrewards, ushort[] extras, sbyte group)
         {
             Entity = enc;
@@ -125,13 +142,15 @@ namespace RaidCrawler.Structures
             return Rewards.ReorderRewards(result);
         }
 
-        public static int GetDeliveryGroupID(int eventct, DeliveryGroupID ids)
+        public static int GetDeliveryGroupID(int eventct, DeliveryGroupID ids, HashSet<int> possible_groups)
         {
             int[] cts = new int[10] { ids.GroupID01, ids.GroupID02, ids.GroupID03, ids.GroupID04, ids.GroupID05,
                                       ids.GroupID06, ids.GroupID07, ids.GroupID08, ids.GroupID09, ids.GroupID10 };
             for (int i = 0; i < cts.Length; i++)
             {
                 var ct = cts[i];
+                if (!possible_groups.Contains(i + 1))
+                    continue;
                 if (eventct < ct)
                     return i + 1;
                 eventct -= ct;
