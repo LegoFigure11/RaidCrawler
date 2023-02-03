@@ -43,4 +43,4 @@ jobs:
       with:
         name: RaidCrawler
         path: |
-          ./bin/Debug/net6.0-windows
+          ./bin/Debug/net7.0-windows
