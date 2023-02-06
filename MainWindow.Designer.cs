@@ -85,6 +85,7 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             ((System.ComponentModel.ISupportInitialize)(this.Sprite)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GemIcon)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -169,7 +170,7 @@
             this.LabelLoadedRaids.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.LabelLoadedRaids.Location = new System.Drawing.Point(12, 103);
             this.LabelLoadedRaids.Name = "LabelLoadedRaids";
-            this.LabelLoadedRaids.Size = new System.Drawing.Size(50, 15);
+            this.LabelLoadedRaids.Size = new System.Drawing.Size(67, 15);
             this.LabelLoadedRaids.TabIndex = 12;
             this.LabelLoadedRaids.Text = "Matches: 0";
             // 
@@ -643,7 +644,8 @@
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatus});
+            this.toolStripStatus,
+            this.toolStripStatusLabel1});
             this.statusStrip1.Location = new System.Drawing.Point(0, 335);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(580, 22);
@@ -654,8 +656,14 @@
             // toolStripStatus
             // 
             this.toolStripStatus.Name = "toolStripStatus";
-            this.toolStripStatus.Size = new System.Drawing.Size(39, 17);
-            this.toolStripStatus.Text = "Status";
+            this.toolStripStatus.Size = new System.Drawing.Size(42, 17);
+            this.toolStripStatus.Text = "Status:";
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(118, 17);
+            this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
             // 
             // MainWindow
             // 
@@ -781,5 +789,6 @@
         private GroupBox groupBox1;
         private StatusStrip statusStrip1;
         private ToolStripStatusLabel toolStripStatus;
+        private ToolStripStatusLabel toolStripStatusLabel1;
     }
 }

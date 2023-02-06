@@ -193,12 +193,12 @@ namespace RaidCrawler.Structures
                 switch (style)
                 {
                     case 0:
-                        switch (ivs[i])
+                        s += ivs[i] switch
                         {
-                            case 0: s += (emoji) ? $"{iv0[i]:D2}{(verbose ? " " + stats[i] : string.Empty)}" : $"`{"✓":D2}`{(verbose ? " " + stats[i] : string.Empty)}"; break;
-                            case 31: s += (emoji) ? $"{iv31[i]:D2}{(verbose ? " " + stats[i] : string.Empty)}" : $"`{"✓":D2}`{(verbose ? " " + stats[i] : string.Empty)}"; break;
-                            default: s += $"`{ivs[i]:D2}`{(verbose ? " " + stats[i] : string.Empty)}"; break;
-                        }
+                            0 => (emoji) ? $"{iv0[i]:D2}{(verbose ? " " + stats[i] : string.Empty)}" : $"`{"✓":D2}`{(verbose ? " " + stats[i] : string.Empty)}",
+                            31 => (emoji) ? $"{iv31[i]:D2}{(verbose ? " " + stats[i] : string.Empty)}" : $"`{"✓":D2}`{(verbose ? " " + stats[i] : string.Empty)}",
+                            _ => $"`{ivs[i]:D2}`{(verbose ? " " + stats[i] : string.Empty)}",
+                        };
                         if (i < 5)
                             s += spacer.Replace("\"", "");
                         break;

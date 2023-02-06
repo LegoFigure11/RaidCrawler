@@ -1003,11 +1003,14 @@ namespace RaidCrawler
             var Data = await SwitchConnection.ReadBytesAbsoluteAsync(offset + RaidBlock.HEADER_SIZE, (int)(RaidBlock.SIZE - RaidBlock.HEADER_SIZE), token);
             Raid raid;
             var count = Data.Length / Raid.SIZE;
-            HashSet<int> possible_groups = new HashSet<int>();
-            foreach (TeraDistribution e in Raid.DistTeraRaids)
+            HashSet<int> possible_groups = new();
+            if (Raid.DistTeraRaids is not null)
             {
-                if (TeraDistribution.AvailableInGame(e.Entity, Config.Game))
-                    possible_groups.Add(e.DeliveryGroupID);
+                foreach (TeraDistribution e in Raid.DistTeraRaids)
+                {
+                    if (TeraDistribution.AvailableInGame(e.Entity, Config.Game))
+                        possible_groups.Add(e.DeliveryGroupID);
+                }
             }
             var eventct = 0;
             for (int i = 0; i < count; i++)

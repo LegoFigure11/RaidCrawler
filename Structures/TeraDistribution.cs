@@ -78,7 +78,7 @@ namespace RaidCrawler.Structures
             var count = rewards.Length / 0x10;
             var result = new (ulong, ulong)[count];
             for (int i = 0; i < result.Length; i++)
-                result[i] = (ReadUInt64LittleEndian(rewards[(0x10 * i)..]), ReadUInt64LittleEndian(rewards[(0x10 * i + 0x8)..]));
+                result[i] = (ReadUInt64LittleEndian(rewards.AsSpan()[(0x10 * i)..]), ReadUInt64LittleEndian(rewards.AsSpan()[(0x10 * i + 0x8)..]));
             return result;
         }
 
@@ -86,7 +86,7 @@ namespace RaidCrawler.Structures
         {
             var result = new ushort[6];
             for (int i = 0; i < result.Length; i++)
-                result[i] = ReadUInt16LittleEndian(extra[(0x2 * i)..]);
+                result[i] = ReadUInt16LittleEndian(extra.AsSpan()[(0x2 * i)..]);
             return result;
         }
 
@@ -121,7 +121,7 @@ namespace RaidCrawler.Structures
             for (int i = 0; i < DeliveryRaidLotteryRewardItem.RewardItemCount; i++)
                 total += lottery_table.GetRewardItem(i).Rate;
             var rand = new Xoroshiro128Plus(seed);
-            var count = (int)rand.NextInt(100); // sandwich = extra rolls? how does this work? is this even 100?
+            var count = (int)rand.NextInt(100);
             count = Rewards.GetRewardCount(count, enc.Stars) + boost;
             for (int i = 0; i < count; i++)
             {
@@ -162,6 +162,7 @@ namespace RaidCrawler.Structures
         {
             if (stage < 0)
                 return null;
+            if (Raid.DistTeraRaids is null) return null;
             if (!isFixed)
             {
                 foreach (TeraDistribution enc in Raid.DistTeraRaids)
