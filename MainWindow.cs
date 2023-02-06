@@ -1004,10 +1004,13 @@ namespace RaidCrawler
             Raid raid;
             var count = Data.Length / Raid.SIZE;
             HashSet<int> possible_groups = new HashSet<int>();
-            foreach (TeraDistribution e in Raid.DistTeraRaids)
+            if (Raid.DistTeraRaids != null)
             {
-                if (TeraDistribution.AvailableInGame(e.Entity, Config.Game))
-                    possible_groups.Add(e.DeliveryGroupID);
+                foreach (TeraDistribution e in Raid.DistTeraRaids)
+                {
+                    if (TeraDistribution.AvailableInGame(e.Entity, Config.Game))
+                        possible_groups.Add(e.DeliveryGroupID);
+                }
             }
             var eventct = 0;
             for (int i = 0; i < count; i++)
