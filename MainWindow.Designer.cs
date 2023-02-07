@@ -84,8 +84,8 @@
             this.btnOpenMap = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.toolStripStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.StatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.ToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             ((System.ComponentModel.ISupportInitialize)(this.Sprite)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GemIcon)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -644,8 +644,8 @@
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatus,
-            this.toolStripStatusLabel1});
+            this.StatusLabel,
+            this.ToolStripStatusLabel});
             this.statusStrip1.Location = new System.Drawing.Point(0, 335);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(580, 22);
@@ -653,17 +653,17 @@
             this.statusStrip1.TabIndex = 126;
             this.statusStrip1.Text = "statusStrip1";
             // 
-            // toolStripStatus
+            // StatusLabel
             // 
-            this.toolStripStatus.Name = "toolStripStatus";
-            this.toolStripStatus.Size = new System.Drawing.Size(42, 17);
-            this.toolStripStatus.Text = "Status:";
+            this.StatusLabel.Name = "StatusLabel";
+            this.StatusLabel.Size = new System.Drawing.Size(42, 17);
+            this.StatusLabel.Text = "Status:";
             // 
-            // toolStripStatusLabel1
+            // ToolStripStatusLabel
             // 
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(118, 17);
-            this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
+            this.ToolStripStatusLabel.Name = "ToolStripStatusLabel";
+            this.ToolStripStatusLabel.Size = new System.Drawing.Size(89, 17);
+            this.ToolStripStatusLabel.Text = "Not connected.";
             // 
             // MainWindow
             // 
@@ -788,7 +788,7 @@
         private Button btnOpenMap;
         private GroupBox groupBox1;
         private StatusStrip statusStrip1;
-        private ToolStripStatusLabel toolStripStatus;
-        private ToolStripStatusLabel toolStripStatusLabel1;
+        private ToolStripStatusLabel StatusLabel;
+        private ToolStripStatusLabel ToolStripStatusLabel;
     }
 }
