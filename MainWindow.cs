@@ -1001,7 +1001,7 @@ namespace RaidCrawler
             Raid raid;
             var count = Data.Length / Raid.SIZE;
             HashSet<int> possible_groups = new();
-            if (Raid.DistTeraRaids is not null)
+            if (Raid.DistTeraRaids != null)
             {
                 foreach (TeraDistribution e in Raid.DistTeraRaids)
                 {
