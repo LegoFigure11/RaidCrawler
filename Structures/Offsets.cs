@@ -8,7 +8,7 @@ namespace RaidCrawler.Structures
         public const string ScarletID = "0100A3D008C5C000";
         public const string VioletID = "01008F6008C5E000";
 
-        public const string RaidBlockPointer = "[[main+4384B18]+180]+40";
+        public const string RaidBlockPointer = "[[main+44A98C8]+180]+40";
         public const string SaveBlockPointer = "[[[[main+44AAC88]+E0]+80]+08]"; // Thanks Lincoln-LM!
         public static (int, uint)[] DifficultyFlags = { (0x2C1A0, 0xEC95D8EF), (0x1F5E0, 0xA9428DFE), (0x1B800, 0x9535F471), (0x14040, 0x6E7F8220) };
         public static (int, uint) BCATRaidBinaryLocation = (0x1040, 0x520A1B0); // Thanks Lincoln-LM!
