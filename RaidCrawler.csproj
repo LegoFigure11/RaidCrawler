@@ -188,7 +188,7 @@
     <PackageReference Include="FlatSharp" Version="6.3.5" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <PackageReference Include="NLog" Version="5.1.1" />
-    <PackageReference Include="PKHeX.Core" Version="23.1.30" />
+    <PackageReference Include="PKHeX.Core" Version="23.2.27" />
     <PackageReference Include="GitVersion.MsBuild" Version="5.12.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
