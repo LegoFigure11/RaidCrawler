@@ -190,6 +190,8 @@ namespace RaidCrawler.Structures
                 bw.Write(noTotal || enc.RomVer == RaidRomType.TYPE_B ? (ushort)0 : totalS[stage]);
                 bw.Write(noTotal || enc.RomVer == RaidRomType.TYPE_A ? (ushort)0 : totalV[stage]);
             }
+            if (format == RaidSerializationFormat.Type2)
+                enc.SerializeType2(bw);
             if (format == RaidSerializationFormat.Type3)
                 enc.SerializeType3(bw);
 
