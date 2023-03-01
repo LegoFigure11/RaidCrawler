@@ -8,13 +8,13 @@ namespace RaidCrawler.Structures
         public const string ScarletID = "0100A3D008C5C000";
         public const string VioletID = "01008F6008C5E000";
 
-        public const string RaidBlockPointer = "[[main+4384B18]+180]+40";
-        public const string SaveBlockPointer = "[[[main+4385F30]+80]+8]"; // Thanks Lincoln-LM!
-        public static (int, uint)[] DifficultyFlags = { (0x2BF20, 0xEC95D8EF), (0x1F400, 0xA9428DFE), (0x1B640, 0x9535F471), (0x13EC0, 0x6E7F8220) }; // Thanks Lincoln-LM!
+        public const string RaidBlockPointer = "[[main+44A98C8]+180]+40";
+        public const string SaveBlockPointer = "[[[[main+44AAC88]+E0]+80]+08]"; // Thanks Lincoln-LM!
+        public static (int, uint)[] DifficultyFlags = { (0x2C1A0, 0xEC95D8EF), (0x1F5E0, 0xA9428DFE), (0x1B800, 0x9535F471), (0x14040, 0x6E7F8220) };
         public static (int, uint) BCATRaidBinaryLocation = (0x1040, 0x520A1B0); // Thanks Lincoln-LM!
         public static (int, uint) BCATRaidPriorityLocation = (0x1860, 0x95451E4); // Thanks Lincoln-LM!
-        public static (int, uint) BCATRaidFixedRewardLocation = (0x16D40, 0x7D6C2B82);
-        public static (int, uint) BCATRaidLotteryRewardLocation = (0x1E6A0, 0xA52B4811);
+        public static (int, uint) BCATRaidFixedRewardLocation = (0x16EC0, 0x7D6C2B82);
+        public static (int, uint) BCATRaidLotteryRewardLocation = (0x1E880, 0xA52B4811);
     }
 
     internal class OffsetUtil
