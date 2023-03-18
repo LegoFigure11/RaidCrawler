@@ -227,24 +227,24 @@ namespace RaidCrawler
             for (int i = DifficultyFlags.Length - 1; i >= 0 && progress == 0; i--)
             {
                 // See https://github.com/Lincoln-LM/sv-live-map/pull/43
-                var block = await ReadSaveBlock(DifficultyFlags[i].Item1, 1, DifficultyFlags[i].Item2, token);
+                var block = await ReadSaveBlock(DifficultyFlags[i], 1, token);
                 if (block[0] == 2) return i + 1;
             }
             return progress;
         }
 
-        public static async Task<byte[]> ReadSaveBlock(int offset, int size, uint key, CancellationToken token)
+        public static async Task<byte[]> ReadSaveBlock(uint key, int size, CancellationToken token)
         {
-            (offset, key) = await SearchSaveBlock(offset, key, token);
-            var block_ofs = await OffsetUtil.GetPointerAddress($"[{SaveBlockPointer}+{offset + 8:X}]", token);
+            var block_ofs = await SearchSaveKey(key, token).ConfigureAwait(false);
+            block_ofs = BitConverter.ToUInt64(await SwitchConnection.ReadBytesAbsoluteAsync(block_ofs + 8, 0x8, token).ConfigureAwait(false), 0);
             var block = await SwitchConnection.ReadBytesAbsoluteAsync(block_ofs, size, token);
             return DecryptBlock(key, block);
         }
 
-        public static async Task<byte[]> ReadSaveBlockObject(int offset, uint key, CancellationToken token)
+        public static async Task<byte[]> ReadSaveBlockObject(uint key, CancellationToken token)
         {
-            (offset, key) = await SearchSaveBlock(offset, key, token);
-            var header_ofs = await OffsetUtil.GetPointerAddress($"[{SaveBlockPointer}+{offset + 8:X}]", token);
+            var header_ofs = await SearchSaveKey(key, token).ConfigureAwait(false);
+            header_ofs = BitConverter.ToUInt64(await SwitchConnection.ReadBytesAbsoluteAsync(header_ofs + 8, 0x8, token).ConfigureAwait(false), 0);
             var header = await SwitchConnection.ReadBytesAbsoluteAsync(header_ofs, 5, token);
             header = DecryptBlock(key, header);
             var size = ReadUInt32LittleEndian(header.AsSpan()[1..]);
@@ -252,13 +252,13 @@ namespace RaidCrawler
             return DecryptBlock(key, obj)[5..];
         }
 
-        public static async Task<byte[]> ReadBlockDefault((int, uint) offsets, string? cache = null, bool force = false)
+        public static async Task<byte[]> ReadBlockDefault(uint key, string? cache = null, bool force = false)
         {
             var folder = Path.Combine(Directory.GetCurrentDirectory(), "cache");
             Directory.CreateDirectory(folder);
             if (force == false && cache != null && File.Exists(Path.Combine(folder, cache)))
                 return File.ReadAllBytes(Path.Combine(folder, cache));
-            var bin = await ReadSaveBlockObject(offsets.Item1, offsets.Item2, CancellationToken.None);
+            var bin = await ReadSaveBlockObject(key, CancellationToken.None);
             if (cache != null)
                 File.WriteAllBytes(Path.Combine(folder, cache), bin);
             return bin;
@@ -311,6 +311,27 @@ namespace RaidCrawler
                     return (offset, read_key);
             }
             throw new ArgumentOutOfRangeException("Save block not found in range +- 0x1000");
+        }
+
+        public static async Task<ulong> SearchSaveKey(uint key, CancellationToken token)
+        {
+            var ptr = await OffsetUtil.GetPointerAddress(BlockKeyPointers, token);
+            var start = ReadUInt64LittleEndian(await SwitchConnection.ReadBytesAbsoluteAsync(ptr + 8, 8, token));
+            var end = ReadUInt64LittleEndian(await SwitchConnection.ReadBytesAbsoluteAsync(ptr + 16, 8, token));
+
+            while (start < end)
+            {
+                var block_ct = (end - start) / 32;
+                var mid = start + (block_ct >> 1) * 32;
+                var found = ReadUInt32LittleEndian(await SwitchConnection.ReadBytesAbsoluteAsync(mid, 4, token));
+                if (found == key)
+                    return mid;
+                if (found >= key)
+                    end = mid;
+                else
+                    start = (mid + 32);
+            }
+            return start;
         }
 
         private static byte[] DecryptBlock(uint key, byte[] block)
