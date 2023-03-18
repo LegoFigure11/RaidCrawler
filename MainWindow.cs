@@ -294,25 +294,6 @@ namespace RaidCrawler
             Raid.DeliveryRaidLotteryRewards = FlatbufferDumper.DumpLotteryRewards(delivery_lottery_rewards);
         }
 
-        public static async Task<(int, uint)> SearchSaveBlock(int base_offset, uint? key, CancellationToken token)
-        {
-            var key_addr = await OffsetUtil.GetPointerAddress($"{SaveBlockPointer}+{base_offset:X}", token);
-            var read_key = ReadUInt32LittleEndian(await SwitchConnection.ReadBytesAbsoluteAsync(key_addr, 4, token));
-            if (key == null)
-                return (base_offset, read_key);
-            if (read_key == key)
-                return (base_offset, read_key);
-            var direction = key > read_key ? 1 : -1;
-            for (int offset = base_offset; offset < base_offset + 0x1000 && offset > base_offset - 0x1000; offset += direction * 0x20)
-            {
-                key_addr = await OffsetUtil.GetPointerAddress($"{SaveBlockPointer}+{offset:X}", token);
-                read_key = ReadUInt32LittleEndian(await SwitchConnection.ReadBytesAbsoluteAsync(key_addr, 4, token));
-                if (read_key == key)
-                    return (offset, read_key);
-            }
-            throw new ArgumentOutOfRangeException("Save block not found in range +- 0x1000");
-        }
-
         public static async Task<ulong> SearchSaveKey(uint key, CancellationToken token)
         {
             var ptr = await OffsetUtil.GetPointerAddress(BlockKeyPointers, token);
