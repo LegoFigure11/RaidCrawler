@@ -33,12 +33,14 @@ namespace RaidCrawler.Structures
                 Client.PostAsync(url.Trim(), content).Wait();
         }
 
-        public static void SendScreenshot(Config c, SwitchSocketAsync nx)
+        public static async Task SendScreenshot(Config c, ISwitchConnectionAsync nx, CancellationToken token)
         {
             DiscordWebhooks = c.EnableNotification ? c.DiscordWebhook.Split(',') : null;
-            if (DiscordWebhooks == null)
+            if (DiscordWebhooks is null)
                 return;
-            var screenshot = SysBot.Base.Decoder.ConvertHexByteStringToBytes(nx.PixelPeek(new CancellationToken()).Result);
+
+            var data = await nx.PixelPeek(token).ConfigureAwait(false);
+            var screenshot = SysBot.Base.Decoder.ConvertHexByteStringToBytes(data);
             var content = new MultipartFormDataContent();
             var info = new
             {
@@ -46,11 +48,12 @@ namespace RaidCrawler.Structures
                 avatar_url = "https://www.serebii.net/scarletviolet/ribbons/mightiestmark.png",
                 content = "Switch Screenshot",
             };
+
             var basic_info = new StringContent(JsonConvert.SerializeObject(info), Encoding.UTF8, "application/json");
             content.Add(basic_info, "payload_json");
             content.Add(new ByteArrayContent(screenshot), "screenshot.jpg", "screenshot.jpg");
             foreach (var url in DiscordWebhooks)
-                Client.PostAsync(url.Trim(), content).Wait();
+                await Client.PostAsync(url.Trim(), content, token).ConfigureAwait(false);
         }
 
         public static object GenerateWebhook(Config c, ITeraRaid encounter, Raid raid, IEnumerable<RaidFilter> filters, string time, List<(int, int, int)>? RewardsList)
@@ -123,11 +126,10 @@ namespace RaidCrawler.Structures
 
         private static string Difficulty(Config c, byte stars, bool isevent, bool emoji)
         {
-            string s = string.Empty;
             string mstar = (emoji ? c.Emoji["7 Star"] : ":star:");
             string bstar = (emoji ? c.Emoji["Event Star"] : ":star:");
             string ystar = (emoji ? c.Emoji["Star"] : ":star:");
-            s = (stars == 7) ? string.Concat(Enumerable.Repeat(mstar, stars)) :
+            string s = (stars == 7) ? string.Concat(Enumerable.Repeat(mstar, stars)) :
                 (isevent) ? string.Concat(Enumerable.Repeat(bstar, stars)) : string.Concat(Enumerable.Repeat(ystar, stars));
             return s;
         }
@@ -219,8 +221,7 @@ namespace RaidCrawler.Structures
 
         private static string Shiny(Config c, bool shiny, bool square, bool emoji)
         {
-            string s = string.Empty;
-
+            string s;
             if (square && shiny)
             {
                 s = $"{(emoji ? c.Emoji["Square Shiny"] : "Square shiny")}";

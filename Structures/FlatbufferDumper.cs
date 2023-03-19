@@ -73,7 +73,7 @@ namespace RaidCrawler.Structures
             var type3 = new List<byte[]>();
 
             if (encounters.Length == 0)
-                return new byte[0][];
+                return Array.Empty<byte[]>();
             var tableEncounters = FlatBufferSerializer.Default.Parse<DeliveryRaidEnemyTableArray>(encounters);
             var byGroupID = tableEncounters.Table
             .Where(z => z.RaidEnemyInfo.Rate != 0)

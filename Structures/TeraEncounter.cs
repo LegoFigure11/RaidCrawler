@@ -87,7 +87,7 @@ namespace RaidCrawler.Structures
             for (int i = 0; i < RaidFixedRewards.Count; i++)
             {
                 var item = fixed_table.GetReward(i);
-                if (item.Category == 0 && item.ItemID == 0)
+                if (item is null || item.Category == 0 && item.ItemID == 0)
                     continue;
                 result.Add((item.ItemID == 0 ? item.Category == 2 ? Rewards.GetTeraShard(teratype) : Rewards.GetMaterial(enc.Species) : item.ItemID, item.Num, item.SubjectType));
             }
@@ -95,7 +95,7 @@ namespace RaidCrawler.Structures
             // lottery reward
             var total = 0;
             for (int i = 0; i < RaidLotteryRewards.RewardItemCount; i++)
-                total += lottery_table.GetRewardItem(i).Rate;
+                total += lottery_table.GetRewardItem(i)!.Rate;
             var rand = new Xoroshiro128Plus(seed);
             var count = (int)rand.NextInt(100); // sandwich = extra rolls? how does this work? is this even 100?
             count = Rewards.GetRewardCount(count, enc.Stars) + boost;
@@ -105,14 +105,14 @@ namespace RaidCrawler.Structures
                 for (int j = 0; j < DeliveryRaidLotteryRewardItem.RewardItemCount; j++)
                 {
                     var item = lottery_table.GetRewardItem(j);
-                    if (roll < item.Rate)
+                    if (roll < item!.Rate)
                     {
                         if (item.Category == 0) result.Add((item.ItemID, item.Num, 0));
                         else if (item.Category == 1) result.Add(item.ItemID == 0 ? (Rewards.GetMaterial(enc.Species), item.Num, 0) : (item.ItemID, item.Num, 0));
                         else result.Add(item.ItemID == 0 ? (Rewards.GetTeraShard(teratype), item.Num, 0) : (item.ItemID, item.Num, 0));
                         break;
                     }
-                    roll -= item.Rate;
+                    roll -= item!.Rate;
                 }
             }
             return Rewards.ReorderRewards(result);

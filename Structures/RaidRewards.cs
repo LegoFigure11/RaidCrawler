@@ -1,5 +1,4 @@
-﻿#nullable disable
-using FlatSharp.Attributes;
+﻿using FlatSharp.Attributes;
 using Newtonsoft.Json;
 using PKHeX.Core;
 using System.ComponentModel;
@@ -283,25 +282,25 @@ namespace RaidCrawler.Structures
     public class RaidFixedRewards
     {
         public ulong TableName { get; set; }
-        public RaidFixedRewardItemInfo RewardItem00 { get; set; }
-        public RaidFixedRewardItemInfo RewardItem01 { get; set; }
-        public RaidFixedRewardItemInfo RewardItem02 { get; set; }
-        public RaidFixedRewardItemInfo RewardItem03 { get; set; }
-        public RaidFixedRewardItemInfo RewardItem04 { get; set; }
-        public RaidFixedRewardItemInfo RewardItem05 { get; set; }
-        public RaidFixedRewardItemInfo RewardItem06 { get; set; }
-        public RaidFixedRewardItemInfo RewardItem07 { get; set; }
-        public RaidFixedRewardItemInfo RewardItem08 { get; set; }
-        public RaidFixedRewardItemInfo RewardItem09 { get; set; }
-        public RaidFixedRewardItemInfo RewardItem10 { get; set; }
-        public RaidFixedRewardItemInfo RewardItem11 { get; set; }
-        public RaidFixedRewardItemInfo RewardItem12 { get; set; }
-        public RaidFixedRewardItemInfo RewardItem13 { get; set; }
-        public RaidFixedRewardItemInfo RewardItem14 { get; set; }
+        public RaidFixedRewardItemInfo? RewardItem00 { get; set; }
+        public RaidFixedRewardItemInfo? RewardItem01 { get; set; }
+        public RaidFixedRewardItemInfo? RewardItem02 { get; set; }
+        public RaidFixedRewardItemInfo? RewardItem03 { get; set; }
+        public RaidFixedRewardItemInfo? RewardItem04 { get; set; }
+        public RaidFixedRewardItemInfo? RewardItem05 { get; set; }
+        public RaidFixedRewardItemInfo? RewardItem06 { get; set; }
+        public RaidFixedRewardItemInfo? RewardItem07 { get; set; }
+        public RaidFixedRewardItemInfo? RewardItem08 { get; set; }
+        public RaidFixedRewardItemInfo? RewardItem09 { get; set; }
+        public RaidFixedRewardItemInfo? RewardItem10 { get; set; }
+        public RaidFixedRewardItemInfo? RewardItem11 { get; set; }
+        public RaidFixedRewardItemInfo? RewardItem12 { get; set; }
+        public RaidFixedRewardItemInfo? RewardItem13 { get; set; }
+        public RaidFixedRewardItemInfo? RewardItem14 { get; set; }
 
         public const int Count = 15;
 
-        public RaidFixedRewardItemInfo GetReward(int index) => index switch
+        public RaidFixedRewardItemInfo? GetReward(int index) => index switch
         {
             00 => RewardItem00,
             01 => RewardItem01,
@@ -326,41 +325,41 @@ namespace RaidCrawler.Structures
     public class RaidLotteryRewards
     {
         public ulong TableName { get; set; }
-        public RaidLotteryRewardItemInfo RewardItem00 { get; set; }
-        public RaidLotteryRewardItemInfo RewardItem01 { get; set; }
-        public RaidLotteryRewardItemInfo RewardItem02 { get; set; }
-        public RaidLotteryRewardItemInfo RewardItem03 { get; set; }
-        public RaidLotteryRewardItemInfo RewardItem04 { get; set; }
-        public RaidLotteryRewardItemInfo RewardItem05 { get; set; }
-        public RaidLotteryRewardItemInfo RewardItem06 { get; set; }
-        public RaidLotteryRewardItemInfo RewardItem07 { get; set; }
-        public RaidLotteryRewardItemInfo RewardItem08 { get; set; }
-        public RaidLotteryRewardItemInfo RewardItem09 { get; set; }
-        public RaidLotteryRewardItemInfo RewardItem10 { get; set; }
-        public RaidLotteryRewardItemInfo RewardItem11 { get; set; }
-        public RaidLotteryRewardItemInfo RewardItem12 { get; set; }
-        public RaidLotteryRewardItemInfo RewardItem13 { get; set; }
-        public RaidLotteryRewardItemInfo RewardItem14 { get; set; }
-        public RaidLotteryRewardItemInfo RewardItem15 { get; set; }
-        public RaidLotteryRewardItemInfo RewardItem16 { get; set; }
-        public RaidLotteryRewardItemInfo RewardItem17 { get; set; }
-        public RaidLotteryRewardItemInfo RewardItem18 { get; set; }
-        public RaidLotteryRewardItemInfo RewardItem19 { get; set; }
-        public RaidLotteryRewardItemInfo RewardItem20 { get; set; }
-        public RaidLotteryRewardItemInfo RewardItem21 { get; set; }
-        public RaidLotteryRewardItemInfo RewardItem22 { get; set; }
-        public RaidLotteryRewardItemInfo RewardItem23 { get; set; }
-        public RaidLotteryRewardItemInfo RewardItem24 { get; set; }
-        public RaidLotteryRewardItemInfo RewardItem25 { get; set; }
-        public RaidLotteryRewardItemInfo RewardItem26 { get; set; }
-        public RaidLotteryRewardItemInfo RewardItem27 { get; set; }
-        public RaidLotteryRewardItemInfo RewardItem28 { get; set; }
-        public RaidLotteryRewardItemInfo RewardItem29 { get; set; }
+        public RaidLotteryRewardItemInfo? RewardItem00 { get; set; }
+        public RaidLotteryRewardItemInfo? RewardItem01 { get; set; }
+        public RaidLotteryRewardItemInfo? RewardItem02 { get; set; }
+        public RaidLotteryRewardItemInfo? RewardItem03 { get; set; }
+        public RaidLotteryRewardItemInfo? RewardItem04 { get; set; }
+        public RaidLotteryRewardItemInfo? RewardItem05 { get; set; }
+        public RaidLotteryRewardItemInfo? RewardItem06 { get; set; }
+        public RaidLotteryRewardItemInfo? RewardItem07 { get; set; }
+        public RaidLotteryRewardItemInfo? RewardItem08 { get; set; }
+        public RaidLotteryRewardItemInfo? RewardItem09 { get; set; }
+        public RaidLotteryRewardItemInfo? RewardItem10 { get; set; }
+        public RaidLotteryRewardItemInfo? RewardItem11 { get; set; }
+        public RaidLotteryRewardItemInfo? RewardItem12 { get; set; }
+        public RaidLotteryRewardItemInfo? RewardItem13 { get; set; }
+        public RaidLotteryRewardItemInfo? RewardItem14 { get; set; }
+        public RaidLotteryRewardItemInfo? RewardItem15 { get; set; }
+        public RaidLotteryRewardItemInfo? RewardItem16 { get; set; }
+        public RaidLotteryRewardItemInfo? RewardItem17 { get; set; }
+        public RaidLotteryRewardItemInfo? RewardItem18 { get; set; }
+        public RaidLotteryRewardItemInfo? RewardItem19 { get; set; }
+        public RaidLotteryRewardItemInfo? RewardItem20 { get; set; }
+        public RaidLotteryRewardItemInfo? RewardItem21 { get; set; }
+        public RaidLotteryRewardItemInfo? RewardItem22 { get; set; }
+        public RaidLotteryRewardItemInfo? RewardItem23 { get; set; }
+        public RaidLotteryRewardItemInfo? RewardItem24 { get; set; }
+        public RaidLotteryRewardItemInfo? RewardItem25 { get; set; }
+        public RaidLotteryRewardItemInfo? RewardItem26 { get; set; }
+        public RaidLotteryRewardItemInfo? RewardItem27 { get; set; }
+        public RaidLotteryRewardItemInfo? RewardItem28 { get; set; }
+        public RaidLotteryRewardItemInfo? RewardItem29 { get; set; }
 
         public const int RewardItemCount = 30;
 
         // Get reward item from index
-        public RaidLotteryRewardItemInfo GetRewardItem(int index) => index switch
+        public RaidLotteryRewardItemInfo? GetRewardItem(int index) => index switch
         {
             00 => RewardItem00,
             01 => RewardItem01,

@@ -3,12 +3,14 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net7.0-windows</TargetFramework>
+	<LangVersion>11</LangVersion>
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationIcon>MightiestMark.ico</ApplicationIcon>
     <AssemblyVersion>1.1.0</AssemblyVersion>
     <FileVersion>1.1.0</FileVersion>
+	<EmbedAllSources>true</EmbedAllSources>
   </PropertyGroup>
 
   <ItemGroup>
@@ -186,6 +188,7 @@
 
   <ItemGroup>
     <PackageReference Include="FlatSharp" Version="6.3.5" />
+    <PackageReference Include="LibUsbDotNet" Version="2.2.29" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <PackageReference Include="NLog" Version="5.1.1" />
     <PackageReference Include="PKHeX.Core" Version="23.2.27" />

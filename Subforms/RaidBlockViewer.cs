@@ -8,7 +8,6 @@ namespace RaidCrawler.Subforms
         {
             InitializeComponent();
             AbsoluteAddress.Text = $"{offset:X8}";
-
             RAM.Text = string.Join(" ", data.Select(bytes => $"{bytes:X2}"));
         }
     }

@@ -1,4 +1,6 @@
-﻿namespace RaidCrawler.Subforms
+﻿using SysBot.Base;
+
+namespace RaidCrawler.Subforms
 {
     partial class ConfigWindow
     {
@@ -104,6 +106,8 @@
             this.labelAppName = new System.Windows.Forms.Label();
             this.picAppIcon = new System.Windows.Forms.PictureBox();
             this.labelAppVersion = new System.Windows.Forms.Label();
+            this.Protocol_label = new System.Windows.Forms.Label();
+            this.Protocol_dropdown = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.BaseDelay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SystemDDownPresses)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NavigateToSettings)).BeginInit();
@@ -545,6 +549,8 @@
             // 
             // tabGeneral
             // 
+            this.tabGeneral.Controls.Add(this.Protocol_dropdown);
+            this.tabGeneral.Controls.Add(this.Protocol_label);
             this.tabGeneral.Controls.Add(this.label23);
             this.tabGeneral.Controls.Add(this.LabelEventProgress);
             this.tabGeneral.Controls.Add(this.EventProgress);
@@ -827,7 +833,7 @@
             this.btnTestWebHook.TabIndex = 22;
             this.btnTestWebHook.Text = "Test Webhook";
             this.btnTestWebHook.UseVisualStyleBackColor = true;
-            this.btnTestWebHook.Click += new System.EventHandler(this.btnTestWebHook_Click);
+            this.btnTestWebHook.Click += new System.EventHandler(this.BtnTestWebHook_Click);
             // 
             // denToggle
             // 
@@ -974,7 +980,7 @@
             this.linkLabel1.TabIndex = 4;
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "https://github.com/LegoFigure11/RaidCrawler";
-            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabel1_LinkClicked);
             // 
             // labelAppName
             // 
@@ -1005,6 +1011,27 @@
             this.labelAppVersion.TabIndex = 0;
             this.labelAppVersion.Text = "v0.0.0-000000";
             this.labelAppVersion.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // Protocol_label
+            // 
+            this.Protocol_label.AutoSize = true;
+            this.Protocol_label.Location = new System.Drawing.Point(8, 110);
+            this.Protocol_label.Name = "Protocol_label";
+            this.Protocol_label.Size = new System.Drawing.Size(120, 15);
+            this.Protocol_label.TabIndex = 110;
+            this.Protocol_label.Text = "Connection Protocol:";
+            // 
+            // Protocol_dropdown
+            // 
+            this.Protocol_dropdown.FormattingEnabled = true;
+            this.Protocol_dropdown.Items.AddRange(new object[] { SwitchProtocol.WiFi, SwitchProtocol.USB });
+            this.Protocol_dropdown.Location = new System.Drawing.Point(159, 107);
+            this.Protocol_dropdown.MaxDropDownItems = 2;
+            this.Protocol_dropdown.Name = "Protocol";
+            this.Protocol_dropdown.Size = new System.Drawing.Size(48, 23);
+            this.Protocol_dropdown.TabIndex = 111;
+            this.Protocol_dropdown.Text = "w";
+            this.Protocol_dropdown.SelectedValueChanged += new System.EventHandler(this.Protocol_Changed);
             // 
             // ConfigWindow
             // 
@@ -1125,5 +1152,7 @@
         private ComboBox StoryProgress;
         private Label labelDaySkip;
         private Button EmojiConfig;
+        private ComboBox Protocol_dropdown;
+        private Label Protocol_label;
     }
 }

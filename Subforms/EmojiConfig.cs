@@ -16,9 +16,9 @@ namespace RaidCrawler.Subforms
             dataGridView1.DataSource = EmojiLoad(c.Emoji);
         }
 
-        private DataTable EmojiLoad(Dictionary<string, string> emoji)
+        private static DataTable EmojiLoad(Dictionary<string, string> emoji)
         {
-            DataTable d = new DataTable();
+            DataTable d = new();
             d.Columns.Add("Emoji", typeof(string));
             d.Columns.Add("Emoji Value", typeof(string));
             emoji.ToList().ForEach(KeyValuePair => d.Rows.Add(new object[] { KeyValuePair.Key, KeyValuePair.Value }));
@@ -26,10 +26,10 @@ namespace RaidCrawler.Subforms
             return d;
         }
 
-        private Dictionary<string, string> EmojiSave(DataTable emoji)
+        private static Dictionary<string, string> EmojiSave(DataTable emoji)
         {
-            Dictionary<string, string> d = new Dictionary<string, string>();
-            emoji.AsEnumerable().ToList().ForEach(row => d.Add(row[0] as string, row[1] as string));
+            Dictionary<string, string> d = new();
+            emoji.AsEnumerable().ToList().ForEach(row => d.Add((string)row[0], (string)row[1]));
             return d;
         }
 

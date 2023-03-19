@@ -582,7 +582,7 @@
             // 
             // timer1
             // 
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            this.timer1.Tick += new System.EventHandler(this.Timer1_Tick);
             // 
             // picBottleCap
             // 
@@ -667,7 +667,7 @@
             this.textAbilityPatch.Size = new System.Drawing.Size(30, 25);
             this.textAbilityPatch.TabIndex = 134;
             this.textAbilityPatch.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.textAbilityPatch.TextChanged += new System.EventHandler(this.rewards_TextChanged);
+            this.textAbilityPatch.TextChanged += new System.EventHandler(this.Rewards_TextChanged);
             // 
             // labelSweetHerba
             // 
@@ -692,7 +692,7 @@
             this.textSweetHerba.Size = new System.Drawing.Size(30, 25);
             this.textSweetHerba.TabIndex = 142;
             this.textSweetHerba.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.textSweetHerba.TextChanged += new System.EventHandler(this.rewards_TextChanged);
+            this.textSweetHerba.TextChanged += new System.EventHandler(this.Rewards_TextChanged);
             // 
             // labelSaltyHerba
             // 
@@ -717,7 +717,7 @@
             this.textSaltyHerba.Size = new System.Drawing.Size(30, 25);
             this.textSaltyHerba.TabIndex = 144;
             this.textSaltyHerba.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.textSaltyHerba.TextChanged += new System.EventHandler(this.rewards_TextChanged);
+            this.textSaltyHerba.TextChanged += new System.EventHandler(this.Rewards_TextChanged);
             // 
             // labelBottleCap
             // 
@@ -742,7 +742,7 @@
             this.textBottleCap.Size = new System.Drawing.Size(30, 25);
             this.textBottleCap.TabIndex = 146;
             this.textBottleCap.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.textBottleCap.TextChanged += new System.EventHandler(this.rewards_TextChanged);
+            this.textBottleCap.TextChanged += new System.EventHandler(this.Rewards_TextChanged);
             // 
             // labelSourHerba
             // 
@@ -767,7 +767,7 @@
             this.textSourHerba.Size = new System.Drawing.Size(30, 25);
             this.textSourHerba.TabIndex = 148;
             this.textSourHerba.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.textSourHerba.TextChanged += new System.EventHandler(this.rewards_TextChanged);
+            this.textSourHerba.TextChanged += new System.EventHandler(this.Rewards_TextChanged);
             // 
             // labelSpicyHerba
             // 
@@ -792,7 +792,7 @@
             this.textSpicyHerba.Size = new System.Drawing.Size(30, 25);
             this.textSpicyHerba.TabIndex = 150;
             this.textSpicyHerba.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.textSpicyHerba.TextChanged += new System.EventHandler(this.rewards_TextChanged);
+            this.textSpicyHerba.TextChanged += new System.EventHandler(this.Rewards_TextChanged);
             // 
             // labelSearchTime
             // 

@@ -4,7 +4,7 @@
     {
         // Drag and Drop
         bool drag = false;
-        Point start = new Point(0, 0);
+        Point start = new(0, 0);
 
         // Progress Bar
         double pbUnit;
@@ -21,7 +21,7 @@
             this.c = c;
         }
 
-        public void startProgress()
+        public void StartProgress()
         {
             pbWidth = pictureBox1.Width;
             pbHeight = pictureBox1.Height;
@@ -39,7 +39,7 @@
             timer1.Start();
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
+        private void Timer1_Tick(object sender, EventArgs e)
         {
             g = Graphics.FromImage(bmp);
             g.Clear(Color.LightSkyBlue);
@@ -79,13 +79,12 @@
             }
         }
 
-        private void rewards_TextChanged(object sender, EventArgs e)
+        private void Rewards_TextChanged(object sender, EventArgs e)
         {
-            int value;
             this.ForeColor = Color.DarkGray;
             // this.BackColor = System.Drawing.Color.FromArgb(0, 5, 25);
 
-            if (Int32.TryParse(this.Text, out value))
+            if (Int32.TryParse(this.Text, out int value))
             {
                 if (value > 0)
                     this.ForeColor = Color.White;

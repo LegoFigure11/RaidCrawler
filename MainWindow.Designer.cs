@@ -86,6 +86,8 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.StatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.ToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.USB_Port_label = new System.Windows.Forms.Label();
+            this.USB_Port_TB = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.Sprite)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GemIcon)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -243,7 +245,7 @@
             this.Seed.ReadOnly = true;
             this.Seed.Size = new System.Drawing.Size(95, 22);
             this.Seed.TabIndex = 43;
-            this.Seed.Click += new System.EventHandler(this.Seed_Clicked);
+            this.Seed.Click += new System.EventHandler(this.Seed_Click);
             // 
             // LabelSeed
             // 
@@ -665,11 +667,32 @@
             this.ToolStripStatusLabel.Size = new System.Drawing.Size(89, 17);
             this.ToolStripStatusLabel.Text = "Not connected.";
             // 
+            // USB_Port_label
+            // 
+            this.USB_Port_label.AutoSize = true;
+            this.USB_Port_label.Location = new System.Drawing.Point(13, 9);
+            this.USB_Port_label.Name = "USB_Port_label";
+            this.USB_Port_label.Size = new System.Drawing.Size(56, 15);
+            this.USB_Port_label.TabIndex = 127;
+            this.USB_Port_label.Text = "USB Port:";
+            // 
+            // USB_Port_TB
+            // 
+            this.USB_Port_TB.Location = new System.Drawing.Point(84, 6);
+            this.USB_Port_TB.Name = "USB_Port_TB";
+            this.USB_Port_TB.Size = new System.Drawing.Size(129, 23);
+            this.USB_Port_TB.TabIndex = 128;
+            this.USB_Port_TB.Text = "w";
+            this.USB_Port_TB.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.USB_Port_TB.TextChanged += new System.EventHandler(this.USB_Port_Changed);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(580, 357);
+            this.Controls.Add(this.USB_Port_TB);
+            this.Controls.Add(this.USB_Port_label);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.ComboIndex);
@@ -790,5 +813,7 @@
         private StatusStrip statusStrip1;
         private ToolStripStatusLabel StatusLabel;
         private ToolStripStatusLabel ToolStripStatusLabel;
+        private Label USB_Port_label;
+        private TextBox USB_Port_TB;
     }
 }

@@ -155,7 +155,7 @@ namespace RaidCrawler.Structures
                     return i + 1;
                 eventct -= ct;
             }
-            throw new ArgumentOutOfRangeException("Found event out of priority range");
+            throw new Exception("Found event out of priority range.");
         }
 
         public static ITeraRaid? GetEncounter(uint Seed, int stage, bool isFixed, int groupid)
@@ -165,7 +165,7 @@ namespace RaidCrawler.Structures
             if (Raid.DistTeraRaids is null) return null;
             if (!isFixed)
             {
-                foreach (TeraDistribution enc in Raid.DistTeraRaids)
+                foreach (TeraDistribution enc in Raid.DistTeraRaids.Cast<TeraDistribution>())
                 {
                     if (enc.Entity is not EncounterDist9 encd)
                         continue;
@@ -187,7 +187,7 @@ namespace RaidCrawler.Structures
             }
             else
             {
-                foreach (TeraDistribution enc in Raid.DistTeraRaids)
+                foreach (TeraDistribution enc in Raid.DistTeraRaids.Cast<TeraDistribution>())
                 {
                     if (enc.Entity is not EncounterMight9 encm)
                         continue;

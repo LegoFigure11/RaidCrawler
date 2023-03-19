@@ -12,9 +12,9 @@ namespace RaidCrawler.Subforms
         {
             var mainForm = Application.OpenForms.OfType<MainWindow>().Single();
             var assembly = System.Reflection.Assembly.GetEntryAssembly();
-            var v = assembly.GetName().Version!;
-            var gitVersionInformationType = assembly.GetType("GitVersionInformation");
-            var shaField = gitVersionInformationType.GetField("ShortSha");
+            var v = assembly?.GetName().Version!;
+            var gitVersionInformationType = assembly?.GetType("GitVersionInformation");
+            var shaField = gitVersionInformationType?.GetField("ShortSha");
 
             InitializeComponent();
 
@@ -24,7 +24,7 @@ namespace RaidCrawler.Subforms
             StoryProgress.SelectedIndex = c.Progress;
             EventProgress.SelectedIndex = c.EventProgress;
             Game.SelectedIndex = Game.FindString(c.Game);
-
+            Protocol_dropdown.SelectedIndex = (int)c.Protocol;
 
             PlayTone.Checked = c.PlaySound;
             FocusWindow.Checked = c.FocusWindow;
@@ -65,7 +65,7 @@ namespace RaidCrawler.Subforms
 
             ExperimentalView.Checked = c.StreamerView;
 
-            labelAppVersion.Text = "v" + v.Major + "." + v.Minor + "." + v.Build + "-" + shaField.GetValue(null);
+            labelAppVersion.Text = "v" + v.Major + "." + v.Minor + "." + v.Build + "-" + shaField?.GetValue(null);
             labelAppVersion.Left = (tabAbout.Width - labelAppVersion.Width) / 2;
             labelAppName.Left = ((tabAbout.Width - labelAppName.Width) / 2) + (picAppIcon.Width / 2) + 2;
             picAppIcon.Left = labelAppName.Left - picAppIcon.Width - 2;
@@ -73,23 +73,6 @@ namespace RaidCrawler.Subforms
 
             labelDaySkip.Text = "Day Skip Successes " + mainForm.GetStatDaySkipSuccess() + " / " + mainForm.GetStatDaySkipTries() + " Total";
         }
-
-        /*private DataTable EmojiLoad(Dictionary<string, string> emoji)
-        {
-            DataTable d = new DataTable();
-            d.Columns.Add("Emoji", typeof(string));
-            d.Columns.Add("Emoji Value", typeof(string));
-            emoji.ToList().ForEach(KeyValuePair => d.Rows.Add(new object[] {KeyValuePair.Key, KeyValuePair.Value}));
-            d.Columns[0].ReadOnly = true;
-            return d;
-        }*/
-
-        /*{private Dictionary<string, string> EmojiSave(DataTable emoji)
-
-            Dictionary<string, string> d = new Dictionary<string, string>();
-            emoji.AsEnumerable().ToList().ForEach(row => d.Add(row[0] as string, row[1] as string));
-            return d;
-        }*/
 
         private void EnableAlert_CheckedChanged(object sender, EventArgs e)
         {
@@ -139,6 +122,8 @@ namespace RaidCrawler.Subforms
             c.ToggleDen = denToggle.Checked;
             c.StreamerView = ExperimentalView.Checked;
 
+            c.Protocol = (SysBot.Base.SwitchProtocol)Protocol_dropdown.SelectedIndex;
+
             string output = JsonConvert.SerializeObject(c);
             using StreamWriter sw = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.json"));
             sw.Write(output);
@@ -152,7 +137,7 @@ namespace RaidCrawler.Subforms
             SystemOvershoot.Enabled = UseOvershoot.Checked;
         }
 
-        private void btnTestWebHook_Click(object sender, EventArgs e)
+        private void BtnTestWebHook_Click(object sender, EventArgs e)
         {
             c.InstanceName = InstanceName.Text;
             c.DiscordMessageContent = DiscordMessageContent.Text;
@@ -166,7 +151,7 @@ namespace RaidCrawler.Subforms
             mainForm.TestWebhook();
         }
 
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void LinkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(((LinkLabel)sender).Text) { UseShellExecute = true });
         }
@@ -176,13 +161,21 @@ namespace RaidCrawler.Subforms
             var mainForm = Application.OpenForms.OfType<MainWindow>().Single();
             mainForm.Game_SelectedIndexChanged();
         }
+
         private void EmojiConfig_Click(object sender, EventArgs e)
         {
-            EmojiConfig config = new EmojiConfig(c);
+            EmojiConfig config = new(c);
             if (config.ShowDialog() == DialogResult.OK)
             {
                 config.Show();
             }
+        }
+
+        private void Protocol_Changed(object sender, EventArgs e)
+        {
+            c.Protocol = (SysBot.Base.SwitchProtocol)Protocol_dropdown.SelectedIndex;
+            var mainForm = Application.OpenForms.OfType<MainWindow>().Single();
+            mainForm.Protocol_SelectedIndexChanged(c.Protocol);
         }
     }
 }
