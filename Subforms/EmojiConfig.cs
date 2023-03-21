@@ -7,41 +7,30 @@ namespace RaidCrawler.Subforms
     public partial class EmojiConfig : Form
     {
         private readonly Config c = new();
+
         public EmojiConfig(Config c)
         {
             InitializeComponent();
-
             this.c = c;
-
-            dataGridView1.DataSource = EmojiLoad(c.Emoji);
+            EmojiGrid.DataSource = EmojiLoad(c.Emoji);
         }
 
         private static DataTable EmojiLoad(Dictionary<string, string> emoji)
         {
-            DataTable d = new();
-            d.Columns.Add("Emoji", typeof(string));
-            d.Columns.Add("Emoji Value", typeof(string));
-            emoji.ToList().ForEach(KeyValuePair => d.Rows.Add(new object[] { KeyValuePair.Key, KeyValuePair.Value }));
-            d.Columns[0].ReadOnly = true;
-            return d;
+            DataTable dt = new();
+            dt.Columns.Add("Emoji", typeof(string));
+            dt.Columns.Add("Emoji Value", typeof(string));
+            emoji.ToList().ForEach(KeyValuePair => dt.Rows.Add(new object[] { KeyValuePair.Key, KeyValuePair.Value }));
+            dt.Columns[0].ReadOnly = true;
+            return dt;
         }
 
-        private static Dictionary<string, string> EmojiSave(DataTable emoji)
+        private void EmojiGrid_Changed(object sender, EventArgs e)
         {
-            Dictionary<string, string> d = new();
-            emoji.AsEnumerable().ToList().ForEach(row => d.Add((string)row[0], (string)row[1]));
-            return d;
-        }
-
-        private void Save_Click(object sender, EventArgs e)
-        {
-            c.Emoji = EmojiSave((DataTable)dataGridView1.DataSource);
-
-            string output = JsonConvert.SerializeObject(c);
-            using StreamWriter sw = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.json"));
-            sw.Write(output);
-
-            Close();
+            var dict = new Dictionary<string, string>();
+            var dt = (DataTable)EmojiGrid.DataSource;
+            dt.AsEnumerable().ToList().ForEach(row => dict.Add((string)row[0], (string)row[1]));
+            c.Emoji = dict;
         }
     }
 }

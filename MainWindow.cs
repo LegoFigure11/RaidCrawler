@@ -74,13 +74,10 @@ namespace RaidCrawler
             den_locations = JsonConvert.DeserializeObject<Dictionary<string, float[]>>(Utils.GetStringResource("den_locations.json") ?? "{}");
 
             var configpath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.json");
+            var text = File.ReadAllText(configpath);
             if (File.Exists(configpath))
-                Config = JsonConvert.DeserializeObject<Config>(File.ReadAllText(configpath)) ?? new Config();
-            else
-            {
-                Config = new Config();
-                SaveConfig();
-            }
+                Config = JsonConvert.DeserializeObject<Config>(text)!;
+            else Config = new();
 
             formTitle = "RaidCrawler v" + v.Major + "." + v.Minor + "." + v.Build + build + " " + Config.InstanceName;
             Text = formTitle;
@@ -162,14 +159,6 @@ namespace RaidCrawler
         public int GetStatDaySkipTries() => StatDaySkipTries;
         public int GetStatDaySkipSuccess() => StatDaySkipSuccess;
 
-        private void SaveConfig()
-        {
-            var configpath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.json");
-            string output = JsonConvert.SerializeObject(Config);
-            using StreamWriter sw = new(configpath);
-            sw.Write(output);
-        }
-
         private void MainWindow_Load(object sender, EventArgs e)
         {
             Location = Config.Location;
@@ -193,7 +182,6 @@ namespace RaidCrawler
             TextBox textBox = (TextBox)sender;
             Config.IP = textBox.Text;
             ConnectionConfig.IP = textBox.Text;
-            SaveConfig();
         }
 
         private void USB_Port_Changed(object sender, EventArgs e)
@@ -206,7 +194,6 @@ namespace RaidCrawler
             {
                 Config.UsbPort = port;
                 ConnectionConfig.Port = port;
-                SaveConfig();
                 return;
             }
             MessageBox.Show("Please enter a valid numerical USB port.");
@@ -216,6 +203,9 @@ namespace RaidCrawler
         {
             lock (_connectLock)
             {
+                if (ConnectionWrapper.Connected)
+                    return;
+
                 ConnectionWrapper = new(ConnectionConfig, UpdateStatus);
                 Connect(Source.Token);
             }
@@ -287,7 +277,12 @@ namespace RaidCrawler
         private void Disconnect_Click(object sender, EventArgs e)
         {
             lock (_connectLock)
+            {
+                if (!ConnectionWrapper.Connected)
+                    return;
+
                 Disconnect(Source.Token);
+            }
         }
 
         private void Disconnect(CancellationToken token)
@@ -511,7 +506,11 @@ namespace RaidCrawler
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
             Config.Location = Location;
-            SaveConfig();
+            var configpath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.json");
+            string output = JsonConvert.SerializeObject(Config);
+            using StreamWriter sw = new(configpath);
+            sw.Write(output);
+
             Disconnect(Source.Token);
             Source.Cancel();
             Source = new();

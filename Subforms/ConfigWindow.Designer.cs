@@ -41,7 +41,6 @@ namespace RaidCrawler.Subforms
             this.BaseDelay = new System.Windows.Forms.NumericUpDown();
             this.SystemDDownPresses = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
-            this.Save = new System.Windows.Forms.Button();
             this.NavigateToSettings = new System.Windows.Forms.NumericUpDown();
             this.OpenSettings = new System.Windows.Forms.NumericUpDown();
             this.OpenHome = new System.Windows.Forms.NumericUpDown();
@@ -234,18 +233,6 @@ namespace RaidCrawler.Subforms
             this.label3.Size = new System.Drawing.Size(228, 15);
             this.label3.TabIndex = 11;
             this.label3.Text = "DDOWN inputs to get to \"Date and Time\":";
-            // 
-            // Save
-            // 
-            this.Save.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.Save.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.Save.Location = new System.Drawing.Point(0, 486);
-            this.Save.Name = "Save";
-            this.Save.Size = new System.Drawing.Size(380, 32);
-            this.Save.TabIndex = 12;
-            this.Save.Text = "Save";
-            this.Save.UseVisualStyleBackColor = true;
-            this.Save.Click += new System.EventHandler(this.Save_Click);
             // 
             // NavigateToSettings
             // 
@@ -1039,7 +1026,6 @@ namespace RaidCrawler.Subforms
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(380, 518);
             this.Controls.Add(this.tabControl1);
-            this.Controls.Add(this.Save);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.Name = "ConfigWindow";
@@ -1071,6 +1057,7 @@ namespace RaidCrawler.Subforms
             this.tabAbout.ResumeLayout(false);
             this.tabAbout.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picAppIcon)).EndInit();
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Config_Closing);
             this.ResumeLayout(false);
 
         }
@@ -1087,7 +1074,6 @@ namespace RaidCrawler.Subforms
         private NumericUpDown BaseDelay;
         private NumericUpDown SystemDDownPresses;
         private Label label3;
-        private Button Save;
         private NumericUpDown NavigateToSettings;
         private NumericUpDown OpenSettings;
         private NumericUpDown OpenHome;

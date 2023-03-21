@@ -86,7 +86,7 @@ namespace RaidCrawler.Subforms
             labelWebhooks.Text = "Webhooks are " + (DiscordWebhook.Enabled ? "enabled." : "disabled.");
         }
 
-        private void Save_Click(object sender, EventArgs e)
+        private void Config_Closing(object sender, EventArgs e)
         {
             c.InstanceName = InstanceName.Text;
 
@@ -127,8 +127,6 @@ namespace RaidCrawler.Subforms
             string output = JsonConvert.SerializeObject(c);
             using StreamWriter sw = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.json"));
             sw.Write(output);
-
-            Close();
         }
 
         private void UseOvershoot_CheckedChanged(object sender, EventArgs e)
@@ -166,9 +164,7 @@ namespace RaidCrawler.Subforms
         {
             EmojiConfig config = new(c);
             if (config.ShowDialog() == DialogResult.OK)
-            {
                 config.Show();
-            }
         }
 
         private void Protocol_Changed(object sender, EventArgs e)

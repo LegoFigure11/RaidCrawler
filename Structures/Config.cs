@@ -61,7 +61,6 @@ namespace RaidCrawler.Structures
             { "Ability Capsule", "<:abilitycapsule:1064541406921752737>"}, { "Ability Patch", "<:abilitypatch:1064538087763476522>"}
         };
 
-
         // Experimental
         public bool StreamerView { get; set; } = false;
         public string InstanceName { get; set; } = string.Empty;
