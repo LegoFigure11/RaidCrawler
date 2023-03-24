@@ -752,7 +752,7 @@
             this.Name = "FilterSettings";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "FilterSettings";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Save_Click);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FilterSettings_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.Form)).EndInit();
             this.PerfectIVFilterGroup.ResumeLayout(false);
             this.PerfectIVFilterGroup.PerformLayout();

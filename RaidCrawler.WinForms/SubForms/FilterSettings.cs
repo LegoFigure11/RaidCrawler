@@ -8,6 +8,7 @@ namespace RaidCrawler.WinForms.SubForms
     {
         private readonly List<RaidFilter> filters;
         private readonly BindingSource bs = new();
+
         public FilterSettings(ref List<RaidFilter> filters)
         {
             InitializeComponent();
@@ -247,7 +248,7 @@ namespace RaidCrawler.WinForms.SubForms
             SpeComp.Enabled = Spe.Checked;
         }
 
-        private void Save_Click(object sender, EventArgs e)
+        private void FilterSettings_FormClosing(object sender, EventArgs e)
         {
             HashSet<int> indexset = new(ActiveFilters.CheckedIndices.Cast<int>());
             for (int i = 0; i < filters.Count; i++)

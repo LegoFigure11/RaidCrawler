@@ -106,6 +106,7 @@ namespace RaidCrawler.WinForms
             ConnectionWrapper = new(ConnectionConfig, UpdateStatus);
 
             InitializeComponent();
+            CheckEnableFilters.Checked = Config.EnableFilters;
             if (Config.Protocol is SwitchProtocol.USB)
             {
                 InputSwitchIP.Visible = false;
@@ -504,6 +505,11 @@ namespace RaidCrawler.WinForms
             form.ShowDialog();
         }
 
+        private void EnableFilters_Click(object sender, EventArgs e)
+        {
+            Config.EnableFilters = CheckEnableFilters.Checked;
+        }
+
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
             var configpath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.json");
@@ -565,6 +571,7 @@ namespace RaidCrawler.WinForms
 
                 var teratype = Raid.GetTeraType(encounter, raid);
                 TeraType.Text = Raid.strings.types[teratype];
+
                 int StarCount = encounter is TeraDistribution ? encounter.Stars : Raid.GetStarCount(raid.Difficulty, Config.Progress, raid.IsBlack);
                 Difficulty.Text = string.Concat(Enumerable.Repeat("☆", StarCount));
 
@@ -580,16 +587,23 @@ namespace RaidCrawler.WinForms
                     Encounter9RNG.GenerateData(blank, param, EncounterCriteria.Unrestricted, raid.Seed);
                     var img = blank.Sprite();
                     img = ApplyTeraColor((byte)teratype, img, SpriteBackgroundType.BottomStripe);
+
                     Species.Text = $"{Raid.strings.Species[encounter.Species]}{(encounter.Form != 0 ? $"-{encounter.Form}" : "")}";
                     Sprite.Image = img;
                     GemIcon.Image = GetDisplayGemImage(teratype, raid);
                     Gender.Text = $"{(Gender)blank.Gender}";
+
                     var nature = blank.Nature;
                     Nature.Text = $"{Raid.strings.Natures[nature]}";
                     Ability.Text = $"{Raid.strings.Ability[blank.Ability]}";
+
                     var extra_moves = new ushort[] { 0, 0, 0, 0 };
                     for (int i = 0; i < encounter.ExtraMoves.Length; i++)
-                        if (i < extra_moves.Length) extra_moves[i] = encounter.ExtraMoves[i];
+                    {
+                        if (i < extra_moves.Length)
+                            extra_moves[i] = encounter.ExtraMoves[i];
+                    }
+
                     Move1.Text = ShowExtraMoves ? Raid.strings.Move[extra_moves[0]] : Raid.strings.Move[encounter.Move1];
                     Move2.Text = ShowExtraMoves ? Raid.strings.Move[extra_moves[1]] : Raid.strings.Move[encounter.Move2];
                     Move3.Text = ShowExtraMoves ? Raid.strings.Move[extra_moves[2]] : Raid.strings.Move[encounter.Move3];
@@ -697,7 +711,11 @@ namespace RaidCrawler.WinForms
 
                     var extra_moves = new ushort[] { 0, 0, 0, 0 };
                     for (int i = 0; i < encounter.ExtraMoves.Length; i++)
-                        if (i < extra_moves.Length) extra_moves[i] = encounter.ExtraMoves[i];
+                    {
+                        if (i < extra_moves.Length)
+                            extra_moves[i] = encounter.ExtraMoves[i];
+                    }
+
                     teraRaidView.Moveset5.Text = (encounter.ExtraMoves.Length > 0) ? Raid.strings.Move[extra_moves[0]] : "---";
                     teraRaidView.Moveset6.Text = (encounter.ExtraMoves.Length > 1) ? Raid.strings.Move[extra_moves[1]] : "---";
                     teraRaidView.Moveset7.Text = (encounter.ExtraMoves.Length > 2) ? Raid.strings.Move[extra_moves[2]] : "---";
@@ -708,82 +726,56 @@ namespace RaidCrawler.WinForms
 
                     // HP
                     teraRaidView.HP.Text = $"{ivs[0]:D2}";
-                    teraRaidView.HP.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(5)))), ((int)(((byte)(25)))));
+                    teraRaidView.HP.BackColor = Color.FromArgb(0, 5, 25);
                     if (teraRaidView.HP.Text is "31")
-                    {
                         teraRaidView.HP.BackColor = Color.ForestGreen;
-                    }
                     else if (teraRaidView.HP.Text is "00")
-                    {
                         teraRaidView.HP.BackColor = Color.DarkRed;
-                    }
 
                     // ATK
                     teraRaidView.ATK.Text = $"{ivs[1]:D2}";
-                    teraRaidView.ATK.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(5)))), ((int)(((byte)(25)))));
+                    teraRaidView.ATK.BackColor = Color.FromArgb(0, 5, 25);
                     if (teraRaidView.ATK.Text is "31")
-                    {
                         teraRaidView.ATK.BackColor = Color.ForestGreen;
-                    }
                     else if (teraRaidView.ATK.Text is "00")
-                    {
                         teraRaidView.ATK.BackColor = Color.DarkRed;
-                    }
 
                     // DEF
                     teraRaidView.DEF.Text = $"{ivs[2]:D2}";
-                    teraRaidView.DEF.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(5)))), ((int)(((byte)(25)))));
+                    teraRaidView.DEF.BackColor = Color.FromArgb(0, 5, 25);
                     if (teraRaidView.DEF.Text is "31")
-                    {
                         teraRaidView.DEF.BackColor = Color.ForestGreen;
-                    }
                     else if (teraRaidView.DEF.Text is "00")
-                    {
                         teraRaidView.DEF.BackColor = Color.DarkRed;
-                    }
 
                     // SPA
                     teraRaidView.SPA.Text = $"{ivs[3]:D2}";
-                    teraRaidView.SPA.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(5)))), ((int)(((byte)(25)))));
+                    teraRaidView.SPA.BackColor = Color.FromArgb(0, 5, 25);
                     if (teraRaidView.SPA.Text is "31")
-                    {
                         teraRaidView.SPA.BackColor = Color.ForestGreen;
-                    }
                     else if (teraRaidView.SPA.Text is "00")
-                    {
                         teraRaidView.SPA.BackColor = Color.DarkRed;
-                    }
 
                     // SPD
                     teraRaidView.SPD.Text = $"{ivs[4]:D2}";
-                    teraRaidView.SPD.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(5)))), ((int)(((byte)(25)))));
+                    teraRaidView.SPD.BackColor = Color.FromArgb(0, 5, 25);
                     if (teraRaidView.SPD.Text is "31")
-                    {
                         teraRaidView.SPD.BackColor = Color.ForestGreen;
-                    }
                     else if (teraRaidView.SPD.Text is "00")
-                    {
                         teraRaidView.SPD.BackColor = Color.DarkRed;
-                    }
 
                     // SPEED
                     teraRaidView.SPEED.Text = $"{ivs[5]:D2}";
-                    teraRaidView.SPEED.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(5)))), ((int)(((byte)(25)))));
+                    teraRaidView.SPEED.BackColor = Color.FromArgb(0, 5, 25);
                     if (teraRaidView.SPEED.Text is "31")
-                    {
                         teraRaidView.SPEED.BackColor = Color.ForestGreen;
-                    }
                     else if (teraRaidView.SPEED.Text is "00")
-                    {
                         teraRaidView.SPEED.BackColor = Color.DarkRed;
-                    }
 
 
                     var map = GenerateMap(raid, teratype);
                     if (map is null)
-                    {
                         MessageBox.Show("Error generating map.");
-                    }
                     teraRaidView.Map.Image = map;
 
                     // Rewards
@@ -982,28 +974,25 @@ namespace RaidCrawler.WinForms
         private bool CheckAdvanceDate(out bool prompt)
         {
             prompt = false;
-            if (!CheckEnableFilters.Checked)
+            if (!Config.EnableFilters)
                 return false;
+
             if (prev.Count != Raids.Count)
                 return true;
+
             var sameraids = true;
             for (int i = 0; i < prev.Count; i++)
-            {
-                if (Raids[i].Seed != prev[i])
-                    sameraids = false;
-            }
+                sameraids = Raids[i].Seed != prev[i];
 
             StatDaySkipTries++;
-            if (!sameraids)
-                StatDaySkipSuccess++;
-
             if (sameraids)
                 return true;
+
+            StatDaySkipSuccess++;
             if (RaidFilters.Any(z => z.FilterSatisfied(Encounters, Raids, RaidBoost.SelectedIndex)))
                 prompt = true;
-            if (StopAdvances || prompt == true)
-                return false;
-            return true;
+
+            return StopAdvances || prompt;
         }
 
         private async Task ReadRaids(CancellationToken token)

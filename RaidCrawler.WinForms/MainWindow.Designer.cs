@@ -118,10 +118,11 @@
             this.CheckEnableFilters.Size = new System.Drawing.Size(95, 19);
             this.CheckEnableFilters.TabIndex = 119;
             this.CheckEnableFilters.Text = "Enable Filters";
-            this.toolTip.SetToolTip(this.CheckEnableFilters, "Enable Filters enables or disables all filters\r\nentirely.\r\n\r\nEnabled - Advance Da" +
-        "te will continue until\r\na match occurs from a filter.\r\n\r\nDisabled - Advance Date" +
-        " will only advance\r\none (1) day.");
+            this.toolTip.SetToolTip(this.CheckEnableFilters, "Enable Filters enables or disables all filters\r\nentirely.\r\n\r\n" +
+                "Enabled - Advance Date will continue until\r\na match occurs from a filter.\r\n\r\n" +
+                "Disabled - Advance Date will only advance\r\none (1) day.");
             this.CheckEnableFilters.UseVisualStyleBackColor = true;
+            this.CheckEnableFilters.Click += new System.EventHandler(this.EnableFilters_Click);
             // 
             // ButtonDisconnect
             // 
