@@ -3,7 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32819.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RaidCrawler", "RaidCrawler.csproj", "{3137FDBF-AE30-4A9D-B334-C12524540401}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RaidCrawler.WinForms", "RaidCrawler.WinForms\RaidCrawler.WinForms.csproj", "{3137FDBF-AE30-4A9D-B334-C12524540401}"
+	ProjectSection(ProjectDependencies) = postProject
+		{EFA55E3C-6A2C-4529-A207-93B8EC5F08D0} = {EFA55E3C-6A2C-4529-A207-93B8EC5F08D0}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RaidCrawler.Core", "RaidCrawler.Core\RaidCrawler.Core.csproj", "{EFA55E3C-6A2C-4529-A207-93B8EC5F08D0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +20,10 @@ Global
 		{3137FDBF-AE30-4A9D-B334-C12524540401}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3137FDBF-AE30-4A9D-B334-C12524540401}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3137FDBF-AE30-4A9D-B334-C12524540401}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFA55E3C-6A2C-4529-A207-93B8EC5F08D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFA55E3C-6A2C-4529-A207-93B8EC5F08D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFA55E3C-6A2C-4529-A207-93B8EC5F08D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFA55E3C-6A2C-4529-A207-93B8EC5F08D0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

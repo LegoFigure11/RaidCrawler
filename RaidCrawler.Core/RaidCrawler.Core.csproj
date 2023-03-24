@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+	<LangVersion>11</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FlatSharp" Version="6.3.5" />
+    <PackageReference Include="LibUsbDotNet" Version="2.2.29" />
+    <PackageReference Include="PKHeX.Core" Version="23.2.27" />
+	<Reference Include="SysBot.Base">
+	  <HintPath>deps\SysBot.Base.dll</HintPath>
+	</Reference>
+  </ItemGroup>
+
+</Project>
