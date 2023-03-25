@@ -8,12 +8,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FlatSharp" Version="6.3.5" />
+	<PackageReference Include="FlatSharp.Compiler" Version="7.1.0">
+	  <PrivateAssets>all</PrivateAssets>
+	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	</PackageReference>
+	<PackageReference Include="FlatSharp.Runtime" Version="7.1.0" />
     <PackageReference Include="LibUsbDotNet" Version="2.2.29" />
-    <PackageReference Include="PKHeX.Core" Version="23.2.27" />
+    <PackageReference Include="PKHeX.Core" Version="23.2.28" />
 	<Reference Include="SysBot.Base">
 	  <HintPath>deps\SysBot.Base.dll</HintPath>
 	</Reference>
+	<FlatSharpSchema Include="Schemas\*.fbs" />
   </ItemGroup>
 
 </Project>

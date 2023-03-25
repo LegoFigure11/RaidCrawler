@@ -1,0 +1,224 @@
+namespace pkNX.Structures.FlatBuffers.Gen9;
+attribute "fs_vector";
+attribute "fs_serializer";
+attribute "fs_valueStruct";
+attribute "fs_nonVirtual";
+attribute "fs_unsafeStructVector";
+
+enum RaidRomType : short {
+    BOTH = 0,
+    TYPE_A = 1,
+    TYPE_B = 2,
+}
+
+table RaidEnemyTableArray (fs_serializer) {
+    Table:[RaidEnemyTable] (required);
+}
+
+table RaidEnemyTable {
+    Info:RaidEnemyInfo (required);
+}
+
+table DeliveryRaidEnemyTableArray (fs_serializer) {
+    Table:[DeliveryRaidEnemyTable] (required);
+}
+
+table DeliveryRaidEnemyTable {
+    Info:RaidEnemyInfo (required);
+}
+
+table RaidTimeData {
+    IsActive:bool;
+    GameLimit:int;
+    ClientLimit:int;
+    CommandLimit:int;
+    PokeReviveTime:int;
+    AiIntervalTime:int;
+    AiIntervalRand:int;
+}
+
+table RaidEnemyInfo {
+    RomVer:RaidRomType;
+    No:int;
+    DeliveryGroupID:byte;
+    Difficulty:int;
+    Rate:byte;
+    DropTableFix:ulong;
+    DropTableRandom:ulong;
+    CaptureRate:byte;
+    CaptureLv:byte;
+    BossPokePara:PokeDataBattle (required);
+    BossPokeSize:RaidBossSizeData (required);
+    BossDesc:RaidBossData (required);
+    TimeData:RaidTimeData (required);
+}
+
+table RaidBossSizeData {
+    HeightType:int;
+    HeightValue:short;
+    WeightType:int;
+    WeightValue:short;
+    ScaleType:int;
+    ScaleValue:short;
+}
+
+table RaidBossExtraData {
+    Timing:short;
+    Action:short;
+    Value:short;
+    Wazano:ushort;
+}
+
+table RaidBossData {
+    HpCoef:short;
+    PowerChargeTrigerHp:byte;
+    PowerChargeTrigerTime:byte;
+    PowerChargeLimitTime:short;
+    PowerChargeCancelDamage:byte;
+    PowerChargePenaltyTime:short;
+    PowerChargePenaltyAction:ushort;
+    PowerChargeDamageRate:byte;
+    PowerChargeGemDamageRate:byte;
+    PowerChargeChangeGemDamageRate:byte;
+    ExtraAction1:RaidBossExtraData (required);
+    ExtraAction2:RaidBossExtraData (required);
+    ExtraAction3:RaidBossExtraData (required);
+    ExtraAction4:RaidBossExtraData (required);
+    ExtraAction5:RaidBossExtraData (required);
+    ExtraAction6:RaidBossExtraData (required);
+    DoubleActionTriggerHp:byte;
+    DoubleActionTriggerTime:byte;
+    DoubleActionRate:byte;
+}
+
+table DeliveryRaidPriorityArray (fs_serializer) {
+    Table:[DeliveryRaidPriority] (required);
+}
+
+table DeliveryRaidPriority {
+    VersionNo:int;
+    GroupID:DeliveryGroupID (required);
+}
+
+table DeliveryGroupID {
+    GroupID:GroupIDSet (required);
+}
+
+struct GroupIDSet (fs_valueStruct)
+{
+   Table:[byte:10] (fs_unsafeStructVector);
+}
+
+table WazaSet {
+    WazaId:ushort = 0;
+    PointUp:byte = 0;
+}
+
+table ParamSet {
+    HP :int;
+    ATK:int;
+    DEF:int;
+    SPA:int;
+    SPD:int;
+    SPE:int;
+}
+
+table PokeDataBattle {
+    DevId:ushort;
+    FormId:short;
+    Sex:int;
+    Item:int;
+    Level:int;
+    BallId:int;
+    WazaType:int;
+    Waza1:WazaSet (required);
+    Waza2:WazaSet (required);
+    Waza3:WazaSet (required);
+    Waza4:WazaSet (required);
+    GemType:int;
+    Seikaku:int;
+    Tokusei:int;
+    TalentType:int;
+    TalentValue:ParamSet (required);
+    TalentVnum:byte;
+    EffortValue:ParamSet (required);
+    RareType:int;
+    ScaleType:int;
+    ScaleValue:short;
+}
+
+table DeliveryRaidLotteryRewardItemArray (fs_serializer) {
+    Table:[DeliveryRaidLotteryRewardItem] (required);
+}
+
+table DeliveryRaidLotteryRewardItem {
+    TableName:ulong;
+    RewardItem00:RaidLotteryRewardItemInfo (required);
+    RewardItem01:RaidLotteryRewardItemInfo (required);
+    RewardItem02:RaidLotteryRewardItemInfo (required);
+    RewardItem03:RaidLotteryRewardItemInfo (required);
+    RewardItem04:RaidLotteryRewardItemInfo (required);
+    RewardItem05:RaidLotteryRewardItemInfo (required);
+    RewardItem06:RaidLotteryRewardItemInfo (required);
+    RewardItem07:RaidLotteryRewardItemInfo (required);
+    RewardItem08:RaidLotteryRewardItemInfo (required);
+    RewardItem09:RaidLotteryRewardItemInfo (required);
+    RewardItem10:RaidLotteryRewardItemInfo (required);
+    RewardItem11:RaidLotteryRewardItemInfo (required);
+    RewardItem12:RaidLotteryRewardItemInfo (required);
+    RewardItem13:RaidLotteryRewardItemInfo (required);
+    RewardItem14:RaidLotteryRewardItemInfo (required);
+    RewardItem15:RaidLotteryRewardItemInfo (required);
+    RewardItem16:RaidLotteryRewardItemInfo (required);
+    RewardItem17:RaidLotteryRewardItemInfo (required);
+    RewardItem18:RaidLotteryRewardItemInfo (required);
+    RewardItem19:RaidLotteryRewardItemInfo (required);
+    RewardItem20:RaidLotteryRewardItemInfo (required);
+    RewardItem21:RaidLotteryRewardItemInfo (required);
+    RewardItem22:RaidLotteryRewardItemInfo (required);
+    RewardItem23:RaidLotteryRewardItemInfo (required);
+    RewardItem24:RaidLotteryRewardItemInfo (required);
+    RewardItem25:RaidLotteryRewardItemInfo (required);
+    RewardItem26:RaidLotteryRewardItemInfo (required);
+    RewardItem27:RaidLotteryRewardItemInfo (required);
+    RewardItem28:RaidLotteryRewardItemInfo (required);
+    RewardItem29:RaidLotteryRewardItemInfo (required);
+}
+
+table DeliveryRaidFixedRewardItemArray (fs_serializer) {
+    Table:[DeliveryRaidFixedRewardItem] (required);
+}
+
+table DeliveryRaidFixedRewardItem {
+    TableName:ulong;
+    RewardItem00:RaidFixedRewardItemInfo (required);
+    RewardItem01:RaidFixedRewardItemInfo (required);
+    RewardItem02:RaidFixedRewardItemInfo (required);
+    RewardItem03:RaidFixedRewardItemInfo (required);
+    RewardItem04:RaidFixedRewardItemInfo (required);
+    RewardItem05:RaidFixedRewardItemInfo (required);
+    RewardItem06:RaidFixedRewardItemInfo (required);
+    RewardItem07:RaidFixedRewardItemInfo (required);
+    RewardItem08:RaidFixedRewardItemInfo (required);
+    RewardItem09:RaidFixedRewardItemInfo (required);
+    RewardItem10:RaidFixedRewardItemInfo (required);
+    RewardItem11:RaidFixedRewardItemInfo (required);
+    RewardItem12:RaidFixedRewardItemInfo (required);
+    RewardItem13:RaidFixedRewardItemInfo (required);
+    RewardItem14:RaidFixedRewardItemInfo (required);
+}
+
+table RaidLotteryRewardItemInfo {
+    Category:int;
+    ItemID:int;
+    Num:byte;
+    Rate:int;
+    RareItemFlag:bool;
+}
+
+table RaidFixedRewardItemInfo {
+    Category:int;
+    SubjectType:int;
+    ItemID:int;
+    Num:byte;
+}

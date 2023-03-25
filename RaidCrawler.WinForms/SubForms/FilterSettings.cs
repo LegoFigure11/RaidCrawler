@@ -169,6 +169,7 @@ namespace RaidCrawler.WinForms.SubForms
                         break;
                     }
                 }
+
                 filters.Add(filter);
                 ResetActiveFilters();
                 ActiveFilters.SelectedIndex = ActiveFilters.Items.Count - 1;

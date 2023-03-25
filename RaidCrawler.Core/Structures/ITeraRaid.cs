@@ -1,4 +1,5 @@
 ﻿using PKHeX.Core;
+
 namespace RaidCrawler.Core.Structures
 {
     public interface ITeraRaid

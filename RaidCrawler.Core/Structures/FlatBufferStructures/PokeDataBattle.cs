@@ -1,74 +1,25 @@
-﻿using FlatSharp.Attributes;
-using System.ComponentModel;
-// ReSharper disable UnusedMember.Global
-// ReSharper disable ClassNeverInstantiated.Global
-// ReSharper disable UnusedType.Global
-#nullable disable
+﻿using PKHeX.Core;
 
-namespace RaidCrawler.Core.Structures;
+namespace pkNX.Structures.FlatBuffers.Gen9;
 
-[FlatBufferTable, TypeConverter(typeof(ExpandableObjectConverter))]
-public class WazaSet
+// ReSharper disable once ClassNeverInstantiated.Global
+public partial class PokeDataBattle
 {
-    [FlatBufferItem(0)] public ushort WazaId { get; set; }
-    [FlatBufferItem(1)] public sbyte PointUp { get; set; }
-}
-
-[FlatBufferTable, TypeConverter(typeof(ExpandableObjectConverter))]
-public class ParamSet
-{
-    [FlatBufferItem(0)] public int HP { get; set; }
-    [FlatBufferItem(1)] public int ATK { get; set; }
-    [FlatBufferItem(2)] public int DEF { get; set; }
-    [FlatBufferItem(3)] public int SPA { get; set; }
-    [FlatBufferItem(4)] public int SPD { get; set; }
-    [FlatBufferItem(5)] public int SPE { get; set; }
-}
-
-[FlatBufferTable, TypeConverter(typeof(ExpandableObjectConverter))]
-public class PokeDataBattle
-{
-    [FlatBufferItem(00)] public ushort DevId { get; set; }
-    [FlatBufferItem(01)] public short FormId { get; set; }
-    [FlatBufferItem(02)] public int Sex { get; set; }
-    [FlatBufferItem(03)] public int Item { get; set; }
-    [FlatBufferItem(04)] public int Level { get; set; }
-    [FlatBufferItem(05)] public int BallId { get; set; }
-    [FlatBufferItem(06)] public int WazaType { get; set; }
-    [FlatBufferItem(07)] public WazaSet Waza1 { get; set; }
-    [FlatBufferItem(08)] public WazaSet Waza2 { get; set; }
-    [FlatBufferItem(09)] public WazaSet Waza3 { get; set; }
-    [FlatBufferItem(10)] public WazaSet Waza4 { get; set; }
-    [FlatBufferItem(11)] public int GemType { get; set; }
-    [FlatBufferItem(12)] public int Seikaku { get; set; }
-    [FlatBufferItem(13)] public int Tokusei { get; set; }
-    [FlatBufferItem(14)] public int TalentType { get; set; }
-    [FlatBufferItem(15)] public ParamSet TalentValue { get; set; }
-    [FlatBufferItem(16)] public sbyte TalentVnum { get; set; }
-    [FlatBufferItem(17)] public ParamSet EffortValue { get; set; }
-    [FlatBufferItem(18)] public int RareType { get; set; }
-    [FlatBufferItem(19)] public int ScaleType { get; set; }
-    [FlatBufferItem(20)] public short ScaleValue { get; set; }
-
-    public void SerializePKHeX(BinaryWriter bw, sbyte captureLv)
+    public void SerializePKHeX(BinaryWriter bw, sbyte captureLv, RaidSerializationFormat format)
     {
-        //if (TalentType != 1)
-        //    throw new ArgumentOutOfRangeException(nameof(TalentType), TalentType, "No min flawless IVs?");
-        //if (TalentVnum == 0 && DevId != 417 && Level != 35) // DEV_PATIRISU = 417
-        //    throw new ArgumentOutOfRangeException(nameof(TalentVnum), TalentVnum, "No min flawless IVs?");
-
-        //if (Seikaku != 0)
-        //    throw new ArgumentOutOfRangeException($"No {Seikaku} allowed!");
+        // Should this be BaseROM or are checks incorrect for Type2 and Type3 throws?
+        if (format == RaidSerializationFormat.BaseROM)
+            AssertRegularFormat();
 
         // If any PointUp for a move is nonzero, throw an exception.
         if (Waza1.PointUp != 0 || Waza2.PointUp != 0 || Waza3.PointUp != 0 || Waza4.PointUp != 0)
-            throw new ArgumentOutOfRangeException($"{Waza1.PointUp} | {Waza2.PointUp} | {Waza3.PointUp} | {Waza4.PointUp}");
+            throw new ArgumentOutOfRangeException(nameof(WazaSet.PointUp), $"No {nameof(WazaSet.PointUp)} allowed!");
 
         // flag BallId if not none
         if (BallId != 0)
-            throw new ArgumentOutOfRangeException($"No {BallId} allowed!");
+            throw new ArgumentOutOfRangeException(nameof(BallId), BallId, $"No {nameof(BallId)} allowed!");
 
-        bw.Write(SpeciesConverterSV.GetNational9(DevId));
+        bw.Write(SpeciesConverter.GetNational9(DevId));
         bw.Write((byte)FormId);
         bw.Write((byte)Sex);
 
@@ -90,22 +41,16 @@ public class PokeDataBattle
         var gem = GemType is 0 ? 1 : GemType;
         bw.Write((byte)gem);
     }
-}
 
-public enum RaidSerializationFormat
-{
-    /// <summary>
-    /// Base ROM Raids
-    /// </summary>
-    BaseROM,
+    private void AssertRegularFormat()
+    {
+        if (TalentType != 1) // V_NUM
+            throw new ArgumentOutOfRangeException(nameof(TalentType), TalentType, "No min flawless IVs?");
 
-    /// <summary>
-    /// Regular Distribution Raids
-    /// </summary>
-    Type2,
+        if (TalentVnum == 0 && DevId != (int)Species.Pachirisu && Level != 35) // nice mistake gamefreak -- 3star Pachirisu is 0 IVs.
+            throw new ArgumentOutOfRangeException(nameof(TalentVnum), TalentVnum, "No min flawless IVs?");
 
-    /// <summary>
-    /// 7 Star Distribution Raids
-    /// </summary>
-    Type3,
+        if (Seikaku != 0) // Default
+            throw new ArgumentOutOfRangeException(nameof(Seikaku), Seikaku, $"No {nameof(Seikaku)} allowed!");
+    }
 }

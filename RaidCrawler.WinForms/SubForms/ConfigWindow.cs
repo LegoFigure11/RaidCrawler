@@ -55,7 +55,6 @@ namespace RaidCrawler.WinForms.SubForms
             SystemOvershoot.Enabled = UseOvershoot.Checked;
 
             IVstyle.SelectedIndex = c.IVsStyle;
-            IVspacer.Text = c.IVsSpacer;
             IVverbose.Checked = c.VerboseIVs;
 
             denToggle.Checked = c.ToggleDen;
@@ -70,6 +69,7 @@ namespace RaidCrawler.WinForms.SubForms
             picAppIcon.Left = labelAppName.Left - picAppIcon.Width - 2;
             linkLabel1.Left = (tabAbout.Width - linkLabel1.Width) / 2;
 
+            labelWebhooks.Text = "Webhooks are " + (DiscordWebhook.Enabled ? "enabled." : "disabled.");
             labelDaySkip.Text = "Day Skip Successes " + mainForm.GetStatDaySkipSuccess() + " / " + mainForm.GetStatDaySkipTries() + " Total";
         }
 
@@ -78,7 +78,7 @@ namespace RaidCrawler.WinForms.SubForms
             AlertMessage.Enabled = EnableAlert.Checked;
         }
 
-        private void EnableDiscordNotifications_CheckedChanged(object sender, EventArgs e)
+        private void EnableDiscordNotifications_Click(object sender, EventArgs e)
         {
             DiscordWebhook.Enabled = EnableDiscordNotifications.Checked;
             DiscordMessageContent.Enabled = EnableDiscordNotifications.Checked;
@@ -113,7 +113,6 @@ namespace RaidCrawler.WinForms.SubForms
             c.ReturnGameDelay = (int)ReturnGame.Value;
 
             c.IVsStyle = IVstyle.SelectedIndex;
-            c.IVsSpacer = IVspacer.Text;
             c.VerboseIVs = IVverbose.Checked;
 
             c.EnableEmoji = EnableEmoji.Checked;
@@ -140,13 +139,12 @@ namespace RaidCrawler.WinForms.SubForms
             c.InstanceName = InstanceName.Text;
             c.DiscordMessageContent = DiscordMessageContent.Text;
             c.IVsStyle = IVstyle.SelectedIndex;
-            c.IVsSpacer = IVspacer.Text;
             c.VerboseIVs = IVverbose.Checked;
             c.EnableEmoji = EnableEmoji.Checked;
             c.ToggleDen = denToggle.Checked;
 
             var mainForm = Application.OpenForms.OfType<MainWindow>().Single();
-            mainForm.TestWebhook();
+            Task.Run(async () => await mainForm.TestWebhook(MainWindow.Source.Token).ConfigureAwait(false));
         }
 
         private void LinkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

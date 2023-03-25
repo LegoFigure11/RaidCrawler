@@ -3,7 +3,7 @@ using RaidCrawler.Core.Interfaces;
 
 namespace RaidCrawler.WinForms
 {
-    public class ClientConfig : IDateAdvanceConfig
+    public class ClientConfig : IDateAdvanceConfig, IWebhookConfig
     {
         // General
         public string IP { get; set; } = "192.168.0.0";

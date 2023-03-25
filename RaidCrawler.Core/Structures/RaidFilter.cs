@@ -1,4 +1,5 @@
 ﻿using PKHeX.Core;
+
 namespace RaidCrawler.Core.Structures
 {
     public class RaidFilter
@@ -31,46 +32,54 @@ namespace RaidCrawler.Core.Structures
 
         public bool IsSpeciesSatisfied(ITeraRaid? enc)
         {
-            if (Species == null)
+            if (Species is null)
                 return true;
-            if (enc == null)
+
+            if (enc is null)
                 return false;
-            return enc.Species == (int)Species;
+
+            return enc.Species == (ushort)Species;
         }
 
         public bool IsFormSatisfied(ITeraRaid? enc)
         {
-            if (Form == null)
+            if (Form is null)
                 return true;
-            if (enc == null)
+
+            if (enc is null)
                 return false;
-            return enc.Form == (int)Form;
+
+            return enc.Form == Form;
         }
 
         public bool IsStarsSatisfied(ITeraRaid? enc)
         {
-            if (Stars == null)
+            if (Stars is null)
                 return true;
-            if (enc == null)
+
+            if (enc is null)
                 return false;
+
             return StarsComp switch
             {
-                0 => enc.Stars == (int)Stars,
-                1 => enc.Stars > (int)Stars,
-                2 => enc.Stars >= (int)Stars,
-                3 => enc.Stars <= (int)Stars,
-                4 => enc.Stars < (int)Stars,
+                0 => enc.Stars == Stars,
+                1 => enc.Stars > Stars,
+                2 => enc.Stars >= Stars,
+                3 => enc.Stars <= Stars,
+                4 => enc.Stars < Stars,
                 _ => false
             };
         }
 
         public bool IsRewardsSatisfied(ITeraRaid? enc, Raid raid, int SandwichBoost)
         {
-            if (RewardItems == null || RewardsCount == 0)
+            if (RewardItems is null || RewardsCount == 0)
                 return true;
+
             var rewards = Rewards.GetRewards(enc, raid.Seed, Raid.GetTeraType(enc, raid), SandwichBoost);
-            if (rewards == null)
+            if (rewards is null)
                 return false;
+
             var count = rewards.Where(z => RewardItems.Contains(z.Item1)).Count();
             return RewardsComp switch
             {
@@ -85,15 +94,17 @@ namespace RaidCrawler.Core.Structures
 
         public bool IsShinySatisfied(ITeraRaid? encounter, Raid raid)
         {
-            if (Shiny == false)
+            if (!Shiny)
                 return true;
+
             return Raid.CheckIsShiny(raid, encounter) == true;
         }
 
         public bool IsSquareSatisfied(ITeraRaid? encounter, Raid raid)
         {
-            if (Square == false)
+            if (!Square)
                 return true;
+
             _ = PersonalTable.SV.GetFormEntry(encounter!.Species, encounter.Form);
             var param = Raid.GetParam(encounter);
             PK9 blank = new()
@@ -101,23 +112,27 @@ namespace RaidCrawler.Core.Structures
                 Species = encounter.Species,
                 Form = encounter.Form
             };
+
             Encounter9RNG.GenerateData(blank, param, EncounterCriteria.Unrestricted, raid.Seed);
-            return (Raid.CheckIsShiny(raid, encounter) && ShinyExtensions.IsSquareShinyExist(blank)) == true;
+            return (Raid.CheckIsShiny(raid, encounter) && ShinyExtensions.IsSquareShinyExist(blank));
         }
 
         public bool IsTeraTypeSatisfied(Raid raid)
         {
-            if (TeraType == null)
+            if (TeraType is null)
                 return true;
-            return raid.TeraType == (int)TeraType;
+
+            return raid.TeraType == TeraType;
         }
 
         public bool IsNatureSatisfied(ITeraRaid? encounter, Raid raid)
         {
-            if (Nature == null)
+            if (Nature is null)
                 return true;
-            if (encounter == null)
+
+            if (encounter is null)
                 return false;
+
             _ = PersonalTable.SV.GetFormEntry(encounter.Species, encounter.Form);
             var param = Raid.GetParam(encounter);
             PK9 blank = new()
@@ -125,16 +140,19 @@ namespace RaidCrawler.Core.Structures
                 Species = encounter.Species,
                 Form = encounter.Form
             };
+
             Encounter9RNG.GenerateData(blank, param, EncounterCriteria.Unrestricted, raid.Seed);
-            return blank.Nature == (int)Nature;
+            return blank.Nature == Nature;
         }
 
         public bool IsIVsSatisfied(ITeraRaid? encounter, Raid raid)
         {
             if (IVBin == 0)
                 return true;
-            if (encounter == null)
+
+            if (encounter is null)
                 return false;
+
             var ivs = Raid.GetIVs(raid.Seed, encounter.FlawlessIVCount);
             for (int i = 0; i < 6; i++)
             {
@@ -172,31 +190,38 @@ namespace RaidCrawler.Core.Structures
 
         public bool IsGenderSatisfied(ITeraRaid? encounter, Raid raid)
         {
-            if (Gender == null)
+            if (Gender is null)
                 return true;
-            if (encounter == null)
+
+            if (encounter is null)
                 return false;
+
             if (encounter.Gender <= 2 && encounter.Gender == Gender)
                 return true;
+
             var param = Raid.GetParam(encounter);
             PK9 blank = new()
             {
                 Species = encounter.Species,
                 Form = encounter.Form
             };
+
             Encounter9RNG.GenerateData(blank, param, EncounterCriteria.Unrestricted, raid.Seed);
             return blank.Gender == Gender;
         }
 
         public bool IsBatchFilterSatisfied(ITeraRaid? encounter, Raid raid)
         {
-            if (BatchFilters == null)
+            if (BatchFilters is null)
                 return true;
-            if (encounter == null)
+
+            if (encounter is null)
                 return false;
+
             var filters = StringInstruction.GetFilters(BatchFilters.AsSpan());
             if (filters.Count == 0)
                 return true;
+
             BatchEditing.ScreenStrings(filters);
             var param = Raid.GetParam(encounter);
             PK9 blank = new()
@@ -204,6 +229,7 @@ namespace RaidCrawler.Core.Structures
                 Species = encounter.Species,
                 Form = encounter.Form
             };
+
             Encounter9RNG.GenerateData(blank, param, EncounterCriteria.Unrestricted, raid.Seed);
             return BatchEditing.IsFilterMatch(filters, blank);
         }
@@ -218,7 +244,8 @@ namespace RaidCrawler.Core.Structures
         public bool FilterSatisfied(List<ITeraRaid?> Encounters, List<Raid> Raids, int SandwichBoost)
         {
             if (Raids.Count != Encounters.Count)
-                throw new ArgumentOutOfRangeException("Raid Count does not match Encounter count");
+                throw new Exception("Raid Count does not match Encounter count");
+
             for (int i = 0; i < Raids.Count; i++)
             {
                 if (FilterSatisfied(Encounters[i], Raids[i], SandwichBoost))

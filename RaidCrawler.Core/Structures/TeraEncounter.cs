@@ -1,4 +1,5 @@
 ﻿using PKHeX.Core;
+using pkNX.Structures.FlatBuffers.Gen9;
 using System.Diagnostics;
 
 namespace RaidCrawler.Core.Structures

@@ -1,4 +1,5 @@
 ﻿using PKHeX.Core;
+using pkNX.Structures.FlatBuffers.Gen9;
 using static System.Buffers.Binary.BinaryPrimitives;
 
 namespace RaidCrawler.Core.Structures
@@ -18,7 +19,7 @@ namespace RaidCrawler.Core.Structures
         public static List<RaidLotteryRewards>? BaseLotteryRewards = new();
         public static List<DeliveryRaidFixedRewardItem>? DeliveryRaidFixedRewards = new();
         public static List<DeliveryRaidLotteryRewardItem>? DeliveryRaidLotteryRewards = new();
-        public static DeliveryGroupID DeliveryRaidPriority = new();
+        public static DeliveryGroupID DeliveryRaidPriority = new() { GroupID = new() };
 
         public readonly byte[] Data; // Raw data
 

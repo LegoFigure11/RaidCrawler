@@ -1,4 +1,5 @@
 ﻿using FlatSharp;
+using pkNX.Structures.FlatBuffers.Gen9;
 using System.Diagnostics;
 
 namespace RaidCrawler.Core.Structures
@@ -13,23 +14,23 @@ namespace RaidCrawler.Core.Structures
             {
                 var path = paths[i];
                 var data = Utils.GetBinaryResource(path);
-                var fb = FlatBufferSerializer.Default.Parse<RaidEnemyTableArray>(data);
+                var fb = RaidEnemyTableArray.Serializer.Parse(data);
                 var table = fb.Table;
                 int totalRateScarlet = 0;
                 int totalRateViolet = 0;
                 foreach (var enc in table)
                 {
                     var wrap = new RaidStorage(enc, i);
-                    if (enc.RaidEnemyInfo.RomVer != RaidRomType.TYPE_B)
+                    if (enc.Info.RomVer != RaidRomType.TYPE_B)
                     {
                         wrap.RandRateStartScarlet = totalRateScarlet;
-                        totalRateScarlet += enc.RaidEnemyInfo.Rate;
+                        totalRateScarlet += enc.Info.Rate;
                     }
 
-                    if (enc.RaidEnemyInfo.RomVer != RaidRomType.TYPE_A)
+                    if (enc.Info.RomVer != RaidRomType.TYPE_A)
                     {
                         wrap.RandRateStartViolet = totalRateViolet;
-                        totalRateViolet += enc.RaidEnemyInfo.Rate;
+                        totalRateViolet += enc.Info.Rate;
                     }
                     list.Add(wrap);
                 }
@@ -53,12 +54,15 @@ namespace RaidCrawler.Core.Structures
             {
                 var rmS = enc.GetScarletRandMinScarlet();
                 var rmV = enc.GetVioletRandMinViolet();
-                enc.Enemy.RaidEnemyInfo.SerializePKHeX(bw, (byte)enc.Stars, enc.Rate);
+                enc.Enemy.Info.SerializePKHeX(bw, (byte)enc.Stars, enc.Rate, RaidSerializationFormat.BaseROM);
+
                 bw.Write(rmS);
                 bw.Write(rmV);
-                enc.Enemy.RaidEnemyInfo.BossDesc.SerializePKHeX(bw2);
-                bw3.Write(enc.Enemy.RaidEnemyInfo.DropTableFix);
-                bw3.Write(enc.Enemy.RaidEnemyInfo.DropTableRandom);
+
+                enc.Enemy.Info.SerializePKHeX(bw2, (byte)enc.Stars, enc.Rate, RaidSerializationFormat.BaseROM);
+
+                bw3.Write(enc.Enemy.Info.DropTableFix);
+                bw3.Write(enc.Enemy.Info.DropTableRandom);
             }
             var pickle = ms.ToArray();
             var extra_moves = ms2.ToArray();
@@ -73,38 +77,44 @@ namespace RaidCrawler.Core.Structures
 
             if (encounters.Length == 0)
                 return Array.Empty<byte[]>();
-            var tableEncounters = FlatBufferSerializer.Default.Parse<DeliveryRaidEnemyTableArray>(encounters);
+
+            var tableEncounters = DeliveryRaidEnemyTableArray.Serializer.Parse(encounters);
             var byGroupID = tableEncounters.Table
-            .Where(z => z.RaidEnemyInfo.Rate != 0)
-            .GroupBy(z => z.RaidEnemyInfo.DeliveryGroupID);
+            .Where(z => z.Info.Rate != 0)
+            .GroupBy(z => z.Info.DeliveryGroupID);
 
             foreach (var group in byGroupID)
             {
                 var items = group.ToArray();
-                if (items.Any(z => z.RaidEnemyInfo.Difficulty > 7))
+                if (items.Any(z => z.Info.Difficulty > 7))
                     continue;
-                if (items.All(z => z.RaidEnemyInfo.Difficulty == 7))
+
+                if (items.All(z => z.Info.Difficulty == 7))
                     AddToList(items, type3, RaidSerializationFormat.Type3, group.Key);
-                else if (items.Any(z => z.RaidEnemyInfo.Difficulty == 7))
-                    throw new Exception($"Mixed difficulty {items.First(z => z.RaidEnemyInfo.Difficulty > 7).RaidEnemyInfo.Difficulty}");
-                else AddToList(items, type2, RaidSerializationFormat.Type2, group.Key);
+                else if (items.Any(z => z.Info.Difficulty == 7))
+                    throw new Exception($"Mixed difficulty {items.First(z => z.Info.Difficulty > 7).Info.Difficulty}");
+
+                AddToList(items, type2, RaidSerializationFormat.Type2, group.Key);
             }
 
-            return new[] { type2.SelectMany(z => z.SkipLast(16 + 12 + 1)).ToArray(), type3.SelectMany(z => z.SkipLast(16 + 12 + 1)).ToArray(),
-                           type2.SelectMany(z => z.TakeLast(16 + 12 + 1).Take(16)).ToArray(), type3.SelectMany(z => z.TakeLast(16 + 12 + 1).Take(16)).ToArray(),
-                           type2.SelectMany(z => z.TakeLast(12 + 1).Take(12)).ToArray(), type3.SelectMany(z => z.TakeLast(12 + 1).Take(12)).ToArray(),
-                           type2.SelectMany(z => z.TakeLast(1)).ToArray(), type3.SelectMany(z => z.TakeLast(1)).ToArray() };
+            return new[]
+            {
+                type2.SelectMany(z => z.SkipLast(16 + 12 + 1)).ToArray(), type3.SelectMany(z => z.SkipLast(16 + 12 + 1)).ToArray(),
+                type2.SelectMany(z => z.TakeLast(16 + 12 + 1).Take(16)).ToArray(), type3.SelectMany(z => z.TakeLast(16 + 12 + 1).Take(16)).ToArray(),
+                type2.SelectMany(z => z.TakeLast(12 + 1).Take(12)).ToArray(), type3.SelectMany(z => z.TakeLast(12 + 1).Take(12)).ToArray(),
+                type2.SelectMany(z => z.TakeLast(1)).ToArray(), type3.SelectMany(z => z.TakeLast(1)).ToArray()
+            };
         }
 
         public static List<DeliveryRaidLotteryRewardItem> DumpLotteryRewards(byte[] rewards)
         {
-            var tableRewards = FlatBufferSerializer.Default.Parse<DeliveryRaidLotteryRewardItemArray>(rewards);
+            var tableRewards = DeliveryRaidLotteryRewardItemArray.Serializer.Parse(rewards);
             return tableRewards.Table.ToList();
         }
 
         public static List<DeliveryRaidFixedRewardItem> DumpFixedRewards(byte[] rewards)
         {
-            var tableRewards = FlatBufferSerializer.Default.Parse<DeliveryRaidFixedRewardItemArray>(rewards);
+            var tableRewards = DeliveryRaidFixedRewardItemArray.Serializer.Parse(rewards);
             return tableRewards.Table.ToList();
         }
 
@@ -112,13 +122,13 @@ namespace RaidCrawler.Core.Structures
         {
             try
             {
-                var prios = FlatBufferSerializer.Default.Parse<DeliveryRaidPriorityArray>(flatbuffer);
-                return (prios.Table[0].DeliveryGroupID, prios.Table[0].VersionNo);
+                var prios = DeliveryRaidPriorityArray.Serializer.Parse(flatbuffer);
+                return (prios.Table[0].GroupID, prios.Table[0].VersionNo);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.ToString());
-                return (new DeliveryGroupID(), 0);
+                return (new DeliveryGroupID { GroupID = new GroupIDSet() }, 0);
             }
         }
 
@@ -137,16 +147,19 @@ namespace RaidCrawler.Core.Structures
             Span<ushort> weightTotalV = stackalloc ushort[StageStars.Length];
             foreach (var enc in table)
             {
-                var info = enc.RaidEnemyInfo;
+                var info = enc.Info;
                 if (info.Rate == 0)
                     continue;
+
                 var difficulty = info.Difficulty;
                 for (int stage = 0; stage < StageStars.Length; stage++)
                 {
                     if (!StageStars[stage].Contains(difficulty))
                         continue;
+
                     if (info.RomVer != RaidRomType.TYPE_B)
                         weightTotalS[stage] += (ushort)info.Rate;
+
                     if (info.RomVer != RaidRomType.TYPE_A)
                         weightTotalV[stage] += (ushort)info.Rate;
                 }
@@ -156,17 +169,20 @@ namespace RaidCrawler.Core.Structures
             Span<ushort> weightMinV = stackalloc ushort[StageStars.Length];
             foreach (var enc in table)
             {
-                var info = enc.RaidEnemyInfo;
+                var info = enc.Info;
                 if (info.Rate == 0)
                     continue;
+
                 var difficulty = info.Difficulty;
                 TryAddToPickle(info, list, format, weightTotalS, weightTotalV, weightMinS, weightMinV, group);
                 for (int stage = 0; stage < StageStars.Length; stage++)
                 {
                     if (!StageStars[stage].Contains(difficulty))
                         continue;
+
                     if (info.RomVer != RaidRomType.TYPE_B)
                         weightMinS[stage] += (ushort)info.Rate;
+
                     if (info.RomVer != RaidRomType.TYPE_A)
                         weightMinV[stage] += (ushort)info.Rate;
                 }
@@ -178,7 +194,7 @@ namespace RaidCrawler.Core.Structures
             using var ms = new MemoryStream();
             using var bw = new BinaryWriter(ms);
 
-            enc.SerializePKHeX(bw, (byte)enc.Difficulty, enc.Rate);
+            enc.SerializePKHeX(bw, (byte)enc.Difficulty, enc.Rate, format);
             for (int stage = 0; stage < StageStars.Length; stage++)
             {
                 bool noTotal = !StageStars[stage].Contains(enc.Difficulty);
@@ -189,8 +205,10 @@ namespace RaidCrawler.Core.Structures
                 bw.Write(noTotal || enc.RomVer == RaidRomType.TYPE_B ? (ushort)0 : totalS[stage]);
                 bw.Write(noTotal || enc.RomVer == RaidRomType.TYPE_A ? (ushort)0 : totalV[stage]);
             }
+
             if (format == RaidSerializationFormat.Type2)
                 enc.SerializeType2(bw);
+
             if (format == RaidSerializationFormat.Type3)
                 enc.SerializeType3(bw);
 
@@ -211,27 +229,27 @@ namespace RaidCrawler.Core.Structures
 
         private record RaidStorage(RaidEnemyTable Enemy, int File)
         {
-            private PokeDataBattle Poke => Enemy.RaidEnemyInfo.BossPokePara;
+            private PokeDataBattle Poke => Enemy.Info.BossPokePara;
 
-            public int Stars => Enemy.RaidEnemyInfo.Difficulty == 0 ? File + 1 : Enemy.RaidEnemyInfo.Difficulty;
+            public int Stars => Enemy.Info.Difficulty == 0 ? File + 1 : Enemy.Info.Difficulty;
             public ushort Species => Poke.DevId;
             public short Form => Poke.FormId;
-            public int Delivery => Enemy.RaidEnemyInfo.DeliveryGroupID;
-            public sbyte Rate => Enemy.RaidEnemyInfo.Rate;
+            public int Delivery => Enemy.Info.DeliveryGroupID;
+            public sbyte Rate => Enemy.Info.Rate;
 
             public int RandRateStartScarlet { get; set; }
             public int RandRateStartViolet { get; set; }
 
             public short GetScarletRandMinScarlet()
             {
-                if (Enemy.RaidEnemyInfo.RomVer == RaidRomType.TYPE_B)
+                if (Enemy.Info.RomVer == RaidRomType.TYPE_B)
                     return -1;
                 return (short)RandRateStartScarlet;
             }
 
             public short GetVioletRandMinViolet()
             {
-                if (Enemy.RaidEnemyInfo.RomVer == RaidRomType.TYPE_A)
+                if (Enemy.Info.RomVer == RaidRomType.TYPE_A)
                     return -1;
                 return (short)RandRateStartViolet;
             }
