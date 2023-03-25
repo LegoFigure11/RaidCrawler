@@ -15,8 +15,9 @@ namespace RaidCrawler.WinForms
 {
     public partial class MainWindow : Form
     {
-        public static CancellationTokenSource Source = new();
+        private static CancellationTokenSource Source = new();
         private static readonly object _connectLock = new();
+        private static readonly object _readLock = new();
         private ConnectionWrapperAsync ConnectionWrapper;
         private readonly SwitchConnectionConfig ConnectionConfig = new()
         { Protocol = SwitchProtocol.WiFi, IP = "192.168.0.0", Port = 6000 };
@@ -134,16 +135,21 @@ namespace RaidCrawler.WinForms
             ToolStripStatusLabel.Text = status;
         }
 
-        private static void ButtonEnable(object[] obj, bool enable)
+        private void ButtonEnable(object[] obj, bool enable)
         {
-            for (int b = 0; b < obj.Length; b++)
+            lock (_readLock)
             {
-                if (obj[b] is not Button btn)
-                    continue;
+                for (int b = 0; b < obj.Length; b++)
+                {
+                    if (obj[b] is not Button btn)
+                        continue;
 
-                if (btn.InvokeRequired)
-                    btn.Invoke(() => { btn.Enabled = enable; });
-                else btn.Enabled = enable;
+                    if (btn.InvokeRequired)
+                        btn.Invoke(() => { btn.Enabled = enable; });
+                    else btn.Enabled = enable;
+                }
+
+                IsReading = !enable;
             }
         }
 
@@ -222,14 +228,11 @@ namespace RaidCrawler.WinForms
         {
             Task.Run(async () =>
             {
-                IsReading = true;
                 ButtonEnable(new[] { ButtonConnect, SendScreenshot, btnOpenMap, Rewards }, false);
-
                 (bool success, string err) = await ConnectionWrapper.Connect(token).ConfigureAwait(false);
                 if (!success)
                 {
-                    IsReading = false;
-                    ButtonEnable(new[] { ButtonConnect, SendScreenshot, btnOpenMap, Rewards }, true);
+                    ButtonEnable(new[] { ButtonConnect }, true);
                     MessageBox.Show(err);
                     return;
                 }
@@ -245,17 +248,24 @@ namespace RaidCrawler.WinForms
 
                 if (id is "")
                 {
-                    (success, err) = await ConnectionWrapper.DisconnectAsync(token).ConfigureAwait(false);
-                    if (!success)
+                    try
                     {
-                        IsReading = false;
-                        ButtonEnable(new[] { ButtonConnect, SendScreenshot, btnOpenMap, Rewards }, true);
-                        MessageBox.Show(err);
+                        (success, err) = await ConnectionWrapper.DisconnectAsync(token).ConfigureAwait(false);
+                        if (!success)
+                        {
+                            ButtonEnable(new[] { ButtonConnect }, true);
+                            MessageBox.Show(err);
+                            return;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        ButtonEnable(new[] { ButtonConnect }, true);
+                        MessageBox.Show(ex.Message);
                         return;
                     }
 
-                    IsReading = false;
-                    ButtonEnable(new[] { ButtonConnect, SendScreenshot, btnOpenMap, Rewards }, true);
+                    ButtonEnable(new[] { ButtonConnect }, true);
                     MessageBox.Show("Unable to detect Pokémon Scarlet or Pokémon Violet running on your Switch!");
                     return;
                 }
@@ -271,7 +281,7 @@ namespace RaidCrawler.WinForms
                 }
                 catch (Exception ex)
                 {
-                    ButtonEnable(new[] { ButtonConnect, SendScreenshot, btnOpenMap, Rewards }, true);
+                    ButtonEnable(new[] { ButtonConnect }, true);
                     MessageBox.Show($"Error occurred while reading event raids: {ex.Message}");
                     return;
                 }
@@ -283,15 +293,14 @@ namespace RaidCrawler.WinForms
                 }
                 catch (Exception ex)
                 {
-                    ButtonEnable(new[] { ButtonConnect, SendScreenshot, btnOpenMap, Rewards }, true);
+                    ButtonEnable(new[] { ButtonConnect }, true);
                     MessageBox.Show($"Error occurred while reading raids: {ex.Message}");
                     return;
                 }
 
                 ComboIndex.SelectedIndex = 0;
-                ToolStripStatusLabel.Text = "Completed!";
-                IsReading = false;
                 ButtonEnable(new[] { ButtonAdvanceDate, ButtonReadRaids, ButtonDisconnect, ButtonViewRAM, ButtonDownloadEvents, SendScreenshot, btnOpenMap, Rewards }, true);
+                ToolStripStatusLabel.Text = "Completed!";
             }, token);
         }
 
@@ -310,15 +319,19 @@ namespace RaidCrawler.WinForms
         {
             Task.Run(async () =>
             {
-                IsReading = true;
-                (bool success, string err) = await ConnectionWrapper.DisconnectAsync(token).ConfigureAwait(false);
-                if (!success)
-                    MessageBox.Show(err);
+                ButtonEnable(new[] { ButtonAdvanceDate, ButtonReadRaids, ButtonDisconnect, ButtonViewRAM, ButtonDownloadEvents, SendScreenshot, btnOpenMap, Rewards }, false);
+                try
+                {
+                    (bool success, string err) = await ConnectionWrapper.DisconnectAsync(token).ConfigureAwait(false);
+                    if (!success)
+                        MessageBox.Show(err);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
 
-                stopwatch.Stop();
-                IsReading = false;
                 ButtonEnable(new[] { ButtonConnect }, true);
-                ButtonEnable(new[] { ButtonAdvanceDate, ButtonReadRaids, ButtonDisconnect, ButtonViewRAM, ButtonDownloadEvents }, false);
             }, token);
         }
 
@@ -375,10 +388,9 @@ namespace RaidCrawler.WinForms
             {
                 if (ConnectionWrapper.Connected)
                 {
+                    ButtonEnable(new[] { ButtonViewRAM, ButtonAdvanceDate, ButtonDisconnect, ButtonDownloadEvents, SendScreenshot, ButtonReadRaids }, false);
                     SearchTimer.Start();
                     stopwatch.Restart();
-
-                    ButtonEnable(new[] { ButtonReadRaids, ButtonAdvanceDate }, false);
                     _WindowState = WindowState;
 
                     var prompt = false;
@@ -442,24 +454,26 @@ namespace RaidCrawler.WinForms
                         Text = formTitle + " [Match Found in " + time + "]";
                     }
 
-                    ButtonEnable(new[] { ButtonReadRaids, ButtonAdvanceDate }, true);
                     SearchTimer.Stop();
+                    ButtonEnable(new[] { ButtonViewRAM, ButtonAdvanceDate, ButtonDisconnect, ButtonDownloadEvents, SendScreenshot, ButtonReadRaids }, true);
                 }
             }, token);
         }
 
         private void ButtonReadRaids_Click(object sender, EventArgs e)
         {
-            if (IsReading)
-                MessageBox.Show("Please wait for the current RAM read to finish.");
-
-            Task.Run(async () => { await ReadRaidsAsync(Source.Token).ConfigureAwait(false); }, Source.Token);
+            Task.Run(async () => await ReadRaidsAsync(Source.Token).ConfigureAwait(false), Source.Token);
         }
 
         private async Task ReadRaidsAsync(CancellationToken token)
         {
-            IsReading = true;
-            ButtonEnable(new[] { ButtonReadRaids, ButtonAdvanceDate }, false);
+            if (IsReading)
+            {
+                MessageBox.Show("Please wait for the current RAM read to finish.");
+                return;
+            }
+
+            ButtonEnable(new[] { ButtonViewRAM, ButtonAdvanceDate, ButtonDisconnect, ButtonDownloadEvents, SendScreenshot, ButtonReadRaids }, false);
             try
             {
                 await ReadRaids(token).ConfigureAwait(false);
@@ -469,26 +483,39 @@ namespace RaidCrawler.WinForms
                 MessageBox.Show($"Error occurred while reading raids: {ex.Message}");
             }
 
-            IsReading = false;
-            ButtonEnable(new[] { ButtonReadRaids, ButtonAdvanceDate }, true);
+            ButtonEnable(new[] { ButtonViewRAM, ButtonAdvanceDate, ButtonDisconnect, ButtonDownloadEvents, SendScreenshot, ButtonReadRaids }, true);
         }
 
         private void ViewRAM_Click(object sender, EventArgs e)
         {
             if (IsReading)
+            {
                 MessageBox.Show("Please wait for the current RAM read to finish.");
+                return;
+            }
 
+            ButtonEnable(new[] { ButtonViewRAM }, false);
             RaidBlockViewer window = default!;
+
             if (ConnectionWrapper.Connected && ModifierKeys == Keys.Shift)
             {
-                IsReading = true;
-                var data = ConnectionWrapper.Connection.ReadBytesAbsoluteAsync(RaidBlockOffset, (int)RaidBlock.SIZE, Source.Token).Result;
-                window = new(data, RaidBlockOffset);
-                IsReading = false;
+                try
+                {
+                    var data = ConnectionWrapper.Connection.ReadBytesAbsoluteAsync(RaidBlockOffset, (int)RaidBlock.SIZE, Source.Token).Result;
+                    window = new(data, RaidBlockOffset);
+                }
+                catch (Exception ex)
+                {
+                    ButtonEnable(new[] { ButtonViewRAM }, true);
+                    MessageBox.Show(ex.Message);
+                    return;
+                }
             }
             else if (Raids[ComboIndex.SelectedIndex] is not null)
                 window = new(Raids[ComboIndex.SelectedIndex].Data, RaidBlockOffset);
+
             ShowDialog(window);
+            ButtonEnable(new[] { ButtonViewRAM }, true);
         }
 
         private void StopFilter_Click(object sender, EventArgs e)
@@ -503,26 +530,29 @@ namespace RaidCrawler.WinForms
                 return;
 
             if (IsReading)
+            {
                 MessageBox.Show("Please wait for the current RAM read to finish.");
+                return;
+            }
 
             Task.Run(async () => { await DownloadEventsAsync(Source.Token).ConfigureAwait(false); }, Source.Token);
         }
 
         private async Task DownloadEventsAsync(CancellationToken token)
         {
-            IsReading = true;
+            ButtonEnable(new[] { ButtonViewRAM, ButtonAdvanceDate, ButtonDisconnect, ButtonDownloadEvents, SendScreenshot, ButtonReadRaids }, false);
             ToolStripStatusLabel.Text = "Reading event raid status...";
 
             try
             {
-                await ReadEventRaids(Source.Token, true).ConfigureAwait(false);
+                await ReadEventRaids(token, true).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error occurred while reading event raids: {ex.Message}");
             }
 
-            IsReading = false;
+            ButtonEnable(new[] { ButtonViewRAM, ButtonAdvanceDate, ButtonDisconnect, ButtonDownloadEvents, SendScreenshot, ButtonReadRaids }, true);
             ToolStripStatusLabel.Text = "Completed!";
         }
 
@@ -739,10 +769,7 @@ namespace RaidCrawler.WinForms
                     var img = blank.Sprite();
 
                     teraRaidView.picBoxPokemon.Image = img;
-
                     teraRaidView.Species.Text = Raid.strings.Species[encounter.Species];
-                    //teraRaidView.Form.Text = encounter.Form != 0 ? $"{encounter.Form}" : " ";
-
                     teraRaidView.Gender.Text = $"{(Gender)blank.Gender}";
 
                     var nature = blank.Nature;
@@ -754,18 +781,15 @@ namespace RaidCrawler.WinForms
                     teraRaidView.Moveset3.Text = Raid.strings.Move[encounter.Move3];
                     teraRaidView.Moveset4.Text = Raid.strings.Move[encounter.Move4];
 
-                    var extra_moves = new ushort[] { 0, 0, 0, 0 };
+                    var length = encounter.ExtraMoves.Length < 4 ? 4 : encounter.ExtraMoves.Length;
+                    var extra_moves = new ushort[length];
                     for (int i = 0; i < encounter.ExtraMoves.Length; i++)
-                    {
-                        if (i < extra_moves.Length)
-                            extra_moves[i] = encounter.ExtraMoves[i];
-                    }
+                        extra_moves[i] = encounter.ExtraMoves[i];
 
-                    teraRaidView.Moveset5.Text = (encounter.ExtraMoves.Length > 0) ? Raid.strings.Move[extra_moves[0]] : "---";
-                    teraRaidView.Moveset6.Text = (encounter.ExtraMoves.Length > 1) ? Raid.strings.Move[extra_moves[1]] : "---";
-                    teraRaidView.Moveset7.Text = (encounter.ExtraMoves.Length > 2) ? Raid.strings.Move[extra_moves[2]] : "---";
-                    teraRaidView.Moveset8.Text = (encounter.ExtraMoves.Length > 3) ? Raid.strings.Move[extra_moves[3]] : "---";
-
+                    teraRaidView.Moveset5.Text = extra_moves[0] > 0 ? Raid.strings.Move[extra_moves[0]] : "---";
+                    teraRaidView.Moveset6.Text = extra_moves[1] > 0 ? Raid.strings.Move[extra_moves[1]] : "---";
+                    teraRaidView.Moveset7.Text = extra_moves[2] > 0 ? Raid.strings.Move[extra_moves[2]] : "---";
+                    teraRaidView.Moveset8.Text = extra_moves[3] > 0 ? Raid.strings.Move[extra_moves[3]] : "---";
 
                     var ivs = ToSpeedLast(blank.IVs);
 
@@ -1200,10 +1224,12 @@ namespace RaidCrawler.WinForms
             if (encounter is null)
                 return;
 
-            ShowExtraMoves = !ShowExtraMoves;
+            ShowExtraMoves ^= true;
             LabelMoves.Text = ShowExtraMoves ? "Extra:" : "Moves:";
             LabelMoves.Location = ShowExtraMoves ? ShowExtra : Default;
-            var extra_moves = new ushort[] { 0, 0, 0, 0 };
+
+            var length = encounter.ExtraMoves.Length < 4 ? 4 : encounter.ExtraMoves.Length;
+            var extra_moves = new ushort[length];
             for (int i = 0; i < encounter.ExtraMoves.Length; i++)
                 extra_moves[i] = encounter.ExtraMoves[i];
 
@@ -1243,14 +1269,18 @@ namespace RaidCrawler.WinForms
             var timeSpan = stopwatch.Elapsed;
             string time = string.Format("{0:00}:{1:00}:{2:00}",
             timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
+
             Text = formTitle + " [Searching for " + time + "]";
             if (Config.StreamerView)
-            {
                 teraRaidView.textSearchTime.Text = time;
-            }
         }
 
-        public async Task TestWebhook(CancellationToken token)
+        public void TestWebhook()
+        {
+            Task.Run(async () => await TestWebhookAsync(Source.Token).ConfigureAwait(false), Source.Token);
+        }
+
+        private async Task TestWebhookAsync(CancellationToken token)
         {
             var filter = new RaidFilter { Name = "Test Webhook" };
             var satisfied_filters = new List<RaidFilter> { filter };
@@ -1260,7 +1290,7 @@ namespace RaidCrawler.WinForms
                 ComboIndex.Invoke(() => { i = ComboIndex.SelectedIndex; });
             else i = ComboIndex.SelectedIndex;
 
-            if (i > -1 && Encounters[i] != null && Raids[i] != null)
+            if (i > -1 && Encounters[i] is not null && Raids[i] is not null)
             {
                 var timeSpan = stopwatch.Elapsed;
                 string time = string.Format("{0:00}:{1:00}:{2:00}", timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
@@ -1271,10 +1301,7 @@ namespace RaidCrawler.WinForms
                 var spriteName = SpriteName.GetResourceStringSprite(blank.Species, blank.Form, blank.Gender, blank.FormArgument, EntityContext.Gen9, Raid.CheckIsShiny(Raids[i], Encounters[i]));
                 await NotificationHandler.SendNotifications(Config, Encounters[i], Raids[i], satisfied_filters, time, RewardsList[i], hexColor, spriteName, token).ConfigureAwait(false);
             }
-            else
-            {
-                MessageBox.Show("Please connect to your device and ensure a raid has been found.");
-            }
+            else MessageBox.Show("Please connect to your device and ensure a raid has been found.");
         }
     }
 }

@@ -59,7 +59,7 @@ namespace RaidCrawler.Core.Structures
                 bw.Write(rmS);
                 bw.Write(rmV);
 
-                enc.Enemy.Info.SerializePKHeX(bw2, (byte)enc.Stars, enc.Rate, RaidSerializationFormat.BaseROM);
+                enc.Enemy.Info.BossDesc.SerializePKHeX(bw2);
 
                 bw3.Write(enc.Enemy.Info.DropTableFix);
                 bw3.Write(enc.Enemy.Info.DropTableRandom);

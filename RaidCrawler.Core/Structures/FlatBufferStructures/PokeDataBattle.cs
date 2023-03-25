@@ -7,7 +7,7 @@ public partial class PokeDataBattle
 {
     public void SerializePKHeX(BinaryWriter bw, sbyte captureLv, RaidSerializationFormat format)
     {
-        // Should this be BaseROM or are checks incorrect for Type2 and Type3 throws?
+        // Type2 throws, on Decidueye. Needs updated checks? Checking only BaseROM for now.
         if (format == RaidSerializationFormat.BaseROM)
             AssertRegularFormat();
 
@@ -44,13 +44,13 @@ public partial class PokeDataBattle
 
     private void AssertRegularFormat()
     {
-        if (TalentType != 1) // V_NUM
-            throw new ArgumentOutOfRangeException(nameof(TalentType), TalentType, "No min flawless IVs?");
+        if (TalentType != 1)
+            throw new ArgumentOutOfRangeException(nameof(TalentType), TalentType, "Invalid talent type.");
 
-        if (TalentVnum == 0 && DevId != (int)Species.Pachirisu && Level != 35) // nice mistake gamefreak -- 3star Pachirisu is 0 IVs.
+        if (TalentVnum == 0 && DevId != (ushort)Species.Pachirisu && Level != 35) // nice mistake gamefreak -- 3star Pachirisu is 0 IVs.
             throw new ArgumentOutOfRangeException(nameof(TalentVnum), TalentVnum, "No min flawless IVs?");
 
-        if (Seikaku != 0) // Default
+        if (Seikaku != 0)
             throw new ArgumentOutOfRangeException(nameof(Seikaku), Seikaku, $"No {nameof(Seikaku)} allowed!");
     }
 }

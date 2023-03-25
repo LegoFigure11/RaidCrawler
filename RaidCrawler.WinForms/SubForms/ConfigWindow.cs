@@ -144,7 +144,7 @@ namespace RaidCrawler.WinForms.SubForms
             c.ToggleDen = denToggle.Checked;
 
             var mainForm = Application.OpenForms.OfType<MainWindow>().Single();
-            Task.Run(async () => await mainForm.TestWebhook(MainWindow.Source.Token).ConfigureAwait(false));
+            mainForm.TestWebhook();
         }
 
         private void LinkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
