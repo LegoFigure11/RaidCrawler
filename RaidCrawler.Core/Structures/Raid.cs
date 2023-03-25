@@ -53,9 +53,15 @@ namespace RaidCrawler.Core.Structures
         // Methods
         private bool Validate()
         {
-            if (Seed == 0) return false;
-            if (!IsActive) return false;
-            if (Area > 22) return false;
+            if (Seed == 0) 
+                return false;
+
+            if (!IsActive)
+                return false;
+
+            if (Area > 22)
+                return false;
+
             GenerateGenericRaidData(Seed);
             return true;
         }
@@ -94,6 +100,7 @@ namespace RaidCrawler.Core.Structures
 
                 ivs[index] = IV_MAX;
             }
+
             // Other IVs
             for (int i = 0; i < ivs.Length; i++)
             {
@@ -151,10 +158,12 @@ namespace RaidCrawler.Core.Structures
 
         public static bool CheckIsShiny(Raid raid, ITeraRaid? enc)
         {
-            if (enc == null)
+            if (enc is null)
                 return raid.IsShiny;
+
             if (enc.Shiny == Shiny.Never)
                 return false;
+
             if (enc.Shiny.IsShiny())
                 return true;
             return raid.IsShiny;
@@ -162,8 +171,9 @@ namespace RaidCrawler.Core.Structures
 
         public static int GetTeraType(ITeraRaid? encounter, Raid raid)
         {
-            if (encounter == null)
+            if (encounter is null)
                 return raid.TeraType;
+
             if (encounter is TeraDistribution td && td.Entity is ITeraRaid9 gem)
                 return (int)gem.TeraType > 1 ? (int)gem.TeraType - 2 : raid.TeraType;
             return raid.TeraType;
@@ -180,16 +190,19 @@ namespace RaidCrawler.Core.Structures
         private static byte GetGender(ITeraRaid enc)
         {
             if (enc is not TeraDistribution td || td.Entity is EncounterDist9)
-                return (byte)PersonalTable.SV.GetFormEntry(enc.Species, enc.Form).Gender;
+                return PersonalTable.SV.GetFormEntry(enc.Species, enc.Form).Gender;
+
             if (td.Entity is EncounterMight9 em)
+            {
                 return em.Gender switch
                 {
                     0 => PersonalInfo.RatioMagicMale,
                     1 => PersonalInfo.RatioMagicFemale,
                     2 => PersonalInfo.RatioMagicGenderless,
-                    _ => (byte)PersonalTable.SV.GetFormEntry(enc.Species, enc.Form).Gender,
+                    _ => PersonalTable.SV.GetFormEntry(enc.Species, enc.Form).Gender,
                 };
-            return (byte)PersonalTable.SV.GetFormEntry(enc.Species, enc.Form).Gender;
+            }
+            return PersonalTable.SV.GetFormEntry(enc.Species, enc.Form).Gender;
         }
     }
 }

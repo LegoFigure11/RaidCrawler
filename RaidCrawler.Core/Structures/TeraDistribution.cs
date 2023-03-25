@@ -32,14 +32,18 @@ namespace RaidCrawler.Core.Structures
         {
             if (enc is EncounterDist9 encd)
             {
-                if (game == "Scarlet") return encd.RandRate0TotalScarlet + encd.RandRate1TotalScarlet + encd.RandRate2TotalScarlet + encd.RandRate3TotalScarlet != 0;
-                else if (game == "Violet") return encd.RandRate0TotalViolet + encd.RandRate1TotalViolet + encd.RandRate2TotalViolet + encd.RandRate3TotalViolet != 0;
+                if (game == "Scarlet")
+                    return encd.RandRate0TotalScarlet + encd.RandRate1TotalScarlet + encd.RandRate2TotalScarlet + encd.RandRate3TotalScarlet != 0;
+                else if (game == "Violet")
+                    return encd.RandRate0TotalViolet + encd.RandRate1TotalViolet + encd.RandRate2TotalViolet + encd.RandRate3TotalViolet != 0;
                 return false;
             }
             else if (enc is EncounterMight9 encm)
             {
-                if (game == "Scarlet") return encm.RandRate0TotalScarlet + encm.RandRate1TotalScarlet + encm.RandRate2TotalScarlet + encm.RandRate3TotalScarlet != 0;
-                else if (game == "Violet") return encm.RandRate0TotalViolet + encm.RandRate1TotalViolet + encm.RandRate2TotalViolet + encm.RandRate3TotalViolet != 0;
+                if (game == "Scarlet")
+                    return encm.RandRate0TotalScarlet + encm.RandRate1TotalScarlet + encm.RandRate2TotalScarlet + encm.RandRate3TotalScarlet != 0;
+                else if (game == "Violet")
+                    return encm.RandRate0TotalViolet + encm.RandRate1TotalViolet + encm.RandRate2TotalViolet + encm.RandRate3TotalViolet != 0;
                 return false;
             }
             return false;
@@ -162,20 +166,26 @@ namespace RaidCrawler.Core.Structures
         {
             if (stage < 0)
                 return null;
-            if (Raid.DistTeraRaids is null) return null;
+
+            if (Raid.DistTeraRaids is null)
+                return null;
+
             if (!isFixed)
             {
                 foreach (TeraDistribution enc in Raid.DistTeraRaids.Cast<TeraDistribution>())
                 {
                     if (enc.Entity is not EncounterDist9 encd)
                         continue;
+
                     if (enc.DeliveryGroupID != groupid)
                         continue;
+
                     var total = Raid.Game == "Scarlet" ? encd.GetRandRateTotalScarlet(stage) : encd.GetRandRateTotalViolet(stage);
                     if (total != 0 || isFixed)
                     {
                         if (isFixed)
                             return enc;
+
                         var rand = new Xoroshiro128Plus(Seed);
                         _ = rand.NextInt(100);
                         var val = rand.NextInt(total);
@@ -191,13 +201,16 @@ namespace RaidCrawler.Core.Structures
                 {
                     if (enc.Entity is not EncounterMight9 encm)
                         continue;
+
                     if (enc.DeliveryGroupID != groupid)
                         continue;
+
                     var total = Raid.Game == "Scarlet" ? encm.GetRandRateTotalScarlet(stage) : encm.GetRandRateTotalViolet(stage);
                     if (total != 0 || isFixed)
                     {
                         if (isFixed)
                             return enc;
+
                         var rand = new Xoroshiro128Plus(Seed);
                         _ = rand.NextInt(100);
                         var val = rand.NextInt(total);

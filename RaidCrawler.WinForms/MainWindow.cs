@@ -264,9 +264,6 @@ namespace RaidCrawler.WinForms
                 Config.Progress = await ConnectionWrapper.GetStoryProgress(token).ConfigureAwait(false);
                 Config.EventProgress = Math.Min(Config.Progress, 3);
 
-                ToolStripStatusLabel.Text = "Reading raids...";
-                await ReadRaids(token).ConfigureAwait(false);
-
                 ToolStripStatusLabel.Text = "Reading event raid status...";
                 try
                 {
@@ -274,7 +271,21 @@ namespace RaidCrawler.WinForms
                 }
                 catch (Exception ex)
                 {
+                    ButtonEnable(new[] { ButtonConnect, SendScreenshot, btnOpenMap, Rewards }, true);
                     MessageBox.Show($"Error occurred while reading event raids: {ex.Message}");
+                    return;
+                }
+
+                ToolStripStatusLabel.Text = "Reading raids...";
+                try
+                {
+                    await ReadRaids(token).ConfigureAwait(false);
+                }
+                catch (Exception ex)
+                {
+                    ButtonEnable(new[] { ButtonConnect, SendScreenshot, btnOpenMap, Rewards }, true);
+                    MessageBox.Show($"Error occurred while reading raids: {ex.Message}");
+                    return;
                 }
 
                 ComboIndex.SelectedIndex = 0;
@@ -442,15 +453,24 @@ namespace RaidCrawler.WinForms
             if (IsReading)
                 MessageBox.Show("Please wait for the current RAM read to finish.");
 
-            Task.Run(async () =>
-            {
-                IsReading = true;
-                ButtonEnable(new[] { ButtonReadRaids, ButtonAdvanceDate }, false);
-                await ReadRaids(Source.Token).ConfigureAwait(false);
+            Task.Run(async () => { await ReadRaidsAsync(Source.Token).ConfigureAwait(false); }, Source.Token);
+        }
 
-                IsReading = false;
-                ButtonEnable(new[] { ButtonReadRaids, ButtonAdvanceDate }, true);
-            }, Source.Token);
+        private async Task ReadRaidsAsync(CancellationToken token)
+        {
+            IsReading = true;
+            ButtonEnable(new[] { ButtonReadRaids, ButtonAdvanceDate }, false);
+            try
+            {
+                await ReadRaids(token).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error occurred while reading raids: {ex.Message}");
+            }
+
+            IsReading = false;
+            ButtonEnable(new[] { ButtonReadRaids, ButtonAdvanceDate }, true);
         }
 
         private void ViewRAM_Click(object sender, EventArgs e)
@@ -485,16 +505,25 @@ namespace RaidCrawler.WinForms
             if (IsReading)
                 MessageBox.Show("Please wait for the current RAM read to finish.");
 
-            Task.Run(async () =>
+            Task.Run(async () => { await DownloadEventsAsync(Source.Token).ConfigureAwait(false); }, Source.Token);
+        }
+
+        private async Task DownloadEventsAsync(CancellationToken token)
+        {
+            IsReading = true;
+            ToolStripStatusLabel.Text = "Reading event raid status...";
+
+            try
             {
-                IsReading = true;
-                ToolStripStatusLabel.Text = "Reading event raid status...";
-
                 await ReadEventRaids(Source.Token, true).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error occurred while reading event raids: {ex.Message}");
+            }
 
-                IsReading = false;
-                ToolStripStatusLabel.Text = "Completed!";
-            }, Source.Token);
+            IsReading = false;
+            ToolStripStatusLabel.Text = "Completed!";
         }
 
         private void Seed_Click(object sender, EventArgs e)
@@ -1027,7 +1056,7 @@ namespace RaidCrawler.WinForms
 
             var count = Data.Length / Raid.SIZE;
             HashSet<int> possible_groups = new();
-            if (Raid.DistTeraRaids != null)
+            if (Raid.DistTeraRaids is not null)
             {
                 foreach (TeraDistribution e in Raid.DistTeraRaids.Cast<TeraDistribution>())
                 {
@@ -1060,15 +1089,14 @@ namespace RaidCrawler.WinForms
             if (Raids.Count > 0)
             {
                 ButtonEnable(new[] { ButtonPrevious, ButtonNext }, true);
-                var dataSource = Enumerable.Range(0, Raids.Count + 1).Select(z => $"{z + 1:D2} / {Raids.Count:D2}").ToArray();
+                var dataSource = Enumerable.Range(0, Raids.Count).Select(z => $"{z + 1:D} / {Raids.Count:D}").ToArray();
                 if (InvokeRequired)
                     ComboIndex.Invoke(() => { ComboIndex.DataSource = dataSource; });
                 else ComboIndex.DataSource = dataSource;
 
-                var selectedIndex = ComboIndex.SelectedIndex < Raids.Count ? ComboIndex.SelectedIndex : 0;
                 if (InvokeRequired)
-                    ComboIndex.Invoke(() => { ComboIndex.SelectedIndex = selectedIndex; });
-                else ComboIndex.SelectedIndex = selectedIndex;
+                    ComboIndex.Invoke(() => { ComboIndex.SelectedIndex = ComboIndex.SelectedIndex < Raids.Count ? ComboIndex.SelectedIndex : 0; });
+                else ComboIndex.SelectedIndex = ComboIndex.SelectedIndex < Raids.Count ? ComboIndex.SelectedIndex : 0;
             }
             else
             {
