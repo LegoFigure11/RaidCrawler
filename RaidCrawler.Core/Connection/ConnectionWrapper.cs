@@ -3,16 +3,16 @@ using System.Text;
 using PKHeX.Core;
 using SysBot.Base;
 using RaidCrawler.Core.Interfaces;
-using static System.Buffers.Binary.BinaryPrimitives;
-using static RaidCrawler.Core.Structures.Offsets;
+using RaidCrawler.Core.Structures;
 using static SysBot.Base.SwitchButton;
 
 namespace RaidCrawler.Core.Connection
 {
-    public class ConnectionWrapperAsync
+    public class ConnectionWrapperAsync : Offsets
     {
         public readonly ISwitchConnectionAsync Connection;
-        public bool Connected { get => Connection is not null && Connection.Connected; }
+        public bool Connected { get => Connection is not null && IsConnected; }
+        private bool IsConnected { get; set; }
         private readonly bool CRLF;
         private readonly Action<string> _statusUpdate;
         private static ulong BaseBlockKeyPointer = 0;
@@ -39,11 +39,13 @@ namespace RaidCrawler.Core.Connection
                 _statusUpdate("Connecting...");
                 Connection.Connect();
                 BaseBlockKeyPointer = await Connection.PointerAll(BlockKeyPointer, token).ConfigureAwait(false);
+                IsConnected = true;
                 _statusUpdate("Connected!");
                 return (true, "");
             }
             catch (SocketException e)
             {
+                IsConnected = false;
                 return (false, e.Message);
             }
         }
@@ -60,11 +62,13 @@ namespace RaidCrawler.Core.Connection
 
                 _statusUpdate("Disconnecting...");
                 Connection.Disconnect();
+                IsConnected = false;
                 _statusUpdate("Disconnected!");
                 return (true, "");
             }
             catch (SocketException e)
             {
+                IsConnected = false;
                 return (false, e.Message);
             }
         }
@@ -95,12 +99,12 @@ namespace RaidCrawler.Core.Connection
         {
             var header_ofs = await SearchSaveKey(key, token).ConfigureAwait(false);
             var data = await Connection.ReadBytesAbsoluteAsync(header_ofs + 8, 8, token).ConfigureAwait(false);
-            header_ofs = BitConverter.ToUInt64(data, 0);
+            header_ofs = BitConverter.ToUInt64(data);
 
             var header = await Connection.ReadBytesAbsoluteAsync(header_ofs, 5, token).ConfigureAwait(false);
             header = DecryptBlock(key, header);
 
-            var size = ReadUInt32LittleEndian(header.AsSpan()[1..]);
+            var size = BitConverter.ToUInt32(header.AsSpan()[1..]);
             var obj = await Connection.ReadBytesAbsoluteAsync(header_ofs, (int)size + 5, token).ConfigureAwait(false);
             return DecryptBlock(key, obj)[5..];
         }
@@ -122,8 +126,8 @@ namespace RaidCrawler.Core.Connection
         public async Task<ulong> SearchSaveKey(uint key, CancellationToken token)
         {
             var data = await Connection.ReadBytesAbsoluteAsync(BaseBlockKeyPointer + 8, 16, token).ConfigureAwait(false);
-            var start = ReadUInt64LittleEndian(data.AsSpan()[..8]);
-            var end = ReadUInt64LittleEndian(data.AsSpan()[8..]);
+            var start = BitConverter.ToUInt64(data.AsSpan()[..8]);
+            var end = BitConverter.ToUInt64(data.AsSpan()[8..]);
 
             while (start < end)
             {
@@ -131,7 +135,7 @@ namespace RaidCrawler.Core.Connection
                 var mid = start + (block_ct >> 1) * 32;
 
                 data = await Connection.ReadBytesAbsoluteAsync(mid, 4, token).ConfigureAwait(false);
-                var found = ReadUInt32LittleEndian(data);
+                var found = BitConverter.ToUInt32(data);
                 if (found == key)
                     return mid;
 

@@ -16,9 +16,11 @@ namespace RaidCrawler.WinForms
     public partial class MainWindow : Form
     {
         private static CancellationTokenSource Source = new();
+        private static CancellationTokenSource DateAdvanceSource = new();
+
         private static readonly object _connectLock = new();
         private static readonly object _readLock = new();
-        private ConnectionWrapperAsync ConnectionWrapper;
+        private ConnectionWrapperAsync ConnectionWrapper = default!;
         private readonly SwitchConnectionConfig ConnectionConfig = new()
         { Protocol = SwitchProtocol.WiFi, IP = "192.168.0.0", Port = 6000 };
 
@@ -104,8 +106,6 @@ namespace RaidCrawler.WinForms
                 Port = protocol is SwitchProtocol.WiFi ? 6000 : Config.UsbPort,
                 Protocol = Config.Protocol,
             };
-
-            ConnectionWrapper = new(ConnectionConfig, UpdateStatus);
 
             InitializeComponent();
 
@@ -216,7 +216,7 @@ namespace RaidCrawler.WinForms
         {
             lock (_connectLock)
             {
-                if (ConnectionWrapper.Connected)
+                if (ConnectionWrapper is not null && ConnectionWrapper.Connected)
                     return;
 
                 ConnectionWrapper = new(ConnectionConfig, UpdateStatus);
@@ -298,8 +298,11 @@ namespace RaidCrawler.WinForms
                     return;
                 }
 
-                ComboIndex.SelectedIndex = 0;
                 ButtonEnable(new[] { ButtonAdvanceDate, ButtonReadRaids, ButtonDisconnect, ButtonViewRAM, ButtonDownloadEvents, SendScreenshot, btnOpenMap, Rewards }, true);
+                if (InvokeRequired)
+                    ComboIndex.Invoke(() => { ComboIndex.SelectedIndex = 0; });
+                else ComboIndex.SelectedIndex = 0;
+
                 ToolStripStatusLabel.Text = "Completed!";
             }, token);
         }
@@ -308,7 +311,7 @@ namespace RaidCrawler.WinForms
         {
             lock (_connectLock)
             {
-                if (!ConnectionWrapper.Connected)
+                if (ConnectionWrapper is null || !ConnectionWrapper.Connected)
                     return;
 
                 Disconnect(Source.Token);
@@ -319,7 +322,7 @@ namespace RaidCrawler.WinForms
         {
             Task.Run(async () =>
             {
-                ButtonEnable(new[] { ButtonAdvanceDate, ButtonReadRaids, ButtonDisconnect, ButtonViewRAM, ButtonDownloadEvents, SendScreenshot, btnOpenMap, Rewards }, false);
+                ButtonEnable(new[] { ButtonAdvanceDate, ButtonReadRaids, ButtonDisconnect, ButtonViewRAM, ButtonDownloadEvents, SendScreenshot }, false);
                 try
                 {
                     (bool success, string err) = await ConnectionWrapper.DisconnectAsync(token).ConfigureAwait(false);
@@ -379,85 +382,112 @@ namespace RaidCrawler.WinForms
 
         private void ButtonAdvanceDate_Click(object sender, EventArgs e)
         {
-            AdvanceDateClick(Source.Token);
+            if (ConnectionWrapper is null || !ConnectionWrapper.Connected)
+                return;
+
+            ButtonAdvanceDate.Visible = false;
+            StopAdvance_Button.Visible = true;
+            Task.Run(async () => await AdvanceDateClick(DateAdvanceSource.Token).ConfigureAwait(false), Source.Token);
         }
 
-        private void AdvanceDateClick(CancellationToken token)
+        private async Task AdvanceDateClick(CancellationToken token)
         {
-            Task.Run(async () =>
+            try
             {
-                if (ConnectionWrapper.Connected)
+                ButtonEnable(new[] { ButtonViewRAM, ButtonAdvanceDate, ButtonDisconnect, ButtonDownloadEvents, SendScreenshot, ButtonReadRaids }, false);
+                SearchTimer.Start();
+                stopwatch.Restart();
+                _WindowState = WindowState;
+
+                var prompt = false;
+                do
                 {
-                    ButtonEnable(new[] { ButtonViewRAM, ButtonAdvanceDate, ButtonDisconnect, ButtonDownloadEvents, SendScreenshot, ButtonReadRaids }, false);
-                    SearchTimer.Start();
-                    stopwatch.Restart();
-                    _WindowState = WindowState;
+                    prev = Raids.Select(z => z.Seed).ToList();
+                    if (Config.StreamerView)
+                        teraRaidView.StartProgress();
 
-                    var prompt = false;
-                    do
+                    ToolStripStatusLabel.Text = "Changing date...";
+                    await ConnectionWrapper.AdvanceDate(Config, token).ConfigureAwait(false);
+                    await ReadRaids(token).ConfigureAwait(false);
+                    prompt = StopAdvanceDate();
+                } while (!prompt);
+                    
+                if (prompt)
+                {
+                    stopwatch.Stop();
+                    var timeSpan = stopwatch.Elapsed;
+                    string time = string.Format("{0:00}:{1:00}:{2:00}",
+                    timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
+
+                    if (Config.PlaySound)
+                        System.Media.SystemSounds.Asterisk.Play();
+
+                    if (Config.FocusWindow)
                     {
-                        prev = Raids.Select(z => z.Seed).ToList();
-                        if (Config.StreamerView)
-                            teraRaidView.StartProgress();
-
-                        ToolStripStatusLabel.Text = "Changing date...";
-                        await ConnectionWrapper.AdvanceDate(Config, token).ConfigureAwait(false);
-                        await ReadRaids(token).ConfigureAwait(false);
-                    } while (CheckAdvanceDate(out prompt));
-
-                    if (prompt)
-                    {
-                        stopwatch.Stop();
-                        var timeSpan = stopwatch.Elapsed;
-                        string time = string.Format("{0:00}:{1:00}:{2:00}",
-                        timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
-
-                        if (Config.PlaySound)
-                            System.Media.SystemSounds.Asterisk.Play();
-
-                        if (Config.FocusWindow)
-                        {
-                            WindowState = _WindowState;
-                            Activate();
-                        }
-
-                        for (int i = 0; i < Raids.Count; i++)
-                        {
-                            var satisfied_filters = new List<RaidFilter>();
-                            foreach (var filter in RaidFilters)
-                            {
-                                if (filter is null)
-                                    continue;
-
-                                if (filter.FilterSatisfied(Encounters[i], Raids[i], RaidBoost.SelectedIndex))
-                                {
-                                    satisfied_filters.Add(filter);
-                                    if (ComboIndex.InvokeRequired)
-                                        ComboIndex.Invoke(() => { ComboIndex.SelectedIndex = i; });
-                                    else ComboIndex.SelectedIndex = i;
-                                }
-                            }
-
-                            if (satisfied_filters.Count > 0)
-                            {
-                                var teraType = Raid.GetTeraType(Encounters[i], Raids[i]);
-                                var color = TypeColor.GetTypeSpriteColor((byte)teraType);
-                                var hexColor = $"{color.R:X2}{color.G:X2}{color.B:X2}";
-                                var blank = new PK9 { Species = Encounters[i]!.Species, Form = Encounters[i]!.Form };
-                                var spriteName = SpriteName.GetResourceStringSprite(blank.Species, blank.Form, blank.Gender, blank.FormArgument, EntityContext.Gen9, Raid.CheckIsShiny(Raids[i], Encounters[i]));
-                                await NotificationHandler.SendNotifications(Config, Encounters[i], Raids[i], satisfied_filters, time, RewardsList[i], hexColor, spriteName, Source.Token).ConfigureAwait(false);
-                            }
-                        }
-
-                        if (Config.EnableAlertWindow)
-                            MessageBox.Show(Config.AlertWindowMessage + "\n\nTime Spent: " + time, "Result found!", MessageBoxButtons.OK);
-                        Text = formTitle + " [Match Found in " + time + "]";
+                        WindowState = _WindowState;
+                        Activate();
                     }
 
-                    SearchTimer.Stop();
-                    ButtonEnable(new[] { ButtonViewRAM, ButtonAdvanceDate, ButtonDisconnect, ButtonDownloadEvents, SendScreenshot, ButtonReadRaids }, true);
+                    for (int i = 0; i < Raids.Count; i++)
+                    {
+                        var satisfied_filters = new List<RaidFilter>();
+                        foreach (var filter in RaidFilters)
+                        {
+                            if (filter is null)
+                                continue;
+
+                            if (filter.FilterSatisfied(Encounters[i], Raids[i], RaidBoost.SelectedIndex))
+                            {
+                                satisfied_filters.Add(filter);
+                                if (InvokeRequired)
+                                    ComboIndex.Invoke(() => { ComboIndex.SelectedIndex = i; });
+                                else ComboIndex.SelectedIndex = i;
+                            }
+                        }
+
+                        if (satisfied_filters.Count > 0)
+                        {
+                            var teraType = Raid.GetTeraType(Encounters[i], Raids[i]);
+                            var color = TypeColor.GetTypeSpriteColor((byte)teraType);
+                            var hexColor = $"{color.R:X2}{color.G:X2}{color.B:X2}";
+                            var blank = new PK9 { Species = Encounters[i]!.Species, Form = Encounters[i]!.Form };
+                            var spriteName = SpriteName.GetResourceStringSprite(blank.Species, blank.Form, blank.Gender, blank.FormArgument, EntityContext.Gen9, Raid.CheckIsShiny(Raids[i], Encounters[i]));
+                            await NotificationHandler.SendNotifications(Config, Encounters[i], Raids[i], satisfied_filters, time, RewardsList[i], hexColor, spriteName, Source.Token).ConfigureAwait(false);
+                        }
+                    }
+
+                    if (Config.EnableAlertWindow)
+                        MessageBox.Show(Config.AlertWindowMessage + "\n\nTime Spent: " + time, "Result found!", MessageBoxButtons.OK);
+                    Text = formTitle + " [Match Found in " + time + "]";
                 }
-            }, token);
+
+                SearchTimer.Stop();
+            }
+            catch
+            {
+                ToolStripStatusLabel.Text = "Date advance stopped.";
+            }
+
+            if (InvokeRequired)
+            {
+                ButtonAdvanceDate.Invoke(() => { ButtonAdvanceDate.Visible = true; });
+                StopAdvance_Button.Invoke(() => { StopAdvance_Button.Visible = false; });
+            }
+            else
+            {
+                ButtonAdvanceDate.Visible = true;
+                StopAdvance_Button.Visible = false;
+            }
+
+            ButtonEnable(new[] { ButtonViewRAM, ButtonAdvanceDate, ButtonDisconnect, ButtonDownloadEvents, SendScreenshot, ButtonReadRaids }, true);
+            DateAdvanceSource = new();
+        }
+
+        private void StopAdvanceButton_Click(object sender, EventArgs e)
+        {
+            StopAdvance_Button.Visible = false;
+            ButtonAdvanceDate.Visible = true;
+            DateAdvanceSource.Cancel();
         }
 
         private void ButtonReadRaids_Click(object sender, EventArgs e)
@@ -497,7 +527,7 @@ namespace RaidCrawler.WinForms
             ButtonEnable(new[] { ButtonViewRAM }, false);
             RaidBlockViewer window = default!;
 
-            if (ConnectionWrapper.Connected && ModifierKeys == Keys.Shift)
+            if (ConnectionWrapper is not null && ConnectionWrapper.Connected && ModifierKeys == Keys.Shift)
             {
                 try
                 {
@@ -526,7 +556,7 @@ namespace RaidCrawler.WinForms
 
         private void DownloadEvents_Click(object sender, EventArgs e)
         {
-            if (!ConnectionWrapper.Connected)
+            if (ConnectionWrapper is null || !ConnectionWrapper.Connected)
                 return;
 
             if (IsReading)
@@ -591,9 +621,19 @@ namespace RaidCrawler.WinForms
             using StreamWriter sw = new(configpath);
             sw.Write(output);
 
-            Disconnect(Source.Token);
+            if (ConnectionWrapper is not null && ConnectionWrapper.Connected)
+            {
+                try
+                {
+                    var _ = ConnectionWrapper.DisconnectAsync(Source.Token).Result;
+                }
+                catch { }
+            }
+
             Source.Cancel();
+            DateAdvanceSource.Cancel();
             Source = new();
+            DateAdvanceSource = new();
         }
 
         private async Task ReadEventRaids(CancellationToken token, bool force = false)
@@ -1040,28 +1080,34 @@ namespace RaidCrawler.WinForms
 
         private bool StopAdvances => RaidFilters.Count == 0 || RaidFilters.All(x => x.Enabled == false);
 
-        private bool CheckAdvanceDate(out bool prompt)
+        private bool StopAdvanceDate()
         {
-            prompt = false;
             if (!Config.EnableFilters)
-                return false;
-
-            if (prev.Count != Raids.Count)
                 return true;
 
-            var sameraids = true;
-            for (int i = 0; i < prev.Count; i++)
-                sameraids = Raids[i].Seed != prev[i];
+            if (prev.Count != Raids.Count)
+                return false;
+
+            var curSeeds = Raids.Select(x => x.Seed).ToArray();
+            var sameraids = curSeeds.Except(prev).ToArray().Length == 0;
 
             StatDaySkipTries++;
             if (sameraids)
-                return true;
+                return false;
 
             StatDaySkipSuccess++;
-            if (RaidFilters.Any(z => z.FilterSatisfied(Encounters, Raids, RaidBoost.SelectedIndex)))
-                prompt = true;
+            for (int i = 0; i < RaidFilters.Count; i++)
+            {
+                var index = 0;
+                if (InvokeRequired)
+                    index = RaidBoost.Invoke(() => { return RaidBoost.SelectedIndex; });
+                else index = RaidBoost.SelectedIndex;
 
-            return StopAdvances || prompt;
+                if (RaidFilters[i].FilterSatisfied(Encounters, Raids, index))
+                    return true;
+            }
+
+            return StopAdvances;
         }
 
         private async Task ReadRaids(CancellationToken token)
@@ -1069,7 +1115,7 @@ namespace RaidCrawler.WinForms
             Raid raid;
             ToolStripStatusLabel.Text = "Parsing pointer...";
             if (RaidBlockOffset == 0)
-                RaidBlockOffset = await ConnectionWrapper.Connection.PointerAll(RaidBlockPointer, token).ConfigureAwait(false);
+                RaidBlockOffset = await ConnectionWrapper.Connection.PointerAll(ConnectionWrapper.RaidBlockPointer, token).ConfigureAwait(false);
 
             Raids.Clear();
             Encounters.Clear();
@@ -1109,7 +1155,11 @@ namespace RaidCrawler.WinForms
 
             ToolStripStatusLabel.Text = "Completed!";
             var filterMatchCount = Enumerable.Range(0, Raids.Count).Count(i => RaidFilters.Any(z => z.FilterSatisfied(Encounters[i], Raids[i], GetRaidBoost())));
-            LabelLoadedRaids.Text = $"Matches: {filterMatchCount}";
+
+            if (InvokeRequired)
+                LabelLoadedRaids.Invoke(() => { LabelLoadedRaids.Text = $"Matches: {filterMatchCount}"; });
+            else LabelLoadedRaids.Text = $"Matches: {filterMatchCount}";
+
             if (Raids.Count > 0)
             {
                 ButtonEnable(new[] { ButtonPrevious, ButtonNext }, true);
