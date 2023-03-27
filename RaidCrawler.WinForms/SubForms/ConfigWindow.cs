@@ -6,7 +6,6 @@ namespace RaidCrawler.WinForms.SubForms
     {
         private readonly ClientConfig c = new();
 
-
         public ConfigWindow(ClientConfig c)
         {
             var mainForm = Application.OpenForms.OfType<MainWindow>().Single();
@@ -170,6 +169,13 @@ namespace RaidCrawler.WinForms.SubForms
             c.Protocol = (SysBot.Base.SwitchProtocol)Protocol_dropdown.SelectedIndex;
             var mainForm = Application.OpenForms.OfType<MainWindow>().Single();
             mainForm.Protocol_SelectedIndexChanged(c.Protocol);
+        }
+
+        private void StreamerView_Clicked(object sender, EventArgs e)
+        {
+            c.StreamerView = ExperimentalView.Checked;
+            var mainForm = Application.OpenForms.OfType<MainWindow>().Single();
+            mainForm.ToggleStreamerView();
         }
     }
 }

@@ -49,7 +49,9 @@ namespace RaidCrawler.WinForms
         private Color DefaultColor;
         private FormWindowState _WindowState;
         private readonly Stopwatch stopwatch = new();
-        private readonly TeraRaidView teraRaidView;
+        private TeraRaidView? teraRaidView;
+
+        private bool StopAdvances => !Config.EnableFilters || RaidFilters.Count == 0 || RaidFilters.All(x => !x.Enabled);
 
         public MainWindow()
         {
@@ -96,8 +98,6 @@ namespace RaidCrawler.WinForms
             SpriteBuilder.ShowTeraOpacityStripe = 0xAF;
             SpriteBuilder.ShowTeraOpacityBackground = 0xFF;
             SpriteUtil.ChangeMode(SpriteBuilderMode.SpritesArtwork5668);
-
-            teraRaidView = new TeraRaidView(Config);
 
             var protocol = Config.Protocol;
             ConnectionConfig = new()
@@ -165,6 +165,13 @@ namespace RaidCrawler.WinForms
             else window.ShowDialog();
         }
 
+        private void ShowMessageBox(string msg)
+        {
+            if (InvokeRequired)
+                Invoke(() => { MessageBox.Show(msg); });
+            else MessageBox.Show(msg);
+        }
+
         private int GetRaidBoost()
         {
             if (InvokeRequired)
@@ -182,12 +189,7 @@ namespace RaidCrawler.WinForms
             USB_Port_TB.Text = Config.UsbPort.ToString();
             DefaultColor = IVs.BackColor;
             RaidBoost.SelectedIndex = 0;
-
-            if (Config.StreamerView)
-            {
-                teraRaidView.Map.Image = map;
-                teraRaidView.Show();
-            }
+            ToggleStreamerView();
         }
 
         private void InputSwitchIP_Changed(object sender, EventArgs e)
@@ -209,7 +211,8 @@ namespace RaidCrawler.WinForms
                 ConnectionConfig.Port = port;
                 return;
             }
-            MessageBox.Show("Please enter a valid numerical USB port.");
+
+            ShowMessageBox("Please enter a valid numerical USB port.");
         }
 
         private void ButtonConnect_Click(object sender, EventArgs e)
@@ -233,11 +236,11 @@ namespace RaidCrawler.WinForms
                 if (!success)
                 {
                     ButtonEnable(new[] { ButtonConnect }, true);
-                    MessageBox.Show(err);
+                    ShowMessageBox(err);
                     return;
                 }
 
-                ToolStripStatusLabel.Text = "Detecting game version...";
+                UpdateStatus("Detecting game version...");
                 string id = await ConnectionWrapper.Connection.GetTitleID(token).ConfigureAwait(false);
                 Config.Game = id switch
                 {
@@ -254,27 +257,27 @@ namespace RaidCrawler.WinForms
                         if (!success)
                         {
                             ButtonEnable(new[] { ButtonConnect }, true);
-                            MessageBox.Show(err);
+                            ShowMessageBox(err);
                             return;
                         }
                     }
                     catch (Exception ex)
                     {
                         ButtonEnable(new[] { ButtonConnect }, true);
-                        MessageBox.Show(ex.Message);
+                        ShowMessageBox(ex.Message);
                         return;
                     }
 
                     ButtonEnable(new[] { ButtonConnect }, true);
-                    MessageBox.Show("Unable to detect Pokémon Scarlet or Pokémon Violet running on your Switch!");
+                    ShowMessageBox("Unable to detect Pokémon Scarlet or Pokémon Violet running on your Switch!");
                     return;
                 }
 
-                ToolStripStatusLabel.Text = "Reading story progress...";
+                UpdateStatus("Reading story progress...");
                 Config.Progress = await ConnectionWrapper.GetStoryProgress(token).ConfigureAwait(false);
                 Config.EventProgress = Math.Min(Config.Progress, 3);
 
-                ToolStripStatusLabel.Text = "Reading event raid status...";
+                UpdateStatus("Reading event raid status...");
                 try
                 {
                     await ReadEventRaids(token).ConfigureAwait(false);
@@ -282,11 +285,11 @@ namespace RaidCrawler.WinForms
                 catch (Exception ex)
                 {
                     ButtonEnable(new[] { ButtonConnect }, true);
-                    MessageBox.Show($"Error occurred while reading event raids: {ex.Message}");
+                    ShowMessageBox($"Error occurred while reading event raids: {ex.Message}");
                     return;
                 }
 
-                ToolStripStatusLabel.Text = "Reading raids...";
+                UpdateStatus("Reading raids...");
                 try
                 {
                     await ReadRaids(token).ConfigureAwait(false);
@@ -294,7 +297,7 @@ namespace RaidCrawler.WinForms
                 catch (Exception ex)
                 {
                     ButtonEnable(new[] { ButtonConnect }, true);
-                    MessageBox.Show($"Error occurred while reading raids: {ex.Message}");
+                    ShowMessageBox($"Error occurred while reading raids: {ex.Message}");
                     return;
                 }
 
@@ -303,7 +306,7 @@ namespace RaidCrawler.WinForms
                     ComboIndex.Invoke(() => { ComboIndex.SelectedIndex = 0; });
                 else ComboIndex.SelectedIndex = 0;
 
-                ToolStripStatusLabel.Text = "Completed!";
+                UpdateStatus("Completed!");
             }, token);
         }
 
@@ -327,11 +330,11 @@ namespace RaidCrawler.WinForms
                 {
                     (bool success, string err) = await ConnectionWrapper.DisconnectAsync(token).ConfigureAwait(false);
                     if (!success)
-                        MessageBox.Show(err);
+                        ShowMessageBox(err);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message);
+                    ShowMessageBox(ex.Message);
                 }
 
                 ButtonEnable(new[] { ButtonConnect }, true);
@@ -403,10 +406,11 @@ namespace RaidCrawler.WinForms
                 do
                 {
                     prev = Raids.Select(z => z.Seed).ToList();
-                    if (Config.StreamerView)
+                    if (Config.StreamerView && teraRaidView is not null)
                         teraRaidView.StartProgress();
 
-                    ToolStripStatusLabel.Text = "Changing date...";
+                    UpdateStatus("Changing date...");
+
                     await ConnectionWrapper.AdvanceDate(Config, token).ConfigureAwait(false);
                     await ReadRaids(token).ConfigureAwait(false);
                     prompt = StopAdvanceDate();
@@ -465,7 +469,7 @@ namespace RaidCrawler.WinForms
             }
             catch
             {
-                ToolStripStatusLabel.Text = "Date advance stopped.";
+                UpdateStatus("Date advance stopped.");
             }
 
             if (InvokeRequired)
@@ -499,7 +503,7 @@ namespace RaidCrawler.WinForms
         {
             if (IsReading)
             {
-                MessageBox.Show("Please wait for the current RAM read to finish.");
+                ShowMessageBox("Please wait for the current RAM read to finish.");
                 return;
             }
 
@@ -510,7 +514,7 @@ namespace RaidCrawler.WinForms
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error occurred while reading raids: {ex.Message}");
+                ShowMessageBox($"Error occurred while reading raids: {ex.Message}");
             }
 
             ButtonEnable(new[] { ButtonViewRAM, ButtonAdvanceDate, ButtonDisconnect, ButtonDownloadEvents, SendScreenshot, ButtonReadRaids }, true);
@@ -520,7 +524,7 @@ namespace RaidCrawler.WinForms
         {
             if (IsReading)
             {
-                MessageBox.Show("Please wait for the current RAM read to finish.");
+                ShowMessageBox("Please wait for the current RAM read to finish.");
                 return;
             }
 
@@ -537,7 +541,7 @@ namespace RaidCrawler.WinForms
                 catch (Exception ex)
                 {
                     ButtonEnable(new[] { ButtonViewRAM }, true);
-                    MessageBox.Show(ex.Message);
+                    ShowMessageBox(ex.Message);
                     return;
                 }
             }
@@ -551,7 +555,7 @@ namespace RaidCrawler.WinForms
         private void StopFilter_Click(object sender, EventArgs e)
         {
             var form = new FilterSettings(ref RaidFilters);
-            form.ShowDialog();
+            ShowDialog(form);
         }
 
         private void DownloadEvents_Click(object sender, EventArgs e)
@@ -561,7 +565,7 @@ namespace RaidCrawler.WinForms
 
             if (IsReading)
             {
-                MessageBox.Show("Please wait for the current RAM read to finish.");
+                ShowMessageBox("Please wait for the current RAM read to finish.");
                 return;
             }
 
@@ -571,7 +575,7 @@ namespace RaidCrawler.WinForms
         private async Task DownloadEventsAsync(CancellationToken token)
         {
             ButtonEnable(new[] { ButtonViewRAM, ButtonAdvanceDate, ButtonDisconnect, ButtonDownloadEvents, SendScreenshot, ButtonReadRaids }, false);
-            ToolStripStatusLabel.Text = "Reading event raid status...";
+            UpdateStatus("Reading event raid status...");
 
             try
             {
@@ -579,33 +583,30 @@ namespace RaidCrawler.WinForms
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error occurred while reading event raids: {ex.Message}");
+                ShowMessageBox($"Error occurred while reading event raids: {ex.Message}");
             }
 
             ButtonEnable(new[] { ButtonViewRAM, ButtonAdvanceDate, ButtonDisconnect, ButtonDownloadEvents, SendScreenshot, ButtonReadRaids }, true);
-            ToolStripStatusLabel.Text = "Completed!";
+            UpdateStatus("Completed!");
         }
 
         private void Seed_Click(object sender, EventArgs e)
         {
-            if (ModifierKeys != Keys.Shift)
-                return;
-
-            if (Raids.Count <= ComboIndex.SelectedIndex)
-                return;
-
-            var raid = Raids[ComboIndex.SelectedIndex];
-            Seed.Text = HideSeed ? $"{raid.Seed:X8}" : "Hidden";
-            EC.Text = HideSeed ? $"{raid.EC:X8}" : "Hidden";
-            PID.Text = (HideSeed ? $"{raid.PID:X8}" : "Hidden") + $"{(raid.IsShiny ? " (☆)" : string.Empty)}";
-            HideSeed = !HideSeed;
-            ActiveControl = null;
+            if (ModifierKeys == Keys.Shift && Raids.Count > ComboIndex.SelectedIndex)
+            {
+                var raid = Raids[ComboIndex.SelectedIndex];
+                Seed.Text = HideSeed ? $"{raid.Seed:X8}" : "Hidden";
+                EC.Text = HideSeed ? $"{raid.EC:X8}" : "Hidden";
+                PID.Text = (HideSeed ? $"{raid.PID:X8}" : "Hidden") + $"{(raid.IsShiny ? " (☆)" : string.Empty)}";
+                HideSeed = !HideSeed;
+                ActiveControl = null;
+            }
         }
 
         private void ConfigSettings_Click(object sender, EventArgs e)
         {
             var form = new ConfigWindow(Config);
-            form.ShowDialog();
+            ShowDialog(form);
         }
 
         private void EnableFilters_Click(object sender, EventArgs e)
@@ -625,7 +626,7 @@ namespace RaidCrawler.WinForms
             {
                 try
                 {
-                    var _ = ConnectionWrapper.DisconnectAsync(Source.Token).Result;
+                    _ = ConnectionWrapper.DisconnectAsync(Source.Token).Result;
                 }
                 catch { }
             }
@@ -702,7 +703,11 @@ namespace RaidCrawler.WinForms
                     var img = blank.Sprite();
                     img = ApplyTeraColor((byte)teratype, img, SpriteBackgroundType.BottomStripe);
 
-                    Species.Text = $"{Raid.strings.Species[encounter.Species]}{(encounter.Form != 0 ? $"-{encounter.Form}" : "")}";
+                    var form = ShowdownParsing.GetStringFromForm(encounter.Form, Raid.strings, encounter.Species, EntityContext.Gen9);
+                    if (form.Length > 0 && form[0] != '-')
+                        form = form.Insert(0, "-");
+
+                    Species.Text = $"{Raid.strings.Species[encounter.Species]}{form}";
                     Sprite.Image = img;
                     GemIcon.Image = GetDisplayGemImage(teratype, raid);
                     Gender.Text = $"{(Gender)blank.Gender}";
@@ -722,16 +727,19 @@ namespace RaidCrawler.WinForms
                     Move2.Text = ShowExtraMoves ? Raid.strings.Move[extra_moves[1]] : Raid.strings.Move[encounter.Move2];
                     Move3.Text = ShowExtraMoves ? Raid.strings.Move[extra_moves[2]] : Raid.strings.Move[encounter.Move3];
                     Move4.Text = ShowExtraMoves ? Raid.strings.Move[extra_moves[3]] : Raid.strings.Move[encounter.Move4];
+
                     IVs.Text = IVsString(ToSpeedLast(blank.IVs));
                     toolTip.SetToolTip(IVs, IVsString(ToSpeedLast(blank.IVs), true));
                 }
                 else
                 {
                     Species.Text = string.Empty;
+
                     Move1.Text = string.Empty;
                     Move2.Text = string.Empty;
                     Move3.Text = string.Empty;
                     Move4.Text = string.Empty;
+
                     IVs.Text = string.Empty;
                     Gender.Text = string.Empty;
                     Nature.Text = string.Empty;
@@ -741,7 +749,7 @@ namespace RaidCrawler.WinForms
                 PID.BackColor = Raid.CheckIsShiny(raid, encounter) ? Color.Gold : DefaultColor;
                 IVs.BackColor = IVs.Text is "31/31/31/31/31/31" ? Color.YellowGreen : DefaultColor;
             }
-            else MessageBox.Show($"Unable to display raid at index {index}. Ensure there are no cheats running or anything else that might shift RAM (Edizon, overlays, etc.), then reboot your console and try again.");
+            else ShowMessageBox($"Unable to display raid at index {index}. Ensure there are no cheats running or anything else that might shift RAM (Edizon, overlays, etc.), then reboot your console and try again.");
         }
 
         private static Image? GetDisplayGemImage(int teratype, Raid raid)
@@ -783,6 +791,12 @@ namespace RaidCrawler.WinForms
 
         private void DisplayPrettyRaid()
         {
+            if (teraRaidView is null)
+            {
+                ShowMessageBox("Something went terribly wrong: teraRaidView is not initialized.");
+                return;
+            }
+
             int index = ComboIndex.SelectedIndex;
             if (Raids.Count > index)
             {
@@ -809,7 +823,11 @@ namespace RaidCrawler.WinForms
                     var img = blank.Sprite();
 
                     teraRaidView.picBoxPokemon.Image = img;
-                    teraRaidView.Species.Text = Raid.strings.Species[encounter.Species];
+                    var form = ShowdownParsing.GetStringFromForm(encounter.Form, Raid.strings, encounter.Species, EntityContext.Gen9);
+                    if (form.Length > 0 && form[0] != '-')
+                        form = form.Insert(0, "-");
+
+                    teraRaidView.Species.Text = $"{Raid.strings.Species[encounter.Species]}{form}";
                     teraRaidView.Gender.Text = $"{(Gender)blank.Gender}";
 
                     var nature = blank.Nature;
@@ -884,7 +902,7 @@ namespace RaidCrawler.WinForms
 
                     var map = GenerateMap(raid, teratype);
                     if (map is null)
-                        MessageBox.Show("Error generating map.");
+                        ShowMessageBox("Error generating map.");
                     teraRaidView.Map.Image = map;
 
                     // Rewards
@@ -981,14 +999,15 @@ namespace RaidCrawler.WinForms
                     // TODO Clear all the fields.
                 }
             }
-            else MessageBox.Show($"Unable to display raid at index {index}. Ensure there are no cheats running or anything else that might shift RAM (Edizon, overlays, etc.), then reboot your console and try again.");
+            else ShowMessageBox($"Unable to display raid at index {index}. Ensure there are no cheats running or anything else that might shift RAM (Edizon, overlays, etc.), then reboot your console and try again.");
         }
 
         private string GetPIDString(Raid raid, ITeraRaid? enc)
         {
-            var shiny_mark = " (☆)";
             if (HideSeed)
                 return "Hidden";
+
+            var shiny_mark = " (☆)";
             var pid = $"{raid.PID:X8}";
             return Raid.CheckIsShiny(raid, enc) ? pid + shiny_mark : pid;
         }
@@ -1078,13 +1097,8 @@ namespace RaidCrawler.WinForms
             catch { return null; }
         }
 
-        private bool StopAdvances => RaidFilters.Count == 0 || RaidFilters.All(x => x.Enabled == false);
-
         private bool StopAdvanceDate()
         {
-            if (!Config.EnableFilters)
-                return true;
-
             if (prev.Count != Raids.Count)
                 return false;
 
@@ -1113,7 +1127,7 @@ namespace RaidCrawler.WinForms
         private async Task ReadRaids(CancellationToken token)
         {
             Raid raid;
-            ToolStripStatusLabel.Text = "Parsing pointer...";
+            UpdateStatus("Parsing pointer...");
             if (RaidBlockOffset == 0)
                 RaidBlockOffset = await ConnectionWrapper.Connection.PointerAll(ConnectionWrapper.RaidBlockPointer, token).ConfigureAwait(false);
 
@@ -1121,7 +1135,7 @@ namespace RaidCrawler.WinForms
             Encounters.Clear();
             RewardsList.Clear();
 
-            ToolStripStatusLabel.Text = "Reading raid block...";
+            UpdateStatus("Reading raid block...");
             var Data = await ConnectionWrapper.Connection.ReadBytesAbsoluteAsync(RaidBlockOffset + RaidBlock.HEADER_SIZE, (int)(RaidBlock.SIZE - RaidBlock.HEADER_SIZE), token).ConfigureAwait(false);
 
             var count = Data.Length / Raid.SIZE;
@@ -1153,7 +1167,7 @@ namespace RaidCrawler.WinForms
                     eventct++;
             }
 
-            ToolStripStatusLabel.Text = "Completed!";
+            UpdateStatus("Completed!");
             var filterMatchCount = Enumerable.Range(0, Raids.Count).Count(i => RaidFilters.Any(z => z.FilterSatisfied(Encounters[i], Raids[i], GetRaidBoost())));
 
             if (InvokeRequired)
@@ -1176,7 +1190,7 @@ namespace RaidCrawler.WinForms
             {
                 ButtonEnable(new[] { ButtonPrevious, ButtonNext }, false);
                 if (Raids.Count > RaidBlock.MAX_COUNT || Raids.Count == 0)
-                    MessageBox.Show("Bad read, ensure there are no cheats running or anything else that might shift RAM (Edizon, overlays, etc.), then reboot your console and try again.");
+                    ShowMessageBox("Bad read, ensure there are no cheats running or anything else that might shift RAM (Edizon, overlays, etc.), then reboot your console and try again.");
             }
         }
 
@@ -1198,6 +1212,7 @@ namespace RaidCrawler.WinForms
                 LabelSwitchIP.Visible = false;
                 USB_Port_label.Visible = true;
                 USB_Port_TB.Visible = true;
+                ConnectionConfig.Port = Config.UsbPort;
             }
             else
             {
@@ -1205,6 +1220,7 @@ namespace RaidCrawler.WinForms
                 LabelSwitchIP.Visible = true;
                 USB_Port_label.Visible = false;
                 USB_Port_TB.Visible = false;
+                ConnectionConfig.Port = 6000;
             }
         }
 
@@ -1212,7 +1228,7 @@ namespace RaidCrawler.WinForms
         {
             if (Raids.Count == 0)
             {
-                MessageBox.Show("Raids not loaded.");
+                ShowMessageBox("Raids not loaded.");
                 return;
             }
 
@@ -1222,31 +1238,31 @@ namespace RaidCrawler.WinForms
             var map = GenerateMap(raid, teratype);
             if (map is null)
             {
-                MessageBox.Show("Error generating map.");
+                ShowMessageBox("Error generating map.");
                 return;
             }
 
             var form = new MapView(map);
-            form.ShowDialog();
+            ShowDialog(form);
         }
 
         private void Rewards_Click(object sender, EventArgs e)
         {
             if (Raids.Count == 0)
             {
-                MessageBox.Show("Raids not loaded.");
+                ShowMessageBox("Raids not loaded.");
                 return;
             }
 
             var rewards = RewardsList[ComboIndex.SelectedIndex];
             if (rewards is null)
             {
-                MessageBox.Show("Error while displaying rewards.");
+                ShowMessageBox("Error while displaying rewards.");
                 return;
             }
 
             var form = new RewardsView(rewards);
-            form.ShowDialog();
+            ShowDialog(form);
         }
 
         private void RaidBoost_SelectedIndexChanged(object sender, EventArgs e)
@@ -1256,7 +1272,7 @@ namespace RaidCrawler.WinForms
             {
                 var raid = Raids[i];
                 var encounter = Encounters[i];
-                RewardsList.Add(Structures.Rewards.GetRewards(encounter, raid.Seed, Raid.GetTeraType(encounter, raid), RaidBoost.SelectedIndex));
+                RewardsList.Add(Core.Structures.Rewards.GetRewards(encounter, raid.Seed, Raid.GetTeraType(encounter, raid), RaidBoost.SelectedIndex));
             }
         }
 
@@ -1266,7 +1282,7 @@ namespace RaidCrawler.WinForms
         {
             if (Raids.Count == 0)
             {
-                MessageBox.Show("Raids not loaded.");
+                ShowMessageBox("Raids not loaded.");
                 return;
             }
 
@@ -1307,9 +1323,9 @@ namespace RaidCrawler.WinForms
                 {
                     await NotificationHandler.SendScreenshot(Config, ConnectionWrapper.Connection, Source.Token).ConfigureAwait(false);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    MessageBox.Show("Cannot send a screenshot since switch is not connected.");
+                    ShowMessageBox($"Could not send the screenshot: {ex.Message}");
                 }
             }, Source.Token);
         }
@@ -1321,7 +1337,7 @@ namespace RaidCrawler.WinForms
             timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
 
             Text = formTitle + " [Searching for " + time + "]";
-            if (Config.StreamerView)
+            if (Config.StreamerView && teraRaidView is not null)
                 teraRaidView.textSearchTime.Text = time;
         }
 
@@ -1351,7 +1367,19 @@ namespace RaidCrawler.WinForms
                 var spriteName = SpriteName.GetResourceStringSprite(blank.Species, blank.Form, blank.Gender, blank.FormArgument, EntityContext.Gen9, Raid.CheckIsShiny(Raids[i], Encounters[i]));
                 await NotificationHandler.SendNotifications(Config, Encounters[i], Raids[i], satisfied_filters, time, RewardsList[i], hexColor, spriteName, token).ConfigureAwait(false);
             }
-            else MessageBox.Show("Please connect to your device and ensure a raid has been found.");
+            else ShowMessageBox("Please connect to your device and ensure a raid has been found.");
+        }
+
+        public void ToggleStreamerView()
+        {
+            if (Config.StreamerView)
+            {
+                teraRaidView = new TeraRaidView(Config);
+                teraRaidView.Map.Image = map;
+                teraRaidView.Show();
+            }
+            else if (!Config.StreamerView && teraRaidView is not null)
+                teraRaidView.Close();
         }
     }
 }

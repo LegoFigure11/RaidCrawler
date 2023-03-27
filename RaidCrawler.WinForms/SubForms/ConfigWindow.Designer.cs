@@ -434,8 +434,9 @@ namespace RaidCrawler.WinForms.SubForms
             ExperimentalView.Name = "ExperimentalView";
             ExperimentalView.Size = new Size(241, 19);
             ExperimentalView.TabIndex = 40;
-            ExperimentalView.Text = "Experimental Raid View  (requires restart)";
+            ExperimentalView.Text = "Toggle Streamer Tera Raid View";
             ExperimentalView.UseVisualStyleBackColor = true;
+            ExperimentalView.Click += new EventHandler(StreamerView_Clicked);
             // 
             // tabControl1
             // 
