@@ -30,35 +30,26 @@ namespace RaidCrawler.Core.Structures
             return true;
         }
 
-        public bool IsSpeciesSatisfied(ITeraRaid? enc)
+        public bool IsSpeciesSatisfied(ITeraRaid enc)
         {
             if (Species is null)
                 return true;
 
-            if (enc is null)
-                return false;
-
             return enc.Species == (ushort)Species;
         }
 
-        public bool IsFormSatisfied(ITeraRaid? enc)
+        public bool IsFormSatisfied(ITeraRaid enc)
         {
             if (Form is null)
                 return true;
 
-            if (enc is null)
-                return false;
-
             return enc.Form == Form;
         }
 
-        public bool IsStarsSatisfied(ITeraRaid? enc)
+        public bool IsStarsSatisfied(ITeraRaid enc)
         {
             if (Stars is null)
                 return true;
-
-            if (enc is null)
-                return false;
 
             return StarsComp switch
             {
@@ -71,15 +62,12 @@ namespace RaidCrawler.Core.Structures
             };
         }
 
-        public bool IsRewardsSatisfied(ITeraRaid? enc, Raid raid, int SandwichBoost)
+        public bool IsRewardsSatisfied(ITeraRaid enc, Raid raid, int sandwichBoost)
         {
             if (RewardItems is null || RewardsCount == 0)
                 return true;
 
-            var rewards = Rewards.GetRewards(enc, raid.Seed, Raid.GetTeraType(enc, raid), SandwichBoost);
-            if (rewards is null)
-                return false;
-
+            var rewards = enc.GetRewards(raid, sandwichBoost);
             var count = rewards.Where(z => RewardItems.Contains(z.Item1)).Count();
             return RewardsComp switch
             {
@@ -92,21 +80,21 @@ namespace RaidCrawler.Core.Structures
             };
         }
 
-        public bool IsShinySatisfied(ITeraRaid? encounter, Raid raid)
+        public bool IsShinySatisfied(ITeraRaid encounter, Raid raid)
         {
             if (!Shiny)
                 return true;
 
-            return Raid.CheckIsShiny(raid, encounter) == true;
+            return raid.CheckIsShiny(encounter);
         }
 
-        public bool IsSquareSatisfied(ITeraRaid? encounter, Raid raid)
+        public bool IsSquareSatisfied(ITeraRaid encounter, Raid raid)
         {
             if (!Square)
                 return true;
 
-            _ = PersonalTable.SV.GetFormEntry(encounter!.Species, encounter.Form);
-            var param = Raid.GetParam(encounter);
+            _ = PersonalTable.SV.GetFormEntry(encounter.Species, encounter.Form);
+            var param = encounter.GetParam();
             PK9 blank = new()
             {
                 Species = encounter.Species,
@@ -114,7 +102,7 @@ namespace RaidCrawler.Core.Structures
             };
 
             Encounter9RNG.GenerateData(blank, param, EncounterCriteria.Unrestricted, raid.Seed);
-            return (Raid.CheckIsShiny(raid, encounter) && ShinyExtensions.IsSquareShinyExist(blank));
+            return raid.CheckIsShiny(encounter) && ShinyExtensions.IsSquareShinyExist(blank);
         }
 
         public bool IsTeraTypeSatisfied(Raid raid)
@@ -125,16 +113,13 @@ namespace RaidCrawler.Core.Structures
             return raid.TeraType == TeraType;
         }
 
-        public bool IsNatureSatisfied(ITeraRaid? encounter, Raid raid)
+        public bool IsNatureSatisfied(ITeraRaid encounter, Raid raid)
         {
             if (Nature is null)
                 return true;
 
-            if (encounter is null)
-                return false;
-
             _ = PersonalTable.SV.GetFormEntry(encounter.Species, encounter.Form);
-            var param = Raid.GetParam(encounter);
+            var param = encounter.GetParam();
             PK9 blank = new()
             {
                 Species = encounter.Species,
@@ -145,15 +130,12 @@ namespace RaidCrawler.Core.Structures
             return blank.Nature == Nature;
         }
 
-        public bool IsIVsSatisfied(ITeraRaid? encounter, Raid raid)
+        public bool IsIVsSatisfied(ITeraRaid encounter, Raid raid)
         {
             if (IVBin == 0)
                 return true;
 
-            if (encounter is null)
-                return false;
-
-            var ivs = Raid.GetIVs(raid.Seed, encounter.FlawlessIVCount);
+            var ivs = GetIVs(raid.Seed, encounter.FlawlessIVCount);
             for (int i = 0; i < 6; i++)
             {
                 var iv = IVVals >> i * 5 & 31;
@@ -161,6 +143,7 @@ namespace RaidCrawler.Core.Structures
                 var ivcomp = IVComps >> i * 3 & 7;
                 if (ivbin != 1)
                     continue;
+
                 switch (ivcomp)
                 {
                     case 0:
@@ -188,18 +171,12 @@ namespace RaidCrawler.Core.Structures
             return true;
         }
 
-        public bool IsGenderSatisfied(ITeraRaid? encounter, Raid raid)
+        public bool IsGenderSatisfied(ITeraRaid encounter, Raid raid)
         {
-            if (Gender is null)
+            if (Gender is null || encounter.Gender <= 2 && encounter.Gender == Gender)
                 return true;
 
-            if (encounter is null)
-                return false;
-
-            if (encounter.Gender <= 2 && encounter.Gender == Gender)
-                return true;
-
-            var param = Raid.GetParam(encounter);
+            var param = encounter.GetParam();
             PK9 blank = new()
             {
                 Species = encounter.Species,
@@ -210,20 +187,17 @@ namespace RaidCrawler.Core.Structures
             return blank.Gender == Gender;
         }
 
-        public bool IsBatchFilterSatisfied(ITeraRaid? encounter, Raid raid)
+        public bool IsBatchFilterSatisfied(ITeraRaid encounter, Raid raid)
         {
             if (BatchFilters is null)
                 return true;
-
-            if (encounter is null)
-                return false;
 
             var filters = StringInstruction.GetFilters(BatchFilters.AsSpan());
             if (filters.Count == 0)
                 return true;
 
             BatchEditing.ScreenStrings(filters);
-            var param = Raid.GetParam(encounter);
+            var param = encounter.GetParam();
             PK9 blank = new()
             {
                 Species = encounter.Species,
@@ -234,24 +208,53 @@ namespace RaidCrawler.Core.Structures
             return BatchEditing.IsFilterMatch(filters, blank);
         }
 
-        public bool FilterSatisfied(ITeraRaid? encounter, Raid raid, int SandwichBoost)
+        public bool FilterSatisfied(ITeraRaid encounter, Raid raid, int SandwichBoost)
         {
             return Enabled && IsIVsSatisfied(encounter, raid) && IsShinySatisfied(encounter, raid) && IsSquareSatisfied(encounter, raid) && IsSpeciesSatisfied(encounter) && IsFormSatisfied(encounter)
                 && IsNatureSatisfied(encounter, raid) && IsStarsSatisfied(encounter) && IsTeraTypeSatisfied(raid)
                 && IsRewardsSatisfied(encounter, raid, SandwichBoost) && IsGenderSatisfied(encounter, raid) && IsBatchFilterSatisfied(encounter, raid);
         }
 
-        public bool FilterSatisfied(List<ITeraRaid?> Encounters, List<Raid> Raids, int SandwichBoost)
+        public bool FilterSatisfied(IReadOnlyList<ITeraRaid> encounters, IReadOnlyList<Raid> raids, int sandwichBoost)
         {
-            if (Raids.Count != Encounters.Count)
-                throw new Exception("Raid Count does not match Encounter count");
+            if (raids.Count != encounters.Count)
+                throw new Exception("Raid count does not match Encounter count");
 
-            for (int i = 0; i < Raids.Count; i++)
+            for (int i = 0; i < raids.Count; i++)
             {
-                if (FilterSatisfied(Encounters[i], Raids[i], SandwichBoost))
+                if (FilterSatisfied(encounters[i], raids[i], sandwichBoost))
                     return true;
             }
             return false;
+        }
+
+        private int[] GetIVs(uint Seed, int FlawlessIVs)
+        {
+            var rng = new Xoroshiro128Plus(Seed);
+            // Dummy calls
+            rng.NextInt(); // EC
+            rng.NextInt(); // TIDSID
+            rng.NextInt(); // PID
+
+            Span<int> ivs = stackalloc[] { -1, -1, -1, -1, -1, -1 };
+            // Flawless IVs
+            for (int i = 0; i < FlawlessIVs; i++)
+            {
+                int index;
+                do { index = (int)rng.NextInt(6); }
+                while (ivs[index] != -1);
+
+                ivs[index] = 31;
+            }
+
+            // Other IVs
+            for (int i = 0; i < ivs.Length; i++)
+            {
+                if (ivs[i] == -1)
+                    ivs[i] = (int)rng.NextInt(32);
+            }
+
+            return ivs.ToArray();
         }
     }
 }

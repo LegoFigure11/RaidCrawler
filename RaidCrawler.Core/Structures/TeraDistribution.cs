@@ -95,22 +95,22 @@ namespace RaidCrawler.Core.Structures
             return result;
         }
 
-        public static List<(int, int, int)>? GetRewards(TeraDistribution enc, uint seed, int teratype, List<DeliveryRaidFixedRewardItem>? fixed_rewards, List<DeliveryRaidLotteryRewardItem>? lottery_rewards, int boost)
+        public static List<(int, int, int)> GetRewards(TeraDistribution enc, uint seed, int teratype, IReadOnlyList<DeliveryRaidFixedRewardItem>? fixed_rewards, IReadOnlyList<DeliveryRaidLotteryRewardItem>? lottery_rewards, int boost)
         {
-            if (lottery_rewards == null)
-                return null;
-            if (fixed_rewards == null)
-                return null;
+            List<(int, int, int)> result = new();
+            if (lottery_rewards is null)
+                return result;
+
+            if (fixed_rewards is null)
+                return result;
 
             var fixed_table = fixed_rewards.Where(z => z.TableName == enc.DropTableFix).First();
-            if (fixed_table == null)
-                return null;
+            if (fixed_table is null)
+                return result;
 
             var lottery_table = lottery_rewards.Where(z => z.TableName == enc.DropTableRandom).First();
-            if (lottery_table == null)
-                return null;
-
-            List<(int, int, int)> result = new();
+            if (lottery_table is null)
+                return result;
 
             // fixed reward
             for (int i = 0; i < DeliveryRaidFixedRewardItem.Count; i++)
@@ -125,9 +125,11 @@ namespace RaidCrawler.Core.Structures
             var total = 0;
             for (int i = 0; i < DeliveryRaidLotteryRewardItem.RewardItemCount; i++)
                 total += lottery_table.GetRewardItem(i).Rate;
+
             var rand = new Xoroshiro128Plus(seed);
             var count = (int)rand.NextInt(100);
             count = Rewards.GetRewardCount(count, enc.Stars) + boost;
+
             for (int i = 0; i < count; i++)
             {
                 var roll = (int)rand.NextInt((ulong)total);
@@ -136,8 +138,10 @@ namespace RaidCrawler.Core.Structures
                     var item = lottery_table.GetRewardItem(j);
                     if (roll < item.Rate)
                     {
-                        if (item.Category == 0) result.Add((item.ItemID, item.Num, 0));
-                        else if (item.Category == 1) result.Add(item.ItemID == 0 ? (Rewards.GetMaterial(enc.Species), item.Num, 0) : (item.ItemID, item.Num, 0));
+                        if (item.Category == 0)
+                            result.Add((item.ItemID, item.Num, 0));
+                        else if (item.Category == 1)
+                            result.Add(item.ItemID == 0 ? (Rewards.GetMaterial(enc.Species), item.Num, 0) : (item.ItemID, item.Num, 0));
                         else result.Add(item.ItemID == 0 ? (Rewards.GetTeraShard(teratype), item.Num, 0) : (item.ItemID, item.Num, 0));
                         break;
                     }
@@ -160,67 +164,6 @@ namespace RaidCrawler.Core.Structures
                 eventct -= ct;
             }
             throw new Exception("Found event out of priority range.");
-        }
-
-        public static ITeraRaid? GetEncounter(uint Seed, int stage, bool isFixed, int groupid)
-        {
-            if (stage < 0)
-                return null;
-
-            if (Raid.DistTeraRaids is null)
-                return null;
-
-            if (!isFixed)
-            {
-                foreach (TeraDistribution enc in Raid.DistTeraRaids.Cast<TeraDistribution>())
-                {
-                    if (enc.Entity is not EncounterDist9 encd)
-                        continue;
-
-                    if (enc.DeliveryGroupID != groupid)
-                        continue;
-
-                    var total = Raid.Game == "Scarlet" ? encd.GetRandRateTotalScarlet(stage) : encd.GetRandRateTotalViolet(stage);
-                    if (total != 0 || isFixed)
-                    {
-                        if (isFixed)
-                            return enc;
-
-                        var rand = new Xoroshiro128Plus(Seed);
-                        _ = rand.NextInt(100);
-                        var val = rand.NextInt(total);
-                        var min = Raid.Game == "Scarlet" ? encd.GetRandRateMinScarlet(stage) : encd.GetRandRateMinViolet(stage);
-                        if ((uint)((int)val - min) < enc.RandRate)
-                            return enc;
-                    }
-                }
-            }
-            else
-            {
-                foreach (TeraDistribution enc in Raid.DistTeraRaids.Cast<TeraDistribution>())
-                {
-                    if (enc.Entity is not EncounterMight9 encm)
-                        continue;
-
-                    if (enc.DeliveryGroupID != groupid)
-                        continue;
-
-                    var total = Raid.Game == "Scarlet" ? encm.GetRandRateTotalScarlet(stage) : encm.GetRandRateTotalViolet(stage);
-                    if (total != 0 || isFixed)
-                    {
-                        if (isFixed)
-                            return enc;
-
-                        var rand = new Xoroshiro128Plus(Seed);
-                        _ = rand.NextInt(100);
-                        var val = rand.NextInt(total);
-                        var min = Raid.Game == "Scarlet" ? encm.GetRandRateMinScarlet(stage) : encm.GetRandRateMinViolet(stage);
-                        if ((uint)((int)val - min) < enc.RandRate)
-                            return enc;
-                    }
-                }
-            }
-            return null;
         }
     }
 }

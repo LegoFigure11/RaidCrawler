@@ -47,42 +47,19 @@ namespace RaidCrawler.Core.Structures
             return result;
         }
 
-        public static ITeraRaid? GetEncounter(uint Seed, int stage, bool black)
+        public static List<(int, int, int)> GetRewards(TeraEncounter enc, uint seed, int teratype, IReadOnlyList<RaidFixedRewards>? fixed_rewards, IReadOnlyList<RaidLotteryRewards>? lottery_rewards, int boost)
         {
-            var clone = new Xoroshiro128Plus(Seed);
-            var starcount = black ? 6 : Raid.GetStarCount((uint)clone.NextInt(100), stage, false);
-            var total = Raid.Game == "Scarlet" ? GetRateTotalBaseSL(starcount) : GetRateTotalBaseVL(starcount);
-            var speciesroll = clone.NextInt((ulong)total);
-            if (Raid.GemTeraRaids != null)
-            {
-                foreach (TeraEncounter enc in (TeraEncounter[])Raid.GemTeraRaids)
-                {
-                    if (enc.Stars != starcount)
-                        continue;
-                    var minimum = Raid.Game == "Scarlet" ? enc.Entity.RandRateMinScarlet : enc.Entity.RandRateMinViolet;
-                    if (minimum >= 0 && (uint)((int)speciesroll - minimum) < enc.Entity.RandRate)
-                        return enc;
-                }
-            }
-            return null;
-        }
-
-        public static List<(int, int, int)>? GetRewards(TeraEncounter enc, uint seed, int teratype, List<RaidFixedRewards>? fixed_rewards, List<RaidLotteryRewards>? lottery_rewards, int boost)
-        {
-            if (lottery_rewards == null)
-                return null;
-            if (fixed_rewards == null)
-                return null;
+            List<(int, int, int)> result = new();
+            if (lottery_rewards is null || fixed_rewards is null)
+                return result;
 
             var fixed_table = fixed_rewards.Where(z => z.TableName == enc.DropTableFix).First();
-            if (fixed_table == null)
-                return null;
+            if (fixed_table is null)
+                return result;
 
             var lottery_table = lottery_rewards.Where(z => z.TableName == enc.DropTableRandom).First();
-            if (lottery_table == null)
-                return null;
-
-            List<(int, int, int)> result = new();
+            if (lottery_table is null)
+                return result;
 
             // fixed reward
             for (int i = 0; i < RaidFixedRewards.Count; i++)
@@ -90,6 +67,7 @@ namespace RaidCrawler.Core.Structures
                 var item = fixed_table.GetReward(i);
                 if (item is null || item.Category == 0 && item.ItemID == 0)
                     continue;
+
                 result.Add((item.ItemID == 0 ? item.Category == 2 ? Rewards.GetTeraShard(teratype) : Rewards.GetMaterial(enc.Species) : item.ItemID, item.Num, item.SubjectType));
             }
 
@@ -97,6 +75,7 @@ namespace RaidCrawler.Core.Structures
             var total = 0;
             for (int i = 0; i < RaidLotteryRewards.RewardItemCount; i++)
                 total += lottery_table.GetRewardItem(i)!.Rate;
+
             var rand = new Xoroshiro128Plus(seed);
             var count = (int)rand.NextInt(100); // sandwich = extra rolls? how does this work? is this even 100?
             count = Rewards.GetRewardCount(count, enc.Stars) + boost;
@@ -118,27 +97,5 @@ namespace RaidCrawler.Core.Structures
             }
             return Rewards.ReorderRewards(result);
         }
-
-        private static short GetRateTotalBaseSL(int star) => star switch
-        {
-            1 => 5800,
-            2 => 5300,
-            3 => 7400,
-            4 => 8800, // Scarlet has one more encounter.
-            5 => 9100,
-            6 => 6500,
-            _ => 0,
-        };
-
-        private static short GetRateTotalBaseVL(int star) => star switch
-        {
-            1 => 5800,
-            2 => 5300,
-            3 => 7400,
-            4 => 8700, // Violet has one less encounter.
-            5 => 9100,
-            6 => 6500,
-            _ => 0,
-        };
     }
 }

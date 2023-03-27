@@ -7,7 +7,7 @@ namespace RaidCrawler.Core.Structures
 {
     public class Rewards
     {
-        public static readonly int[][] RewardSlots =
+        private static readonly int[][] RewardSlots =
         {
             new [] { 4, 5, 6, 7, 8 },
             new [] { 4, 5, 6, 7, 8 },
@@ -265,17 +265,6 @@ namespace RaidCrawler.Core.Structures
 
                 _ => 10000,
             };
-        }
-
-        public static List<(int, int, int)>? GetRewards(ITeraRaid? encounter, uint seed, int teratype, int sandwich_boost)
-        {
-            var rewards = encounter switch
-            {
-                TeraDistribution => TeraDistribution.GetRewards((TeraDistribution)encounter, seed, teratype, Raid.DeliveryRaidFixedRewards, Raid.DeliveryRaidLotteryRewards, sandwich_boost),
-                TeraEncounter => TeraEncounter.GetRewards((TeraEncounter)encounter, seed, teratype, Raid.BaseFixedRewards, Raid.BaseLotteryRewards, sandwich_boost),
-                _ => null,
-            };
-            return rewards;
         }
     }
 

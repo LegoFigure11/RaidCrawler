@@ -3,22 +3,22 @@
     public partial class TeraRaidView : Form
     {
         // Drag and Drop
-        bool drag = false;
-        Point start = new(0, 0);
+        private bool drag = false;
+        private Point start = new(0, 0);
 
         // Progress Bar
-        double pbUnit;
-        int pbWidth, pbHeight, pbComplete;
-        Bitmap bmp;
-        Graphics g;
-        ClientConfig c;
+        private double pbUnit;
+        private int pbWidth, pbHeight, pbComplete;
+        private Bitmap? bmp;
+        private Graphics? g;
+        private readonly ClientConfig config;
 
         public TeraRaidView(ClientConfig c)
         {
             InitializeComponent();
             StartPosition = FormStartPosition.Manual;
             Location = new Point(0, 0);
-            this.c = c;
+            config = c;
         }
 
         public void StartProgress()
@@ -31,9 +31,9 @@
             bmp = new Bitmap(pbWidth, pbHeight);
 
             decimal delays;
-            delays = c.BaseDelay * 20 + c.OpenHomeDelay + c.NavigateToSettingsDelay +
-                c.OpenSettingsDelay + c.HoldDuration + c.Submenu + c.DateChange +
-                c.ReturnHomeDelay + c.ReturnGameDelay + 4250; // fudge time to read raids
+            delays = config.BaseDelay * 20 + config.OpenHomeDelay + config.NavigateToSettingsDelay +
+                config.OpenSettingsDelay + config.HoldDuration + config.Submenu + config.DateChange +
+                config.ReturnHomeDelay + config.ReturnGameDelay + 4250; // fudge time to read raids
 
             timer1.Interval = (int)(delays / 100);
             timer1.Start();
@@ -41,7 +41,7 @@
 
         private void Timer1_Tick(object sender, EventArgs e)
         {
-            g = Graphics.FromImage(bmp);
+            g = Graphics.FromImage(bmp!);
             g.Clear(Color.LightSkyBlue);
 
             //draw progressbar
@@ -75,22 +75,20 @@
             if (drag)
             {
                 Point p = PointToScreen(e.Location);
-                this.Location = new Point(p.X - start.X, p.Y - start.Y);
+                Location = new Point(p.X - start.X, p.Y - start.Y);
             }
         }
 
         private void Rewards_TextChanged(object sender, EventArgs e)
         {
-            this.ForeColor = Color.DarkGray;
-            // this.BackColor = System.Drawing.Color.FromArgb(0, 5, 25);
-
-            if (Int32.TryParse(this.Text, out int value))
+            ForeColor = Color.DarkGray;
+            if (int.TryParse(Text, out int value))
             {
                 if (value > 0)
-                    this.ForeColor = Color.White;
-                if (value > 2)
-                    this.BackColor = Color.ForestGreen;
+                    ForeColor = Color.White;
 
+                if (value > 2)
+                    BackColor = Color.ForestGreen;
             }
         }
 
@@ -101,7 +99,7 @@
 
         private void TeraRaidView_DoubleClick(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
     }
 }

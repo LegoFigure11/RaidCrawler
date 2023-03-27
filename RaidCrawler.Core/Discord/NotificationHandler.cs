@@ -21,7 +21,7 @@ namespace RaidCrawler.Core.Discord
 
         private static string[]? DiscordWebhooks;
 
-        public static async Task SendNotifications(IWebhookConfig c, ITeraRaid? encounter, Raid raid, IEnumerable<RaidFilter> filters, string time, List<(int, int, int)>? RewardsList, string hexColor, string spriteName, CancellationToken token)
+        public static async Task SendNotifications(IWebhookConfig c, ITeraRaid? encounter, Raid raid, IEnumerable<RaidFilter> filters, string time, IReadOnlyList<(int, int, int)> RewardsList, string hexColor, string spriteName, CancellationToken token)
         {
             if (encounter is null)
                 return;
@@ -59,9 +59,9 @@ namespace RaidCrawler.Core.Discord
                 await Client.PostAsync(url.Trim(), content, token).ConfigureAwait(false);
         }
 
-        public static object GenerateWebhook(IWebhookConfig c, ITeraRaid encounter, Raid raid, IEnumerable<RaidFilter> filters, string time, List<(int, int, int)>? RewardsList, string hexColor, string spriteName)
+        public static object GenerateWebhook(IWebhookConfig c, ITeraRaid encounter, Raid raid, IEnumerable<RaidFilter> filters, string time, IReadOnlyList<(int, int, int)> RewardsList, string hexColor, string spriteName)
         {
-            var param = Raid.GetParam(encounter);
+            var param = encounter.GetParam();
             var blank = new PK9
             {
                 Species = encounter.Species,
@@ -71,19 +71,19 @@ namespace RaidCrawler.Core.Discord
             Encounter9RNG.GenerateData(blank, param, EncounterCriteria.Unrestricted, raid.Seed);
             var emoji = c.EnableEmoji;
             var isevent = raid.IsEvent;
-            var species = $"{Raid.strings.Species[encounter.Species]}{(encounter.Form != 0 ? $"-{encounter.Form}" : "")}";
+            var species = $"{raid.Strings.Species[encounter.Species]}{(encounter.Form != 0 ? $"-{encounter.Form}" : "")}";
             var difficulty = Difficulty(c, encounter.Stars, isevent, emoji);
-            var nature = $"{Raid.strings.Natures[blank.Nature]}";
-            var ability = $"{Raid.strings.Ability[blank.Ability]}";
-            var shiny = Shiny(c, Raid.CheckIsShiny(raid, encounter), ShinyExtensions.IsSquareShinyExist(blank), emoji);
+            var nature = $"{raid.Strings.Natures[blank.Nature]}";
+            var ability = $"{raid.Strings.Ability[blank.Ability]}";
+            var shiny = Shiny(c, raid.CheckIsShiny(encounter), ShinyExtensions.IsSquareShinyExist(blank), emoji);
             var gender = Gender(c, blank.Gender, emoji);
-            var teratype = Raid.GetTeraType(encounter, raid);
-            var tera = $"{Raid.strings.types[teratype]}";
-            var teraemoji = TeraEmoji(c, $"{Raid.strings.types[teratype]}", emoji);
+            var teratype = raid.GetTeraType(encounter);
+            var tera = $"{raid.Strings.types[teratype]}";
+            var teraemoji = TeraEmoji(c, $"{raid.Strings.types[teratype]}", emoji);
             var ivs = IVsStringEmoji(c, ToSpeedLast(blank.IVs), c.IVsStyle, c.VerboseIVs, emoji);
             var moves = new ushort[4] { encounter.Move1, encounter.Move2, encounter.Move3, encounter.Move4 };
-            var movestr = string.Concat(moves.Where(z => z != 0).Select(z => $"{Raid.strings.Move[z]}ㅤ\n")).Trim();
-            var extramoves = !raid.IsEvent ? "None" : string.Concat(encounter.ExtraMoves.Where(z => z != 0).Select(z => $"{Raid.strings.Move[z]}ㅤ\n")).Trim();
+            var movestr = string.Concat(moves.Where(z => z != 0).Select(z => $"{raid.Strings.Move[z]}ㅤ\n")).Trim();
+            var extramoves = !raid.IsEvent ? "None" : string.Concat(encounter.ExtraMoves.Where(z => z != 0).Select(z => $"{raid.Strings.Move[z]}ㅤ\n")).Trim();
             var area = $"{Areas.Area[raid.Area - 1]}" + (c.ToggleDen ? $" [Den {raid.Den}]ㅤ" : "ㅤ");
             var instance = " " + c.InstanceName;
             var rewards = GetRewards(c, RewardsList, emoji);
@@ -146,7 +146,7 @@ namespace RaidCrawler.Core.Discord
             return gender;
         }
 
-        private static string GetRewards(IWebhookConfig c, List<(int, int, int)>? rewards, bool emoji)
+        private static string GetRewards(IWebhookConfig c, IReadOnlyList<(int, int, int)> rewards, bool emoji)
         {
             string s = string.Empty;
             int abilitycapsule = 0;

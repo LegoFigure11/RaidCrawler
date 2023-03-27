@@ -157,6 +157,7 @@
             this.Difficulty.TabIndex = 114;
             this.Difficulty.Text = "⭐⭐⭐⭐⭐⭐⭐";
             this.Difficulty.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.Difficulty.Enabled = false;
             // 
             // Species
             // 
@@ -170,6 +171,7 @@
             this.Species.Size = new System.Drawing.Size(348, 57);
             this.Species.TabIndex = 115;
             this.Species.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.Species.Enabled = false;
             // 
             // Shiny
             // 
@@ -196,6 +198,7 @@
             this.Gender.Size = new System.Drawing.Size(109, 22);
             this.Gender.TabIndex = 118;
             this.Gender.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.Gender.Enabled = false;
             // 
             // debug
             // 
@@ -230,6 +233,7 @@
             this.Ability.PlaceholderText = "Ability";
             this.Ability.Size = new System.Drawing.Size(200, 25);
             this.Ability.TabIndex = 121;
+            this.Ability.Enabled = false;
             // 
             // Nature
             // 
@@ -242,6 +246,7 @@
             this.Nature.PlaceholderText = "Nature";
             this.Nature.Size = new System.Drawing.Size(200, 25);
             this.Nature.TabIndex = 122;
+            this.Nature.Enabled = false;
             // 
             // groupBox1
             // 
@@ -324,6 +329,7 @@
             this.SPEED.Size = new System.Drawing.Size(30, 25);
             this.SPEED.TabIndex = 132;
             this.SPEED.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.SPEED.Enabled = false;
             // 
             // labelSpD
             // 
@@ -348,6 +354,7 @@
             this.SPD.Size = new System.Drawing.Size(30, 25);
             this.SPD.TabIndex = 130;
             this.SPD.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.SPD.Enabled = false;
             // 
             // labelSpA
             // 
@@ -372,6 +379,7 @@
             this.SPA.Size = new System.Drawing.Size(30, 25);
             this.SPA.TabIndex = 128;
             this.SPA.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.SPA.Enabled = false;
             // 
             // labelDef
             // 
@@ -396,6 +404,7 @@
             this.DEF.Size = new System.Drawing.Size(30, 25);
             this.DEF.TabIndex = 126;
             this.DEF.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.DEF.Enabled = false;
             // 
             // labelAtk
             // 
@@ -420,6 +429,7 @@
             this.ATK.Size = new System.Drawing.Size(30, 25);
             this.ATK.TabIndex = 124;
             this.ATK.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.ATK.Enabled = false;
             // 
             // labelHP
             // 
@@ -444,6 +454,7 @@
             this.HP.Size = new System.Drawing.Size(30, 25);
             this.HP.TabIndex = 121;
             this.HP.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.HP.Enabled = false;
             // 
             // groupBox3
             // 
@@ -474,6 +485,7 @@
             this.Moveset8.PlaceholderText = "Moveset8";
             this.Moveset8.Size = new System.Drawing.Size(200, 25);
             this.Moveset8.TabIndex = 128;
+            this.Moveset8.Enabled = false;
             // 
             // Moveset6
             // 
@@ -486,6 +498,7 @@
             this.Moveset6.PlaceholderText = "Moveset6";
             this.Moveset6.Size = new System.Drawing.Size(200, 25);
             this.Moveset6.TabIndex = 127;
+            this.Moveset6.Enabled = false;
             // 
             // Moveset4
             // 
@@ -498,6 +511,7 @@
             this.Moveset4.PlaceholderText = "Moveset4";
             this.Moveset4.Size = new System.Drawing.Size(200, 25);
             this.Moveset4.TabIndex = 126;
+            this.Moveset4.Enabled = false;
             // 
             // Moveset7
             // 
@@ -510,6 +524,7 @@
             this.Moveset7.PlaceholderText = "Moveset7";
             this.Moveset7.Size = new System.Drawing.Size(200, 25);
             this.Moveset7.TabIndex = 125;
+            this.Moveset7.Enabled = false;
             // 
             // Moveset5
             // 
@@ -522,6 +537,7 @@
             this.Moveset5.PlaceholderText = "Moveset5";
             this.Moveset5.Size = new System.Drawing.Size(200, 25);
             this.Moveset5.TabIndex = 124;
+            this.Moveset5.Enabled = false;
             // 
             // Moveset3
             // 
@@ -534,6 +550,7 @@
             this.Moveset3.PlaceholderText = "Moveset3";
             this.Moveset3.Size = new System.Drawing.Size(200, 25);
             this.Moveset3.TabIndex = 123;
+            this.Moveset3.Enabled = false;
             // 
             // Moveset1
             // 
@@ -546,6 +563,7 @@
             this.Moveset1.PlaceholderText = "Moveset1";
             this.Moveset1.Size = new System.Drawing.Size(200, 25);
             this.Moveset1.TabIndex = 121;
+            this.Moveset1.Enabled = false;
             // 
             // Moveset2
             // 
@@ -558,6 +576,7 @@
             this.Moveset2.PlaceholderText = "Moveset2";
             this.Moveset2.Size = new System.Drawing.Size(200, 25);
             this.Moveset2.TabIndex = 122;
+            this.Moveset2.Enabled = false;
             // 
             // picShinyAlert
             // 
@@ -668,6 +687,7 @@
             this.textAbilityPatch.TabIndex = 134;
             this.textAbilityPatch.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.textAbilityPatch.TextChanged += new System.EventHandler(this.Rewards_TextChanged);
+            this.textAbilityPatch.Enabled = false;
             // 
             // labelSweetHerba
             // 
@@ -693,6 +713,7 @@
             this.textSweetHerba.TabIndex = 142;
             this.textSweetHerba.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.textSweetHerba.TextChanged += new System.EventHandler(this.Rewards_TextChanged);
+            this.textSweetHerba.Enabled = false;
             // 
             // labelSaltyHerba
             // 
@@ -718,6 +739,7 @@
             this.textSaltyHerba.TabIndex = 144;
             this.textSaltyHerba.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.textSaltyHerba.TextChanged += new System.EventHandler(this.Rewards_TextChanged);
+            this.textSaltyHerba.Enabled = false;
             // 
             // labelBottleCap
             // 
@@ -743,6 +765,7 @@
             this.textBottleCap.TabIndex = 146;
             this.textBottleCap.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.textBottleCap.TextChanged += new System.EventHandler(this.Rewards_TextChanged);
+            this.textBottleCap.Enabled = false;
             // 
             // labelSourHerba
             // 
@@ -768,6 +791,7 @@
             this.textSourHerba.TabIndex = 148;
             this.textSourHerba.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.textSourHerba.TextChanged += new System.EventHandler(this.Rewards_TextChanged);
+            this.textSourHerba.Enabled = false;
             // 
             // labelSpicyHerba
             // 
@@ -793,6 +817,7 @@
             this.textSpicyHerba.TabIndex = 150;
             this.textSpicyHerba.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.textSpicyHerba.TextChanged += new System.EventHandler(this.Rewards_TextChanged);
+            this.textSpicyHerba.Enabled = false;
             // 
             // labelSearchTime
             // 
@@ -820,6 +845,7 @@
             this.textSearchTime.TabIndex = 153;
             this.textSearchTime.Text = "00:00:00";
             this.textSearchTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textSearchTime.Enabled = false;
             // 
             // picAbilityCapsule
             // 
@@ -864,6 +890,7 @@
             this.textBitterHerba.Size = new System.Drawing.Size(30, 25);
             this.textBitterHerba.TabIndex = 158;
             this.textBitterHerba.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBitterHerba.Enabled = false;
             // 
             // labelAbilityCapsule
             // 
@@ -888,6 +915,7 @@
             this.textAbilityCapsule.Size = new System.Drawing.Size(30, 25);
             this.textAbilityCapsule.TabIndex = 156;
             this.textAbilityCapsule.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textAbilityCapsule.Enabled = false;
             // 
             // TeraRaidView
             // 

@@ -5,7 +5,7 @@ namespace RaidCrawler.WinForms.SubForms
 {
     public partial class RewardsView : Form
     {
-        public RewardsView(List<(int, int, int)> rewards)
+        public RewardsView(IReadOnlyList<string> itemStrings, IReadOnlyList<(int, int, int)> rewards)
         {
             InitializeComponent();
             Bitmap rare = PKHeX.Drawing.PokeSprite.Properties.Resources.rare_icon;
@@ -25,7 +25,7 @@ namespace RaidCrawler.WinForms.SubForms
                 {
                     10000 => "Material",
                     20000 => "Tera Shard",
-                    _ => Raid.strings.Item[rewards[i].Item1]
+                    _ => itemStrings[rewards[i].Item1]
                 };
 
                 var subject = rewards[i].Item3 switch

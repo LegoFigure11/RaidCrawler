@@ -20,21 +20,21 @@ namespace RaidCrawler.WinForms
 
         private static readonly object _connectLock = new();
         private static readonly object _readLock = new();
+
+        private readonly ClientConfig Config = new();
         private ConnectionWrapperAsync ConnectionWrapper = default!;
         private readonly SwitchConnectionConfig ConnectionConfig = new()
         { Protocol = SwitchProtocol.WiFi, IP = "192.168.0.0", Port = 6000 };
 
-        private readonly ClientConfig Config = new();
+        private readonly Raid RaidContainer;
 
-        private readonly List<Raid> Raids = new();
-        private readonly List<ITeraRaid?> Encounters = new();
         private List<uint> prev = new();
         private List<RaidFilter> RaidFilters = new();
         private static readonly Image map = Image.FromStream(new MemoryStream(Utils.GetBinaryResource("paldea.png")));
         private static Dictionary<string, float[]>? den_locations;
 
         // rewards
-        private readonly List<List<(int, int, int)>?> RewardsList = new();
+        //private readonly List<IReadOnlyList<(int, int, int)>> RewardsList = new();
 
         // statistics
         public int StatDaySkipTries = 0;
@@ -61,18 +61,6 @@ namespace RaidCrawler.WinForms
             build = $" (dev-{date:yyyyMMdd})";
 #endif
             var v = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version!;
-
-            var raid_data = new[]
-            {
-                "raid_enemy_01_array.bin",
-                "raid_enemy_02_array.bin",
-                "raid_enemy_03_array.bin",
-                "raid_enemy_04_array.bin",
-                "raid_enemy_05_array.bin",
-                "raid_enemy_06_array.bin",
-            };
-
-            Raid.GemTeraRaids = TeraEncounter.GetAllEncounters(raid_data);
             var filterpath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "filters.json");
             if (File.Exists(filterpath))
                 RaidFilters = JsonSerializer.Deserialize<List<RaidFilter>>(File.ReadAllText(filterpath)) ?? new List<RaidFilter>();
@@ -89,11 +77,9 @@ namespace RaidCrawler.WinForms
             formTitle = "RaidCrawler v" + v.Major + "." + v.Minor + "." + v.Build + build + " " + Config.InstanceName;
             Text = formTitle;
 
-            // load rewards
-            Raid.BaseFixedRewards = JsonSerializer.Deserialize<List<RaidFixedRewards>>(Utils.GetStringResource("raid_fixed_reward_item_array.json") ?? "[]");
-            Raid.BaseLotteryRewards = JsonSerializer.Deserialize<List<RaidLotteryRewards>>(Utils.GetStringResource("raid_lottery_reward_item_array.json") ?? "[]");
+            // load raids
+            RaidContainer = new(Config.Game);
 
-            Raid.Game = Config.Game;
             SpriteBuilder.ShowTeraThicknessStripe = 0x4;
             SpriteBuilder.ShowTeraOpacityStripe = 0xAF;
             SpriteBuilder.ShowTeraOpacityBackground = 0xFF;
@@ -168,8 +154,8 @@ namespace RaidCrawler.WinForms
         private void ShowMessageBox(string msg)
         {
             if (InvokeRequired)
-                Invoke(() => { MessageBox.Show(msg); });
-            else MessageBox.Show(msg);
+                Invoke(() => { MessageBox.Show(msg, "RaidCrawler Error"); });
+            else MessageBox.Show(msg, "RaidCrawler Error");
         }
 
         private int GetRaidBoost()
@@ -232,11 +218,20 @@ namespace RaidCrawler.WinForms
             Task.Run(async () =>
             {
                 ButtonEnable(new[] { ButtonConnect, SendScreenshot, btnOpenMap, Rewards }, false);
-                (bool success, string err) = await ConnectionWrapper.Connect(token).ConfigureAwait(false);
-                if (!success)
+                try
+                {
+                    (bool success, string err) = await ConnectionWrapper.Connect(token).ConfigureAwait(false);
+                    if (!success)
+                    {
+                        ButtonEnable(new[] { ButtonConnect }, true);
+                        ShowMessageBox(err);
+                        return;
+                    }
+                }
+                catch (Exception ex)
                 {
                     ButtonEnable(new[] { ButtonConnect }, true);
-                    ShowMessageBox(err);
+                    ShowMessageBox(ex.Message);
                     return;
                 }
 
@@ -253,7 +248,7 @@ namespace RaidCrawler.WinForms
                 {
                     try
                     {
-                        (success, err) = await ConnectionWrapper.DisconnectAsync(token).ConfigureAwait(false);
+                        (bool success, string err) = await ConnectionWrapper.DisconnectAsync(token).ConfigureAwait(false);
                         if (!success)
                         {
                             ButtonEnable(new[] { ButtonConnect }, true);
@@ -328,6 +323,8 @@ namespace RaidCrawler.WinForms
                 ButtonEnable(new[] { ButtonAdvanceDate, ButtonReadRaids, ButtonDisconnect, ButtonViewRAM, ButtonDownloadEvents, SendScreenshot }, false);
                 try
                 {
+                    DateAdvanceSource.Cancel();
+                    Source.Cancel();
                     (bool success, string err) = await ConnectionWrapper.DisconnectAsync(token).ConfigureAwait(false);
                     if (!success)
                         ShowMessageBox(err);
@@ -337,21 +334,24 @@ namespace RaidCrawler.WinForms
                     ShowMessageBox(ex.Message);
                 }
 
+                DateAdvanceSource = new();
+                Source = new();
                 ButtonEnable(new[] { ButtonConnect }, true);
             }, token);
         }
 
         private void ButtonPrevious_Click(object sender, EventArgs e)
         {
-            if (Raids.Count > 0)
+            var count = RaidContainer.Container.GetRaidCount();
+            if (count > 0)
             {
-                var index = (ComboIndex.SelectedIndex + Raids.Count - 1) % Raids.Count; // Wrap around
+                var index = (ComboIndex.SelectedIndex + count - 1) % count; // Wrap around
                 if (ModifierKeys == Keys.Shift)
                 {
-                    for (int i = 0; i < Raids.Count; i++)
+                    for (int i = 0; i < count; i++)
                     {
-                        var chk = (index + Raids.Count - i) % Raids.Count;
-                        if (StopAdvances || RaidFilters.Any(z => z.FilterSatisfied(Encounters[chk], Raids[chk], RaidBoost.SelectedIndex)))
+                        var chk = (index + count - i) % count;
+                        if (StopAdvances || RaidFilters.Any(z => z.FilterSatisfied(RaidContainer.Container.Encounters[chk], RaidContainer.Container.Raids[chk], RaidBoost.SelectedIndex)))
                         {
                             index = chk;
                             break;
@@ -364,15 +364,16 @@ namespace RaidCrawler.WinForms
 
         private void ButtonNext_Click(object sender, EventArgs e)
         {
-            if (Raids.Count > 0)
+            var count = RaidContainer.Container.GetRaidCount();
+            if (count > 0)
             {
-                var index = (ComboIndex.SelectedIndex + Raids.Count + 1) % Raids.Count; // Wrap around
+                var index = (ComboIndex.SelectedIndex + count + 1) % count; // Wrap around
                 if (ModifierKeys == Keys.Shift)
                 {
-                    for (int i = 0; i < Raids.Count; i++)
+                    for (int i = 0; i < count; i++)
                     {
-                        var chk = (index + Raids.Count + i) % Raids.Count;
-                        if (StopAdvances || RaidFilters.Any(z => z.FilterSatisfied(Encounters[chk], Raids[chk], RaidBoost.SelectedIndex)))
+                        var chk = (index + count + i) % count;
+                        if (StopAdvances || RaidFilters.Any(z => z.FilterSatisfied(RaidContainer.Container.Encounters[chk], RaidContainer.Container.Raids[chk], RaidBoost.SelectedIndex)))
                         {
                             index = chk;
                             break;
@@ -403,9 +404,10 @@ namespace RaidCrawler.WinForms
                 _WindowState = WindowState;
 
                 var prompt = false;
+                var raids = RaidContainer.Container.Raids;
                 do
                 {
-                    prev = Raids.Select(z => z.Seed).ToList();
+                    prev = raids.Select(z => z.Seed).ToList();
                     if (Config.StreamerView && teraRaidView is not null)
                         teraRaidView.StartProgress();
 
@@ -432,7 +434,9 @@ namespace RaidCrawler.WinForms
                         Activate();
                     }
 
-                    for (int i = 0; i < Raids.Count; i++)
+                    var encounters = RaidContainer.Container.Encounters;
+                    var rewards = RaidContainer.Container.Rewards;
+                    for (int i = 0; i < raids.Count; i++)
                     {
                         var satisfied_filters = new List<RaidFilter>();
                         foreach (var filter in RaidFilters)
@@ -440,7 +444,7 @@ namespace RaidCrawler.WinForms
                             if (filter is null)
                                 continue;
 
-                            if (filter.FilterSatisfied(Encounters[i], Raids[i], RaidBoost.SelectedIndex))
+                            if (filter.FilterSatisfied(encounters[i], raids[i], RaidBoost.SelectedIndex))
                             {
                                 satisfied_filters.Add(filter);
                                 if (InvokeRequired)
@@ -451,12 +455,17 @@ namespace RaidCrawler.WinForms
 
                         if (satisfied_filters.Count > 0)
                         {
-                            var teraType = Raid.GetTeraType(Encounters[i], Raids[i]);
+                            var teraType = raids[i].GetTeraType(encounters[i]);
                             var color = TypeColor.GetTypeSpriteColor((byte)teraType);
                             var hexColor = $"{color.R:X2}{color.G:X2}{color.B:X2}";
-                            var blank = new PK9 { Species = Encounters[i]!.Species, Form = Encounters[i]!.Form };
-                            var spriteName = SpriteName.GetResourceStringSprite(blank.Species, blank.Form, blank.Gender, blank.FormArgument, EntityContext.Gen9, Raid.CheckIsShiny(Raids[i], Encounters[i]));
-                            await NotificationHandler.SendNotifications(Config, Encounters[i], Raids[i], satisfied_filters, time, RewardsList[i], hexColor, spriteName, Source.Token).ConfigureAwait(false);
+                            var blank = new PK9
+                            {
+                                Species = encounters[i].Species,
+                                Form = encounters[i].Form
+                            };
+
+                            var spriteName = SpriteName.GetResourceStringSprite(blank.Species, blank.Form, blank.Gender, blank.FormArgument, EntityContext.Gen9, raids[i].CheckIsShiny(encounters[i]));
+                            await NotificationHandler.SendNotifications(Config, encounters[i], raids[i], satisfied_filters, time, rewards[i], hexColor, spriteName, Source.Token).ConfigureAwait(false);
                         }
                     }
 
@@ -545,8 +554,11 @@ namespace RaidCrawler.WinForms
                     return;
                 }
             }
-            else if (Raids[ComboIndex.SelectedIndex] is not null)
-                window = new(Raids[ComboIndex.SelectedIndex].Data, RaidBlockOffset);
+            else if (RaidContainer.Container.Raids.Count > ComboIndex.SelectedIndex)
+            {
+                var data = RaidContainer.Container.Raids[ComboIndex.SelectedIndex].GetData();
+                window = new(data, RaidBlockOffset);
+            }
 
             ShowDialog(window);
             ButtonEnable(new[] { ButtonViewRAM }, true);
@@ -592,9 +604,9 @@ namespace RaidCrawler.WinForms
 
         private void Seed_Click(object sender, EventArgs e)
         {
-            if (ModifierKeys == Keys.Shift && Raids.Count > ComboIndex.SelectedIndex)
+            if (ModifierKeys == Keys.Shift && RaidContainer.Container.Raids.Count > ComboIndex.SelectedIndex)
             {
-                var raid = Raids[ComboIndex.SelectedIndex];
+                var raid = RaidContainer.Container.Raids[ComboIndex.SelectedIndex];
                 Seed.Text = HideSeed ? $"{raid.Seed:X8}" : "Hidden";
                 EC.Text = HideSeed ? $"{raid.EC:X8}" : "Hidden";
                 PID.Text = (HideSeed ? $"{raid.PID:X8}" : "Hidden") + $"{(raid.IsShiny ? " (☆)" : string.Empty)}";
@@ -657,7 +669,7 @@ namespace RaidCrawler.WinForms
             }
 
             var delivery_raid_prio = await ConnectionWrapper.ReadBlockDefault(BCATRaidPriorityLocation, "raid_priority_array", force, token).ConfigureAwait(false);
-            (Raid.DeliveryRaidPriority, var priority) = FlatbufferDumper.DumpDeliveryPriorities(delivery_raid_prio);
+            (RaidContainer.DeliveryRaidPriority, var priority) = FlatbufferDumper.DumpDeliveryPriorities(delivery_raid_prio);
             if (priority == 0)
                 return;
 
@@ -665,18 +677,19 @@ namespace RaidCrawler.WinForms
             var delivery_fixed_rewards = await ConnectionWrapper.ReadBlockDefault(BCATRaidFixedRewardLocation, "fixed_reward_item_array", force, token).ConfigureAwait(false);
             var delivery_lottery_rewards = await ConnectionWrapper.ReadBlockDefault(BCATRaidLotteryRewardLocation, "lottery_reward_item_array", force, token).ConfigureAwait(false);
 
-            Raid.DistTeraRaids = TeraDistribution.GetAllEncounters(delivery_raid_fbs);
-            Raid.DeliveryRaidFixedRewards = FlatbufferDumper.DumpFixedRewards(delivery_fixed_rewards);
-            Raid.DeliveryRaidLotteryRewards = FlatbufferDumper.DumpLotteryRewards(delivery_lottery_rewards);
+            RaidContainer.DistTeraRaids = TeraDistribution.GetAllEncounters(delivery_raid_fbs);
+            RaidContainer.DeliveryRaidFixedRewards = FlatbufferDumper.DumpFixedRewards(delivery_fixed_rewards);
+            RaidContainer.DeliveryRaidLotteryRewards = FlatbufferDumper.DumpLotteryRewards(delivery_lottery_rewards);
         }
 
         private void DisplayRaid()
         {
             int index = ComboIndex.SelectedIndex;
-            if (Raids.Count > index)
+            var raids = RaidContainer.Container.Raids;
+            if (raids.Count > index)
             {
-                Raid raid = Raids[index];
-                var encounter = Encounters[index];
+                Raid raid = raids[index];
+                var encounter = RaidContainer.Container.Encounters[index];
 
                 Seed.Text = !HideSeed ? $"{raid.Seed:X8}" : "Hidden";
                 EC.Text = !HideSeed ? $"{raid.EC:X8}" : "Hidden";
@@ -684,69 +697,52 @@ namespace RaidCrawler.WinForms
                 Area.Text = $"{Areas.Area[raid.Area - 1]} - Den {raid.Den}";
                 labelEvent.Visible = raid.IsEvent;
 
-                var teratype = Raid.GetTeraType(encounter, raid);
-                TeraType.Text = Raid.strings.types[teratype];
+                var teratype = raid.GetTeraType(encounter);
+                TeraType.Text = RaidContainer.Strings.types[teratype];
 
-                int StarCount = encounter is TeraDistribution ? encounter.Stars : Raid.GetStarCount(raid.Difficulty, Config.Progress, raid.IsBlack);
+                int StarCount = encounter is TeraDistribution ? encounter.Stars : raid.GetStarCount(raid.Difficulty, Config.Progress, raid.IsBlack);
                 Difficulty.Text = string.Concat(Enumerable.Repeat("☆", StarCount));
 
-                if (encounter is not null)
+                var param = encounter.GetParam();
+                var blank = new PK9
                 {
-                    var param = Raid.GetParam(encounter);
-                    var blank = new PK9
-                    {
-                        Species = encounter.Species,
-                        Form = encounter.Form
-                    };
+                    Species = encounter.Species,
+                    Form = encounter.Form
+                };
 
-                    Encounter9RNG.GenerateData(blank, param, EncounterCriteria.Unrestricted, raid.Seed);
-                    var img = blank.Sprite();
-                    img = ApplyTeraColor((byte)teratype, img, SpriteBackgroundType.BottomStripe);
+                Encounter9RNG.GenerateData(blank, param, EncounterCriteria.Unrestricted, raid.Seed);
+                var img = blank.Sprite();
+                img = ApplyTeraColor((byte)teratype, img, SpriteBackgroundType.BottomStripe);
 
-                    var form = ShowdownParsing.GetStringFromForm(encounter.Form, Raid.strings, encounter.Species, EntityContext.Gen9);
-                    if (form.Length > 0 && form[0] != '-')
-                        form = form.Insert(0, "-");
+                var form = ShowdownParsing.GetStringFromForm(encounter.Form, RaidContainer.Strings, encounter.Species, EntityContext.Gen9);
+                if (form.Length > 0 && form[0] != '-')
+                    form = form.Insert(0, "-");
 
-                    Species.Text = $"{Raid.strings.Species[encounter.Species]}{form}";
-                    Sprite.Image = img;
-                    GemIcon.Image = GetDisplayGemImage(teratype, raid);
-                    Gender.Text = $"{(Gender)blank.Gender}";
+                Species.Text = $"{RaidContainer.Strings.Species[encounter.Species]}{form}";
+                Sprite.Image = img;
+                GemIcon.Image = GetDisplayGemImage(teratype, raid);
+                Gender.Text = $"{(Gender)blank.Gender}";
 
-                    var nature = blank.Nature;
-                    Nature.Text = $"{Raid.strings.Natures[nature]}";
-                    Ability.Text = $"{Raid.strings.Ability[blank.Ability]}";
+                var nature = blank.Nature;
+                Nature.Text = $"{RaidContainer.Strings.Natures[nature]}";
+                Ability.Text = $"{RaidContainer.Strings.Ability[blank.Ability]}";
 
-                    var extra_moves = new ushort[] { 0, 0, 0, 0 };
-                    for (int i = 0; i < encounter.ExtraMoves.Length; i++)
-                    {
-                        if (i < extra_moves.Length)
-                            extra_moves[i] = encounter.ExtraMoves[i];
-                    }
-
-                    Move1.Text = ShowExtraMoves ? Raid.strings.Move[extra_moves[0]] : Raid.strings.Move[encounter.Move1];
-                    Move2.Text = ShowExtraMoves ? Raid.strings.Move[extra_moves[1]] : Raid.strings.Move[encounter.Move2];
-                    Move3.Text = ShowExtraMoves ? Raid.strings.Move[extra_moves[2]] : Raid.strings.Move[encounter.Move3];
-                    Move4.Text = ShowExtraMoves ? Raid.strings.Move[extra_moves[3]] : Raid.strings.Move[encounter.Move4];
-
-                    IVs.Text = IVsString(ToSpeedLast(blank.IVs));
-                    toolTip.SetToolTip(IVs, IVsString(ToSpeedLast(blank.IVs), true));
-                }
-                else
+                var extra_moves = new ushort[] { 0, 0, 0, 0 };
+                for (int i = 0; i < encounter.ExtraMoves.Length; i++)
                 {
-                    Species.Text = string.Empty;
-
-                    Move1.Text = string.Empty;
-                    Move2.Text = string.Empty;
-                    Move3.Text = string.Empty;
-                    Move4.Text = string.Empty;
-
-                    IVs.Text = string.Empty;
-                    Gender.Text = string.Empty;
-                    Nature.Text = string.Empty;
-                    Ability.Text = string.Empty;
+                    if (i < extra_moves.Length)
+                        extra_moves[i] = encounter.ExtraMoves[i];
                 }
 
-                PID.BackColor = Raid.CheckIsShiny(raid, encounter) ? Color.Gold : DefaultColor;
+                Move1.Text = ShowExtraMoves ? RaidContainer.Strings.Move[extra_moves[0]] : RaidContainer.Strings.Move[encounter.Move1];
+                Move2.Text = ShowExtraMoves ? RaidContainer.Strings.Move[extra_moves[1]] : RaidContainer.Strings.Move[encounter.Move2];
+                Move3.Text = ShowExtraMoves ? RaidContainer.Strings.Move[extra_moves[2]] : RaidContainer.Strings.Move[encounter.Move3];
+                Move4.Text = ShowExtraMoves ? RaidContainer.Strings.Move[extra_moves[3]] : RaidContainer.Strings.Move[encounter.Move4];
+
+                IVs.Text = IVsString(ToSpeedLast(blank.IVs));
+                toolTip.SetToolTip(IVs, IVsString(ToSpeedLast(blank.IVs), true));
+
+                PID.BackColor = raid.CheckIsShiny(encounter) ? Color.Gold : DefaultColor;
                 IVs.BackColor = IVs.Text is "31/31/31/31/31/31" ? Color.YellowGreen : DefaultColor;
             }
             else ShowMessageBox($"Unable to display raid at index {index}. Ensure there are no cheats running or anything else that might shift RAM (Edizon, overlays, etc.), then reboot your console and try again.");
@@ -798,56 +794,58 @@ namespace RaidCrawler.WinForms
             }
 
             int index = ComboIndex.SelectedIndex;
-            if (Raids.Count > index)
+            var raids = RaidContainer.Container.Raids;
+            if (raids.Count > index)
             {
-                Raid raid = Raids[index];
-                var encounter = Encounters[index];
+                Raid raid = raids[index];
+                var encounter = RaidContainer.Container.Encounters[index];
 
                 teraRaidView.Area.Text = $"{Areas.Area[raid.Area - 1]} - Den {raid.Den}";
 
-                var teratype = Raid.GetTeraType(encounter, raid);
+                var teratype = raid.GetTeraType(encounter);
                 teraRaidView.TeraType.Image = (Bitmap)Properties.Resources.ResourceManager.GetObject("gem_text_" + teratype)!;
 
-                int StarCount = encounter is TeraDistribution ? encounter.Stars : Raid.GetStarCount(raid.Difficulty, Config.Progress, raid.IsBlack);
+                int StarCount = encounter is TeraDistribution ? encounter.Stars : raid.GetStarCount(raid.Difficulty, Config.Progress, raid.IsBlack);
                 teraRaidView.Difficulty.Text = string.Concat(Enumerable.Repeat("⭐", StarCount));
 
-                if (encounter != null)
+                if (encounter is not null)
                 {
-                    var param = Raid.GetParam(encounter);
+                    var param = encounter.GetParam();
                     var blank = new PK9
                     {
                         Species = encounter.Species,
                         Form = encounter.Form
                     };
+
                     Encounter9RNG.GenerateData(blank, param, EncounterCriteria.Unrestricted, raid.Seed);
                     var img = blank.Sprite();
 
                     teraRaidView.picBoxPokemon.Image = img;
-                    var form = ShowdownParsing.GetStringFromForm(encounter.Form, Raid.strings, encounter.Species, EntityContext.Gen9);
+                    var form = ShowdownParsing.GetStringFromForm(encounter.Form, RaidContainer.Strings, encounter.Species, EntityContext.Gen9);
                     if (form.Length > 0 && form[0] != '-')
                         form = form.Insert(0, "-");
 
-                    teraRaidView.Species.Text = $"{Raid.strings.Species[encounter.Species]}{form}";
+                    teraRaidView.Species.Text = $"{RaidContainer.Strings.Species[encounter.Species]}{form}";
                     teraRaidView.Gender.Text = $"{(Gender)blank.Gender}";
 
                     var nature = blank.Nature;
-                    teraRaidView.Nature.Text = $"{Raid.strings.Natures[nature]}";
-                    teraRaidView.Ability.Text = $"{Raid.strings.Ability[blank.Ability]}";
+                    teraRaidView.Nature.Text = $"{RaidContainer.Strings.Natures[nature]}";
+                    teraRaidView.Ability.Text = $"{RaidContainer.Strings.Ability[blank.Ability]}";
 
-                    teraRaidView.Moveset1.Text = Raid.strings.Move[encounter.Move1];
-                    teraRaidView.Moveset2.Text = Raid.strings.Move[encounter.Move2];
-                    teraRaidView.Moveset3.Text = Raid.strings.Move[encounter.Move3];
-                    teraRaidView.Moveset4.Text = Raid.strings.Move[encounter.Move4];
+                    teraRaidView.Moveset1.Text = encounter.Move1 > 0 ? RaidContainer.Strings.Move[encounter.Move1] : "---";
+                    teraRaidView.Moveset2.Text = encounter.Move2 > 0 ? RaidContainer.Strings.Move[encounter.Move2] : "---";
+                    teraRaidView.Moveset3.Text = encounter.Move3 > 0 ? RaidContainer.Strings.Move[encounter.Move3] : "---";
+                    teraRaidView.Moveset4.Text = encounter.Move4 > 0 ? RaidContainer.Strings.Move[encounter.Move4] : "---";
 
                     var length = encounter.ExtraMoves.Length < 4 ? 4 : encounter.ExtraMoves.Length;
                     var extra_moves = new ushort[length];
                     for (int i = 0; i < encounter.ExtraMoves.Length; i++)
                         extra_moves[i] = encounter.ExtraMoves[i];
 
-                    teraRaidView.Moveset5.Text = extra_moves[0] > 0 ? Raid.strings.Move[extra_moves[0]] : "---";
-                    teraRaidView.Moveset6.Text = extra_moves[1] > 0 ? Raid.strings.Move[extra_moves[1]] : "---";
-                    teraRaidView.Moveset7.Text = extra_moves[2] > 0 ? Raid.strings.Move[extra_moves[2]] : "---";
-                    teraRaidView.Moveset8.Text = extra_moves[3] > 0 ? Raid.strings.Move[extra_moves[3]] : "---";
+                    teraRaidView.Moveset5.Text = extra_moves[0] > 0 ? RaidContainer.Strings.Move[extra_moves[0]] : "---";
+                    teraRaidView.Moveset6.Text = extra_moves[1] > 0 ? RaidContainer.Strings.Move[extra_moves[1]] : "---";
+                    teraRaidView.Moveset7.Text = extra_moves[2] > 0 ? RaidContainer.Strings.Move[extra_moves[2]] : "---";
+                    teraRaidView.Moveset8.Text = extra_moves[3] > 0 ? RaidContainer.Strings.Move[extra_moves[3]] : "---";
 
                     var ivs = ToSpeedLast(blank.IVs);
 
@@ -906,7 +904,7 @@ namespace RaidCrawler.WinForms
                     teraRaidView.Map.Image = map;
 
                     // Rewards
-                    var rewards = RewardsList[index];
+                    var rewards = RaidContainer.Container.Rewards[index];
 
                     teraRaidView.textAbilityPatch.Text = "0";
                     teraRaidView.textAbilityPatch.ForeColor = Color.DimGray;
@@ -940,7 +938,7 @@ namespace RaidCrawler.WinForms
                     teraRaidView.textSpicyHerba.ForeColor = Color.DimGray;
                     teraRaidView.labelSpicyHerba.ForeColor = Color.DimGray;
 
-                    for (int i = 0; i < rewards!.Count; i++)
+                    for (int i = 0; i < rewards.Count; i++)
                     {
                         if (rewards[i].Item1 == 645)
                         {
@@ -991,8 +989,10 @@ namespace RaidCrawler.WinForms
                             teraRaidView.labelSpicyHerba.ForeColor = Color.WhiteSmoke;
                         }
                     }
-                    teraRaidView.Shiny.Visible = Raid.CheckIsShiny(raid, encounter);
-                    teraRaidView.picShinyAlert.Enabled = Raid.CheckIsShiny(raid, encounter);
+
+                    var shiny = raid.CheckIsShiny(encounter);
+                    teraRaidView.Shiny.Visible = shiny;
+                    teraRaidView.picShinyAlert.Enabled = shiny;
                 }
                 else
                 {
@@ -1009,7 +1009,7 @@ namespace RaidCrawler.WinForms
 
             var shiny_mark = " (☆)";
             var pid = $"{raid.PID:X8}";
-            return Raid.CheckIsShiny(raid, enc) ? pid + shiny_mark : pid;
+            return raid.CheckIsShiny(enc) ? pid + shiny_mark : pid;
         }
 
         private static string IVsString(int[] ivs, bool verbose = false)
@@ -1099,10 +1099,11 @@ namespace RaidCrawler.WinForms
 
         private bool StopAdvanceDate()
         {
-            if (prev.Count != Raids.Count)
+            var raids = RaidContainer.Container.Raids;
+            if (prev.Count != raids.Count)
                 return false;
 
-            var curSeeds = Raids.Select(x => x.Seed).ToArray();
+            var curSeeds = raids.Select(x => x.Seed).ToArray();
             var sameraids = curSeeds.Except(prev).ToArray().Length == 0;
 
             StatDaySkipTries++;
@@ -1117,7 +1118,8 @@ namespace RaidCrawler.WinForms
                     index = RaidBoost.Invoke(() => { return RaidBoost.SelectedIndex; });
                 else index = RaidBoost.SelectedIndex;
 
-                if (RaidFilters[i].FilterSatisfied(Encounters, Raids, index))
+                var encounters = RaidContainer.Container.Encounters;
+                if (RaidFilters[i].FilterSatisfied(encounters, raids, index))
                     return true;
             }
 
@@ -1131,18 +1133,18 @@ namespace RaidCrawler.WinForms
             if (RaidBlockOffset == 0)
                 RaidBlockOffset = await ConnectionWrapper.Connection.PointerAll(ConnectionWrapper.RaidBlockPointer, token).ConfigureAwait(false);
 
-            Raids.Clear();
-            Encounters.Clear();
-            RewardsList.Clear();
+            RaidContainer.Container.ClearRaids();
+            RaidContainer.Container.ClearEncounters();
+            RaidContainer.Container.ClearRewards();
 
             UpdateStatus("Reading raid block...");
-            var Data = await ConnectionWrapper.Connection.ReadBytesAbsoluteAsync(RaidBlockOffset + RaidBlock.HEADER_SIZE, (int)(RaidBlock.SIZE - RaidBlock.HEADER_SIZE), token).ConfigureAwait(false);
+            var data = await ConnectionWrapper.Connection.ReadBytesAbsoluteAsync(RaidBlockOffset + RaidBlock.HEADER_SIZE, (int)(RaidBlock.SIZE - RaidBlock.HEADER_SIZE), token).ConfigureAwait(false);
 
-            var count = Data.Length / Raid.SIZE;
+            var count = data.Length / Raid.SIZE;
             HashSet<int> possible_groups = new();
-            if (Raid.DistTeraRaids is not null)
+            if (RaidContainer.DistTeraRaids is not null)
             {
-                foreach (TeraDistribution e in Raid.DistTeraRaids.Cast<TeraDistribution>())
+                foreach (TeraDistribution e in RaidContainer.DistTeraRaids.Cast<TeraDistribution>())
                 {
                     if (TeraDistribution.AvailableInGame(e.Entity, Config.Game))
                         possible_groups.Add(e.DeliveryGroupID);
@@ -1150,55 +1152,76 @@ namespace RaidCrawler.WinForms
             }
 
             var eventct = 0;
+            List<Raid> newRaids = new();
+            List<ITeraRaid> newTera = new();
+            List<List<(int, int, int)>> newRewards = new();
+            var raids = RaidContainer.Container.Raids;
+
             for (int i = 0; i < count; i++)
             {
-                raid = new Raid(Data.Skip(i * Raid.SIZE).Take(Raid.SIZE).ToArray());
+                raid = new Raid(RaidContainer.Game, data.Skip(i * Raid.SIZE).Take(Raid.SIZE).ToArray())
+                {
+                    GemTeraRaids = RaidContainer.GemTeraRaids,
+                    DistTeraRaids = RaidContainer.DistTeraRaids,
+                    DeliveryRaidPriority = RaidContainer.DeliveryRaidPriority,
+                    DeliveryRaidFixedRewards = RaidContainer.DeliveryRaidFixedRewards,
+                    DeliveryRaidLotteryRewards = RaidContainer.DeliveryRaidLotteryRewards,
+                    BaseFixedRewards = RaidContainer.BaseFixedRewards,
+                    BaseLotteryRewards = RaidContainer.BaseLotteryRewards,
+                };
+
                 var progress = raid.IsEvent ? Config.EventProgress : Config.Progress;
-                var raid_delivery_group_id = raid.IsEvent ? TeraDistribution.GetDeliveryGroupID(eventct, Raid.DeliveryRaidPriority, possible_groups) : -1;
-                var encounter = raid.Encounter(progress, raid_delivery_group_id);
+                var raid_delivery_group_id = raid.IsEvent ? TeraDistribution.GetDeliveryGroupID(eventct, raid.DeliveryRaidPriority, possible_groups) : -1;
+                var encounter = raid.GetTeraEncounter(progress, raid_delivery_group_id);
                 if (raid.IsValid)
                 {
-                    Raids.Add(raid);
-                    Encounters.Add(encounter);
-                    RewardsList.Add(RaidCrawler.Core.Structures.Rewards.GetRewards(encounter, raid.Seed, Raid.GetTeraType(encounter, raid), RaidBoost.SelectedIndex));
+                    newRaids.Add(raid);
+                    newTera.Add(encounter);
+                    newRewards.Add(encounter.GetRewards(raid, GetRaidBoost()));
                 }
 
                 if (raid.IsEvent)
                     eventct++;
             }
 
+            RaidContainer.Container.SetRaids(newRaids);
+            raids = RaidContainer.Container.Raids;
+            RaidContainer.Container.SetEncounters(newTera);
+            RaidContainer.Container.SetRewards(newRewards);
+
             UpdateStatus("Completed!");
-            var filterMatchCount = Enumerable.Range(0, Raids.Count).Count(i => RaidFilters.Any(z => z.FilterSatisfied(Encounters[i], Raids[i], GetRaidBoost())));
+            var encounters = RaidContainer.Container.Encounters;
+            var filterMatchCount = Enumerable.Range(0, raids.Count).Count(c => RaidFilters.Any(z => z.FilterSatisfied(encounters[c], raids[c], GetRaidBoost())));
 
             if (InvokeRequired)
                 LabelLoadedRaids.Invoke(() => { LabelLoadedRaids.Text = $"Matches: {filterMatchCount}"; });
             else LabelLoadedRaids.Text = $"Matches: {filterMatchCount}";
 
-            if (Raids.Count > 0)
+            if (raids.Count > 0)
             {
                 ButtonEnable(new[] { ButtonPrevious, ButtonNext }, true);
-                var dataSource = Enumerable.Range(0, Raids.Count).Select(z => $"{z + 1:D} / {Raids.Count:D}").ToArray();
+                var dataSource = Enumerable.Range(0, raids.Count).Select(z => $"{z + 1:D} / {raids.Count:D}").ToArray();
                 if (InvokeRequired)
                     ComboIndex.Invoke(() => { ComboIndex.DataSource = dataSource; });
                 else ComboIndex.DataSource = dataSource;
 
                 if (InvokeRequired)
-                    ComboIndex.Invoke(() => { ComboIndex.SelectedIndex = ComboIndex.SelectedIndex < Raids.Count ? ComboIndex.SelectedIndex : 0; });
-                else ComboIndex.SelectedIndex = ComboIndex.SelectedIndex < Raids.Count ? ComboIndex.SelectedIndex : 0;
+                    ComboIndex.Invoke(() => { ComboIndex.SelectedIndex = ComboIndex.SelectedIndex < raids.Count ? ComboIndex.SelectedIndex : 0; });
+                else ComboIndex.SelectedIndex = ComboIndex.SelectedIndex < raids.Count ? ComboIndex.SelectedIndex : 0;
             }
             else
             {
                 ButtonEnable(new[] { ButtonPrevious, ButtonNext }, false);
-                if (Raids.Count > RaidBlock.MAX_COUNT || Raids.Count == 0)
+                if (raids.Count > RaidBlock.MAX_COUNT || raids.Count == 0)
                     ShowMessageBox("Bad read, ensure there are no cheats running or anything else that might shift RAM (Edizon, overlays, etc.), then reboot your console and try again.");
             }
         }
 
         public void Game_SelectedIndexChanged()
         {
-            Raid.Game = Config.Game;
+            RaidContainer.SetGame(Config.Game);
             Config.Game = Config.Game;
-            if (Raids.Count > 0)
+            if (RaidContainer.Container.Raids.Count > 0)
                 DisplayRaid();
         }
 
@@ -1226,15 +1249,16 @@ namespace RaidCrawler.WinForms
 
         private void DisplayMap(object sender, EventArgs e)
         {
-            if (Raids.Count == 0)
+            var raids = RaidContainer.Container.Raids;
+            if (raids.Count == 0)
             {
                 ShowMessageBox("Raids not loaded.");
                 return;
             }
 
-            var raid = Raids[ComboIndex.SelectedIndex];
-            var encounter = Encounters[ComboIndex.SelectedIndex];
-            var teratype = Raid.GetTeraType(encounter, raid);
+            var raid = raids[ComboIndex.SelectedIndex];
+            var encounter = RaidContainer.Container.Encounters[ComboIndex.SelectedIndex];
+            var teratype = raid.GetTeraType(encounter);
             var map = GenerateMap(raid, teratype);
             if (map is null)
             {
@@ -1248,45 +1272,50 @@ namespace RaidCrawler.WinForms
 
         private void Rewards_Click(object sender, EventArgs e)
         {
-            if (Raids.Count == 0)
+            if (RaidContainer.Container.Raids.Count == 0)
             {
                 ShowMessageBox("Raids not loaded.");
                 return;
             }
 
-            var rewards = RewardsList[ComboIndex.SelectedIndex];
+            var rewards = RaidContainer.Container.Rewards[ComboIndex.SelectedIndex];
             if (rewards is null)
             {
                 ShowMessageBox("Error while displaying rewards.");
                 return;
             }
 
-            var form = new RewardsView(rewards);
+            var form = new RewardsView(RaidContainer.Strings.Item, rewards);
             ShowDialog(form);
         }
 
         private void RaidBoost_SelectedIndexChanged(object sender, EventArgs e)
         {
-            RewardsList.Clear();
-            for (int i = 0; i < Raids.Count; i++)
+            RaidContainer.Container.ClearRewards();
+            var raids = RaidContainer.Container.Raids;
+            var encounters = RaidContainer.Container.Encounters;
+
+            List<List<(int, int, int)>> newRewards = new();
+            for (int i = 0; i < raids.Count; i++)
             {
-                var raid = Raids[i];
-                var encounter = Encounters[i];
-                RewardsList.Add(Core.Structures.Rewards.GetRewards(encounter, raid.Seed, Raid.GetTeraType(encounter, raid), RaidBoost.SelectedIndex));
+                var raid = raids[i];
+                var encounter = encounters[i];
+                newRewards.Add(encounter.GetRewards(raid, RaidBoost.SelectedIndex));
             }
+            RaidContainer.Container.SetRewards(newRewards);
         }
 
         Point Default = new(244, 280);
         Point ShowExtra = new(253, 280);
         private void Move_Clicked(object sender, EventArgs e)
         {
-            if (Raids.Count == 0)
+            if (RaidContainer.Container.Raids.Count == 0)
             {
                 ShowMessageBox("Raids not loaded.");
                 return;
             }
 
-            var encounter = Encounters[ComboIndex.SelectedIndex];
+            var encounter = RaidContainer.Container.Encounters[ComboIndex.SelectedIndex];
             if (encounter is null)
                 return;
 
@@ -1299,15 +1328,15 @@ namespace RaidCrawler.WinForms
             for (int i = 0; i < encounter.ExtraMoves.Length; i++)
                 extra_moves[i] = encounter.ExtraMoves[i];
 
-            Move1.Text = ShowExtraMoves ? Raid.strings.Move[extra_moves[0]] : Raid.strings.Move[encounter.Move1];
-            Move2.Text = ShowExtraMoves ? Raid.strings.Move[extra_moves[1]] : Raid.strings.Move[encounter.Move2];
-            Move3.Text = ShowExtraMoves ? Raid.strings.Move[extra_moves[2]] : Raid.strings.Move[encounter.Move3];
-            Move4.Text = ShowExtraMoves ? Raid.strings.Move[extra_moves[3]] : Raid.strings.Move[encounter.Move4];
+            Move1.Text = ShowExtraMoves ? RaidContainer.Strings.Move[extra_moves[0]] : RaidContainer.Strings.Move[encounter.Move1];
+            Move2.Text = ShowExtraMoves ? RaidContainer.Strings.Move[extra_moves[1]] : RaidContainer.Strings.Move[encounter.Move2];
+            Move3.Text = ShowExtraMoves ? RaidContainer.Strings.Move[extra_moves[2]] : RaidContainer.Strings.Move[encounter.Move3];
+            Move4.Text = ShowExtraMoves ? RaidContainer.Strings.Move[extra_moves[3]] : RaidContainer.Strings.Move[encounter.Move4];
         }
 
         private void ComboIndex_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (Raids.Count == 0)
+            if (RaidContainer.Container.Raids.Count == 0)
                 return;
 
             DisplayRaid();
@@ -1356,16 +1385,24 @@ namespace RaidCrawler.WinForms
                 ComboIndex.Invoke(() => { i = ComboIndex.SelectedIndex; });
             else i = ComboIndex.SelectedIndex;
 
-            if (i > -1 && Encounters[i] is not null && Raids[i] is not null)
+            var raids = RaidContainer.Container.Raids;
+            var encounters = RaidContainer.Container.Encounters;
+            var rewards = RaidContainer.Container.Rewards;
+            if (i > -1 && encounters[i] is not null && raids[i] is not null)
             {
                 var timeSpan = stopwatch.Elapsed;
                 string time = string.Format("{0:00}:{1:00}:{2:00}", timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
-                var teraType = Raid.GetTeraType(Encounters[i], Raids[i]);
+                var teraType = raids[i].GetTeraType(encounters[i]);
                 var color = TypeColor.GetTypeSpriteColor((byte)teraType);
                 var hexColor = $"{color.R:X2}{color.G:X2}{color.B:X2}";
-                var blank = new PK9 { Species = Encounters[i]!.Species, Form = Encounters[i]!.Form };
-                var spriteName = SpriteName.GetResourceStringSprite(blank.Species, blank.Form, blank.Gender, blank.FormArgument, EntityContext.Gen9, Raid.CheckIsShiny(Raids[i], Encounters[i]));
-                await NotificationHandler.SendNotifications(Config, Encounters[i], Raids[i], satisfied_filters, time, RewardsList[i], hexColor, spriteName, token).ConfigureAwait(false);
+                var blank = new PK9
+                {
+                    Species = encounters[i].Species,
+                    Form = encounters[i].Form
+                };
+
+                var spriteName = SpriteName.GetResourceStringSprite(blank.Species, blank.Form, blank.Gender, blank.FormArgument, EntityContext.Gen9, raids[i].CheckIsShiny(encounters[i]));
+                await NotificationHandler.SendNotifications(Config, encounters[i], raids[i], satisfied_filters, time, rewards[i], hexColor, spriteName, token).ConfigureAwait(false);
             }
             else ShowMessageBox("Please connect to your device and ensure a raid has been found.");
         }
