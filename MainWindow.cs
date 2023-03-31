@@ -1022,7 +1022,7 @@ namespace RaidCrawler
                 {
                     Raids.Add(raid);
                     Encounters.Add(encounter);
-                    RewardsList.Add(Structures.Rewards.GetRewards(encounter, raid.Seed, raid.TeraType, RaidBoost.SelectedIndex));
+                    RewardsList.Add(Structures.Rewards.GetRewards(encounter, raid.Seed, Raid.GetTeraType(encounter, raid), RaidBoost.SelectedIndex));
                 }
                 if (raid.IsEvent)
                     eventct++;
@@ -1188,7 +1188,7 @@ namespace RaidCrawler
             {
                 var raid = Raids[i];
                 var encounter = Encounters[i];
-                RewardsList.Add(Structures.Rewards.GetRewards(encounter, raid.Seed, raid.TeraType, RaidBoost.SelectedIndex));
+                RewardsList.Add(Structures.Rewards.GetRewards(encounter, raid.Seed, Raid.GetTeraType(encounter, raid), RaidBoost.SelectedIndex));
             }
         }
 
