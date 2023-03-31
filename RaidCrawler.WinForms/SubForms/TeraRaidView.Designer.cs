@@ -58,17 +58,16 @@
             this.labelHP = new System.Windows.Forms.Label();
             this.HP = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.Moveset8 = new System.Windows.Forms.TextBox();
-            this.Moveset6 = new System.Windows.Forms.TextBox();
-            this.Moveset4 = new System.Windows.Forms.TextBox();
-            this.Moveset7 = new System.Windows.Forms.TextBox();
-            this.Moveset5 = new System.Windows.Forms.TextBox();
-            this.Moveset3 = new System.Windows.Forms.TextBox();
-            this.Moveset1 = new System.Windows.Forms.TextBox();
-            this.Moveset2 = new System.Windows.Forms.TextBox();
+            this.Move8 = new System.Windows.Forms.TextBox();
+            this.Move6 = new System.Windows.Forms.TextBox();
+            this.Move4 = new System.Windows.Forms.TextBox();
+            this.Move7 = new System.Windows.Forms.TextBox();
+            this.Move5 = new System.Windows.Forms.TextBox();
+            this.Move3 = new System.Windows.Forms.TextBox();
+            this.Move1 = new System.Windows.Forms.TextBox();
+            this.Move2 = new System.Windows.Forms.TextBox();
             this.picShinyAlert = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.picBottleCap = new System.Windows.Forms.PictureBox();
             this.picSaltyHerba = new System.Windows.Forms.PictureBox();
             this.picSpicyHerba = new System.Windows.Forms.PictureBox();
@@ -458,14 +457,14 @@
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.Moveset8);
-            this.groupBox3.Controls.Add(this.Moveset6);
-            this.groupBox3.Controls.Add(this.Moveset4);
-            this.groupBox3.Controls.Add(this.Moveset7);
-            this.groupBox3.Controls.Add(this.Moveset5);
-            this.groupBox3.Controls.Add(this.Moveset3);
-            this.groupBox3.Controls.Add(this.Moveset1);
-            this.groupBox3.Controls.Add(this.Moveset2);
+            this.groupBox3.Controls.Add(this.Move8);
+            this.groupBox3.Controls.Add(this.Move6);
+            this.groupBox3.Controls.Add(this.Move4);
+            this.groupBox3.Controls.Add(this.Move7);
+            this.groupBox3.Controls.Add(this.Move5);
+            this.groupBox3.Controls.Add(this.Move3);
+            this.groupBox3.Controls.Add(this.Move1);
+            this.groupBox3.Controls.Add(this.Move2);
             this.groupBox3.ForeColor = System.Drawing.Color.DarkGray;
             this.groupBox3.Location = new System.Drawing.Point(12, 333);
             this.groupBox3.Name = "groupBox3";
@@ -474,109 +473,109 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Raid Moveset";
             // 
-            // Moveset8
+            // Move8
             // 
-            this.Moveset8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(5)))), ((int)(((byte)(25)))));
-            this.Moveset8.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.Moveset8.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.Moveset8.ForeColor = System.Drawing.Color.LightSlateGray;
-            this.Moveset8.Location = new System.Drawing.Point(278, 115);
-            this.Moveset8.Name = "Moveset8";
-            this.Moveset8.PlaceholderText = "Moveset8";
-            this.Moveset8.Size = new System.Drawing.Size(200, 25);
-            this.Moveset8.TabIndex = 128;
-            this.Moveset8.Enabled = false;
+            this.Move8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(5)))), ((int)(((byte)(25)))));
+            this.Move8.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.Move8.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.Move8.ForeColor = System.Drawing.Color.LightSlateGray;
+            this.Move8.Location = new System.Drawing.Point(278, 115);
+            this.Move8.Name = "Move8";
+            this.Move8.PlaceholderText = "Move8";
+            this.Move8.Size = new System.Drawing.Size(200, 25);
+            this.Move8.TabIndex = 128;
+            this.Move8.Enabled = false;
             // 
-            // Moveset6
+            // Move6
             // 
-            this.Moveset6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(5)))), ((int)(((byte)(25)))));
-            this.Moveset6.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.Moveset6.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.Moveset6.ForeColor = System.Drawing.Color.LightSlateGray;
-            this.Moveset6.Location = new System.Drawing.Point(278, 84);
-            this.Moveset6.Name = "Moveset6";
-            this.Moveset6.PlaceholderText = "Moveset6";
-            this.Moveset6.Size = new System.Drawing.Size(200, 25);
-            this.Moveset6.TabIndex = 127;
-            this.Moveset6.Enabled = false;
+            this.Move6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(5)))), ((int)(((byte)(25)))));
+            this.Move6.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.Move6.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.Move6.ForeColor = System.Drawing.Color.LightSlateGray;
+            this.Move6.Location = new System.Drawing.Point(278, 84);
+            this.Move6.Name = "Move6";
+            this.Move6.PlaceholderText = "Move6";
+            this.Move6.Size = new System.Drawing.Size(200, 25);
+            this.Move6.TabIndex = 127;
+            this.Move6.Enabled = false;
             // 
-            // Moveset4
+            // Move4
             // 
-            this.Moveset4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(5)))), ((int)(((byte)(25)))));
-            this.Moveset4.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.Moveset4.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.Moveset4.ForeColor = System.Drawing.SystemColors.ActiveCaption;
-            this.Moveset4.Location = new System.Drawing.Point(278, 53);
-            this.Moveset4.Name = "Moveset4";
-            this.Moveset4.PlaceholderText = "Moveset4";
-            this.Moveset4.Size = new System.Drawing.Size(200, 25);
-            this.Moveset4.TabIndex = 126;
-            this.Moveset4.Enabled = false;
+            this.Move4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(5)))), ((int)(((byte)(25)))));
+            this.Move4.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.Move4.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.Move4.ForeColor = System.Drawing.SystemColors.ActiveCaption;
+            this.Move4.Location = new System.Drawing.Point(278, 53);
+            this.Move4.Name = "Move4";
+            this.Move4.PlaceholderText = "Move4";
+            this.Move4.Size = new System.Drawing.Size(200, 25);
+            this.Move4.TabIndex = 126;
+            this.Move4.Enabled = false;
             // 
-            // Moveset7
+            // Move7
             // 
-            this.Moveset7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(5)))), ((int)(((byte)(25)))));
-            this.Moveset7.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.Moveset7.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.Moveset7.ForeColor = System.Drawing.Color.LightSlateGray;
-            this.Moveset7.Location = new System.Drawing.Point(22, 115);
-            this.Moveset7.Name = "Moveset7";
-            this.Moveset7.PlaceholderText = "Moveset7";
-            this.Moveset7.Size = new System.Drawing.Size(200, 25);
-            this.Moveset7.TabIndex = 125;
-            this.Moveset7.Enabled = false;
+            this.Move7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(5)))), ((int)(((byte)(25)))));
+            this.Move7.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.Move7.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.Move7.ForeColor = System.Drawing.Color.LightSlateGray;
+            this.Move7.Location = new System.Drawing.Point(22, 115);
+            this.Move7.Name = "Move7";
+            this.Move7.PlaceholderText = "Move7";
+            this.Move7.Size = new System.Drawing.Size(200, 25);
+            this.Move7.TabIndex = 125;
+            this.Move7.Enabled = false;
             // 
-            // Moveset5
+            // Move5
             // 
-            this.Moveset5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(5)))), ((int)(((byte)(25)))));
-            this.Moveset5.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.Moveset5.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.Moveset5.ForeColor = System.Drawing.Color.LightSlateGray;
-            this.Moveset5.Location = new System.Drawing.Point(22, 84);
-            this.Moveset5.Name = "Moveset5";
-            this.Moveset5.PlaceholderText = "Moveset5";
-            this.Moveset5.Size = new System.Drawing.Size(200, 25);
-            this.Moveset5.TabIndex = 124;
-            this.Moveset5.Enabled = false;
+            this.Move5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(5)))), ((int)(((byte)(25)))));
+            this.Move5.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.Move5.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.Move5.ForeColor = System.Drawing.Color.LightSlateGray;
+            this.Move5.Location = new System.Drawing.Point(22, 84);
+            this.Move5.Name = "Move5";
+            this.Move5.PlaceholderText = "Move5";
+            this.Move5.Size = new System.Drawing.Size(200, 25);
+            this.Move5.TabIndex = 124;
+            this.Move5.Enabled = false;
             // 
-            // Moveset3
+            // Move3
             // 
-            this.Moveset3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(5)))), ((int)(((byte)(25)))));
-            this.Moveset3.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.Moveset3.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.Moveset3.ForeColor = System.Drawing.SystemColors.ActiveCaption;
-            this.Moveset3.Location = new System.Drawing.Point(22, 53);
-            this.Moveset3.Name = "Moveset3";
-            this.Moveset3.PlaceholderText = "Moveset3";
-            this.Moveset3.Size = new System.Drawing.Size(200, 25);
-            this.Moveset3.TabIndex = 123;
-            this.Moveset3.Enabled = false;
+            this.Move3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(5)))), ((int)(((byte)(25)))));
+            this.Move3.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.Move3.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.Move3.ForeColor = System.Drawing.SystemColors.ActiveCaption;
+            this.Move3.Location = new System.Drawing.Point(22, 53);
+            this.Move3.Name = "Move3";
+            this.Move3.PlaceholderText = "Move3";
+            this.Move3.Size = new System.Drawing.Size(200, 25);
+            this.Move3.TabIndex = 123;
+            this.Move3.Enabled = false;
             // 
-            // Moveset1
+            // Move1
             // 
-            this.Moveset1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(5)))), ((int)(((byte)(25)))));
-            this.Moveset1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.Moveset1.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.Moveset1.ForeColor = System.Drawing.SystemColors.ActiveCaption;
-            this.Moveset1.Location = new System.Drawing.Point(22, 22);
-            this.Moveset1.Name = "Moveset1";
-            this.Moveset1.PlaceholderText = "Moveset1";
-            this.Moveset1.Size = new System.Drawing.Size(200, 25);
-            this.Moveset1.TabIndex = 121;
-            this.Moveset1.Enabled = false;
+            this.Move1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(5)))), ((int)(((byte)(25)))));
+            this.Move1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.Move1.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.Move1.ForeColor = System.Drawing.SystemColors.ActiveCaption;
+            this.Move1.Location = new System.Drawing.Point(22, 22);
+            this.Move1.Name = "Move1";
+            this.Move1.PlaceholderText = "Move1";
+            this.Move1.Size = new System.Drawing.Size(200, 25);
+            this.Move1.TabIndex = 121;
+            this.Move1.Enabled = false;
             // 
-            // Moveset2
+            // Move2
             // 
-            this.Moveset2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(5)))), ((int)(((byte)(25)))));
-            this.Moveset2.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.Moveset2.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.Moveset2.ForeColor = System.Drawing.SystemColors.ActiveCaption;
-            this.Moveset2.Location = new System.Drawing.Point(278, 22);
-            this.Moveset2.Name = "Moveset2";
-            this.Moveset2.PlaceholderText = "Moveset2";
-            this.Moveset2.Size = new System.Drawing.Size(200, 25);
-            this.Moveset2.TabIndex = 122;
-            this.Moveset2.Enabled = false;
+            this.Move2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(5)))), ((int)(((byte)(25)))));
+            this.Move2.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.Move2.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.Move2.ForeColor = System.Drawing.SystemColors.ActiveCaption;
+            this.Move2.Location = new System.Drawing.Point(278, 22);
+            this.Move2.Name = "Move2";
+            this.Move2.PlaceholderText = "Move2";
+            this.Move2.Size = new System.Drawing.Size(200, 25);
+            this.Move2.TabIndex = 122;
+            this.Move2.Enabled = false;
             // 
             // picShinyAlert
             // 
@@ -598,10 +597,6 @@
             this.pictureBox1.Size = new System.Drawing.Size(850, 27);
             this.pictureBox1.TabIndex = 126;
             this.pictureBox1.TabStop = false;
-            // 
-            // timer1
-            // 
-            this.timer1.Tick += new System.EventHandler(this.Timer1_Tick);
             // 
             // picBottleCap
             // 
@@ -1014,8 +1009,8 @@
         private Label labelHP;
         public TextBox HP;
         private GroupBox groupBox3;
-        public TextBox Moveset1;
-        public TextBox Moveset2;
+        public TextBox Move1;
+        public TextBox Move2;
         private Label labelSpeed;
         public TextBox SPEED;
         private Label labelSpD;
@@ -1026,14 +1021,13 @@
         public TextBox DEF;
         private Label labelAtk;
         public TextBox ATK;
-        public TextBox Moveset8;
-        public TextBox Moveset6;
-        public TextBox Moveset4;
-        public TextBox Moveset7;
-        public TextBox Moveset5;
-        public TextBox Moveset3;
+        public TextBox Move8;
+        public TextBox Move6;
+        public TextBox Move4;
+        public TextBox Move7;
+        public TextBox Move5;
+        public TextBox Move3;
         private PictureBox pictureBox1;
-        private System.Windows.Forms.Timer timer1;
         public TextBox textAbilityPatch;
         public TextBox textSweetHerba;
         public TextBox textSaltyHerba;

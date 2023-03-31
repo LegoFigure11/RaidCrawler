@@ -7,61 +7,49 @@
         private Point start = new(0, 0);
 
         // Progress Bar
-        private double pbUnit;
-        private int pbWidth, pbHeight, pbComplete;
-        private Bitmap? bmp;
+        private readonly int pbWidth, pbHeight;
+        private readonly Bitmap bmp;
+        private float pbComplete;
+        private float pbUnit;
         private Graphics? g;
-        private readonly ClientConfig config;
 
-        public TeraRaidView(ClientConfig c)
+        public TeraRaidView()
         {
             InitializeComponent();
             StartPosition = FormStartPosition.Manual;
             Location = new Point(0, 0);
-            config = c;
-        }
-
-        public void StartProgress()
-        {
             pbWidth = pictureBox1.Width;
             pbHeight = pictureBox1.Height;
-            pbUnit = pbWidth / 100;
-
-            pbComplete = 100;
+            pbComplete = -1;
             bmp = new Bitmap(pbWidth, pbHeight);
-
-            decimal delays;
-            delays = config.BaseDelay * 20 + config.OpenHomeDelay + config.NavigateToSettingsDelay +
-                config.OpenSettingsDelay + config.HoldDuration + config.Submenu + config.DateChange +
-                config.ReturnHomeDelay + config.ReturnGameDelay + 4250; // fudge time to read raids
-
-            timer1.Interval = (int)(delays / 100);
-            timer1.Start();
         }
 
-        private void Timer1_Tick(object sender, EventArgs e)
+        public void UpdateProgressBar(int steps)
         {
-            g = Graphics.FromImage(bmp!);
+            if (pbComplete <= 0)
+            {
+                pbComplete = pbWidth;
+                pbUnit = (float)pbWidth / steps;
+            }
+
+            g = Graphics.FromImage(bmp);
             g.Clear(Color.LightSkyBlue);
 
             //draw progressbar
-            g.FillRectangle(Brushes.CornflowerBlue, new Rectangle(0, 0, (int)(pbComplete * pbUnit), pbHeight));
+            pbComplete -= pbUnit;
+            Math.Floor(pbComplete);
+            g.FillRegion(Brushes.CornflowerBlue, new Region(new RectangleF(0, 0, pbComplete, pbHeight)));
 
             //load bitmap in picturebox picboxPB
             pictureBox1.Image = bmp;
 
-            //update pbComplete
-            //Note!
-            //To keep things simple I am adding +1 to pbComplete every 50ms
-            //You can change this as per your requirement :)
-            if (pbComplete < 0)
+            if (pbComplete <= 0)
             {
                 g.FillRectangle(new SolidBrush(Color.FromArgb(0, 5, 25)), new Rectangle(0, 0, pbWidth, pbHeight));
                 pictureBox1.Image = bmp;
                 g.Dispose();
-                timer1.Stop();
+                pbComplete = -1;
             }
-            pbComplete--;
         }
 
         private void TeraRaidView_MouseDown(object sender, MouseEventArgs e)

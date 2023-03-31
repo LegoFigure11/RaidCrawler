@@ -408,77 +408,77 @@ namespace RaidCrawler.WinForms
                 do
                 {
                     prev = raids.Select(z => z.Seed).ToList();
-                    if (Config.StreamerView && teraRaidView is not null)
-                        teraRaidView.StartProgress();
-
                     UpdateStatus("Changing date...");
 
-                    await ConnectionWrapper.AdvanceDate(Config, token).ConfigureAwait(false);
+                    bool streamer = Config.StreamerView && teraRaidView is not null;
+                    await ConnectionWrapper.AdvanceDate(Config, token, streamer ? teraRaidView!.UpdateProgressBar : null).ConfigureAwait(false);
                     await ReadRaids(token).ConfigureAwait(false);
+
+                    Invoke(DisplayRaid);
+                    if (streamer)
+                        Invoke(DisplayPrettyRaid);
+
                     prompt = StopAdvanceDate();
                 } while (!prompt);
-                    
-                if (prompt)
-                {
-                    stopwatch.Stop();
-                    var timeSpan = stopwatch.Elapsed;
-                    string time = string.Format("{0:00}:{1:00}:{2:00}",
-                    timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
-
-                    if (Config.PlaySound)
-                        System.Media.SystemSounds.Asterisk.Play();
-
-                    if (Config.FocusWindow)
-                    {
-                        WindowState = _WindowState;
-                        Activate();
-                    }
-
-                    var encounters = RaidContainer.Container.Encounters;
-                    var rewards = RaidContainer.Container.Rewards;
-                    for (int i = 0; i < raids.Count; i++)
-                    {
-                        var satisfied_filters = new List<RaidFilter>();
-                        foreach (var filter in RaidFilters)
-                        {
-                            if (filter is null)
-                                continue;
-
-                            if (filter.FilterSatisfied(encounters[i], raids[i], RaidBoost.SelectedIndex))
-                            {
-                                satisfied_filters.Add(filter);
-                                if (InvokeRequired)
-                                    ComboIndex.Invoke(() => { ComboIndex.SelectedIndex = i; });
-                                else ComboIndex.SelectedIndex = i;
-                            }
-                        }
-
-                        if (satisfied_filters.Count > 0)
-                        {
-                            var teraType = raids[i].GetTeraType(encounters[i]);
-                            var color = TypeColor.GetTypeSpriteColor((byte)teraType);
-                            var hexColor = $"{color.R:X2}{color.G:X2}{color.B:X2}";
-                            var blank = new PK9
-                            {
-                                Species = encounters[i].Species,
-                                Form = encounters[i].Form
-                            };
-
-                            var spriteName = SpriteName.GetResourceStringSprite(blank.Species, blank.Form, blank.Gender, blank.FormArgument, EntityContext.Gen9, raids[i].CheckIsShiny(encounters[i]));
-                            await NotificationHandler.SendNotifications(Config, encounters[i], raids[i], satisfied_filters, time, rewards[i], hexColor, spriteName, Source.Token).ConfigureAwait(false);
-                        }
-                    }
-
-                    if (Config.EnableAlertWindow)
-                        MessageBox.Show(Config.AlertWindowMessage + "\n\nTime Spent: " + time, "Result found!", MessageBoxButtons.OK);
-                    Text = formTitle + " [Match Found in " + time + "]";
-                }
 
                 SearchTimer.Stop();
+                stopwatch.Stop();
+                var timeSpan = stopwatch.Elapsed;
+                string time = string.Format("{0:00}:{1:00}:{2:00}",
+                timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
+
+                if (Config.PlaySound)
+                    System.Media.SystemSounds.Asterisk.Play();
+
+                if (Config.FocusWindow)
+                {
+                    WindowState = _WindowState;
+                    Activate();
+                }
+
+                var encounters = RaidContainer.Container.Encounters;
+                var rewards = RaidContainer.Container.Rewards;
+                for (int i = 0; i < raids.Count; i++)
+                {
+                    var satisfied_filters = new List<RaidFilter>();
+                    foreach (var filter in RaidFilters)
+                    {
+                        if (filter is null)
+                            continue;
+
+                        if (filter.FilterSatisfied(encounters[i], raids[i], RaidBoost.SelectedIndex))
+                        {
+                            satisfied_filters.Add(filter);
+                            if (InvokeRequired)
+                                ComboIndex.Invoke(() => { ComboIndex.SelectedIndex = i; });
+                            else ComboIndex.SelectedIndex = i;
+                        }
+                    }
+
+                    if (satisfied_filters.Count > 0)
+                    {
+                        var teraType = raids[i].GetTeraType(encounters[i]);
+                        var color = TypeColor.GetTypeSpriteColor((byte)teraType);
+                        var hexColor = $"{color.R:X2}{color.G:X2}{color.B:X2}";
+                        var blank = new PK9
+                        {
+                            Species = encounters[i].Species,
+                            Form = encounters[i].Form
+                        };
+
+                        var spriteName = SpriteName.GetResourceStringSprite(blank.Species, blank.Form, blank.Gender, blank.FormArgument, EntityContext.Gen9, raids[i].CheckIsShiny(encounters[i]));
+                        await NotificationHandler.SendNotifications(Config, encounters[i], raids[i], satisfied_filters, time, rewards[i], hexColor, spriteName, Source.Token).ConfigureAwait(false);
+                    }
+                }
+
+                if (Config.EnableAlertWindow)
+                    MessageBox.Show(Config.AlertWindowMessage + "\n\nTime Spent: " + time, "Result found!", MessageBoxButtons.OK);
+                Text = formTitle + " [Match Found in " + time + "]";
             }
             catch
             {
                 UpdateStatus("Date advance stopped.");
+                SearchTimer.Stop();
             }
 
             if (InvokeRequired)
@@ -501,6 +501,9 @@ namespace RaidCrawler.WinForms
             StopAdvance_Button.Visible = false;
             ButtonAdvanceDate.Visible = true;
             DateAdvanceSource.Cancel();
+            DateAdvanceSource = new();
+
+            SearchTimer.Stop();
         }
 
         private void ButtonReadRaids_Click(object sender, EventArgs e)
@@ -832,20 +835,20 @@ namespace RaidCrawler.WinForms
                     teraRaidView.Nature.Text = $"{RaidContainer.Strings.Natures[nature]}";
                     teraRaidView.Ability.Text = $"{RaidContainer.Strings.Ability[blank.Ability]}";
 
-                    teraRaidView.Moveset1.Text = encounter.Move1 > 0 ? RaidContainer.Strings.Move[encounter.Move1] : "---";
-                    teraRaidView.Moveset2.Text = encounter.Move2 > 0 ? RaidContainer.Strings.Move[encounter.Move2] : "---";
-                    teraRaidView.Moveset3.Text = encounter.Move3 > 0 ? RaidContainer.Strings.Move[encounter.Move3] : "---";
-                    teraRaidView.Moveset4.Text = encounter.Move4 > 0 ? RaidContainer.Strings.Move[encounter.Move4] : "---";
+                    teraRaidView.Move1.Text = encounter.Move1 > 0 ? RaidContainer.Strings.Move[encounter.Move1] : "---";
+                    teraRaidView.Move2.Text = encounter.Move2 > 0 ? RaidContainer.Strings.Move[encounter.Move2] : "---";
+                    teraRaidView.Move3.Text = encounter.Move3 > 0 ? RaidContainer.Strings.Move[encounter.Move3] : "---";
+                    teraRaidView.Move4.Text = encounter.Move4 > 0 ? RaidContainer.Strings.Move[encounter.Move4] : "---";
 
                     var length = encounter.ExtraMoves.Length < 4 ? 4 : encounter.ExtraMoves.Length;
                     var extra_moves = new ushort[length];
                     for (int i = 0; i < encounter.ExtraMoves.Length; i++)
                         extra_moves[i] = encounter.ExtraMoves[i];
 
-                    teraRaidView.Moveset5.Text = extra_moves[0] > 0 ? RaidContainer.Strings.Move[extra_moves[0]] : "---";
-                    teraRaidView.Moveset6.Text = extra_moves[1] > 0 ? RaidContainer.Strings.Move[extra_moves[1]] : "---";
-                    teraRaidView.Moveset7.Text = extra_moves[2] > 0 ? RaidContainer.Strings.Move[extra_moves[2]] : "---";
-                    teraRaidView.Moveset8.Text = extra_moves[3] > 0 ? RaidContainer.Strings.Move[extra_moves[3]] : "---";
+                    teraRaidView.Move5.Text = extra_moves[0] > 0 ? RaidContainer.Strings.Move[extra_moves[0]] : "---";
+                    teraRaidView.Move6.Text = extra_moves[1] > 0 ? RaidContainer.Strings.Move[extra_moves[1]] : "---";
+                    teraRaidView.Move7.Text = extra_moves[2] > 0 ? RaidContainer.Strings.Move[extra_moves[2]] : "---";
+                    teraRaidView.Move8.Text = extra_moves[3] > 0 ? RaidContainer.Strings.Move[extra_moves[3]] : "---";
 
                     var ivs = ToSpeedLast(blank.IVs);
 
@@ -1129,9 +1132,11 @@ namespace RaidCrawler.WinForms
         private async Task ReadRaids(CancellationToken token)
         {
             Raid raid;
-            UpdateStatus("Parsing pointer...");
             if (RaidBlockOffset == 0)
+            {
+                UpdateStatus("Parsing pointer...");
                 RaidBlockOffset = await ConnectionWrapper.Connection.PointerAll(ConnectionWrapper.RaidBlockPointer, token).ConfigureAwait(false);
+            }
 
             RaidContainer.Container.ClearRaids();
             RaidContainer.Container.ClearEncounters();
@@ -1305,8 +1310,6 @@ namespace RaidCrawler.WinForms
             RaidContainer.Container.SetRewards(newRewards);
         }
 
-        Point Default = new(244, 280);
-        Point ShowExtra = new(253, 280);
         private void Move_Clicked(object sender, EventArgs e)
         {
             if (RaidContainer.Container.Raids.Count == 0)
@@ -1321,7 +1324,7 @@ namespace RaidCrawler.WinForms
 
             ShowExtraMoves ^= true;
             LabelMoves.Text = ShowExtraMoves ? "Extra:" : "Moves:";
-            LabelMoves.Location = ShowExtraMoves ? ShowExtra : Default;
+            LabelMoves.Location = ShowExtraMoves ? new(253, 280) : new(244, 280);
 
             var length = encounter.ExtraMoves.Length < 4 ? 4 : encounter.ExtraMoves.Length;
             var extra_moves = new ushort[length];
@@ -1359,7 +1362,7 @@ namespace RaidCrawler.WinForms
             }, Source.Token);
         }
 
-        private void SearchTimer_Tick(object sender, EventArgs e)
+        private void SearchTimer_Elapsed(object sender, EventArgs e)
         {
             var timeSpan = stopwatch.Elapsed;
             string time = string.Format("{0:00}:{1:00}:{2:00}",
@@ -1411,7 +1414,7 @@ namespace RaidCrawler.WinForms
         {
             if (Config.StreamerView)
             {
-                teraRaidView = new TeraRaidView(Config);
+                teraRaidView = new();
                 teraRaidView.Map.Image = map;
                 teraRaidView.Show();
             }

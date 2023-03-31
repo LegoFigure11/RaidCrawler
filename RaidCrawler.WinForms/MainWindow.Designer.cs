@@ -80,7 +80,7 @@
             RaidBoost = new ComboBox();
             ComboIndex = new ComboBox();
             SendScreenshot = new Button();
-            SearchTimer = new System.Windows.Forms.Timer(components);
+            SearchTimer = new System.Timers.Timer(1);
             btnOpenMap = new Button();
             groupBox1 = new GroupBox();
             statusStrip1 = new StatusStrip();
@@ -611,7 +611,7 @@
             // 
             // SearchTimer
             // 
-            SearchTimer.Tick += SearchTimer_Tick;
+            SearchTimer.Elapsed += SearchTimer_Elapsed;
             // 
             // btnOpenMap
             // 
@@ -811,7 +811,7 @@
         private CheckBox CheckEnableFilters;
         private ComboBox ComboIndex;
         private Button SendScreenshot;
-        private System.Windows.Forms.Timer SearchTimer;
+        private System.Timers.Timer SearchTimer;
         private Button btnOpenMap;
         private GroupBox groupBox1;
         private StatusStrip statusStrip1;
