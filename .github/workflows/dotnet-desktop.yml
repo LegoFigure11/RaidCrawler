@@ -45,4 +45,4 @@ jobs:
       with:
         name: RaidCrawler
         path: |
-          ./bin/Debug/net7.0-windows
+          ./RaidCrawler.WinForms/bin/Debug/net7.0-windows

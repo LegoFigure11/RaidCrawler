@@ -8,8 +8,8 @@ namespace RaidCrawler.Core.Structures
         {
             return encounter switch
             {
-                TeraDistribution => TeraDistribution.GetRewards((TeraDistribution)encounter, raid.Seed, raid.TeraType, raid.DeliveryRaidFixedRewards, raid.DeliveryRaidLotteryRewards, sandwich_boost),
-                TeraEncounter => TeraEncounter.GetRewards((TeraEncounter)encounter, raid.Seed, raid.TeraType, raid.BaseFixedRewards, raid.BaseLotteryRewards, sandwich_boost),
+                TeraDistribution => TeraDistribution.GetRewards((TeraDistribution)encounter, raid.Seed, raid.GetTeraType(encounter), raid.DeliveryRaidFixedRewards, raid.DeliveryRaidLotteryRewards, sandwich_boost),
+                TeraEncounter => TeraEncounter.GetRewards((TeraEncounter)encounter, raid.Seed, raid.GetTeraType(encounter), raid.BaseFixedRewards, raid.BaseLotteryRewards, sandwich_boost),
                 _ => throw new NotImplementedException($"Unknown encounter for rewards: {encounter.GetType()}"),
             };
         }
