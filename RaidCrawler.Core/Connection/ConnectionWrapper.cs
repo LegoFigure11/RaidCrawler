@@ -181,17 +181,17 @@ namespace RaidCrawler.Core.Connection
             int steps = (config.UseTouch ? 17 : 24) + (config.UseOvershoot ? 2 : config.SystemDownPresses);
             int delay = config.BaseDelay;
 
-            await Click(LSTICK, 0_050 + delay, token).ConfigureAwait(false); // Sometimes it seems like the first command doesn't go through so send this just in case
+            await Click(LSTICK, 0_050, token).ConfigureAwait(false); // Sometimes it seems like the first command doesn't go through so send this just in case
             UpdateProgressBar(action, steps);
 
             // HOME Menu
-            await Click(HOME, config.OpenHomeDelay + delay, token).ConfigureAwait(false);
+            await Click(HOME, 1_500 + config.OpenHomeDelay, token).ConfigureAwait(false);
             UpdateProgressBar(action, steps);
 
             // Navigate to Settings
             if (config.UseTouch)
             {
-                await Touch(840, 540, 0_250, delay, token).ConfigureAwait(false);
+                await Touch(840, 540, 0_150, 0_150 + delay, token).ConfigureAwait(false);
                 UpdateProgressBar(action, steps);
             }
             else
@@ -210,7 +210,7 @@ namespace RaidCrawler.Core.Connection
             UpdateProgressBar(action, steps);
 
             // Scroll to bottom
-            await PressAndHold(DDOWN, config.HoldDuration, delay, token).ConfigureAwait(false);
+            await PressAndHold(DDOWN, config.HoldDuration, 0_150 + delay, token).ConfigureAwait(false);
             UpdateProgressBar(action, steps);
 
             // Navigate to "Date and Time"
@@ -220,7 +220,7 @@ namespace RaidCrawler.Core.Connection
             // Hold down to overshoot Date/Time by one. DUP to recover.
             if (config.UseOvershoot)
             {
-                await PressAndHold(DDOWN, config.SystemOvershoot, delay, token).ConfigureAwait(false);
+                await PressAndHold(DDOWN, config.SystemOvershoot, 0_150 + delay, token).ConfigureAwait(false);
                 UpdateProgressBar(action, steps);
 
                 await Click(DUP, 0_500 + delay, token).ConfigureAwait(false);
@@ -266,10 +266,10 @@ namespace RaidCrawler.Core.Connection
             UpdateProgressBar(action, steps);
 
             // Return to game
-            await Click(HOME, config.ReturnHomeDelay + delay, token).ConfigureAwait(false);
+            await Click(HOME, 1_500 + config.ReturnHomeDelay, token).ConfigureAwait(false);
             UpdateProgressBar(action, steps);
 
-            await Click(HOME, config.ReturnGameDelay + delay, token).ConfigureAwait(false);
+            await Click(HOME, 1_500 + config.ReturnGameDelay, token).ConfigureAwait(false);
             UpdateProgressBar(action, steps);
         }
 

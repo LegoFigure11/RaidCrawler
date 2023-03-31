@@ -1,3 +1,5 @@
+using System.Data;
+using System.Diagnostics;
 using System.Text.Json;
 using PKHeX.Core;
 using PKHeX.Drawing;
@@ -7,8 +9,6 @@ using RaidCrawler.Core.Structures;
 using RaidCrawler.Core.Discord;
 using RaidCrawler.WinForms.SubForms;
 using SysBot.Base;
-using System.Data;
-using System.Diagnostics;
 using static RaidCrawler.Core.Structures.Offsets;
 
 namespace RaidCrawler.WinForms
@@ -33,9 +33,6 @@ namespace RaidCrawler.WinForms
         private static readonly Image map = Image.FromStream(new MemoryStream(Utils.GetBinaryResource("paldea.png")));
         private static Dictionary<string, float[]>? den_locations;
 
-        // rewards
-        //private readonly List<IReadOnlyList<(int, int, int)>> RewardsList = new();
-
         // statistics
         public int StatDaySkipTries = 0;
         public int StatDaySkipSuccess = 0;
@@ -57,7 +54,7 @@ namespace RaidCrawler.WinForms
         {
             string build = string.Empty;
 #if DEBUG
-            var date = File.GetLastWriteTime(System.Reflection.Assembly.GetEntryAssembly()!.Location);
+            var date = File.GetLastWriteTime(AppContext.BaseDirectory);
             build = $" (dev-{date:yyyyMMdd})";
 #endif
             var v = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version!;
@@ -403,9 +400,9 @@ namespace RaidCrawler.WinForms
                 stopwatch.Restart();
                 _WindowState = WindowState;
 
-                var prompt = false;
+                var stop = false;
                 var raids = RaidContainer.Container.Raids;
-                do
+                while (!stop)
                 {
                     prev = raids.Select(z => z.Seed).ToList();
                     UpdateStatus("Changing date...");
@@ -418,8 +415,8 @@ namespace RaidCrawler.WinForms
                     if (streamer)
                         Invoke(DisplayPrettyRaid);
 
-                    prompt = StopAdvanceDate();
-                } while (!prompt);
+                    stop = !Config.EnableFilters || StopAdvanceDate();
+                }
 
                 SearchTimer.Stop();
                 stopwatch.Stop();
@@ -436,44 +433,47 @@ namespace RaidCrawler.WinForms
                     Activate();
                 }
 
-                var encounters = RaidContainer.Container.Encounters;
-                var rewards = RaidContainer.Container.Rewards;
-                for (int i = 0; i < raids.Count; i++)
+                if (Config.EnableFilters)
                 {
-                    var satisfied_filters = new List<RaidFilter>();
-                    foreach (var filter in RaidFilters)
+                    var encounters = RaidContainer.Container.Encounters;
+                    var rewards = RaidContainer.Container.Rewards;
+                    for (int i = 0; i < raids.Count; i++)
                     {
-                        if (filter is null)
-                            continue;
-
-                        if (filter.FilterSatisfied(encounters[i], raids[i], RaidBoost.SelectedIndex))
+                        var satisfied_filters = new List<RaidFilter>();
+                        foreach (var filter in RaidFilters)
                         {
-                            satisfied_filters.Add(filter);
-                            if (InvokeRequired)
-                                ComboIndex.Invoke(() => { ComboIndex.SelectedIndex = i; });
-                            else ComboIndex.SelectedIndex = i;
+                            if (filter is null)
+                                continue;
+
+                            if (filter.FilterSatisfied(encounters[i], raids[i], RaidBoost.SelectedIndex))
+                            {
+                                satisfied_filters.Add(filter);
+                                if (InvokeRequired)
+                                    ComboIndex.Invoke(() => { ComboIndex.SelectedIndex = i; });
+                                else ComboIndex.SelectedIndex = i;
+                            }
+                        }
+
+                        if (satisfied_filters.Count > 0)
+                        {
+                            var teraType = raids[i].GetTeraType(encounters[i]);
+                            var color = TypeColor.GetTypeSpriteColor((byte)teraType);
+                            var hexColor = $"{color.R:X2}{color.G:X2}{color.B:X2}";
+                            var blank = new PK9
+                            {
+                                Species = encounters[i].Species,
+                                Form = encounters[i].Form
+                            };
+
+                            var spriteName = SpriteName.GetResourceStringSprite(blank.Species, blank.Form, blank.Gender, blank.FormArgument, EntityContext.Gen9, raids[i].CheckIsShiny(encounters[i]));
+                            await NotificationHandler.SendNotifications(Config, encounters[i], raids[i], satisfied_filters, time, rewards[i], hexColor, spriteName, Source.Token).ConfigureAwait(false);
                         }
                     }
 
-                    if (satisfied_filters.Count > 0)
-                    {
-                        var teraType = raids[i].GetTeraType(encounters[i]);
-                        var color = TypeColor.GetTypeSpriteColor((byte)teraType);
-                        var hexColor = $"{color.R:X2}{color.G:X2}{color.B:X2}";
-                        var blank = new PK9
-                        {
-                            Species = encounters[i].Species,
-                            Form = encounters[i].Form
-                        };
-
-                        var spriteName = SpriteName.GetResourceStringSprite(blank.Species, blank.Form, blank.Gender, blank.FormArgument, EntityContext.Gen9, raids[i].CheckIsShiny(encounters[i]));
-                        await NotificationHandler.SendNotifications(Config, encounters[i], raids[i], satisfied_filters, time, rewards[i], hexColor, spriteName, Source.Token).ConfigureAwait(false);
-                    }
+                    if (Config.EnableAlertWindow)
+                        MessageBox.Show(Config.AlertWindowMessage + "\n\nTime Spent: " + time, "Result found!", MessageBoxButtons.OK);
+                    Text = formTitle + " [Match Found in " + time + "]";
                 }
-
-                if (Config.EnableAlertWindow)
-                    MessageBox.Show(Config.AlertWindowMessage + "\n\nTime Spent: " + time, "Result found!", MessageBoxButtons.OK);
-                Text = formTitle + " [Match Found in " + time + "]";
             }
             catch
             {

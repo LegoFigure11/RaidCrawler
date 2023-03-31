@@ -10,15 +10,14 @@ jobs:
 
   build:
 
-    strategy:
-      matrix:
-        configuration: [Debug]
+    env:
+      Configuration: 'Release'
 
     runs-on: windows-latest
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         fetch-depth: 0
 
@@ -29,20 +28,18 @@ jobs:
           6.0.x
           7.0.x
 
-    - name: Setup MSBuild.exe
-      uses: microsoft/setup-msbuild@v1.0.2
-
-    - name: Restore the application
-      run: msbuild /t:Restore /p:Configuration=$env:Configuration
-      env:
-        Configuration: ${{ matrix.configuration }}
+    - name: Restore the solution
+      run: dotnet restore
     
-    - name: Rebuild
-      run: msbuild /t:Rebuild /property:Configuration=Debug
+    - name: Publish
+      run: |
+        dotnet build --configuration $env:Configuration --no-restore
+        dotnet publish -c $env:Configuration -r win-x64 --self-contained false
 
     - name: Archive production artifacts
-      uses: actions/upload-artifact@v2
+      if: ${{ success() }}
+      uses: actions/upload-artifact@v3
       with:
         name: RaidCrawler
         path: |
-          ./RaidCrawler.WinForms/bin/Debug/net7.0-windows
+          ./RaidCrawler.WinForms/bin/x64/Release/net7.0-windows/win-x64/publish/
