@@ -1,14 +1,14 @@
-using System.Data;
-using System.Diagnostics;
-using System.Text.Json;
 using PKHeX.Core;
 using PKHeX.Drawing;
 using PKHeX.Drawing.PokeSprite;
 using RaidCrawler.Core.Connection;
-using RaidCrawler.Core.Structures;
 using RaidCrawler.Core.Discord;
+using RaidCrawler.Core.Structures;
 using RaidCrawler.WinForms.SubForms;
 using SysBot.Base;
+using System.Data;
+using System.Diagnostics;
+using System.Text.Json;
 using static RaidCrawler.Core.Structures.Offsets;
 
 namespace RaidCrawler.WinForms

@@ -1,9 +1,9 @@
-﻿using System.Net.Sockets;
-using System.Text;
-using PKHeX.Core;
-using SysBot.Base;
+﻿using PKHeX.Core;
 using RaidCrawler.Core.Interfaces;
 using RaidCrawler.Core.Structures;
+using SysBot.Base;
+using System.Net.Sockets;
+using System.Text;
 using static SysBot.Base.SwitchButton;
 
 namespace RaidCrawler.Core.Connection

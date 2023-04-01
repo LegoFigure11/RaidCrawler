@@ -1,6 +1,6 @@
 using PKHeX.Core;
-using RaidCrawler.Core.Structures;
 using RaidCrawler.Core.Interfaces;
+using RaidCrawler.Core.Structures;
 using SysBot.Base;
 using System.Text.Json;
 

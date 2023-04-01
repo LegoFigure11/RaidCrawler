@@ -1,5 +1,5 @@
-﻿using SysBot.Base;
-using RaidCrawler.Core.Interfaces;
+﻿using RaidCrawler.Core.Interfaces;
+using SysBot.Base;
 
 namespace RaidCrawler.WinForms
 {

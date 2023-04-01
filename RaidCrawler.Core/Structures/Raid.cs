@@ -72,7 +72,7 @@ namespace RaidCrawler.Core.Structures
         // Methods
         private bool Validate()
         {
-            if (Seed == 0 || !IsActive || Area > 22) 
+            if (Seed == 0 || !IsActive || Area > 22)
                 return false;
 
             GenerateGenericRaidData(Seed);
