@@ -24,8 +24,8 @@ namespace RaidCrawler.WinForms
         public string DiscordMessageContent { get; set; } = string.Empty;
 
         // Date Advance
-        public bool UseTouch { get; set; } = true;
-        public bool UseOvershoot { get; set; } = true;
+        public bool UseTouch { get; set; } = false;
+        public bool UseOvershoot { get; set; } = false;
 
         public int OpenHomeDelay { get; set; } = 0_500;
         public int NavigateToSettingsDelay { get; set; } = 0_250;
