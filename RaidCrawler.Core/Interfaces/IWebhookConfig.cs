@@ -1,7 +1,10 @@
-﻿namespace RaidCrawler.Core.Interfaces
+﻿using SysBot.Base;
+
+namespace RaidCrawler.Core.Interfaces
 {
     public interface IWebhookConfig
     {
+        SwitchProtocol Protocol { get; set; }
         bool EnableNotification { get; set; }
         bool ToggleDen { get; set; }
         string InstanceName { get; set; }

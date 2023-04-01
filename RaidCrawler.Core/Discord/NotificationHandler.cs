@@ -43,7 +43,6 @@ namespace RaidCrawler.Core.Discord
                 return;
 
             var data = await nx.PixelPeek(token).ConfigureAwait(false);
-            var screenshot = Decoder.ConvertHexByteStringToBytes(data);
             var content = new MultipartFormDataContent();
             var info = new
             {
@@ -54,7 +53,7 @@ namespace RaidCrawler.Core.Discord
 
             var basic_info = new StringContent(JsonSerializer.Serialize(info), System.Text.Encoding.UTF8, "application/json");
             content.Add(basic_info, "payload_json");
-            content.Add(new ByteArrayContent(screenshot), "screenshot.jpg", "screenshot.jpg");
+            content.Add(new ByteArrayContent(data), "screenshot.jpg", "screenshot.jpg");
             foreach (var url in DiscordWebhooks)
                 await Client.PostAsync(url.Trim(), content, token).ConfigureAwait(false);
         }
