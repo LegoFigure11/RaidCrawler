@@ -28,7 +28,6 @@ namespace RaidCrawler.WinForms
 
         private readonly Raid RaidContainer;
 
-        private List<uint> prev = new();
         private List<RaidFilter> RaidFilters = new();
         private static readonly Image map = Image.FromStream(new MemoryStream(Utils.GetBinaryResource("paldea.png")));
         private static Dictionary<string, float[]>? den_locations;
@@ -404,7 +403,10 @@ namespace RaidCrawler.WinForms
                 var raids = RaidContainer.Container.Raids;
                 while (!stop)
                 {
-                    prev = raids.Select(z => z.Seed).ToList();
+                    if (teraRaidView is not null)
+                        Invoke(() => teraRaidView.DaySkips.Text = $"Day Skip Successes {GetStatDaySkipSuccess()} / {GetStatDaySkipTries() + 1}");
+
+                    var previousSeeds = raids.Select(z => z.Seed).ToList();
                     UpdateStatus("Changing date...");
 
                     bool streamer = Config.StreamerView && teraRaidView is not null;
@@ -415,7 +417,9 @@ namespace RaidCrawler.WinForms
                     if (streamer)
                         Invoke(DisplayPrettyRaid);
 
-                    stop = !Config.EnableFilters || StopAdvanceDate();
+                    stop = StopAdvanceDate(previousSeeds);
+                    if (teraRaidView is not null)
+                        Invoke(() => teraRaidView.DaySkips.Text = $"Day Skip Successes {GetStatDaySkipSuccess()} / {GetStatDaySkipTries()}");
                 }
 
                 SearchTimer.Stop();
@@ -472,7 +476,7 @@ namespace RaidCrawler.WinForms
 
                     if (Config.EnableAlertWindow)
                         MessageBox.Show(Config.AlertWindowMessage + "\n\nTime Spent: " + time, "Result found!", MessageBoxButtons.OK);
-                    Text = formTitle + " [Match Found in " + time + "]";
+                    Invoke(() => Text = $"{formTitle} [Match Found in {time}]");
                 }
             }
             catch
@@ -1100,20 +1104,20 @@ namespace RaidCrawler.WinForms
             catch { return null; }
         }
 
-        private bool StopAdvanceDate()
+        private bool StopAdvanceDate(List<uint> previousSeeds)
         {
             var raids = RaidContainer.Container.Raids;
-            if (prev.Count != raids.Count)
-                return false;
-
             var curSeeds = raids.Select(x => x.Seed).ToArray();
-            var sameraids = curSeeds.Except(prev).ToArray().Length == 0;
+            var sameraids = curSeeds.Except(previousSeeds).ToArray().Length == 0;
 
             StatDaySkipTries++;
             if (sameraids)
                 return false;
 
             StatDaySkipSuccess++;
+            if (!Config.EnableFilters)
+                return true;
+
             for (int i = 0; i < RaidFilters.Count; i++)
             {
                 var index = 0;
@@ -1368,9 +1372,9 @@ namespace RaidCrawler.WinForms
             string time = string.Format("{0:00}:{1:00}:{2:00}",
             timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
 
-            Text = formTitle + " [Searching for " + time + "]";
+            Invoke(() => Text = formTitle + " [Searching for " + time + "]");
             if (Config.StreamerView && teraRaidView is not null)
-                teraRaidView.textSearchTime.Text = time;
+                Invoke(() => teraRaidView.textSearchTime.Text = time);
         }
 
         public void TestWebhook()

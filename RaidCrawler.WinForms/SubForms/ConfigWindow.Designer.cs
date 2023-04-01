@@ -38,7 +38,6 @@ namespace RaidCrawler.WinForms.SubForms
             AlertMessage = new TextBox();
             label2 = new Label();
             label1 = new Label();
-            BaseDelay = new NumericUpDown();
             SystemDDownPresses = new NumericUpDown();
             label3 = new Label();
             NavigateToSettings = new NumericUpDown();
@@ -78,7 +77,6 @@ namespace RaidCrawler.WinForms.SubForms
             StoryProgress = new ComboBox();
             tabMatch = new TabPage();
             tabAdvanceDate = new TabPage();
-            labelDaySkip = new Label();
             label16 = new Label();
             SystemOvershoot = new NumericUpDown();
             UseOvershoot = new CheckBox();
@@ -105,7 +103,6 @@ namespace RaidCrawler.WinForms.SubForms
             labelAppName = new Label();
             picAppIcon = new PictureBox();
             labelAppVersion = new Label();
-            ((System.ComponentModel.ISupportInitialize)BaseDelay).BeginInit();
             ((System.ComponentModel.ISupportInitialize)SystemDDownPresses).BeginInit();
             ((System.ComponentModel.ISupportInitialize)NavigateToSettings).BeginInit();
             ((System.ComponentModel.ISupportInitialize)OpenSettings).BeginInit();
@@ -193,14 +190,6 @@ namespace RaidCrawler.WinForms.SubForms
             label1.Size = new Size(196, 15);
             label1.TabIndex = 8;
             label1.Text = "Base delay to be added to all inputs:";
-            // 
-            // BaseDelay
-            // 
-            BaseDelay.Location = new Point(296, 68);
-            BaseDelay.Maximum = new decimal(new int[] { 9999, 0, 0, 0 });
-            BaseDelay.Name = "BaseDelay";
-            BaseDelay.Size = new Size(68, 23);
-            BaseDelay.TabIndex = 9;
             // 
             // SystemDDownPresses
             // 
@@ -579,15 +568,13 @@ namespace RaidCrawler.WinForms.SubForms
             tabMatch.UseVisualStyleBackColor = true;
             // 
             // tabAdvanceDate
-            // 
-            tabAdvanceDate.Controls.Add(labelDaySkip);
+            //
             tabAdvanceDate.Controls.Add(label16);
             tabAdvanceDate.Controls.Add(SystemOvershoot);
             tabAdvanceDate.Controls.Add(UseOvershoot);
             tabAdvanceDate.Controls.Add(label15);
             tabAdvanceDate.Controls.Add(label2);
             tabAdvanceDate.Controls.Add(label1);
-            tabAdvanceDate.Controls.Add(BaseDelay);
             tabAdvanceDate.Controls.Add(UseTouch);
             tabAdvanceDate.Controls.Add(SystemDDownPresses);
             tabAdvanceDate.Controls.Add(label12);
@@ -617,15 +604,6 @@ namespace RaidCrawler.WinForms.SubForms
             tabAdvanceDate.TabIndex = 1;
             tabAdvanceDate.Text = "Advance Date";
             tabAdvanceDate.UseVisualStyleBackColor = true;
-            // 
-            // labelDaySkip
-            // 
-            labelDaySkip.AutoSize = true;
-            labelDaySkip.Location = new Point(8, 414);
-            labelDaySkip.Name = "labelDaySkip";
-            labelDaySkip.Size = new Size(44, 15);
-            labelDaySkip.TabIndex = 41;
-            labelDaySkip.Text = "label24";
             // 
             // label16
             // 
@@ -911,7 +889,6 @@ namespace RaidCrawler.WinForms.SubForms
             StartPosition = FormStartPosition.CenterParent;
             Text = "RaidCrawler Settings";
             FormClosing += Config_Closing;
-            ((System.ComponentModel.ISupportInitialize)BaseDelay).EndInit();
             ((System.ComponentModel.ISupportInitialize)SystemDDownPresses).EndInit();
             ((System.ComponentModel.ISupportInitialize)NavigateToSettings).EndInit();
             ((System.ComponentModel.ISupportInitialize)OpenSettings).EndInit();
@@ -949,7 +926,6 @@ namespace RaidCrawler.WinForms.SubForms
         private TextBox AlertMessage;
         private Label label2;
         private Label label1;
-        private NumericUpDown BaseDelay;
         private NumericUpDown SystemDDownPresses;
         private Label label3;
         private NumericUpDown NavigateToSettings;
@@ -1012,7 +988,6 @@ namespace RaidCrawler.WinForms.SubForms
         private ComboBox Game;
         private Label LabelStoryProgress;
         private ComboBox StoryProgress;
-        private Label labelDaySkip;
         private Button EmojiConfig;
         private ComboBox Protocol_dropdown;
         private Label Protocol_label;

@@ -9,8 +9,7 @@
         // Progress Bar
         private readonly int pbWidth, pbHeight;
         private readonly Bitmap bmp;
-        private float pbComplete;
-        private float pbUnit;
+        private double pbComplete, pbUnit;
         private Graphics? g;
 
         public TeraRaidView()
@@ -29,7 +28,7 @@
             if (pbComplete <= 0)
             {
                 pbComplete = pbWidth;
-                pbUnit = (float)pbWidth / steps;
+                pbUnit = pbWidth / (steps - 1);
             }
 
             g = Graphics.FromImage(bmp);
@@ -37,15 +36,13 @@
 
             //draw progressbar
             pbComplete -= pbUnit;
-            Math.Floor(pbComplete);
-            g.FillRegion(Brushes.CornflowerBlue, new Region(new RectangleF(0, 0, pbComplete, pbHeight)));
+            g.FillRegion(Brushes.CornflowerBlue, new Region(new RectangleF(0, 0, (float)pbComplete, pbHeight)));
 
             //load bitmap in picturebox picboxPB
             pictureBox1.Image = bmp;
-
             if (pbComplete <= 0)
             {
-                g.FillRectangle(new SolidBrush(Color.FromArgb(0, 5, 25)), new Rectangle(0, 0, pbWidth, pbHeight));
+                g.FillRectangle(new SolidBrush(Color.FromArgb(0, 5, 25)), new RectangleF(0, 0, pbWidth, pbHeight));
                 pictureBox1.Image = bmp;
                 g.Dispose();
                 pbComplete = -1;

@@ -8,7 +8,6 @@ namespace RaidCrawler.WinForms.SubForms
 
         public ConfigWindow(ClientConfig c)
         {
-            var mainForm = Application.OpenForms.OfType<MainWindow>().Single();
             var assembly = System.Reflection.Assembly.GetEntryAssembly();
             var v = assembly?.GetName().Version!;
             var gitVersionInformationType = assembly?.GetType("GitVersionInformation");
@@ -37,7 +36,6 @@ namespace RaidCrawler.WinForms.SubForms
 
             UseTouch.Checked = c.UseTouch;
             UseOvershoot.Checked = c.UseOvershoot;
-            BaseDelay.Value = c.BaseDelay;
             OpenHome.Value = c.OpenHomeDelay;
             NavigateToSettings.Value = c.NavigateToSettingsDelay;
             OpenSettings.Value = c.OpenSettingsDelay;
@@ -69,7 +67,6 @@ namespace RaidCrawler.WinForms.SubForms
             linkLabel1.Left = (tabAbout.Width - linkLabel1.Width) / 2;
 
             labelWebhooks.Text = "Webhooks are " + (DiscordWebhook.Enabled ? "enabled." : "disabled.");
-            labelDaySkip.Text = "Day Skip Successes " + mainForm.GetStatDaySkipSuccess() + " / " + mainForm.GetStatDaySkipTries() + " Total";
         }
 
         private void EnableAlert_CheckedChanged(object sender, EventArgs e)
@@ -98,7 +95,6 @@ namespace RaidCrawler.WinForms.SubForms
 
             c.UseTouch = UseTouch.Checked;
             c.UseOvershoot = UseOvershoot.Checked;
-            c.BaseDelay = (int)BaseDelay.Value;
             c.OpenHomeDelay = (int)OpenHome.Value;
             c.NavigateToSettingsDelay = (int)NavigateToSettings.Value;
             c.OpenSettingsDelay = (int)OpenSettings.Value;

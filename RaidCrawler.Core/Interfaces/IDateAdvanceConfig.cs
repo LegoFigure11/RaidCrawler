@@ -4,7 +4,6 @@
     {
         bool UseTouch { get; set; }
         bool UseOvershoot { get; set; }
-        int BaseDelay { get; set; }
         int OpenHomeDelay { get; set; }
         int NavigateToSettingsDelay { get; set; }
         int OpenSettingsDelay { get; set; }
