@@ -233,14 +233,14 @@ namespace RaidCrawler.WinForms
 
                 UpdateStatus("Detecting game version...");
                 string id = await ConnectionWrapper.Connection.GetTitleID(token).ConfigureAwait(false);
-                Config.Game = id switch
+                var game = id switch
                 {
                     ScarletID => "Scarlet",
                     VioletID => "Violet",
                     _ => "",
                 };
 
-                if (id is "")
+                if (game is "")
                 {
                     try
                     {
@@ -252,17 +252,17 @@ namespace RaidCrawler.WinForms
                             return;
                         }
                     }
-                    catch (Exception ex)
+                    catch {}
+                    finally
                     {
                         ButtonEnable(new[] { ButtonConnect }, true);
-                        ShowMessageBox(ex.Message);
-                        return;
+                        ShowMessageBox("Unable to detect Pokémon Scarlet or Pokémon Violet running on your Switch!");
                     }
-
-                    ButtonEnable(new[] { ButtonConnect }, true);
-                    ShowMessageBox("Unable to detect Pokémon Scarlet or Pokémon Violet running on your Switch!");
                     return;
                 }
+
+                Config.Game = game;
+                RaidContainer.SetGame(Config.Game);
 
                 UpdateStatus("Reading story progress...");
                 Config.Progress = await ConnectionWrapper.GetStoryProgress(token).ConfigureAwait(false);
@@ -319,8 +319,6 @@ namespace RaidCrawler.WinForms
                 ButtonEnable(new[] { ButtonAdvanceDate, ButtonReadRaids, ButtonDisconnect, ButtonViewRAM, ButtonDownloadEvents, SendScreenshot }, false);
                 try
                 {
-                    DateAdvanceSource.Cancel();
-                    Source.Cancel();
                     (bool success, string err) = await ConnectionWrapper.DisconnectAsync(token).ConfigureAwait(false);
                     if (!success)
                         ShowMessageBox(err);
@@ -330,8 +328,11 @@ namespace RaidCrawler.WinForms
                     ShowMessageBox(ex.Message);
                 }
 
-                DateAdvanceSource = new();
+                Source.Cancel();
+                DateAdvanceSource.Cancel();
                 Source = new();
+                DateAdvanceSource = new();
+                RaidBlockOffset = 0;
                 ButtonEnable(new[] { ButtonConnect }, true);
             }, token);
         }
@@ -1088,18 +1089,19 @@ namespace RaidCrawler.WinForms
             if (den_locations is null || den_locations.Count == 0)
                 return null;
 
+            double x, y;
             try
             {
-                var x = (den_locations[$"{raid.Area}-{raid.Den}"][0] + 2.072021484) * 512 / 5000;
-                var y = (den_locations[$"{raid.Area}-{raid.Den}"][2] + 5255.240018) * 512 / 5000;
-                var mapimg = ImageUtil.LayerImage(map, gem, (int)x, (int)y);
                 if (den_locations.TryGetValue($"{raid.Area}-{raid.Den}_", out float[]? value))
                 {
                     x = (value[0] + 2.072021484) * 512 / 5000;
-                    x = (den_locations[$"{raid.Area}-{raid.Den}_"][0] + 2.072021484) * 512 / 5000;
-                    mapimg = ImageUtil.LayerImage(mapimg, gem, (int)x, (int)y);
+                    y = (value[2] + 5255.240018) * 512 / 5000;
+                    return ImageUtil.LayerImage(map, gem, (int)x, (int)y);
                 }
-                return mapimg;
+
+                x = (den_locations[$"{raid.Area}-{raid.Den}"][0] + 2.072021484) * 512 / 5000;
+                y = (den_locations[$"{raid.Area}-{raid.Den}"][2] + 5255.240018) * 512 / 5000;
+                return ImageUtil.LayerImage(map, gem, (int)x, (int)y);
             }
             catch { return null; }
         }
@@ -1226,10 +1228,10 @@ namespace RaidCrawler.WinForms
             }
         }
 
-        public void Game_SelectedIndexChanged()
+        public void Game_SelectedIndexChanged(string name)
         {
-            RaidContainer.SetGame(Config.Game);
-            Config.Game = Config.Game;
+            Config.Game = name;
+            RaidContainer.SetGame(name);
             if (RaidContainer.Container.Raids.Count > 0)
                 DisplayRaid();
         }
