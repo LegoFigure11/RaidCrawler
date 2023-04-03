@@ -1330,7 +1330,7 @@ namespace RaidCrawler.WinForms
 
             ShowExtraMoves ^= true;
             LabelMoves.Text = ShowExtraMoves ? "Extra:" : "Moves:";
-            LabelMoves.Location = ShowExtraMoves ? new(253, 280) : new(244, 280);
+            LabelMoves.Location = new(LabelMoves.Location.X + (ShowExtraMoves ? 9 : -9), LabelMoves.Location.Y);
 
             var length = encounter.ExtraMoves.Length < 4 ? 4 : encounter.ExtraMoves.Length;
             var extra_moves = new ushort[length];
