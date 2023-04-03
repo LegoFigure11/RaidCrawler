@@ -149,8 +149,9 @@ namespace RaidCrawler.WinForms.SubForms
 
         private void Game_SelectedIndexChanged(object sender, EventArgs e)
         {
+            var game = (string)Game.SelectedItem;
             var mainForm = Application.OpenForms.OfType<MainWindow>().Single();
-            mainForm.Game_SelectedIndexChanged();
+            mainForm.Game_SelectedIndexChanged(game);
         }
 
         private void EmojiConfig_Click(object sender, EventArgs e)
