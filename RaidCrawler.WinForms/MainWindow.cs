@@ -147,11 +147,12 @@ namespace RaidCrawler.WinForms
             else window.ShowDialog();
         }
 
-        private void ShowMessageBox(string msg)
+        private void ShowMessageBox(string msg, string caption = "")
         {
+            caption = caption == "" ? "RaidCrawler Error" : caption;
             if (InvokeRequired)
-                Invoke(() => { MessageBox.Show(msg, "RaidCrawler Error"); });
-            else MessageBox.Show(msg, "RaidCrawler Error");
+                Invoke(() => { MessageBox.Show(msg, caption, MessageBoxButtons.OK); });
+            else MessageBox.Show(msg, caption, MessageBoxButtons.OK);
         }
 
         private int GetRaidBoost()
@@ -413,6 +414,7 @@ namespace RaidCrawler.WinForms
                     bool streamer = Config.StreamerView && teraRaidView is not null;
                     await ConnectionWrapper.AdvanceDate(Config, token, streamer ? teraRaidView!.UpdateProgressBar : null).ConfigureAwait(false);
                     await ReadRaids(token).ConfigureAwait(false);
+                    raids = RaidContainer.Container.Raids;
 
                     Invoke(DisplayRaid);
                     if (streamer)
@@ -433,15 +435,13 @@ namespace RaidCrawler.WinForms
                     System.Media.SystemSounds.Asterisk.Play();
 
                 if (Config.FocusWindow)
-                {
-                    WindowState = _WindowState;
-                    Activate();
-                }
+                    Invoke(() => { WindowState = _WindowState; Activate(); });
 
                 if (Config.EnableFilters)
                 {
                     var encounters = RaidContainer.Container.Encounters;
                     var rewards = RaidContainer.Container.Rewards;
+                    var boost = Invoke(() => { return RaidBoost.SelectedIndex; });
                     for (int i = 0; i < raids.Count; i++)
                     {
                         var satisfied_filters = new List<RaidFilter>();
@@ -450,7 +450,7 @@ namespace RaidCrawler.WinForms
                             if (filter is null)
                                 continue;
 
-                            if (filter.FilterSatisfied(encounters[i], raids[i], RaidBoost.SelectedIndex))
+                            if (filter.FilterSatisfied(encounters[i], raids[i], boost))
                             {
                                 satisfied_filters.Add(filter);
                                 if (InvokeRequired)
@@ -476,7 +476,7 @@ namespace RaidCrawler.WinForms
                     }
 
                     if (Config.EnableAlertWindow)
-                        MessageBox.Show(Config.AlertWindowMessage + "\n\nTime Spent: " + time, "Result found!", MessageBoxButtons.OK);
+                        ShowMessageBox($"{Config.AlertWindowMessage}\n\nTime Spent: {time}", "Result found!");
                     Invoke(() => Text = $"{formTitle} [Match Found in {time}]");
                 }
             }
