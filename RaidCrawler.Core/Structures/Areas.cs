@@ -2,7 +2,7 @@
 {
     public class Areas
     {
-        public static string[] Area = new string[] {
+        private static readonly string[] AreaList = new string[] {
             "South Province (Area 1)",
             "", // Unused
             "", // Unused
@@ -26,5 +26,7 @@
             "North Province (Area 1)",
             "North Province (Area 2)",
         };
+
+        public static string GetArea(int index) => AreaList[index];
     }
 }

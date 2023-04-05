@@ -281,7 +281,10 @@ namespace RaidCrawler.Core.Connection
 
         private static void UpdateProgressBar(Action<int>? action, int steps)
         {
-            action?.Invoke(steps);
+            if (action is null)
+                return;
+
+            action.Invoke(steps);
         }
     }
 }

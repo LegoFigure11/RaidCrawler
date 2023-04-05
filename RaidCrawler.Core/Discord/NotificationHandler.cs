@@ -70,7 +70,9 @@ namespace RaidCrawler.Core.Discord
             Encounter9RNG.GenerateData(blank, param, EncounterCriteria.Unrestricted, raid.Seed);
             var emoji = c.EnableEmoji;
             var isevent = raid.IsEvent;
-            var species = $"{raid.Strings.Species[encounter.Species]}{(encounter.Form != 0 ? $"-{encounter.Form}" : "")}";
+
+            var form = Utils.GetFormString(blank.Species, blank.Form, raid.Strings);
+            var species = $"{raid.Strings.Species[encounter.Species]}{form}";
             var difficulty = Difficulty(c, encounter.Stars, isevent, emoji);
             var nature = $"{raid.Strings.Natures[blank.Nature]}";
             var ability = $"{raid.Strings.Ability[blank.Ability]}";
@@ -83,7 +85,7 @@ namespace RaidCrawler.Core.Discord
             var moves = new ushort[4] { encounter.Move1, encounter.Move2, encounter.Move3, encounter.Move4 };
             var movestr = string.Concat(moves.Where(z => z != 0).Select(z => $"{raid.Strings.Move[z]}ㅤ\n")).Trim();
             var extramoves = !raid.IsEvent ? "None" : string.Concat(encounter.ExtraMoves.Where(z => z != 0).Select(z => $"{raid.Strings.Move[z]}ㅤ\n")).Trim();
-            var area = $"{Areas.Area[raid.Area - 1]}" + (c.ToggleDen ? $" [Den {raid.Den}]ㅤ" : "ㅤ");
+            var area = $"{Areas.GetArea((int)(raid.Area - 1))}" + (c.ToggleDen ? $" [Den {raid.Den}]ㅤ" : "ㅤ");
             var instance = " " + c.InstanceName;
             var rewards = GetRewards(c, RewardsList, emoji);
             var SuccessWebHook = new

@@ -126,8 +126,8 @@ namespace RaidCrawler.WinForms
                     if (obj[b] is not Button btn)
                         continue;
 
-                    if (btn.InvokeRequired)
-                        btn.Invoke(() => { btn.Enabled = enable; });
+                    if (InvokeRequired)
+                        Invoke(() => { btn.Enabled = enable; });
                     else btn.Enabled = enable;
                 }
 
@@ -157,8 +157,8 @@ namespace RaidCrawler.WinForms
         private int GetRaidBoost()
         {
             if (InvokeRequired)
-                return RaidBoost.Invoke(() => { return RaidBoost.SelectedIndex; });
-            else return RaidBoost.SelectedIndex;
+                return Invoke(() => { return RaidBoost.SelectedIndex; });
+            return RaidBoost.SelectedIndex;
         }
 
         public int GetStatDaySkipTries() => StatDaySkipTries;
@@ -294,7 +294,7 @@ namespace RaidCrawler.WinForms
 
                 ButtonEnable(new[] { ButtonAdvanceDate, ButtonReadRaids, ButtonDisconnect, ButtonViewRAM, ButtonDownloadEvents, SendScreenshot, btnOpenMap, Rewards }, true);
                 if (InvokeRequired)
-                    ComboIndex.Invoke(() => { ComboIndex.SelectedIndex = 0; });
+                    Invoke(() => { ComboIndex.SelectedIndex = 0; });
                 else ComboIndex.SelectedIndex = 0;
 
                 UpdateStatus("Completed!");
@@ -454,7 +454,7 @@ namespace RaidCrawler.WinForms
                             {
                                 satisfied_filters.Add(filter);
                                 if (InvokeRequired)
-                                    ComboIndex.Invoke(() => { ComboIndex.SelectedIndex = i; });
+                                    Invoke(() => { ComboIndex.SelectedIndex = i; });
                                 else ComboIndex.SelectedIndex = i;
                             }
                         }
@@ -470,7 +470,7 @@ namespace RaidCrawler.WinForms
                                 Form = encounters[i].Form
                             };
 
-                            var spriteName = SpriteName.GetResourceStringSprite(blank.Species, blank.Form, blank.Gender, blank.FormArgument, EntityContext.Gen9, raids[i].CheckIsShiny(encounters[i]));
+                            var spriteName = GetSpriteNameForUrl(blank, raids[i].CheckIsShiny(encounters[i]));
                             await NotificationHandler.SendNotifications(Config, encounters[i], raids[i], satisfied_filters, time, rewards[i], hexColor, spriteName, Source.Token).ConfigureAwait(false);
                         }
                     }
@@ -488,8 +488,8 @@ namespace RaidCrawler.WinForms
 
             if (InvokeRequired)
             {
-                ButtonAdvanceDate.Invoke(() => { ButtonAdvanceDate.Visible = true; });
-                StopAdvance_Button.Invoke(() => { StopAdvance_Button.Visible = false; });
+                Invoke(() => { ButtonAdvanceDate.Visible = true; });
+                Invoke(() => { StopAdvance_Button.Visible = false; });
             }
             else
             {
@@ -702,7 +702,7 @@ namespace RaidCrawler.WinForms
                 Seed.Text = !HideSeed ? $"{raid.Seed:X8}" : "Hidden";
                 EC.Text = !HideSeed ? $"{raid.EC:X8}" : "Hidden";
                 PID.Text = GetPIDString(raid, encounter);
-                Area.Text = $"{Areas.Area[raid.Area - 1]} - Den {raid.Den}";
+                Area.Text = $"{Areas.GetArea((int)(raid.Area - 1))} - Den {raid.Den}";
                 labelEvent.Visible = raid.IsEvent;
 
                 var teratype = raid.GetTeraType(encounter);
@@ -808,7 +808,7 @@ namespace RaidCrawler.WinForms
                 Raid raid = raids[index];
                 var encounter = RaidContainer.Container.Encounters[index];
 
-                teraRaidView.Area.Text = $"{Areas.Area[raid.Area - 1]} - Den {raid.Den}";
+                teraRaidView.Area.Text = $"{Areas.GetArea((int)(raid.Area - 1))} - Den {raid.Den}";
 
                 var teratype = raid.GetTeraType(encounter);
                 teraRaidView.TeraType.Image = (Bitmap)Properties.Resources.ResourceManager.GetObject("gem_text_" + teratype)!;
@@ -829,9 +829,7 @@ namespace RaidCrawler.WinForms
                     var img = blank.Sprite();
 
                     teraRaidView.picBoxPokemon.Image = img;
-                    var form = ShowdownParsing.GetStringFromForm(encounter.Form, RaidContainer.Strings, encounter.Species, EntityContext.Gen9);
-                    if (form.Length > 0 && form[0] != '-')
-                        form = form.Insert(0, "-");
+                    var form = Utils.GetFormString(blank.Species, blank.Form, raid.Strings);
 
                     teraRaidView.Species.Text = $"{RaidContainer.Strings.Species[encounter.Species]}{form}";
                     teraRaidView.Gender.Text = $"{(Gender)blank.Gender}";
@@ -1124,7 +1122,7 @@ namespace RaidCrawler.WinForms
             {
                 var index = 0;
                 if (InvokeRequired)
-                    index = RaidBoost.Invoke(() => { return RaidBoost.SelectedIndex; });
+                    index = Invoke(() => { return RaidBoost.SelectedIndex; });
                 else index = RaidBoost.SelectedIndex;
 
                 var encounters = RaidContainer.Container.Encounters;
@@ -1205,7 +1203,7 @@ namespace RaidCrawler.WinForms
             var filterMatchCount = Enumerable.Range(0, raids.Count).Count(c => RaidFilters.Any(z => z.FilterSatisfied(encounters[c], raids[c], GetRaidBoost())));
 
             if (InvokeRequired)
-                LabelLoadedRaids.Invoke(() => { LabelLoadedRaids.Text = $"Matches: {filterMatchCount}"; });
+                Invoke(() => { LabelLoadedRaids.Text = $"Matches: {filterMatchCount}"; });
             else LabelLoadedRaids.Text = $"Matches: {filterMatchCount}";
 
             if (raids.Count > 0)
@@ -1213,11 +1211,11 @@ namespace RaidCrawler.WinForms
                 ButtonEnable(new[] { ButtonPrevious, ButtonNext }, true);
                 var dataSource = Enumerable.Range(0, raids.Count).Select(z => $"{z + 1:D} / {raids.Count:D}").ToArray();
                 if (InvokeRequired)
-                    ComboIndex.Invoke(() => { ComboIndex.DataSource = dataSource; });
+                    Invoke(() => { ComboIndex.DataSource = dataSource; });
                 else ComboIndex.DataSource = dataSource;
 
                 if (InvokeRequired)
-                    ComboIndex.Invoke(() => { ComboIndex.SelectedIndex = ComboIndex.SelectedIndex < raids.Count ? ComboIndex.SelectedIndex : 0; });
+                    Invoke(() => { ComboIndex.SelectedIndex = ComboIndex.SelectedIndex < raids.Count ? ComboIndex.SelectedIndex : 0; });
                 else ComboIndex.SelectedIndex = ComboIndex.SelectedIndex < raids.Count ? ComboIndex.SelectedIndex : 0;
             }
             else
@@ -1391,7 +1389,7 @@ namespace RaidCrawler.WinForms
 
             int i = -1;
             if (InvokeRequired)
-                ComboIndex.Invoke(() => { i = ComboIndex.SelectedIndex; });
+                i = Invoke(() => { return ComboIndex.SelectedIndex; });
             else i = ComboIndex.SelectedIndex;
 
             var raids = RaidContainer.Container.Raids;
@@ -1404,13 +1402,16 @@ namespace RaidCrawler.WinForms
                 var teraType = raids[i].GetTeraType(encounters[i]);
                 var color = TypeColor.GetTypeSpriteColor((byte)teraType);
                 var hexColor = $"{color.R:X2}{color.G:X2}{color.B:X2}";
+
                 var blank = new PK9
                 {
                     Species = encounters[i].Species,
-                    Form = encounters[i].Form
+                    Form = encounters[i].Form,
+                    Gender = encounters[i].Gender,
                 };
+                blank.SetSuggestedFormArgument();
 
-                var spriteName = SpriteName.GetResourceStringSprite(blank.Species, blank.Form, blank.Gender, blank.FormArgument, EntityContext.Gen9, raids[i].CheckIsShiny(encounters[i]));
+                var spriteName = GetSpriteNameForUrl(blank, raids[i].CheckIsShiny(encounters[i]));
                 await NotificationHandler.SendNotifications(Config, encounters[i], raids[i], satisfied_filters, time, rewards[i], hexColor, spriteName, token).ConfigureAwait(false);
             }
             else ShowMessageBox("Please connect to your device and ensure a raid has been found.");
@@ -1426,6 +1427,13 @@ namespace RaidCrawler.WinForms
             }
             else if (!Config.StreamerView && teraRaidView is not null)
                 teraRaidView.Close();
+        }
+
+        private static string GetSpriteNameForUrl(PK9 pk, bool shiny)
+        {
+            // Since we're later using this for URL assembly later, we need dashes instead of underscores for forms.
+            var spriteName = SpriteName.GetResourceStringSprite(pk.Species, pk.Form, pk.Gender, pk.FormArgument, EntityContext.Gen9, shiny)[1..];
+            return spriteName.Replace('_', '-').Insert(0, "_");
         }
     }
 }

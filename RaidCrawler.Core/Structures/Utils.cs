@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using PKHeX.Core;
+using System.Reflection;
 
 namespace RaidCrawler.Core.Structures
 {
@@ -59,6 +60,14 @@ namespace RaidCrawler.Core.Structures
                 return null;
             using var reader = new StreamReader(resource);
             return reader.ReadToEnd();
+        }
+
+        public static string GetFormString(ushort species, byte form, GameStrings formStrings, EntityContext context = EntityContext.Gen9)
+        {
+            var result = ShowdownParsing.GetStringFromForm(form, formStrings, species, context);
+            if (result.Length > 0 && result[0] != '-')
+                return result.Insert(0, "-");
+            return result;
         }
     }
 }
