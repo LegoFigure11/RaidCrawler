@@ -597,6 +597,7 @@
             ComboIndex.Name = "ComboIndex";
             ComboIndex.Size = new Size(64, 23);
             ComboIndex.TabIndex = 120;
+            ComboIndex.Enabled = false;
             ComboIndex.SelectedIndexChanged += ComboIndex_SelectedIndexChanged;
             // 
             // SendScreenshot

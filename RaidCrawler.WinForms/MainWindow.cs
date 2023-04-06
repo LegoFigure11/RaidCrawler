@@ -295,7 +295,7 @@ namespace RaidCrawler.WinForms
 
                 ButtonEnable(new[] { ButtonAdvanceDate, ButtonReadRaids, ButtonDisconnect, ButtonViewRAM, ButtonDownloadEvents, SendScreenshot, btnOpenMap, Rewards }, true);
                 if (InvokeRequired)
-                    Invoke(() => { ComboIndex.SelectedIndex = 0; });
+                    Invoke(() => { ComboIndex.Enabled = true; ComboIndex.SelectedIndex = 0; });
                 else ComboIndex.SelectedIndex = 0;
 
                 UpdateStatus("Completed!");
