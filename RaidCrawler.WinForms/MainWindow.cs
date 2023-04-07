@@ -411,6 +411,16 @@ namespace RaidCrawler.WinForms
                     var previousSeeds = raids.Select(z => z.Seed).ToList();
                     UpdateStatus("Changing date...");
 
+                    // Reset every 1000 to ensure we don't build up too many menus. Does this affect success?
+                    if (StatDaySkipTries > 0 && StatDaySkipTries % 1000 == 0)
+                    {
+                        await ConnectionWrapper.CloseGame(token).ConfigureAwait(false);
+                        await ConnectionWrapper.StartGame(token).ConfigureAwait(false);
+
+                        UpdateStatus("Refreshing the raid block pointer...");
+                        RaidBlockOffset = await ConnectionWrapper.Connection.PointerAll(ConnectionWrapper.RaidBlockPointer, token).ConfigureAwait(false);
+                    }
+
                     bool streamer = Config.StreamerView && teraRaidView is not null;
                     await ConnectionWrapper.AdvanceDate(Config, token, streamer ? teraRaidView!.UpdateProgressBar : null).ConfigureAwait(false);
                     await ReadRaids(token).ConfigureAwait(false);
@@ -1138,7 +1148,7 @@ namespace RaidCrawler.WinForms
             Raid raid;
             if (RaidBlockOffset == 0)
             {
-                UpdateStatus("Parsing pointer...");
+                UpdateStatus("Caching the raid block pointer...");
                 RaidBlockOffset = await ConnectionWrapper.Connection.PointerAll(ConnectionWrapper.RaidBlockPointer, token).ConfigureAwait(false);
             }
 

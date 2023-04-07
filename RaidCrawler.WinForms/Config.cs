@@ -27,17 +27,18 @@ namespace RaidCrawler.WinForms
         public bool UseTouch { get; set; } = false;
         public bool UseOvershoot { get; set; } = false;
 
-        public int OpenHomeDelay { get; set; } = 0_500;
-        public int NavigateToSettingsDelay { get; set; } = 0_250;
-        public int OpenSettingsDelay { get; set; } = 1_250;
+        public int OpenHomeDelay { get; set; } = 1_800;
+        public int NavigateToSettingsDelay { get; set; } = 0_100;
+        public int OpenSettingsDelay { get; set; } = 1_000;
         public int HoldDuration { get; set; } = 1_700;
         public int SystemDownPresses { get; set; } = 38;
-        public int Submenu { get; set; } = 1_500;
-        public int DateChange { get; set; } = 0;
+        public int Submenu { get; set; } = 2_200;
+        public int DateChange { get; set; } = 0_500;
         public int DaysToSkip { get; set; } = 0;
-        public int ReturnHomeDelay { get; set; } = 1;
-        public int ReturnGameDelay { get; set; } = 0_500;
-        public int SystemOvershoot { get; set; } = 0_800;
+        public int ReturnHomeDelay { get; set; } = 2_500;
+        public int ReturnGameDelay { get; set; } = 4_000;
+        public int SystemOvershoot { get; set; } = 0_750;
+        public int BaseDelay { get; set; } = 0;
 
         // Webhook
         public bool EnableEmoji { get; set; } = true;

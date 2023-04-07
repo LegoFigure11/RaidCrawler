@@ -79,6 +79,7 @@ namespace RaidCrawler.WinForms.SubForms
             tabAdvanceDate = new TabPage();
             label16 = new Label();
             SystemOvershoot = new NumericUpDown();
+            BaseDelay = new NumericUpDown();
             UseOvershoot = new CheckBox();
             label15 = new Label();
             tabWebhook = new TabPage();
@@ -113,6 +114,7 @@ namespace RaidCrawler.WinForms.SubForms
             ((System.ComponentModel.ISupportInitialize)ReturnHome).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ReturnGame).BeginInit();
             ((System.ComponentModel.ISupportInitialize)DaysToSkip).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)BaseDelay).BeginInit();
             tabControl1.SuspendLayout();
             tabGeneral.SuspendLayout();
             tabMatch.SuspendLayout();
@@ -370,6 +372,14 @@ namespace RaidCrawler.WinForms.SubForms
             DaysToSkip.Size = new Size(68, 23);
             DaysToSkip.TabIndex = 32;
             // 
+            // BaseDelay
+            // 
+            BaseDelay.Location = new System.Drawing.Point(296, 68);
+            BaseDelay.Maximum = new decimal(new int[] { 9999, 0, 0, 0 });
+            BaseDelay.Name = "BaseDelay";
+            BaseDelay.Size = new System.Drawing.Size(68, 23);
+            BaseDelay.TabIndex = 9;
+            // 
             // label12
             // 
             label12.AutoSize = true;
@@ -597,6 +607,7 @@ namespace RaidCrawler.WinForms.SubForms
             tabAdvanceDate.Controls.Add(label6);
             tabAdvanceDate.Controls.Add(label7);
             tabAdvanceDate.Controls.Add(Submenu);
+            tabAdvanceDate.Controls.Add(BaseDelay);
             tabAdvanceDate.Location = new Point(4, 24);
             tabAdvanceDate.Name = "tabAdvanceDate";
             tabAdvanceDate.Padding = new Padding(3);
@@ -899,6 +910,7 @@ namespace RaidCrawler.WinForms.SubForms
             ((System.ComponentModel.ISupportInitialize)ReturnHome).EndInit();
             ((System.ComponentModel.ISupportInitialize)ReturnGame).EndInit();
             ((System.ComponentModel.ISupportInitialize)DaysToSkip).EndInit();
+            ((System.ComponentModel.ISupportInitialize)BaseDelay).EndInit();
             tabControl1.ResumeLayout(false);
             tabGeneral.ResumeLayout(false);
             tabGeneral.PerformLayout();
@@ -991,5 +1003,6 @@ namespace RaidCrawler.WinForms.SubForms
         private Button EmojiConfig;
         private ComboBox Protocol_dropdown;
         private Label Protocol_label;
+        private NumericUpDown BaseDelay;
     }
 }

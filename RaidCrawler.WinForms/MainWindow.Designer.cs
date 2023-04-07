@@ -682,9 +682,9 @@
             // 
             // StopAdvance_Button
             // 
-            StopAdvance_Button.Location = new Point(117, 96);
+            StopAdvance_Button.Location = new Point(117, 98);
             StopAdvance_Button.Name = "StopAdvance_Button";
-            StopAdvance_Button.Size = new Size(95, 30);
+            StopAdvance_Button.Size = new Size(96, 27);
             StopAdvance_Button.TabIndex = 129;
             StopAdvance_Button.Text = "Stop";
             StopAdvance_Button.Visible = false;

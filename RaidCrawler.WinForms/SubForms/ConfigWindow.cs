@@ -47,6 +47,7 @@ namespace RaidCrawler.WinForms.SubForms
             DaysToSkip.Value = c.DaysToSkip;
             ReturnHome.Value = c.ReturnHomeDelay;
             ReturnGame.Value = c.ReturnGameDelay;
+            BaseDelay.Value = c.BaseDelay;
 
             SystemDDownPresses.Enabled = !UseOvershoot.Checked;
             SystemOvershoot.Enabled = UseOvershoot.Checked;
@@ -106,6 +107,7 @@ namespace RaidCrawler.WinForms.SubForms
             c.DaysToSkip = (int)DaysToSkip.Value;
             c.ReturnHomeDelay = (int)ReturnHome.Value;
             c.ReturnGameDelay = (int)ReturnGame.Value;
+            c.BaseDelay = (int)BaseDelay.Value;
 
             c.IVsStyle = IVstyle.SelectedIndex;
             c.VerboseIVs = IVverbose.Checked;

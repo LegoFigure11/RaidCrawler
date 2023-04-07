@@ -15,5 +15,6 @@
         int DaysToSkip { get; set; }
         int ReturnHomeDelay { get; set; }
         int ReturnGameDelay { get; set; }
+        int BaseDelay { get; set; }
     }
 }
