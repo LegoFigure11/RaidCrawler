@@ -11,7 +11,7 @@ enum RaidRomType : short {
     TYPE_B = 2,
 }
 
-table RaidEnemyTableArray (fs_serializer) {
+table RaidEnemyTableArray (fs_serializer:"Greedy") {
     Table:[RaidEnemyTable] (required);
 }
 
@@ -19,7 +19,7 @@ table RaidEnemyTable {
     Info:RaidEnemyInfo (required);
 }
 
-table DeliveryRaidEnemyTableArray (fs_serializer) {
+table DeliveryRaidEnemyTableArray (fs_serializer:"Greedy") {
     Table:[DeliveryRaidEnemyTable] (required);
 }
 
@@ -91,7 +91,7 @@ table RaidBossData {
     DoubleActionRate:byte;
 }
 
-table DeliveryRaidPriorityArray (fs_serializer) {
+table DeliveryRaidPriorityArray (fs_serializer:"Greedy") {
     Table:[DeliveryRaidPriority] (required);
 }
 
@@ -147,7 +147,7 @@ table PokeDataBattle {
     ScaleValue:short;
 }
 
-table DeliveryRaidLotteryRewardItemArray (fs_serializer) {
+table DeliveryRaidLotteryRewardItemArray (fs_serializer:"Greedy") {
     Table:[DeliveryRaidLotteryRewardItem] (required);
 }
 
@@ -185,7 +185,7 @@ table DeliveryRaidLotteryRewardItem {
     RewardItem29:RaidLotteryRewardItemInfo (required);
 }
 
-table DeliveryRaidFixedRewardItemArray (fs_serializer) {
+table DeliveryRaidFixedRewardItemArray (fs_serializer:"Greedy") {
     Table:[DeliveryRaidFixedRewardItem] (required);
 }
 
