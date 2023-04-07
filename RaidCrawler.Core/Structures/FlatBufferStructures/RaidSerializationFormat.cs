@@ -10,10 +10,10 @@ public enum RaidSerializationFormat
     /// <summary>
     /// Regular Distribution Raids
     /// </summary>
-    Type2,
+    Distribution,
 
     /// <summary>
     /// 7 Star Distribution Raids
     /// </summary>
-    Type3,
+    Might,
 }

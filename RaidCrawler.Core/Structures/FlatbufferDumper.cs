@@ -14,7 +14,7 @@ namespace RaidCrawler.Core.Structures
             {
                 var path = paths[i];
                 var data = Utils.GetBinaryResource(path);
-                var fb = RaidEnemyTableArray.Serializer.Parse(data);
+                var fb = RaidEnemyTableArray.Serializer.Parse(data, FlatBufferDeserializationOption.Greedy);
                 var table = fb.Table;
                 int totalRateScarlet = 0;
                 int totalRateViolet = 0;
@@ -78,7 +78,7 @@ namespace RaidCrawler.Core.Structures
             if (encounters.Length == 0)
                 return Array.Empty<byte[]>();
 
-            var tableEncounters = DeliveryRaidEnemyTableArray.Serializer.Parse(encounters);
+            var tableEncounters = DeliveryRaidEnemyTableArray.Serializer.Parse(encounters, FlatBufferDeserializationOption.Greedy);
             var byGroupID = tableEncounters.Table
             .Where(z => z.Info.Rate != 0)
             .GroupBy(z => z.Info.DeliveryGroupID);
@@ -90,11 +90,11 @@ namespace RaidCrawler.Core.Structures
                     continue;
 
                 if (items.All(z => z.Info.Difficulty == 7))
-                    AddToList(items, type3, RaidSerializationFormat.Type3, group.Key);
+                    AddToList(items, type3, RaidSerializationFormat.Might, group.Key);
                 else if (items.Any(z => z.Info.Difficulty == 7))
                     throw new Exception($"Mixed difficulty {items.First(z => z.Info.Difficulty > 7).Info.Difficulty}");
 
-                AddToList(items, type2, RaidSerializationFormat.Type2, group.Key);
+                AddToList(items, type2, RaidSerializationFormat.Distribution, group.Key);
             }
 
             return new[]
@@ -108,13 +108,13 @@ namespace RaidCrawler.Core.Structures
 
         public static List<DeliveryRaidLotteryRewardItem> DumpLotteryRewards(byte[] rewards)
         {
-            var tableRewards = DeliveryRaidLotteryRewardItemArray.Serializer.Parse(rewards);
+            var tableRewards = DeliveryRaidLotteryRewardItemArray.Serializer.Parse(rewards, FlatBufferDeserializationOption.Greedy);
             return tableRewards.Table.ToList();
         }
 
         public static List<DeliveryRaidFixedRewardItem> DumpFixedRewards(byte[] rewards)
         {
-            var tableRewards = DeliveryRaidFixedRewardItemArray.Serializer.Parse(rewards);
+            var tableRewards = DeliveryRaidFixedRewardItemArray.Serializer.Parse(rewards, FlatBufferDeserializationOption.Greedy);
             return tableRewards.Table.ToList();
         }
 
@@ -122,7 +122,7 @@ namespace RaidCrawler.Core.Structures
         {
             try
             {
-                var prios = DeliveryRaidPriorityArray.Serializer.Parse(flatbuffer);
+                var prios = DeliveryRaidPriorityArray.Serializer.Parse(flatbuffer, FlatBufferDeserializationOption.Greedy);
                 return (prios.Table[0].GroupID, prios.Table[0].VersionNo);
             }
             catch (Exception ex)
@@ -206,11 +206,11 @@ namespace RaidCrawler.Core.Structures
                 bw.Write(noTotal || enc.RomVer == RaidRomType.TYPE_A ? (ushort)0 : totalV[stage]);
             }
 
-            if (format == RaidSerializationFormat.Type2)
-                enc.SerializeType2(bw);
+            if (format == RaidSerializationFormat.Distribution)
+                enc.SerializeDistribution(bw);
 
-            if (format == RaidSerializationFormat.Type3)
-                enc.SerializeType3(bw);
+            if (format == RaidSerializationFormat.Might)
+                enc.SerializeMight(bw);
 
             // drop table reference
             bw.Write(enc.DropTableFix);

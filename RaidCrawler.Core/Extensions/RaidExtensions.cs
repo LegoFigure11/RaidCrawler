@@ -30,7 +30,7 @@ namespace RaidCrawler.Core.Structures
         public static ITeraRaid GetDistributionEncounter(this Raid raid, int stage, bool isFixed, int groupid)
         {
             if (stage < 0 || raid.DistTeraRaids is null)
-                throw new ArgumentNullException($"No encounters found for given raid: den {raid.Den}, stage {stage}");
+                throw new ArgumentNullException($"No encounters found for given distribution raid: den {raid.Den}, stage {stage}");
 
             if (!isFixed)
             {

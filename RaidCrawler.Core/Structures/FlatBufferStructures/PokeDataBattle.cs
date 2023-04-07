@@ -7,7 +7,6 @@ public partial class PokeDataBattle
 {
     public void SerializePKHeX(BinaryWriter bw, sbyte captureLv, RaidSerializationFormat format)
     {
-        // Type2 throws, on Decidueye. Needs updated checks? Checking only BaseROM for now.
         if (format == RaidSerializationFormat.BaseROM)
             AssertRegularFormat();
 
@@ -24,7 +23,7 @@ public partial class PokeDataBattle
         bw.Write((byte)Sex);
 
         bw.Write((byte)Tokusei);
-        bw.Write((byte)TalentVnum);
+        bw.Write((byte)(TalentType == 1 ? TalentVnum : 0));
         bw.Write((byte)RareType);
         bw.Write((byte)captureLv);
 
