@@ -211,10 +211,9 @@ namespace RaidCrawler.Core.Connection
                     await Click(DRIGHT, config.NavigateToSettingsDelay + BaseDelay, token).ConfigureAwait(false);
                     UpdateProgressBar(action, steps);
                 }
-
-                await Click(A, config.OpenSettingsDelay + BaseDelay, token).ConfigureAwait(false);
-                UpdateProgressBar(action, steps);
             }
+            await Click(A, config.OpenSettingsDelay + BaseDelay, token).ConfigureAwait(false);
+            UpdateProgressBar(action, steps);
 
             // Scroll to bottom
             await PressAndHold(DDOWN, config.HoldDuration, 0_100 + BaseDelay, token).ConfigureAwait(false);
