@@ -651,7 +651,7 @@ namespace RaidCrawler.WinForms.SubForms
             label15.Name = "label15";
             label15.Size = new Size(261, 15);
             label15.TabIndex = 37;
-            label15.Text = "Use overshoot instead of DDOWN inputs (faster)";
+            label15.Text = "Use overshoot instead of DDOWN inputs (faster, experimental)";
             // 
             // tabWebhook
             // 
