@@ -76,7 +76,7 @@ namespace RaidCrawler.Core.Structures
                     }
                 }
             }
-            throw new ArgumentNullException($"No encounters found for given raid: den {raid.Den}, stage {stage}");
+            throw new ArgumentNullException($"No encounters found for given distribution raid: den {raid.Den}, stage {stage}, isFixed {isFixed}");
         }
 
         public static bool CheckIsShiny(this Raid raid, ITeraRaid? enc)

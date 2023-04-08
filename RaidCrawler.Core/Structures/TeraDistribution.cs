@@ -19,7 +19,9 @@ namespace RaidCrawler.Core.Structures
         public AbilityPermission Ability => Entity.Ability;
         public byte FlawlessIVCount => Entity.FlawlessIVCount;
         public Shiny Shiny => Entity.Shiny;
+        public Nature Nature => Entity.Nature;
         public byte Level => Entity.Level;
+        public IndividualValueSet IVs => Entity.IVs;
         public ushort Move1 => Entity.Moves.Move1;
         public ushort Move2 => Entity.Moves.Move2;
         public ushort Move3 => Entity.Moves.Move3;
