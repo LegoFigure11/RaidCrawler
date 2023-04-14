@@ -10,7 +10,7 @@ namespace RaidCrawler.Core.Structures
 
         static Utils()
         {
-            thisAssembly = Assembly.GetEntryAssembly()!;
+            thisAssembly = Assembly.GetExecutingAssembly()!;
             resourceNameMap = BuildLookup(thisAssembly.GetManifestResourceNames());
         }
 
@@ -58,6 +58,7 @@ namespace RaidCrawler.Core.Structures
             using var resource = thisAssembly.GetManifestResourceStream(resourceName);
             if (resource is null)
                 return null;
+
             using var reader = new StreamReader(resource);
             return reader.ReadToEnd();
         }
@@ -68,6 +69,18 @@ namespace RaidCrawler.Core.Structures
             if (result.Length > 0 && result[0] != '-')
                 return result.Insert(0, "-");
             return result;
+        }
+
+        public static int[] ToSpeedLast(int[] ivs)
+        {
+            var res = new int[6];
+            res[0] = ivs[0];
+            res[1] = ivs[1];
+            res[2] = ivs[2];
+            res[3] = ivs[4];
+            res[4] = ivs[5];
+            res[5] = ivs[3];
+            return res;
         }
     }
 }

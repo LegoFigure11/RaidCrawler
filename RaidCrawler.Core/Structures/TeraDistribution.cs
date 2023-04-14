@@ -152,20 +152,5 @@ namespace RaidCrawler.Core.Structures
             }
             return Rewards.ReorderRewards(result);
         }
-
-        public static int GetDeliveryGroupID(int eventct, DeliveryGroupID ids, HashSet<int> possible_groups)
-        {
-            var groups = ids.GroupID;
-            for (int i = 0; i < groups.Table_Length; i++)
-            {
-                var ct = groups.Table(i);
-                if (!possible_groups.Contains(i + 1))
-                    continue;
-                if (eventct < ct)
-                    return i + 1;
-                eventct -= ct;
-            }
-            throw new Exception("Found event out of priority range.");
-        }
     }
 }

@@ -687,7 +687,7 @@ namespace RaidCrawler.WinForms
             }
 
             var delivery_raid_prio = await ConnectionWrapper.ReadBlockDefault(BCATRaidPriorityLocation, "raid_priority_array", force, token).ConfigureAwait(false);
-            (RaidContainer.DeliveryRaidPriority, var priority) = FlatbufferDumper.DumpDeliveryPriorities(delivery_raid_prio);
+            (var group_id, var priority) = FlatbufferDumper.DumpDeliveryPriorities(delivery_raid_prio);
             if (priority == 0)
                 return;
 
@@ -696,6 +696,7 @@ namespace RaidCrawler.WinForms
             var delivery_lottery_rewards = await ConnectionWrapper.ReadBlockDefault(BCATRaidLotteryRewardLocation, "lottery_reward_item_array", force, token).ConfigureAwait(false);
 
             RaidContainer.DistTeraRaids = TeraDistribution.GetAllEncounters(delivery_raid_fbs);
+            RaidContainer.DeliveryRaidPriority = group_id;
             RaidContainer.DeliveryRaidFixedRewards = FlatbufferDumper.DumpFixedRewards(delivery_fixed_rewards);
             RaidContainer.DeliveryRaidLotteryRewards = FlatbufferDumper.DumpLotteryRewards(delivery_lottery_rewards);
         }
@@ -757,8 +758,8 @@ namespace RaidCrawler.WinForms
                 Move3.Text = ShowExtraMoves ? RaidContainer.Strings.Move[extra_moves[2]] : RaidContainer.Strings.Move[encounter.Move3];
                 Move4.Text = ShowExtraMoves ? RaidContainer.Strings.Move[extra_moves[3]] : RaidContainer.Strings.Move[encounter.Move4];
 
-                IVs.Text = IVsString(ToSpeedLast(blank.IVs));
-                toolTip.SetToolTip(IVs, IVsString(ToSpeedLast(blank.IVs), true));
+                IVs.Text = IVsString(Utils.ToSpeedLast(blank.IVs));
+                toolTip.SetToolTip(IVs, IVsString(Utils.ToSpeedLast(blank.IVs), true));
 
                 PID.BackColor = raid.CheckIsShiny(encounter) ? Color.Gold : DefaultColor;
                 IVs.BackColor = IVs.Text is "31/31/31/31/31/31" ? Color.YellowGreen : DefaultColor;
@@ -863,7 +864,7 @@ namespace RaidCrawler.WinForms
                     teraRaidView.Move7.Text = extra_moves[2] > 0 ? RaidContainer.Strings.Move[extra_moves[2]] : "---";
                     teraRaidView.Move8.Text = extra_moves[3] > 0 ? RaidContainer.Strings.Move[extra_moves[3]] : "---";
 
-                    var ivs = ToSpeedLast(blank.IVs);
+                    var ivs = Utils.ToSpeedLast(blank.IVs);
 
                     // HP
                     teraRaidView.HP.Text = $"{ivs[0]:D2}";
@@ -1041,18 +1042,6 @@ namespace RaidCrawler.WinForms
             return s;
         }
 
-        private static int[] ToSpeedLast(int[] ivs)
-        {
-            var res = new int[6];
-            res[0] = ivs[0];
-            res[1] = ivs[1];
-            res[2] = ivs[2];
-            res[3] = ivs[4];
-            res[4] = ivs[5];
-            res[5] = ivs[3];
-            return res;
-        }
-
         private static Image ApplyTeraColor(byte elementalType, Image img, SpriteBackgroundType type)
         {
             var color = TypeColor.GetTypeSpriteColor(elementalType);
@@ -1145,7 +1134,6 @@ namespace RaidCrawler.WinForms
 
         private async Task ReadRaids(CancellationToken token)
         {
-            Raid raid;
             if (RaidBlockOffset == 0)
             {
                 UpdateStatus("Caching the raid block pointer...");
@@ -1158,60 +1146,15 @@ namespace RaidCrawler.WinForms
 
             UpdateStatus("Reading raid block...");
             var data = await ConnectionWrapper.Connection.ReadBytesAbsoluteAsync(RaidBlockOffset + RaidBlock.HEADER_SIZE, (int)(RaidBlock.SIZE - RaidBlock.HEADER_SIZE), token).ConfigureAwait(false);
+            var failed = RaidContainer.ReadAllRaids(data, Config.Progress, Config.EventProgress, GetRaidBoost());
+            if (failed > 0)
+                ShowMessageBox($"There were {failed} raids that failed to be read.\nMore info can be found in the \"raid_dbg.txt\" file.");
 
-            var count = data.Length / Raid.SIZE;
-            HashSet<int> possible_groups = new();
-            if (RaidContainer.DistTeraRaids is not null)
-            {
-                foreach (TeraDistribution e in RaidContainer.DistTeraRaids.Cast<TeraDistribution>())
-                {
-                    if (TeraDistribution.AvailableInGame(e.Entity, Config.Game))
-                        possible_groups.Add(e.DeliveryGroupID);
-                }
-            }
-
-            var eventct = 0;
-            List<Raid> newRaids = new();
-            List<ITeraRaid> newTera = new();
-            List<List<(int, int, int)>> newRewards = new();
             var raids = RaidContainer.Container.Raids;
-
-            for (int i = 0; i < count; i++)
-            {
-                raid = new Raid(RaidContainer.Game, data.Skip(i * Raid.SIZE).Take(Raid.SIZE).ToArray())
-                {
-                    GemTeraRaids = RaidContainer.GemTeraRaids,
-                    DistTeraRaids = RaidContainer.DistTeraRaids,
-                    DeliveryRaidPriority = RaidContainer.DeliveryRaidPriority,
-                    DeliveryRaidFixedRewards = RaidContainer.DeliveryRaidFixedRewards,
-                    DeliveryRaidLotteryRewards = RaidContainer.DeliveryRaidLotteryRewards,
-                    BaseFixedRewards = RaidContainer.BaseFixedRewards,
-                    BaseLotteryRewards = RaidContainer.BaseLotteryRewards,
-                };
-
-                var progress = raid.IsEvent ? Config.EventProgress : Config.Progress;
-                var raid_delivery_group_id = raid.IsEvent ? TeraDistribution.GetDeliveryGroupID(eventct, raid.DeliveryRaidPriority, possible_groups) : -1;
-                var encounter = raid.GetTeraEncounter(progress, raid_delivery_group_id);
-                if (raid.IsValid)
-                {
-                    newRaids.Add(raid);
-                    newTera.Add(encounter);
-                    newRewards.Add(encounter.GetRewards(raid, GetRaidBoost()));
-                }
-
-                if (raid.IsEvent)
-                    eventct++;
-            }
-
-            RaidContainer.Container.SetRaids(newRaids);
-            raids = RaidContainer.Container.Raids;
-            RaidContainer.Container.SetEncounters(newTera);
-            RaidContainer.Container.SetRewards(newRewards);
-
-            UpdateStatus("Completed!");
             var encounters = RaidContainer.Container.Encounters;
-            var filterMatchCount = Enumerable.Range(0, raids.Count).Count(c => RaidFilters.Any(z => z.FilterSatisfied(encounters[c], raids[c], GetRaidBoost())));
+            UpdateStatus("Completed!");
 
+            var filterMatchCount = Enumerable.Range(0, raids.Count).Count(c => RaidFilters.Any(z => z.FilterSatisfied(encounters[c], raids[c], GetRaidBoost())));
             if (InvokeRequired)
                 Invoke(() => { LabelLoadedRaids.Text = $"Matches: {filterMatchCount}"; });
             else LabelLoadedRaids.Text = $"Matches: {filterMatchCount}";
