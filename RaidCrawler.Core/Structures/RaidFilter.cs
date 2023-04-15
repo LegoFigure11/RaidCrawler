@@ -30,20 +30,20 @@ namespace RaidCrawler.Core.Structures
             return true;
         }
 
-        public bool IsSpeciesSatisfied(ITeraRaid enc)
+        public bool IsSpeciesSatisfied(ushort species)
         {
             if (Species is null)
                 return true;
 
-            return enc.Species == (ushort)Species;
+            return species == (ushort)Species;
         }
 
-        public bool IsFormSatisfied(ITeraRaid enc)
+        public bool IsFormSatisfied(byte form)
         {
             if (Form is null)
                 return true;
 
-            return enc.Form == Form;
+            return form == Form;
         }
 
         public bool IsStarsSatisfied(ITeraRaid enc)
@@ -80,29 +80,20 @@ namespace RaidCrawler.Core.Structures
             };
         }
 
-        public bool IsShinySatisfied(ITeraRaid encounter, Raid raid)
+        public bool IsShinySatisfied(PK9 blank)
         {
             if (!Shiny)
                 return true;
 
-            return raid.CheckIsShiny(encounter);
+            return blank.IsShiny;
         }
 
-        public bool IsSquareSatisfied(ITeraRaid encounter, Raid raid)
+        public bool IsSquareSatisfied(PK9 blank)
         {
             if (!Square)
                 return true;
 
-            _ = PersonalTable.SV.GetFormEntry(encounter.Species, encounter.Form);
-            var param = encounter.GetParam();
-            PK9 blank = new()
-            {
-                Species = encounter.Species,
-                Form = encounter.Form
-            };
-
-            Encounter9RNG.GenerateData(blank, param, EncounterCriteria.Unrestricted, raid.Seed);
-            return raid.CheckIsShiny(encounter) && ShinyExtensions.IsSquareShinyExist(blank);
+            return blank.IsShiny && ShinyExtensions.IsSquareShinyExist(blank);
         }
 
         public bool IsTeraTypeSatisfied(Raid raid)
@@ -113,29 +104,20 @@ namespace RaidCrawler.Core.Structures
             return raid.TeraType == TeraType;
         }
 
-        public bool IsNatureSatisfied(ITeraRaid encounter, Raid raid)
+        public bool IsNatureSatisfied(int nature)
         {
             if (Nature is null)
                 return true;
 
-            _ = PersonalTable.SV.GetFormEntry(encounter.Species, encounter.Form);
-            var param = encounter.GetParam();
-            PK9 blank = new()
-            {
-                Species = encounter.Species,
-                Form = encounter.Form
-            };
-
-            Encounter9RNG.GenerateData(blank, param, EncounterCriteria.Unrestricted, raid.Seed);
-            return blank.Nature == Nature;
+            return nature == Nature;
         }
 
-        public bool IsIVsSatisfied(ITeraRaid encounter, Raid raid)
+        public bool IsIVsSatisfied(PK9 blank)
         {
             if (IVBin == 0)
                 return true;
 
-            var ivs = GetIVs(raid.Seed, encounter.FlawlessIVCount);
+            var ivs = blank.IVs;
             for (int i = 0; i < 6; i++)
             {
                 var iv = IVVals >> i * 5 & 31;
@@ -171,23 +153,15 @@ namespace RaidCrawler.Core.Structures
             return true;
         }
 
-        public bool IsGenderSatisfied(ITeraRaid encounter, Raid raid)
+        public bool IsGenderSatisfied(ITeraRaid encounter, int gender)
         {
             if (Gender is null || encounter.Gender <= 2 && encounter.Gender == Gender)
                 return true;
 
-            var param = encounter.GetParam();
-            PK9 blank = new()
-            {
-                Species = encounter.Species,
-                Form = encounter.Form
-            };
-
-            Encounter9RNG.GenerateData(blank, param, EncounterCriteria.Unrestricted, raid.Seed);
-            return blank.Gender == Gender;
+            return gender == Gender;
         }
 
-        public bool IsBatchFilterSatisfied(ITeraRaid encounter, Raid raid)
+        public bool IsBatchFilterSatisfied(PK9 blank)
         {
             if (BatchFilters is null)
                 return true;
@@ -197,22 +171,22 @@ namespace RaidCrawler.Core.Structures
                 return true;
 
             BatchEditing.ScreenStrings(filters);
-            var param = encounter.GetParam();
-            PK9 blank = new()
-            {
-                Species = encounter.Species,
-                Form = encounter.Form
-            };
-
-            Encounter9RNG.GenerateData(blank, param, EncounterCriteria.Unrestricted, raid.Seed);
             return BatchEditing.IsFilterMatch(filters, blank);
         }
 
-        public bool FilterSatisfied(ITeraRaid encounter, Raid raid, int SandwichBoost)
+        public bool FilterSatisfied(ITeraRaid enc, Raid raid, int SandwichBoost)
         {
-            return Enabled && IsIVsSatisfied(encounter, raid) && IsShinySatisfied(encounter, raid) && IsSquareSatisfied(encounter, raid) && IsSpeciesSatisfied(encounter) && IsFormSatisfied(encounter)
-                && IsNatureSatisfied(encounter, raid) && IsStarsSatisfied(encounter) && IsTeraTypeSatisfied(raid)
-                && IsRewardsSatisfied(encounter, raid, SandwichBoost) && IsGenderSatisfied(encounter, raid) && IsBatchFilterSatisfied(encounter, raid);
+            var param = enc.GetParam();
+            var blank = new PK9
+            {
+                Species = enc.Species,
+                Form = enc.Form
+            };
+            Encounter9RNG.GenerateData(blank, param, EncounterCriteria.Unrestricted, raid.Seed);
+
+            return Enabled && IsIVsSatisfied(blank) && IsShinySatisfied(blank) && IsSquareSatisfied(blank) && IsSpeciesSatisfied(blank.Species) && IsFormSatisfied(blank.Form)
+                && IsNatureSatisfied(blank.Nature) && IsStarsSatisfied(enc) && IsTeraTypeSatisfied(raid)
+                && IsRewardsSatisfied(enc, raid, SandwichBoost) && IsGenderSatisfied(enc, blank.Gender) && IsBatchFilterSatisfied(blank);
         }
 
         public bool FilterSatisfied(IReadOnlyList<ITeraRaid> encounters, IReadOnlyList<Raid> raids, int sandwichBoost)
@@ -226,35 +200,6 @@ namespace RaidCrawler.Core.Structures
                     return true;
             }
             return false;
-        }
-
-        private int[] GetIVs(uint Seed, int FlawlessIVs)
-        {
-            var rng = new Xoroshiro128Plus(Seed);
-            // Dummy calls
-            rng.NextInt(); // EC
-            rng.NextInt(); // TIDSID
-            rng.NextInt(); // PID
-
-            Span<int> ivs = stackalloc[] { -1, -1, -1, -1, -1, -1 };
-            // Flawless IVs
-            for (int i = 0; i < FlawlessIVs; i++)
-            {
-                int index;
-                do { index = (int)rng.NextInt(6); }
-                while (ivs[index] != -1);
-
-                ivs[index] = 31;
-            }
-
-            // Other IVs
-            for (int i = 0; i < ivs.Length; i++)
-            {
-                if (ivs[i] == -1)
-                    ivs[i] = (int)rng.NextInt(32);
-            }
-
-            return ivs.ToArray();
         }
     }
 }

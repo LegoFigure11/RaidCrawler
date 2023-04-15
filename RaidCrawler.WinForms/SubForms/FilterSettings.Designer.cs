@@ -96,6 +96,8 @@
             this.Species.Name = "Species";
             this.Species.Size = new System.Drawing.Size(121, 23);
             this.Species.TabIndex = 0;
+            this.Species.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            this.Species.AutoCompleteSource = AutoCompleteSource.ListItems;
             // 
             // SpeciesCheck
             // 
@@ -146,6 +148,8 @@
             this.Nature.Name = "Nature";
             this.Nature.Size = new System.Drawing.Size(121, 23);
             this.Nature.TabIndex = 2;
+            this.Nature.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            this.Nature.AutoCompleteSource = AutoCompleteSource.ListItems;
             // 
             // StarCheck
             // 
@@ -532,6 +536,8 @@
             this.TeraType.Name = "TeraType";
             this.TeraType.Size = new System.Drawing.Size(121, 23);
             this.TeraType.TabIndex = 17;
+            this.TeraType.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            this.TeraType.AutoCompleteSource = AutoCompleteSource.ListItems;
             // 
             // ActiveFilters
             // 
@@ -680,6 +686,8 @@
             this.Gender.Name = "Gender";
             this.Gender.Size = new System.Drawing.Size(121, 23);
             this.Gender.TabIndex = 32;
+            this.Gender.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            this.Gender.AutoCompleteSource = AutoCompleteSource.ListItems;
             // 
             // LabelBatchFilters
             // 

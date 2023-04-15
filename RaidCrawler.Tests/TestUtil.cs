@@ -1,5 +1,6 @@
 ﻿using RaidCrawler.Core.Structures;
 using System.Reflection;
+using System.Text.Json;
 
 namespace RaidCrawler.Tests
 {
@@ -20,6 +21,13 @@ namespace RaidCrawler.Tests
             using var resource = assembly.GetManifestResourceStream(name)!;
             using var reader = new BinaryReader(resource);
             return reader.ReadBytes((int)resource.Length);
+        }
+
+        private string GetStringTestResource(string name)
+        {
+            using var resource = assembly.GetManifestResourceStream(name)!;
+            using var reader = new StreamReader(resource);
+            return reader.ReadToEnd();
         }
 
         public (int, RaidContainer?) GetRaidContainer(string path, int storyPrg)
@@ -47,6 +55,12 @@ namespace RaidCrawler.Tests
             var baseData = GetBinaryTestResource(GetTestResourceName(path, "base"));
             var failed = container.ReadAllRaids(baseData, storyPrg, eventPrg, 0);
             return (failed, container.Container);
+        }
+
+        public IReadOnlyList<RaidFilter> GetRaidFilter(string path)
+        {
+            var text = GetStringTestResource(path);
+            return JsonSerializer.Deserialize<List<RaidFilter>>(text)!;
         }
     }
 }
