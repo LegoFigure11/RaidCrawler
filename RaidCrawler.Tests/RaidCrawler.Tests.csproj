@@ -42,6 +42,7 @@
     <None Remove="Blocks\chaos_12_Distro_noMight_VL\raid_priority_array" />
     <None Remove="Filters\BounsweetShiny.json" />
     <None Remove="Filters\Ditto0Atk.json" />
+    <None Remove="Filters\Ditto0Spe.json" />
     <None Remove="Filters\IVControl.json" />
   </ItemGroup>
 
@@ -77,6 +78,7 @@
     <EmbeddedResource Include="Blocks\chaos_12_Distro_noMight_VL\raid_priority_array" />
     <EmbeddedResource Include="Filters\BounsweetShiny.json" />
     <EmbeddedResource Include="Filters\Ditto0Atk.json" />
+    <EmbeddedResource Include="Filters\Ditto0Spe.json" />
     <EmbeddedResource Include="Filters\IVControl.json" />
   </ItemGroup>
 

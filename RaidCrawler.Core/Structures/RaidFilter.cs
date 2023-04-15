@@ -117,7 +117,7 @@ namespace RaidCrawler.Core.Structures
             if (IVBin == 0)
                 return true;
 
-            var ivs = blank.IVs;
+            var ivs = Utils.ToSpeedLast(blank.IVs);
             for (int i = 0; i < 6; i++)
             {
                 var iv = IVVals >> i * 5 & 31;
