@@ -253,7 +253,7 @@ namespace RaidCrawler.WinForms
                             return;
                         }
                     }
-                    catch {}
+                    catch { }
                     finally
                     {
                         ButtonEnable(new[] { ButtonConnect }, true);
@@ -397,14 +397,17 @@ namespace RaidCrawler.WinForms
             try
             {
                 ButtonEnable(new[] { ButtonViewRAM, ButtonAdvanceDate, ButtonDisconnect, ButtonDownloadEvents, SendScreenshot, ButtonReadRaids }, false);
+                Invoke(() => Label_DayAdvance.Visible = true);
                 SearchTimer.Start();
-                stopwatch.Restart();
+                stopwatch.Start();
                 _WindowState = WindowState;
 
                 var stop = false;
                 var raids = RaidContainer.Container.Raids;
                 while (!stop)
                 {
+                    var advanceTextInit = $"Day Skip Successes {GetStatDaySkipSuccess()} / {GetStatDaySkipTries() + 1}";
+                    Invoke(() => Label_DayAdvance.Text = advanceTextInit);
                     if (teraRaidView is not null)
                         Invoke(() => teraRaidView.DaySkips.Text = $"Day Skip Successes {GetStatDaySkipSuccess()} / {GetStatDaySkipTries() + 1}");
 
@@ -431,15 +434,18 @@ namespace RaidCrawler.WinForms
                         Invoke(DisplayPrettyRaid);
 
                     stop = StopAdvanceDate(previousSeeds);
+
+                    var advanceText = $"Day Skip Successes {GetStatDaySkipSuccess()} / {GetStatDaySkipTries()}";
+                    Invoke(() => Label_DayAdvance.Text = advanceText);
                     if (teraRaidView is not null)
-                        Invoke(() => teraRaidView.DaySkips.Text = $"Day Skip Successes {GetStatDaySkipSuccess()} / {GetStatDaySkipTries()}");
+                        Invoke(() => teraRaidView.DaySkips.Text = advanceText);
                 }
 
-                SearchTimer.Stop();
                 stopwatch.Stop();
+                SearchTimer.Stop();
                 var timeSpan = stopwatch.Elapsed;
-                string time = string.Format("{0:00}:{1:00}:{2:00}",
-                timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
+                string time = string.Format("{0:00}:{1:00}:{2:00}:{3:00}",
+                timeSpan.Days, timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
 
                 if (Config.PlaySound)
                     System.Media.SystemSounds.Asterisk.Play();
@@ -471,6 +477,9 @@ namespace RaidCrawler.WinForms
 
                         if (satisfied_filters.Count > 0)
                         {
+                            // Save game on match.
+                            await ConnectionWrapper.SaveGame(token).ConfigureAwait(false);
+
                             var teraType = raids[i].GetTeraType(encounters[i]);
                             var color = TypeColor.GetTypeSpriteColor((byte)teraType);
                             var hexColor = $"{color.R:X2}{color.G:X2}{color.B:X2}";
@@ -517,7 +526,9 @@ namespace RaidCrawler.WinForms
             ButtonAdvanceDate.Visible = true;
             DateAdvanceSource.Cancel();
             DateAdvanceSource = new();
+            teraRaidView?.ResetProgressBar();
 
+            stopwatch.Stop();
             SearchTimer.Stop();
         }
 
@@ -1321,9 +1332,12 @@ namespace RaidCrawler.WinForms
 
         private void SearchTimer_Elapsed(object sender, EventArgs e)
         {
+            if (!stopwatch.IsRunning)
+                return;
+
             var timeSpan = stopwatch.Elapsed;
-            string time = string.Format("{0:00}:{1:00}:{2:00}",
-            timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
+            string time = string.Format("{0:00}:{1:00}:{2:00}:{3:00}",
+            timeSpan.Days, timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
 
             Invoke(() => Text = formTitle + " [Searching for " + time + "]");
             if (Config.StreamerView && teraRaidView is not null)

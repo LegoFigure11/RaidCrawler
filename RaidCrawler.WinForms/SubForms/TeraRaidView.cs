@@ -49,6 +49,18 @@
             }
         }
 
+        public void ResetProgressBar()
+        {
+            pbComplete = -1;
+            g = Graphics.FromImage(bmp);
+            g.Clear(Color.LightSkyBlue);
+            g.FillRectangle(new SolidBrush(Color.FromArgb(0, 5, 25)), new RectangleF(0, 0, pbWidth, pbHeight));
+
+            pictureBox1.Image = bmp;
+            g.Dispose();
+            pbComplete = -1;
+        }
+
         private void TeraRaidView_MouseDown(object sender, MouseEventArgs e)
         {
             drag = true;

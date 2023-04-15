@@ -540,7 +540,7 @@
             pictureBox1.BackColor = Color.Transparent;
             pictureBox1.Location = new Point(12, 501);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(639, 27);
+            pictureBox1.Size = new Size(546, 27);
             pictureBox1.TabIndex = 126;
             pictureBox1.TabStop = false;
             // 
@@ -751,13 +751,13 @@
             // textSearchTime
             // 
             textSearchTime.BackColor = Color.FromArgb(0, 5, 25);
-            textSearchTime.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point);
+            textSearchTime.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
             textSearchTime.ForeColor = Color.LightSlateGray;
-            textSearchTime.Location = new Point(857, 501);
+            textSearchTime.Location = new Point(840, 501);
             textSearchTime.Name = "textSearchTime";
-            textSearchTime.Size = new Size(91, 25);
+            textSearchTime.Size = new Size(102, 25);
             textSearchTime.TabIndex = 153;
-            textSearchTime.Text = "00:00:00";
+            textSearchTime.Text = "00:00:00:00";
             textSearchTime.TextAlign = ContentAlignment.BottomCenter;
             // 
             // picAbilityCapsule
@@ -831,10 +831,11 @@
             DaySkips.Anchor = AnchorStyles.None;
             DaySkips.AutoSize = true;
             DaySkips.BackColor = Color.Transparent;
-            DaySkips.ForeColor = SystemColors.ButtonShadow;
-            DaySkips.Location = new Point(690, 507);
+            DaySkips.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            DaySkips.ForeColor = Color.LightSlateGray;
+            DaySkips.Location = new Point(618, 509);
             DaySkips.Name = "DaySkips";
-            DaySkips.Size = new Size(133, 15);
+            DaySkips.Size = new Size(141, 15);
             DaySkips.TabIndex = 161;
             DaySkips.Text = "Day Skip Successes 0 / 0";
             DaySkips.TextAlign = ContentAlignment.MiddleCenter;

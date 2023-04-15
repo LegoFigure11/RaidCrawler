@@ -80,17 +80,19 @@
             RaidBoost = new ComboBox();
             ComboIndex = new ComboBox();
             SendScreenshot = new Button();
-            SearchTimer = new System.Timers.Timer(1);
+            SearchTimer = new System.Timers.Timer();
             btnOpenMap = new Button();
             groupBox1 = new GroupBox();
             statusStrip1 = new StatusStrip();
             StatusLabel = new ToolStripStatusLabel();
             ToolStripStatusLabel = new ToolStripStatusLabel();
+            Label_DayAdvance = new ToolStripStatusLabel();
             USB_Port_label = new Label();
             USB_Port_TB = new TextBox();
             StopAdvance_Button = new Button();
             ((System.ComponentModel.ISupportInitialize)Sprite).BeginInit();
             ((System.ComponentModel.ISupportInitialize)GemIcon).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)SearchTimer).BeginInit();
             groupBox1.SuspendLayout();
             statusStrip1.SuspendLayout();
             SuspendLayout();
@@ -592,12 +594,12 @@
             // 
             ComboIndex.BackColor = SystemColors.Window;
             ComboIndex.DropDownStyle = ComboBoxStyle.DropDownList;
+            ComboIndex.Enabled = false;
             ComboIndex.FormattingEnabled = true;
             ComboIndex.Location = new Point(80, 68);
             ComboIndex.Name = "ComboIndex";
             ComboIndex.Size = new Size(64, 23);
             ComboIndex.TabIndex = 120;
-            ComboIndex.Enabled = false;
             ComboIndex.SelectedIndexChanged += ComboIndex_SelectedIndexChanged;
             // 
             // SendScreenshot
@@ -612,6 +614,9 @@
             // 
             // SearchTimer
             // 
+            SearchTimer.Enabled = true;
+            SearchTimer.Interval = 1D;
+            SearchTimer.SynchronizingObject = this;
             SearchTimer.Elapsed += SearchTimer_Elapsed;
             // 
             // btnOpenMap
@@ -641,7 +646,7 @@
             // 
             // statusStrip1
             // 
-            statusStrip1.Items.AddRange(new ToolStripItem[] { StatusLabel, ToolStripStatusLabel });
+            statusStrip1.Items.AddRange(new ToolStripItem[] { StatusLabel, ToolStripStatusLabel, Label_DayAdvance });
             statusStrip1.Location = new Point(0, 335);
             statusStrip1.Name = "statusStrip1";
             statusStrip1.Size = new Size(580, 22);
@@ -660,6 +665,13 @@
             ToolStripStatusLabel.Name = "ToolStripStatusLabel";
             ToolStripStatusLabel.Size = new Size(89, 17);
             ToolStripStatusLabel.Text = "Not connected.";
+            // 
+            // Label_DayAdvance
+            // 
+            Label_DayAdvance.Name = "Label_DayAdvance";
+            Label_DayAdvance.Size = new Size(136, 17);
+            Label_DayAdvance.Text = "Day Skip Successes: 0 / 0";
+            Label_DayAdvance.Visible = false;
             // 
             // USB_Port_label
             // 
@@ -687,9 +699,9 @@
             StopAdvance_Button.Size = new Size(96, 27);
             StopAdvance_Button.TabIndex = 129;
             StopAdvance_Button.Text = "Stop";
-            StopAdvance_Button.Visible = false;
             StopAdvance_Button.UseVisualStyleBackColor = true;
-            StopAdvance_Button.Click += new EventHandler(StopAdvanceButton_Click);
+            StopAdvance_Button.Visible = false;
+            StopAdvance_Button.Click += StopAdvanceButton_Click;
             // 
             // MainWindow
             // 
@@ -753,6 +765,7 @@
             Load += MainWindow_Load;
             ((System.ComponentModel.ISupportInitialize)Sprite).EndInit();
             ((System.ComponentModel.ISupportInitialize)GemIcon).EndInit();
+            ((System.ComponentModel.ISupportInitialize)SearchTimer).EndInit();
             groupBox1.ResumeLayout(false);
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
@@ -821,5 +834,6 @@
         private Label USB_Port_label;
         private TextBox USB_Port_TB;
         private Button StopAdvance_Button;
+        private ToolStripStatusLabel Label_DayAdvance;
     }
 }
