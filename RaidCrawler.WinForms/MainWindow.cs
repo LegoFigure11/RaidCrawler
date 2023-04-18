@@ -415,7 +415,8 @@ namespace RaidCrawler.WinForms
                     UpdateStatus("Changing date...");
 
                     bool streamer = Config.StreamerView && teraRaidView is not null;
-                    await ConnectionWrapper.AdvanceDate(Config, token, streamer ? teraRaidView!.UpdateProgressBar : null).ConfigureAwait(false);
+                    Action<int>? action = streamer ? teraRaidView!.UpdateProgressBar : null;
+                    await ConnectionWrapper.AdvanceDate(Config, token, action).ConfigureAwait(false);
                     await ReadRaids(token).ConfigureAwait(false);
                     raids = RaidContainer.Container.Raids;
 
@@ -489,10 +490,12 @@ namespace RaidCrawler.WinForms
                     Invoke(() => Text = $"{formTitle} [Match Found in {time}]");
                 }
             }
-            catch
+            catch (Exception ex)
             {
                 UpdateStatus("Date advance stopped.");
                 SearchTimer.Stop();
+                if (ex is not TaskCanceledException)
+                    ShowMessageBox(ex.Message, "Date Advance Error");
             }
 
             if (InvokeRequired)

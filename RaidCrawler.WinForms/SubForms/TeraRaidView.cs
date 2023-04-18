@@ -2,6 +2,7 @@
 {
     public partial class TeraRaidView : Form
     {
+        private readonly object _lock = new();
         // Drag and Drop
         private bool drag = false;
         private Point start = new(0, 0);
@@ -25,40 +26,52 @@
 
         public void UpdateProgressBar(int steps)
         {
-            if (pbComplete <= 0)
+            lock (_lock)
             {
-                pbComplete = pbWidth;
-                pbUnit = pbWidth / (steps - 1);
-            }
+                Invoke(() =>
+                {
+                    if (pbComplete <= 0)
+                    {
+                        pbComplete = pbWidth;
+                        pbUnit = pbWidth / (steps - 1);
+                    }
 
-            g = Graphics.FromImage(bmp);
-            g.Clear(Color.LightSkyBlue);
+                    g = Graphics.FromImage(bmp);
+                    g.Clear(Color.LightSkyBlue);
 
-            //draw progressbar
-            pbComplete -= pbUnit;
-            g.FillRegion(Brushes.CornflowerBlue, new Region(new RectangleF(0, 0, (float)pbComplete, pbHeight)));
+                    //draw progressbar
+                    pbComplete -= pbUnit;
+                    g.FillRegion(Brushes.CornflowerBlue, new Region(new RectangleF(0, 0, (float)pbComplete, pbHeight)));
 
-            //load bitmap in picturebox picboxPB
-            pictureBox1.Image = bmp;
-            if (pbComplete <= 0)
-            {
-                g.FillRectangle(new SolidBrush(Color.FromArgb(0, 5, 25)), new RectangleF(0, 0, pbWidth, pbHeight));
-                pictureBox1.Image = bmp;
-                g.Dispose();
-                pbComplete = -1;
+                    //load bitmap in picturebox picboxPB
+                    pictureBox1.Image = bmp;
+                    if (pbComplete <= 0)
+                    {
+                        g.FillRectangle(new SolidBrush(Color.FromArgb(0, 5, 25)), new RectangleF(0, 0, pbWidth, pbHeight));
+                        pictureBox1.Image = bmp;
+                        g.Dispose();
+                        pbComplete = -1;
+                    }
+                });
             }
         }
 
         public void ResetProgressBar()
         {
-            pbComplete = -1;
-            g = Graphics.FromImage(bmp);
-            g.Clear(Color.LightSkyBlue);
-            g.FillRectangle(new SolidBrush(Color.FromArgb(0, 5, 25)), new RectangleF(0, 0, pbWidth, pbHeight));
+            lock (_lock)
+            {
+                Invoke(() =>
+                {
+                    pbComplete = -1;
+                    g = Graphics.FromImage(bmp);
+                    g.Clear(Color.LightSkyBlue);
+                    g.FillRectangle(new SolidBrush(Color.FromArgb(0, 5, 25)), new RectangleF(0, 0, pbWidth, pbHeight));
 
-            pictureBox1.Image = bmp;
-            g.Dispose();
-            pbComplete = -1;
+                    pictureBox1.Image = bmp;
+                    g.Dispose();
+                    pbComplete = -1;
+                });
+            }
         }
 
         private void TeraRaidView_MouseDown(object sender, MouseEventArgs e)

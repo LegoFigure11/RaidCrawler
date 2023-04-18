@@ -167,11 +167,11 @@ namespace RaidCrawler.Core.Connection
             await Task.Delay(delay, token).ConfigureAwait(false);
         }
 
-        public async Task PressAndHold(SwitchButton b, int hold, int delay, CancellationToken token)
+        public async Task SetStick(SwitchStick stick, short x, short y, int hold, int delay, CancellationToken token)
         {
-            await Connection.SendAsync(SwitchCommand.Hold(b, CRLF), token).ConfigureAwait(false);
+            await Connection.SendAsync(SwitchCommand.SetStick(stick, x, y, CRLF), token).ConfigureAwait(false);
             await Task.Delay(hold, token).ConfigureAwait(false);
-            await Connection.SendAsync(SwitchCommand.Release(b, CRLF), token).ConfigureAwait(false);
+            await Connection.SendAsync(SwitchCommand.SetStick(stick, 0, 0, CRLF), token).ConfigureAwait(false);
             await Task.Delay(delay, token).ConfigureAwait(false);
         }
 
@@ -179,7 +179,7 @@ namespace RaidCrawler.Core.Connection
         public async Task AdvanceDate(IDateAdvanceConfig config, CancellationToken token, Action<int>? action = null)
         {
             // Not great, but when adding/removing clicks, make sure to account for command count for an accurate StreamerView progress bar.
-            int steps = (config.UseTouch ? 19 : 26) + (config.UseOvershoot ? 2 : config.SystemDownPresses) + config.DaysToSkip;
+            int steps = (config.UseTouch ? 21 : 27) + (config.UseOvershoot ? 2 : config.SystemDownPresses) + config.DaysToSkip;
 
             _statusUpdate("Changing date...");
             var BaseDelay = config.BaseDelay;
@@ -198,7 +198,7 @@ namespace RaidCrawler.Core.Connection
             // Navigate to Settings
             if (config.UseTouch)
             {
-                await Touch(840, 540, 0_150, config.OpenSettingsDelay + BaseDelay, token).ConfigureAwait(false);
+                await Touch(0_840, 0_540, 0_050, 0, token).ConfigureAwait(false);
                 UpdateProgressBar(action, steps);
             }
             else
@@ -217,7 +217,7 @@ namespace RaidCrawler.Core.Connection
             UpdateProgressBar(action, steps);
 
             // Scroll to bottom
-            await PressAndHold(DDOWN, config.HoldDuration, 0_100 + BaseDelay, token).ConfigureAwait(false);
+            await SetStick(SwitchStick.LEFT, 0, -30_000, config.HoldDuration, 0_100 + BaseDelay, token).ConfigureAwait(false);
             UpdateProgressBar(action, steps);
 
             // Navigate to "Date and Time"
@@ -228,7 +228,7 @@ namespace RaidCrawler.Core.Connection
             // Hold down to overshoot Date/Time by one. DUP to recover.
             if (config.UseOvershoot)
             {
-                await PressAndHold(DDOWN, config.SystemOvershoot, 0_100 + BaseDelay, token).ConfigureAwait(false);
+                await SetStick(SwitchStick.LEFT, 0, -30_000, config.SystemOvershoot, 0_100 + BaseDelay, token).ConfigureAwait(false);
                 UpdateProgressBar(action, steps);
 
                 await Click(DUP, 0_500 + BaseDelay, token).ConfigureAwait(false);
@@ -250,7 +250,7 @@ namespace RaidCrawler.Core.Connection
             // Open Date/Time settings
             if (config.UseTouch)
             {
-                await Touch(950, 400, 0_150, config.DateChange + BaseDelay, token).ConfigureAwait(false);
+                await Touch(0_950, 0_400, 0_050, 0, token).ConfigureAwait(false);
                 UpdateProgressBar(action, steps);
             }
             else
@@ -260,10 +260,10 @@ namespace RaidCrawler.Core.Connection
                     await Click(DDOWN, 0_100 + BaseDelay, token).ConfigureAwait(false);
                     UpdateProgressBar(action, steps);
                 }
-
-                await Click(A, config.DateChange + BaseDelay, token).ConfigureAwait(false);
-                UpdateProgressBar(action, steps);
             }
+
+            await Click(A, config.DateChange + BaseDelay, token).ConfigureAwait(false);
+            UpdateProgressBar(action, steps);
 
             for (int i = 0; i < config.DaysToSkip; i++)
             {
@@ -273,23 +273,27 @@ namespace RaidCrawler.Core.Connection
 
             for (int i = 0; i < 6; i++)
             {
-                await Click(DRIGHT, 0_050 + BaseDelay, token).ConfigureAwait(false);
+                await Click(DRIGHT, (i < 5 ? 0_050 : 0_100) + BaseDelay, token).ConfigureAwait(false);
                 UpdateProgressBar(action, steps);
             }
 
-            // Click twice to avoid button drops and give it more time to recognize that we touched the time.
             await Click(A, 0_150 + config.DateChange + BaseDelay, token).ConfigureAwait(false);
-            UpdateProgressBar(action, steps);
-
-            await Click(A, 0_150 + BaseDelay, token).ConfigureAwait(false);
             UpdateProgressBar(action, steps);
 
             // Return to game
             await Click(HOME, config.ReturnHomeDelay + BaseDelay, token).ConfigureAwait(false);
             UpdateProgressBar(action, steps);
 
-            await Click(HOME, config.ReturnGameDelay + BaseDelay, token).ConfigureAwait(false);
+            await Click(HOME, 0_500 + BaseDelay, token).ConfigureAwait(false);
             UpdateProgressBar(action, steps);
+
+            // Attempt to dodge an update prompt.
+            await Click(DUP, 0_600 + BaseDelay, token).ConfigureAwait(false);
+            UpdateProgressBar(action, steps);
+
+            await Click(A, config.ReturnGameDelay + BaseDelay, token).ConfigureAwait(false);
+            UpdateProgressBar(action, steps);
+
             _statusUpdate("Back in the game...");
         }
 
