@@ -179,7 +179,7 @@ namespace RaidCrawler.Core.Connection
         public async Task AdvanceDate(IDateAdvanceConfig config, CancellationToken token, Action<int>? action = null)
         {
             // Not great, but when adding/removing clicks, make sure to account for command count for an accurate StreamerView progress bar.
-            int steps = (config.UseTouch ? 21 : 27) + (config.UseOvershoot ? 2 : config.SystemDownPresses) + config.DaysToSkip;
+            int steps = (config.UseTouch ? 19 : 25) + (config.UseOvershoot ? 2 : config.SystemDownPresses) + (config.DodgeSystemUpdate ? 2 : 0) + config.DaysToSkip;
 
             _statusUpdate("Changing date...");
             var BaseDelay = config.BaseDelay;
@@ -284,15 +284,18 @@ namespace RaidCrawler.Core.Connection
             await Click(HOME, config.ReturnHomeDelay + BaseDelay, token).ConfigureAwait(false);
             UpdateProgressBar(action, steps);
 
-            await Click(HOME, 0_500 + BaseDelay, token).ConfigureAwait(false);
+            await Click(HOME, (config.DodgeSystemUpdate ? 0_500 : config.ReturnGameDelay) + BaseDelay, token).ConfigureAwait(false);
             UpdateProgressBar(action, steps);
 
-            // Attempt to dodge an update prompt.
-            await Click(DUP, 0_600 + BaseDelay, token).ConfigureAwait(false);
-            UpdateProgressBar(action, steps);
+            if (config.DodgeSystemUpdate)
+            {
+                // Attempt to dodge an update prompt.
+                await Click(DUP, 0_600 + BaseDelay, token).ConfigureAwait(false);
+                UpdateProgressBar(action, steps);
 
-            await Click(A, config.ReturnGameDelay + BaseDelay, token).ConfigureAwait(false);
-            UpdateProgressBar(action, steps);
+                await Click(A, config.ReturnGameDelay + BaseDelay, token).ConfigureAwait(false);
+                UpdateProgressBar(action, steps);
+            }
 
             _statusUpdate("Back in the game...");
         }
@@ -333,24 +336,23 @@ namespace RaidCrawler.Core.Connection
             BaseBlockKeyPointer = await Connection.PointerAll(BlockKeyPointer, token).ConfigureAwait(false);
         }
 
-        public async Task SaveGame(CancellationToken token)
+        public async Task SaveGame(IDateAdvanceConfig config, CancellationToken token)
         {
-            // To do: add configurable settings.
             _statusUpdate("Saving the game...");
             // B out in case we're in some menu.
-            await Click(B, 1_000, token).ConfigureAwait(false);
-            await Click(B, 1_000, token).ConfigureAwait(false);
+            for (int i = 0; i < 4; i++)
+                await Click(B, 0_500, token).ConfigureAwait(false);
 
             // Open the menu and save.
             await Click(X, 1_000, token).ConfigureAwait(false);
             await Click(R, 1_000, token).ConfigureAwait(false);
             await Click(A, 1_000, token).ConfigureAwait(false);
             await Click(A, 1_000, token).ConfigureAwait(false);
-            await Click(A, 3_000, token).ConfigureAwait(false);
+            await Click(A, 3_000 + config.SaveGameDelay, token).ConfigureAwait(false);
 
             // Return to overworld.
-            await Click(B, 1_000, token).ConfigureAwait(false);
-            await Click(B, 1_000, token).ConfigureAwait(false);
+            for (int i = 0; i < 4; i++)
+                await Click(B, 0_500, token).ConfigureAwait(false);
             _statusUpdate("Game saved!");
         }
 

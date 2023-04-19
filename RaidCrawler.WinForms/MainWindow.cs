@@ -469,7 +469,8 @@ namespace RaidCrawler.WinForms
                         if (satisfied_filters.Count > 0)
                         {
                             // Save game on match.
-                            await ConnectionWrapper.SaveGame(token).ConfigureAwait(false);
+                            if (Config.SaveOnMatch)
+                                await ConnectionWrapper.SaveGame(Config, token).ConfigureAwait(false);
 
                             var teraType = raids[i].GetTeraType(encounters[i]);
                             var color = TypeColor.GetTypeSpriteColor((byte)teraType);

@@ -36,6 +36,8 @@ namespace RaidCrawler.WinForms.SubForms
 
             UseTouch.Checked = c.UseTouch;
             UseOvershoot.Checked = c.UseOvershoot;
+            SaveGame.Checked = c.SaveOnMatch;
+            DodgeSystemUpdate.Checked = c.DodgeSystemUpdate;
             OpenHome.Value = c.OpenHomeDelay;
             NavigateToSettings.Value = c.NavigateToSettingsDelay;
             OpenSettings.Value = c.OpenSettingsDelay;
@@ -48,9 +50,11 @@ namespace RaidCrawler.WinForms.SubForms
             ReturnHome.Value = c.ReturnHomeDelay;
             ReturnGame.Value = c.ReturnGameDelay;
             BaseDelay.Value = c.BaseDelay;
+            SaveGameDelay.Value = c.SaveGameDelay;
 
             SystemDDownPresses.Enabled = !UseOvershoot.Checked;
             SystemOvershoot.Enabled = UseOvershoot.Checked;
+            SaveGameDelay.Enabled = SaveGame.Checked;
 
             IVstyle.SelectedIndex = c.IVsStyle;
             IVverbose.Checked = c.VerboseIVs;
@@ -96,6 +100,8 @@ namespace RaidCrawler.WinForms.SubForms
 
             c.UseTouch = UseTouch.Checked;
             c.UseOvershoot = UseOvershoot.Checked;
+            c.SaveOnMatch = SaveGame.Checked;
+            c.DodgeSystemUpdate = DodgeSystemUpdate.Checked;
             c.OpenHomeDelay = (int)OpenHome.Value;
             c.NavigateToSettingsDelay = (int)NavigateToSettings.Value;
             c.OpenSettingsDelay = (int)OpenSettings.Value;
@@ -108,6 +114,7 @@ namespace RaidCrawler.WinForms.SubForms
             c.ReturnHomeDelay = (int)ReturnHome.Value;
             c.ReturnGameDelay = (int)ReturnGame.Value;
             c.BaseDelay = (int)BaseDelay.Value;
+            c.SaveGameDelay = (int)SaveGameDelay.Value;
 
             c.IVsStyle = IVstyle.SelectedIndex;
             c.VerboseIVs = IVverbose.Checked;
@@ -129,6 +136,11 @@ namespace RaidCrawler.WinForms.SubForms
         {
             SystemDDownPresses.Enabled = !UseOvershoot.Checked;
             SystemOvershoot.Enabled = UseOvershoot.Checked;
+        }
+
+        private void SaveGame_CheckedChanged(object sender, EventArgs e)
+        {
+            SaveGameDelay.Enabled = SaveGame.Checked;
         }
 
         private void BtnTestWebHook_Click(object sender, EventArgs e)

@@ -26,6 +26,8 @@ namespace RaidCrawler.WinForms
         // Date Advance
         public bool UseTouch { get; set; } = false;
         public bool UseOvershoot { get; set; } = false;
+        public bool DodgeSystemUpdate { get; set; } = false;
+        public bool SaveOnMatch { get; set; } = true;
 
         public int OpenHomeDelay { get; set; } = 1_800;
         public int NavigateToSettingsDelay { get; set; } = 0_100;
@@ -39,6 +41,7 @@ namespace RaidCrawler.WinForms
         public int ReturnGameDelay { get; set; } = 4_000;
         public int SystemOvershoot { get; set; } = 0_750;
         public int BaseDelay { get; set; } = 0;
+        public int SaveGameDelay { get; set; } = 0;
 
         // Webhook
         public bool EnableEmoji { get; set; } = true;
