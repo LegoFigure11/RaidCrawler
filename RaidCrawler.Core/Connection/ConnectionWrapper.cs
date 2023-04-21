@@ -131,8 +131,8 @@ namespace RaidCrawler.Core.Connection
 
             while (start < end)
             {
-                var block_ct = (end - start) / 32;
-                var mid = start + (block_ct >> 1) * 32;
+                var block_ct = (end - start) / 48;
+                var mid = start + (block_ct >> 1) * 48;
 
                 data = await Connection.ReadBytesAbsoluteAsync(mid, 4, token).ConfigureAwait(false);
                 var found = BitConverter.ToUInt32(data);
@@ -141,7 +141,7 @@ namespace RaidCrawler.Core.Connection
 
                 if (found >= key)
                     end = mid;
-                else start = mid + 32;
+                else start = mid + 48;
             }
             return start;
         }
