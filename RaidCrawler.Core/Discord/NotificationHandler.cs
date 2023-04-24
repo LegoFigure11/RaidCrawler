@@ -21,7 +21,7 @@ namespace RaidCrawler.Core.Discord
 
         private static string[]? DiscordWebhooks;
 
-        public static async Task SendNotifications(IWebhookConfig c, ITeraRaid? encounter, Raid raid, IEnumerable<RaidFilter> filters, string time, IReadOnlyList<(int, int, int)> RewardsList, string hexColor, string spriteName, CancellationToken token)
+        public static async Task SendNotification(IWebhookConfig c, ITeraRaid? encounter, Raid raid, RaidFilter filter, string time, IReadOnlyList<(int, int, int)> RewardsList, string hexColor, string spriteName, CancellationToken token)
         {
             if (encounter is null)
                 return;
@@ -30,7 +30,7 @@ namespace RaidCrawler.Core.Discord
             if (DiscordWebhooks is null)
                 return;
 
-            var webhook = GenerateWebhook(c, encounter, raid, filters, time, RewardsList, hexColor, spriteName);
+            var webhook = GenerateWebhook(c, encounter, raid, filter, time, RewardsList, hexColor, spriteName);
             var content = new StringContent(JsonSerializer.Serialize(webhook), System.Text.Encoding.UTF8, "application/json");
             foreach (var url in DiscordWebhooks)
                 await Client.PostAsync(url.Trim(), content, token).ConfigureAwait(false);
@@ -58,7 +58,7 @@ namespace RaidCrawler.Core.Discord
                 await Client.PostAsync(url.Trim(), content, token).ConfigureAwait(false);
         }
 
-        public static object GenerateWebhook(IWebhookConfig c, ITeraRaid encounter, Raid raid, IEnumerable<RaidFilter> filters, string time, IReadOnlyList<(int, int, int)> RewardsList, string hexColor, string spriteName)
+        public static object GenerateWebhook(IWebhookConfig c, ITeraRaid encounter, Raid raid, RaidFilter filter, string time, IReadOnlyList<(int, int, int)> RewardsList, string hexColor, string spriteName)
         {
             var param = encounter.GetParam();
             var blank = new PK9
@@ -116,7 +116,7 @@ namespace RaidCrawler.Core.Discord
 
                             new { name = "Location󠀠󠀠󠀠", value = area, inline = true, },
                             new { name = "Search Time󠀠󠀠󠀠", value = time, inline = true, },
-                            new { name = "Filter Name" + (filters.Count() > 1 ? "s" : string.Empty), value = string.Join(", ", filters.Select(z => z.Name)), inline = true, },
+                            new { name = "Filter Name", value = filter.Name, inline = true, },
 
                             new { name = rewards != "" ? "Rewards" : "", value = rewards, inline = false, },
                         },

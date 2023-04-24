@@ -449,9 +449,9 @@ namespace RaidCrawler.WinForms
                     var encounters = RaidContainer.Container.Encounters;
                     var rewards = RaidContainer.Container.Rewards;
                     var boost = Invoke(() => { return RaidBoost.SelectedIndex; });
+                    var satisfied_filters = new List<(RaidFilter, ITeraRaid, Raid, IReadOnlyList<(int, int, int)>)>();
                     for (int i = 0; i < raids.Count; i++)
                     {
-                        var satisfied_filters = new List<RaidFilter>();
                         foreach (var filter in RaidFilters)
                         {
                             if (filter is null)
@@ -459,32 +459,35 @@ namespace RaidCrawler.WinForms
 
                             if (filter.FilterSatisfied(encounters[i], raids[i], boost))
                             {
-                                satisfied_filters.Add(filter);
+                                satisfied_filters.Add((filter, encounters[i], raids[i], rewards[i]));
                                 if (InvokeRequired)
                                     Invoke(() => { ComboIndex.SelectedIndex = i; });
                                 else ComboIndex.SelectedIndex = i;
                             }
                         }
+                    }
 
-                        if (satisfied_filters.Count > 0)
+                    if (Config.EnableNotification)
+                    {
+                        foreach (var satisfied in satisfied_filters)
                         {
-                            // Save game on match.
-                            if (Config.SaveOnMatch)
-                                await ConnectionWrapper.SaveGame(Config, token).ConfigureAwait(false);
-
-                            var teraType = raids[i].GetTeraType(encounters[i]);
+                            var teraType = satisfied.Item3.GetTeraType(satisfied.Item2);
                             var color = TypeColor.GetTypeSpriteColor((byte)teraType);
                             var hexColor = $"{color.R:X2}{color.G:X2}{color.B:X2}";
                             var blank = new PK9
                             {
-                                Species = encounters[i].Species,
-                                Form = encounters[i].Form
+                                Species = satisfied.Item2.Species,
+                                Form = satisfied.Item2.Form
                             };
 
-                            var spriteName = GetSpriteNameForUrl(blank, raids[i].CheckIsShiny(encounters[i]));
-                            await NotificationHandler.SendNotifications(Config, encounters[i], raids[i], satisfied_filters, time, rewards[i], hexColor, spriteName, Source.Token).ConfigureAwait(false);
+                            var spriteName = GetSpriteNameForUrl(blank, satisfied.Item3.CheckIsShiny(satisfied.Item2));
+                            await NotificationHandler.SendNotification(Config, satisfied.Item2, satisfied.Item3, satisfied.Item1, time, satisfied.Item4, hexColor, spriteName, Source.Token).ConfigureAwait(false);
                         }
                     }
+
+                    // Save game on match.
+                    if (Config.SaveOnMatch && satisfied_filters.Count > 0)
+                        await ConnectionWrapper.SaveGame(Config, token).ConfigureAwait(false);
 
                     if (Config.EnableAlertWindow)
                         ShowMessageBox($"{Config.AlertWindowMessage}\n\nTime Spent: {time}", "Result found!");
@@ -1346,7 +1349,6 @@ namespace RaidCrawler.WinForms
         private async Task TestWebhookAsync(CancellationToken token)
         {
             var filter = new RaidFilter { Name = "Test Webhook" };
-            var satisfied_filters = new List<RaidFilter> { filter };
 
             int i = -1;
             if (InvokeRequired)
@@ -1373,7 +1375,7 @@ namespace RaidCrawler.WinForms
                 blank.SetSuggestedFormArgument();
 
                 var spriteName = GetSpriteNameForUrl(blank, raids[i].CheckIsShiny(encounters[i]));
-                await NotificationHandler.SendNotifications(Config, encounters[i], raids[i], satisfied_filters, time, rewards[i], hexColor, spriteName, token).ConfigureAwait(false);
+                await NotificationHandler.SendNotification(Config, encounters[i], raids[i], filter, time, rewards[i], hexColor, spriteName, token).ConfigureAwait(false);
             }
             else ShowMessageBox("Please connect to your device and ensure a raid has been found.");
         }
