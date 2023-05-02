@@ -22,10 +22,8 @@ public class RaidReadTests : TestUtil
 
         var container = raids.Item2;
         container.Should().NotBeNull();
-        if (container is null)
-            return;
 
-        var raidCount = container.GetRaidCount();
+        var raidCount = container!.GetRaidCount();
         var encCount = container.Encounters.Count;
         container.GetRaidCount().Should().Be(expectedRaids);
         raidCount.Should().Be(encCount);

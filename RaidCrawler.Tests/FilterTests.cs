@@ -23,11 +23,15 @@ namespace RaidCrawler.Tests
         public void FilterTest(string path, string filterPath, string controlPath, int storyPrg)
         {
             var raid = GetRaidContainer(path, storyPrg);
-            var container = raid.Item2!;
+            raid.Item1.Should().Be(0);
+
+            var container = raid.Item2;
+            container.Should().NotBeNull();
+
             var filter = GetRaidFilter(filterPath)[0];
             filter.Should().NotBeNull();
 
-            var raids = container.Raids;
+            var raids = container!.Raids;
             var encounters = container.Encounters;
             var satisfied = 0;
             for (int i = 0; i < raids.Count; i++)

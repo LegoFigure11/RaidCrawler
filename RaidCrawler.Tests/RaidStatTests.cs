@@ -24,10 +24,8 @@ public class RaidStatTests : TestUtil
 
         var container = raids.Item2;
         container.Should().NotBeNull();
-        if (container is null)
-            return;
 
-        var raid = container.Raids[denIndex];
+        var raid = container!.Raids[denIndex];
         var enc = container.Encounters[denIndex];
         enc.Species.Should().Be((ushort)species);
 

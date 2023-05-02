@@ -13,7 +13,7 @@ namespace RaidCrawler.Core.Structures
             var starcount = black ? 6 : raid.GetStarCount((uint)clone.NextInt(100), stage, false);
             var total = raid.Game == "Scarlet" ? GetRateTotalBaseSL(starcount) : GetRateTotalBaseVL(starcount);
             var speciesroll = clone.NextInt((ulong)total);
-            if (raid.GemTeraRaids != null)
+            if (raid.GemTeraRaids is not null)
             {
                 foreach (TeraEncounter enc in (TeraEncounter[])raid.GemTeraRaids)
                 {
@@ -25,7 +25,7 @@ namespace RaidCrawler.Core.Structures
                         return enc;
                 }
             }
-            throw new ArgumentNullException($"No encounters found for given raid: den {raid.Den}, stage {stage}");
+            return null;
         }
 
         public static ITeraRaid? GetDistributionEncounter(this Raid raid, int stage, bool isFixed, int groupid)
@@ -41,11 +41,8 @@ namespace RaidCrawler.Core.Structures
                         continue;
 
                     var total = raid.Game == "Scarlet" ? encd.GetRandRateTotalScarlet(stage) : encd.GetRandRateTotalViolet(stage);
-                    if (total != 0 || isFixed)
+                    if (total > 0)
                     {
-                        if (isFixed)
-                            return enc;
-
                         var rand = new Xoroshiro128Plus(raid.Seed);
                         _ = rand.NextInt(100);
                         var val = rand.NextInt(total);
@@ -63,18 +60,8 @@ namespace RaidCrawler.Core.Structures
                         continue;
 
                     var total = raid.Game == "Scarlet" ? encm.GetRandRateTotalScarlet(stage) : encm.GetRandRateTotalViolet(stage);
-                    if (total != 0 || isFixed)
-                    {
-                        if (isFixed)
-                            return enc;
-
-                        var rand = new Xoroshiro128Plus(raid.Seed);
-                        _ = rand.NextInt(100);
-                        var val = rand.NextInt(total);
-                        var min = raid.Game == "Scarlet" ? encm.GetRandRateMinScarlet(stage) : encm.GetRandRateMinViolet(stage);
-                        if ((uint)((int)val - min) < enc.RandRate)
-                            return enc;
-                    }
+                    if (total > 0)
+                        return enc;
                 }
             }
             return null;
@@ -87,22 +74,20 @@ namespace RaidCrawler.Core.Structures
                 File.Delete(dbgFile);
 
             var count = data.Length / Raid.SIZE;
-            HashSet<int> possible_groups = new();
+            List<int> possible_groups = new();
             if (container.DistTeraRaids is not null)
             {
                 foreach (TeraDistribution e in container.DistTeraRaids.Cast<TeraDistribution>())
                 {
-                    if (TeraDistribution.AvailableInGame(e.Entity, container.Game))
+                    if (TeraDistribution.AvailableInGame(e.Entity, container.Game) && !possible_groups.Contains(e.DeliveryGroupID))
                         possible_groups.Add(e.DeliveryGroupID);
                 }
             }
 
-            var eventct = 0;
             var failed = 0;
             List<Raid> newRaids = new();
             List<ITeraRaid> newTera = new();
             List<List<(int, int, int)>> newRewards = new();
-
             for (int i = 0; i < count; i++)
             {
                 var raid = new Raid(container.Game, data.Skip(i * Raid.SIZE).Take(Raid.SIZE).ToArray())
@@ -116,14 +101,11 @@ namespace RaidCrawler.Core.Structures
                     BaseLotteryRewards = container.BaseLotteryRewards,
                 };
 
-                if (raid.Den == 0)
-                {
-                    eventct++;
+                if (!raid.IsValid)
                     continue;
-                }
 
                 var progress = raid.IsEvent ? eventPrg : storyPrg;
-                var raid_delivery_group_id = raid.IsEvent ? raid.GetDeliveryGroupID(raid.DeliveryRaidPriority, possible_groups, eventct) : -1;
+                var raid_delivery_group_id = raid.GetDeliveryGroupID(raid.DeliveryRaidPriority, possible_groups);
                 var encounter = raid.GetTeraEncounter(progress, raid_delivery_group_id);
                 if (encounter is null)
                 {
@@ -131,14 +113,12 @@ namespace RaidCrawler.Core.Structures
                     var msg = $"No encounters found for the given{(raid.IsEvent ? " distribution" : "")} raid.\nDen: {raid.Den}\nProgress: {progress}\n{extra}";
                     File.AppendAllText(dbgFile, msg);
                     failed++;
+                    continue;
                 }
 
-                if (raid.IsValid && encounter is not null)
-                {
-                    newRaids.Add(raid);
-                    newTera.Add(encounter);
-                    newRewards.Add(encounter.GetRewards(raid, boost));
-                }
+                newRaids.Add(raid);
+                newTera.Add(encounter);
+                newRewards.Add(encounter.GetRewards(raid, boost));
             }
 
             container.Container.SetRaids(newRaids);
@@ -211,20 +191,18 @@ namespace RaidCrawler.Core.Structures
             };
         }
 
-        public static int GetDeliveryGroupID(this Raid raid, DeliveryGroupID ids, HashSet<int> possible_groups, int eventct)
+        public static int GetDeliveryGroupID(this Raid raid, DeliveryGroupID ids, List<int> possible_groups)
         {
-            if (raid.Flags != 3)
-                eventct++;
+            if (!raid.IsEvent)
+                return -1;
 
             var groups = ids.GroupID;
             for (int i = 0; i < groups.Table_Length; i++)
             {
-                var ct = groups.Table(i);
-                if (!possible_groups.Contains(i + 1))
-                    continue;
-                if (eventct < ct)
-                    return i + 1;
-                eventct -= ct;
+                var ct = groups.Table(i) + (raid.Flags != 3 ? 1 : 0);
+                var result = possible_groups.Find(x => x == ct);
+                if (result > 0)
+                    return ct;
             }
             throw new Exception("Found event out of priority range.");
         }

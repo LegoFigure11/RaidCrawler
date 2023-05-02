@@ -4,15 +4,12 @@ namespace RaidCrawler.Core.Structures
 {
     public static class EncounterExtensions
     {
-        public static List<(int, int, int)> GetRewards(this ITeraRaid encounter, Raid raid, int sandwich_boost)
+        public static List<(int, int, int)> GetRewards(this ITeraRaid encounter, Raid raid, int sandwich_boost) => encounter switch
         {
-            return encounter switch
-            {
-                TeraDistribution => TeraDistribution.GetRewards((TeraDistribution)encounter, raid.Seed, raid.GetTeraType(encounter), raid.DeliveryRaidFixedRewards, raid.DeliveryRaidLotteryRewards, sandwich_boost),
-                TeraEncounter => TeraEncounter.GetRewards((TeraEncounter)encounter, raid.Seed, raid.GetTeraType(encounter), raid.BaseFixedRewards, raid.BaseLotteryRewards, sandwich_boost),
-                _ => throw new NotImplementedException($"Unknown encounter for rewards: {encounter.GetType()}"),
-            };
-        }
+            TeraDistribution => TeraDistribution.GetRewards((TeraDistribution)encounter, raid.Seed, raid.GetTeraType(encounter), raid.DeliveryRaidFixedRewards, raid.DeliveryRaidLotteryRewards, sandwich_boost),
+            TeraEncounter => TeraEncounter.GetRewards((TeraEncounter)encounter, raid.Seed, raid.GetTeraType(encounter), raid.BaseFixedRewards, raid.BaseLotteryRewards, sandwich_boost),
+            _ => throw new NotImplementedException($"Unknown encounter for rewards: {encounter.GetType()}"),
+        };
 
         public static GenerateParam9 GetParam(this ITeraRaid encounter)
         {
