@@ -402,15 +402,15 @@ namespace RaidCrawler.WinForms
                 stopwatch.Start();
                 _WindowState = WindowState;
 
+                var advanceTextInit = $"Day Skip Successes {GetStatDaySkipSuccess()} / {GetStatDaySkipTries()}";
+                Invoke(() => Label_DayAdvance.Text = advanceTextInit);
+                if (teraRaidView is not null)
+                    Invoke(() => teraRaidView.DaySkips.Text = advanceTextInit);
+
                 var stop = false;
                 var raids = RaidContainer.Container.Raids;
                 while (!stop)
                 {
-                    var advanceTextInit = $"Day Skip Successes {GetStatDaySkipSuccess()} / {GetStatDaySkipTries() + 1}";
-                    Invoke(() => Label_DayAdvance.Text = advanceTextInit);
-                    if (teraRaidView is not null)
-                        Invoke(() => teraRaidView.DaySkips.Text = $"Day Skip Successes {GetStatDaySkipSuccess()} / {GetStatDaySkipTries() + 1}");
-
                     var previousSeeds = raids.Select(z => z.Seed).ToList();
                     UpdateStatus("Changing date...");
 

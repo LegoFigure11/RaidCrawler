@@ -196,10 +196,12 @@ namespace RaidCrawler.Core.Structures
             if (!raid.IsEvent)
                 return -1;
 
+            // WW/IL re-run has DeliveryGroupID = 3, having a Might7 alongside it conflicts.
+            bool group3 = possible_groups.Contains(3) && raid.Flags != 3;
             var groups = ids.GroupID;
             for (int i = 0; i < groups.Table_Length; i++)
             {
-                var ct = groups.Table(i) + (raid.Flags != 3 ? 1 : 0);
+                var ct = groups.Table(i) + (group3 ? 2 : raid.Flags != 3 ? 1 : 0);
                 var result = possible_groups.Find(x => x == ct);
                 if (result > 0)
                     return ct;

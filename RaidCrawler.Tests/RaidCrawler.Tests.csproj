@@ -40,6 +40,11 @@
     <None Remove="Blocks\chaos_12_Distro_noMight_VL\lottery_reward_item_array" />
     <None Remove="Blocks\chaos_12_Distro_noMight_VL\raid_enemy_array" />
     <None Remove="Blocks\chaos_12_Distro_noMight_VL\raid_priority_array" />
+    <None Remove="Blocks\zyro_Inteleon_IL_VL\base" />
+    <None Remove="Blocks\zyro_Inteleon_IL_VL\fixed_reward_item_array" />
+    <None Remove="Blocks\zyro_Inteleon_IL_VL\lottery_reward_item_array" />
+    <None Remove="Blocks\zyro_Inteleon_IL_VL\raid_enemy_array" />
+    <None Remove="Blocks\zyro_Inteleon_IL_VL\raid_priority_array" />
     <None Remove="Filters\BounsweetShiny.json" />
     <None Remove="Filters\Ditto0Atk.json" />
     <None Remove="Filters\Ditto0Spe.json" />
@@ -76,6 +81,11 @@
     <EmbeddedResource Include="Blocks\chaos_12_Distro_noMight_VL\lottery_reward_item_array" />
     <EmbeddedResource Include="Blocks\chaos_12_Distro_noMight_VL\raid_enemy_array" />
     <EmbeddedResource Include="Blocks\chaos_12_Distro_noMight_VL\raid_priority_array" />
+    <EmbeddedResource Include="Blocks\zyro_Inteleon_IL_VL\base" />
+    <EmbeddedResource Include="Blocks\zyro_Inteleon_IL_VL\fixed_reward_item_array" />
+    <EmbeddedResource Include="Blocks\zyro_Inteleon_IL_VL\lottery_reward_item_array" />
+    <EmbeddedResource Include="Blocks\zyro_Inteleon_IL_VL\raid_enemy_array" />
+    <EmbeddedResource Include="Blocks\zyro_Inteleon_IL_VL\raid_priority_array" />
     <EmbeddedResource Include="Filters\BounsweetShiny.json" />
     <EmbeddedResource Include="Filters\Ditto0Atk.json" />
     <EmbeddedResource Include="Filters\Ditto0Spe.json" />
