@@ -38,6 +38,8 @@ namespace RaidCrawler.WinForms.SubForms
             UseOvershoot.Checked = c.UseOvershoot;
             SaveGame.Checked = c.SaveOnMatch;
             DodgeSystemUpdate.Checked = c.DodgeSystemUpdate;
+            UseSetStick.Checked = c.UseSetStick;
+
             OpenHome.Value = c.OpenHomeDelay;
             NavigateToSettings.Value = c.NavigateToSettingsDelay;
             OpenSettings.Value = c.OpenSettingsDelay;
@@ -102,6 +104,8 @@ namespace RaidCrawler.WinForms.SubForms
             c.UseOvershoot = UseOvershoot.Checked;
             c.SaveOnMatch = SaveGame.Checked;
             c.DodgeSystemUpdate = DodgeSystemUpdate.Checked;
+            c.UseSetStick = UseSetStick.Checked;
+
             c.OpenHomeDelay = (int)OpenHome.Value;
             c.NavigateToSettingsDelay = (int)NavigateToSettings.Value;
             c.OpenSettingsDelay = (int)OpenSettings.Value;
@@ -136,6 +140,11 @@ namespace RaidCrawler.WinForms.SubForms
         {
             SystemDDownPresses.Enabled = !UseOvershoot.Checked;
             SystemOvershoot.Enabled = UseOvershoot.Checked;
+        }
+
+        private void UseSetStick_CheckedChanged(Object sender, EventArgs e)
+        {
+            UseSetStick.Enabled = !UseSetStick.Checked;
         }
 
         private void SaveGame_CheckedChanged(object sender, EventArgs e)

@@ -123,7 +123,7 @@ namespace RaidCrawler.Core.Connection
             return bin;
         }
 
-        public async Task<ulong> SearchSaveKey(uint key, CancellationToken token)
+        private async Task<ulong> SearchSaveKey(uint key, CancellationToken token)
         {
             var data = await Connection.ReadBytesAbsoluteAsync(BaseBlockKeyPointer + 8, 16, token).ConfigureAwait(false);
             var start = BitConverter.ToUInt64(data.AsSpan()[..8]);
@@ -154,24 +154,32 @@ namespace RaidCrawler.Core.Connection
             return block;
         }
 
-        public async Task Click(SwitchButton button, int delay, CancellationToken token)
+        private async Task Click(SwitchButton button, int delay, CancellationToken token)
         {
             await Connection.SendAsync(SwitchCommand.Click(button, CRLF), token).ConfigureAwait(false);
             await Task.Delay(delay, token).ConfigureAwait(false);
         }
 
-        public async Task Touch(int x, int y, int hold, int delay, CancellationToken token)
+        private async Task Touch(int x, int y, int hold, int delay, CancellationToken token)
         {
             var command = Encoding.ASCII.GetBytes($"touchHold {x} {y} {hold}{(CRLF ? "\r\n" : "")}");
             await Connection.SendAsync(command, token).ConfigureAwait(false);
             await Task.Delay(delay, token).ConfigureAwait(false);
         }
 
-        public async Task SetStick(SwitchStick stick, short x, short y, int hold, int delay, CancellationToken token)
+        private async Task SetStick(SwitchStick stick, short x, short y, int hold, int delay, CancellationToken token)
         {
             await Connection.SendAsync(SwitchCommand.SetStick(stick, x, y, CRLF), token).ConfigureAwait(false);
             await Task.Delay(hold, token).ConfigureAwait(false);
             await Connection.SendAsync(SwitchCommand.SetStick(stick, 0, 0, CRLF), token).ConfigureAwait(false);
+            await Task.Delay(delay, token).ConfigureAwait(false);
+        }
+
+        private async Task PressAndHold(SwitchButton b, int hold, int delay, CancellationToken token)
+        {
+            await Connection.SendAsync(SwitchCommand.Hold(b, CRLF), token).ConfigureAwait(false);
+            await Task.Delay(hold, token).ConfigureAwait(false);
+            await Connection.SendAsync(SwitchCommand.Release(b, CRLF), token).ConfigureAwait(false);
             await Task.Delay(delay, token).ConfigureAwait(false);
         }
 
@@ -217,7 +225,9 @@ namespace RaidCrawler.Core.Connection
             UpdateProgressBar(action, steps);
 
             // Scroll to bottom
-            await SetStick(SwitchStick.LEFT, 0, -30_000, config.HoldDuration, 0_100 + BaseDelay, token).ConfigureAwait(false);
+            if (config.UseSetStick)
+                await SetStick(SwitchStick.LEFT, 0, -30_000, config.HoldDuration, 0_100 + BaseDelay, token).ConfigureAwait(false);
+            else await PressAndHold(DDOWN, config.HoldDuration, 0_100 + BaseDelay, token).ConfigureAwait(false);
             UpdateProgressBar(action, steps);
 
             // Navigate to "Date and Time"
@@ -228,7 +238,9 @@ namespace RaidCrawler.Core.Connection
             // Hold down to overshoot Date/Time by one. DUP to recover.
             if (config.UseOvershoot)
             {
-                await SetStick(SwitchStick.LEFT, 0, -30_000, config.SystemOvershoot, 0_100 + BaseDelay, token).ConfigureAwait(false);
+                if (config.UseSetStick)
+                    await SetStick(SwitchStick.LEFT, 0, -30_000, config.SystemOvershoot, 0_100 + BaseDelay, token).ConfigureAwait(false);
+                else await PressAndHold(DDOWN, config.SystemOvershoot, 0_100 + BaseDelay, token).ConfigureAwait(false);
                 UpdateProgressBar(action, steps);
 
                 await Click(DUP, 0_500 + BaseDelay, token).ConfigureAwait(false);

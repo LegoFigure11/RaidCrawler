@@ -28,6 +28,7 @@ namespace RaidCrawler.WinForms
         public bool UseOvershoot { get; set; } = false;
         public bool DodgeSystemUpdate { get; set; } = false;
         public bool SaveOnMatch { get; set; } = true;
+        public bool UseSetStick { get; set; } = false;
 
         public int OpenHomeDelay { get; set; } = 1_800;
         public int NavigateToSettingsDelay { get; set; } = 0_100;
