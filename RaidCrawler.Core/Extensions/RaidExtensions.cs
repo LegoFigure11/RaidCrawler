@@ -5,22 +5,23 @@ namespace RaidCrawler.Core.Structures
 {
     public static class RaidExtensions
     {
-        public static ITeraRaid? GetTeraEncounter(this Raid raid, int progress, int id) => raid.IsEvent ? raid.GetDistributionEncounter(progress, raid.Flags == 3, id) : raid.GetEncounter(progress, raid.IsBlack);
+        public static ITeraRaid? GetTeraEncounter(this Raid raid, RaidContainer container, int progress, int id)
+            => raid.IsEvent ? raid.GetDistributionEncounter(container, progress, raid.Flags == 3, id) : raid.GetEncounter(container, progress, raid.IsBlack);
 
-        public static ITeraRaid? GetEncounter(this Raid raid, int stage, bool black)
+        public static ITeraRaid? GetEncounter(this Raid raid, RaidContainer container, int stage, bool black)
         {
             var clone = new Xoroshiro128Plus(raid.Seed);
             var starcount = black ? 6 : raid.GetStarCount((uint)clone.NextInt(100), stage, false);
-            var total = raid.Game == "Scarlet" ? GetRateTotalBaseSL(starcount) : GetRateTotalBaseVL(starcount);
+            var total = container.Game == "Scarlet" ? GetRateTotalBaseSL(starcount) : GetRateTotalBaseVL(starcount);
             var speciesroll = clone.NextInt((ulong)total);
-            if (raid.GemTeraRaids is not null)
+            if (container.GemTeraRaids is not null)
             {
-                foreach (TeraEncounter enc in (TeraEncounter[])raid.GemTeraRaids)
+                foreach (TeraEncounter enc in (TeraEncounter[])container.GemTeraRaids)
                 {
                     if (enc.Stars != starcount)
                         continue;
 
-                    var minimum = raid.Game == "Scarlet" ? enc.Entity.RandRateMinScarlet : enc.Entity.RandRateMinViolet;
+                    var minimum = container.Game == "Scarlet" ? enc.Entity.RandRateMinScarlet : enc.Entity.RandRateMinViolet;
                     if (minimum >= 0 && (uint)((int)speciesroll - minimum) < enc.Entity.RandRate)
                         return enc;
                 }
@@ -28,25 +29,25 @@ namespace RaidCrawler.Core.Structures
             return null;
         }
 
-        public static ITeraRaid? GetDistributionEncounter(this Raid raid, int stage, bool isFixed, int groupid)
+        public static ITeraRaid? GetDistributionEncounter(this Raid raid, RaidContainer container, int stage, bool isFixed, int groupid)
         {
-            if (stage < 0 || raid.DistTeraRaids is null)
+            if (stage < 0 || container.DistTeraRaids is null)
                 return null;
 
             if (!isFixed)
             {
-                foreach (TeraDistribution enc in raid.DistTeraRaids.Cast<TeraDistribution>())
+                foreach (TeraDistribution enc in container.DistTeraRaids.Cast<TeraDistribution>())
                 {
                     if (enc.Entity is not EncounterDist9 encd || enc.DeliveryGroupID != groupid)
                         continue;
 
-                    var total = raid.Game == "Scarlet" ? encd.GetRandRateTotalScarlet(stage) : encd.GetRandRateTotalViolet(stage);
+                    var total = container.Game == "Scarlet" ? encd.GetRandRateTotalScarlet(stage) : encd.GetRandRateTotalViolet(stage);
                     if (total > 0)
                     {
                         var rand = new Xoroshiro128Plus(raid.Seed);
                         _ = rand.NextInt(100);
                         var val = rand.NextInt(total);
-                        var min = raid.Game == "Scarlet" ? encd.GetRandRateMinScarlet(stage) : encd.GetRandRateMinViolet(stage);
+                        var min = container.Game == "Scarlet" ? encd.GetRandRateMinScarlet(stage) : encd.GetRandRateMinViolet(stage);
                         if ((uint)((int)val - min) < enc.RandRate)
                             return enc;
                     }
@@ -54,12 +55,12 @@ namespace RaidCrawler.Core.Structures
             }
             else
             {
-                foreach (TeraDistribution enc in raid.DistTeraRaids.Cast<TeraDistribution>())
+                foreach (TeraDistribution enc in container.DistTeraRaids.Cast<TeraDistribution>())
                 {
                     if (enc.Entity is not EncounterMight9 encm || enc.DeliveryGroupID != groupid)
                         continue;
 
-                    var total = raid.Game == "Scarlet" ? encm.GetRandRateTotalScarlet(stage) : encm.GetRandRateTotalViolet(stage);
+                    var total = container.Game == "Scarlet" ? encm.GetRandRateTotalScarlet(stage) : encm.GetRandRateTotalViolet(stage);
                     if (total > 0)
                         return enc;
                 }
@@ -67,7 +68,7 @@ namespace RaidCrawler.Core.Structures
             return null;
         }
 
-        public static int ReadAllRaids(this Raid container, byte[] data, int storyPrg, int eventPrg, int boost)
+        public static (int delivery, int encounter) ReadAllRaids(this RaidContainer container, byte[] data, int storyPrg, int eventPrg, int boost)
         {
             var dbgFile = "raid_dbg.txt";
             if (File.Exists(dbgFile))
@@ -84,46 +85,49 @@ namespace RaidCrawler.Core.Structures
                 }
             }
 
-            var failed = 0;
+            (int delivery, int encounter) failed = (0, 0);
             List<Raid> newRaids = new();
             List<ITeraRaid> newTera = new();
             List<List<(int, int, int)>> newRewards = new();
             for (int i = 0; i < count; i++)
             {
-                var raid = new Raid(container.Game, data.Skip(i * Raid.SIZE).Take(Raid.SIZE).ToArray())
-                {
-                    GemTeraRaids = container.GemTeraRaids,
-                    DistTeraRaids = container.DistTeraRaids,
-                    DeliveryRaidPriority = container.DeliveryRaidPriority,
-                    DeliveryRaidFixedRewards = container.DeliveryRaidFixedRewards,
-                    DeliveryRaidLotteryRewards = container.DeliveryRaidLotteryRewards,
-                    BaseFixedRewards = container.BaseFixedRewards,
-                    BaseLotteryRewards = container.BaseLotteryRewards,
-                };
-
+                var raid = new Raid(data.AsSpan(i * Raid.SIZE, Raid.SIZE));
                 if (!raid.IsValid)
                     continue;
 
                 var progress = raid.IsEvent ? eventPrg : storyPrg;
-                var raid_delivery_group_id = raid.GetDeliveryGroupID(raid.DeliveryRaidPriority, possible_groups);
-                var encounter = raid.GetTeraEncounter(progress, raid_delivery_group_id);
+                var raid_delivery_group_id = -1;
+                try
+                {
+                    raid_delivery_group_id = raid.GetDeliveryGroupID(container.DeliveryRaidPriority, possible_groups);
+                }
+                catch (Exception ex)
+                {
+                    var extra = $"Group ID: {raid_delivery_group_id}\nisFixed: {raid.Flags == 3}\nisBlack: {raid.IsBlack}\nisEvent: {raid.IsEvent}\n\n";
+                    var msg = $"{ex.Message}\nDen: {raid.Den}\nProgress: {progress}\nDifficulty: {raid.Difficulty}\n{extra}";
+                    File.AppendAllText(dbgFile, msg);
+                    failed.delivery++;
+                    continue;
+                }
+
+                var encounter = raid.GetTeraEncounter(container, progress, raid_delivery_group_id);
                 if (encounter is null)
                 {
-                    var extra = raid.IsEvent ? $"isFixed: {raid.Flags == 3}\nGroup ID: {raid_delivery_group_id}\n\n" : $"isBlack: {raid.IsBlack}\n\n";
-                    var msg = $"No encounters found for the given{(raid.IsEvent ? " distribution" : "")} raid.\nDen: {raid.Den}\nProgress: {progress}\n{extra}";
+                    var extra = $"Group ID: {raid_delivery_group_id}\nisFixed: {raid.Flags == 3}\nisBlack: {raid.IsBlack}\nisEvent: {raid.IsEvent}\n\n";
+                    var msg = $"No encounters found.\nDen: {raid.Den}\nProgress: {progress}\nDifficulty: {raid.Difficulty}\n{extra}";
                     File.AppendAllText(dbgFile, msg);
-                    failed++;
+                    failed.encounter++;
                     continue;
                 }
 
                 newRaids.Add(raid);
                 newTera.Add(encounter);
-                newRewards.Add(encounter.GetRewards(raid, boost));
+                newRewards.Add(encounter.GetRewards(container, raid, boost));
             }
 
-            container.Container.SetRaids(newRaids);
-            container.Container.SetEncounters(newTera);
-            container.Container.SetRewards(newRewards);
+            container.SetRaids(newRaids);
+            container.SetEncounters(newTera);
+            container.SetRewards(newRewards);
             return failed;
         }
 

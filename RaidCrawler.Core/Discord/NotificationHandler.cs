@@ -60,6 +60,7 @@ namespace RaidCrawler.Core.Discord
 
         public static object GenerateWebhook(IWebhookConfig c, ITeraRaid encounter, Raid raid, RaidFilter filter, string time, IReadOnlyList<(int, int, int)> RewardsList, string hexColor, string spriteName)
         {
+            var strings = GameInfo.GetStrings(1);
             var param = encounter.GetParam();
             var blank = new PK9
             {
@@ -71,20 +72,20 @@ namespace RaidCrawler.Core.Discord
             var emoji = c.EnableEmoji;
             var isevent = raid.IsEvent;
 
-            var form = Utils.GetFormString(blank.Species, blank.Form, raid.Strings);
-            var species = $"{raid.Strings.Species[encounter.Species]}{form}";
+            var form = Utils.GetFormString(blank.Species, blank.Form, strings);
+            var species = $"{strings.Species[encounter.Species]}{form}";
             var difficulty = Difficulty(c, encounter.Stars, isevent, emoji);
-            var nature = $"{raid.Strings.Natures[blank.Nature]}";
-            var ability = $"{raid.Strings.Ability[blank.Ability]}";
+            var nature = $"{strings.Natures[blank.Nature]}";
+            var ability = $"{strings.Ability[blank.Ability]}";
             var shiny = Shiny(c, raid.CheckIsShiny(encounter), ShinyExtensions.IsSquareShinyExist(blank), emoji);
             var gender = Gender(c, blank.Gender, emoji);
             var teratype = raid.GetTeraType(encounter);
-            var tera = $"{raid.Strings.types[teratype]}";
-            var teraemoji = TeraEmoji(c, $"{raid.Strings.types[teratype]}", emoji);
+            var tera = $"{strings.types[teratype]}";
+            var teraemoji = TeraEmoji(c, $"{strings.types[teratype]}", emoji);
             var ivs = IVsStringEmoji(c, ToSpeedLast(blank.IVs), c.IVsStyle, c.VerboseIVs, emoji);
             var moves = new ushort[4] { encounter.Move1, encounter.Move2, encounter.Move3, encounter.Move4 };
-            var movestr = string.Concat(moves.Where(z => z != 0).Select(z => $"{raid.Strings.Move[z]}ㅤ\n")).Trim();
-            var extramoves = string.Concat(encounter.ExtraMoves.Where(z => z != 0).Select(z => $"{raid.Strings.Move[z]}ㅤ\n")).Trim();
+            var movestr = string.Concat(moves.Where(z => z != 0).Select(z => $"{strings.Move[z]}ㅤ\n")).Trim();
+            var extramoves = string.Concat(encounter.ExtraMoves.Where(z => z != 0).Select(z => $"{strings.Move[z]}ㅤ\n")).Trim();
             var area = $"{Areas.GetArea((int)(raid.Area - 1))}" + (c.ToggleDen ? $" [Den {raid.Den}]ㅤ" : "ㅤ");
             var instance = " " + c.InstanceName;
             var rewards = GetRewards(c, RewardsList, emoji);

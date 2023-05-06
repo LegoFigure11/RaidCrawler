@@ -23,7 +23,8 @@ namespace RaidCrawler.Tests
         public void FilterTest(string path, string filterPath, string controlPath, int storyPrg)
         {
             var raid = GetRaidContainer(path, storyPrg);
-            raid.Item1.Should().Be(0);
+            raid.Item1.delivery.Should().Be(0);
+            raid.Item1.enc.Should().Be(0);
 
             var container = raid.Item2;
             container.Should().NotBeNull();
@@ -36,7 +37,7 @@ namespace RaidCrawler.Tests
             var satisfied = 0;
             for (int i = 0; i < raids.Count; i++)
             {
-                if (filter.FilterSatisfied(encounters[i], raids[i], 0))
+                if (filter.FilterSatisfied(container, encounters[i], raids[i], 0))
                     satisfied++;
             }
             satisfied.Should().NotBe(0);
@@ -48,7 +49,7 @@ namespace RaidCrawler.Tests
             satisfied = 0;
             for (int i = 0; i < raids.Count; i++)
             {
-                if (filter.FilterSatisfied(encounters[i], raids[i], 0))
+                if (filter.FilterSatisfied(container, encounters[i], raids[i], 0))
                     satisfied++;
             }
             satisfied.Should().Be(0);

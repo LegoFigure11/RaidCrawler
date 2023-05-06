@@ -30,17 +30,17 @@ namespace RaidCrawler.Tests
             return reader.ReadToEnd();
         }
 
-        public (int, RaidContainer?) GetRaidContainer(string path, int storyPrg)
+        public ((int delivery, int enc), RaidContainer?) GetRaidContainer(string path, int storyPrg)
         {
             var game = GetGame(path);
-            var container = new Raid(game);
+            var container = new RaidContainer(game);
             var eventPrg = Math.Min(storyPrg, 3);
 
             // Read embedded distribution data.
             var delivery_raid_prio = GetBinaryTestResource(GetTestResourceName(path, "raid_priority_array"));
             (var group_id, var priority) = FlatbufferDumper.DumpDeliveryPriorities(delivery_raid_prio);
             if (priority == 0)
-                return (-1, null);
+                return ((-1, -1), null);
 
             var delivery_raid_fbs = GetBinaryTestResource(GetTestResourceName(path, "raid_enemy_array"));
             var delivery_fixed_rewards = GetBinaryTestResource(GetTestResourceName(path, "fixed_reward_item_array"));
@@ -54,7 +54,7 @@ namespace RaidCrawler.Tests
             // Read embedded base data and read all raids.
             var baseData = GetBinaryTestResource(GetTestResourceName(path, "base"));
             var failed = container.ReadAllRaids(baseData, storyPrg, eventPrg, 0);
-            return (failed, container.Container);
+            return (failed, container);
         }
 
         public IReadOnlyList<RaidFilter> GetRaidFilter(string path)

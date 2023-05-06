@@ -20,7 +20,8 @@ public class RaidStatTests : TestUtil
     public void StatsCorrect(string path, int storyPrg, int denIndex, Species species, int[] ivs, Nature nature, bool shiny)
     {
         var raids = GetRaidContainer(path, storyPrg);
-        raids.Item1.Should().Be(0);
+        raids.Item1.delivery.Should().Be(0);
+        raids.Item1.enc.Should().Be(0);
 
         var container = raids.Item2;
         container.Should().NotBeNull();

@@ -19,10 +19,11 @@ public class RaidReadTests : TestUtil
     [Description("Test read conditions where Might7 is possible but cleared, and where Might7 is possible but not present.")]
     public void RaidReadTest(string path, int storyPrg, int expectedRaids)
     {
-        var raids = GetRaidContainer(path, storyPrg);
-        raids.Item1.Should().Be(0);
+        var raid = GetRaidContainer(path, storyPrg);
+        raid.Item1.delivery.Should().Be(0);
+        raid.Item1.enc.Should().Be(0);
 
-        var container = raids.Item2;
+        var container = raid.Item2;
         container.Should().NotBeNull();
 
         var raidCount = container!.GetRaidCount();
