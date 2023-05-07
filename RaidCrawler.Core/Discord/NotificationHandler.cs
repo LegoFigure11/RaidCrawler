@@ -2,44 +2,66 @@ using PKHeX.Core;
 using RaidCrawler.Core.Interfaces;
 using RaidCrawler.Core.Structures;
 using SysBot.Base;
+using System.Globalization;
 using System.Text.Json;
+using System.Text;
 
 namespace RaidCrawler.Core.Discord
 {
-    public static class NotificationHandler
+    public class NotificationHandler
     {
-        private static HttpClient? _client;
+        private readonly HttpClient _client;
+        private readonly string[]? DiscordWebhooks;
+        private readonly IWebhookConfig Config;
 
-        public static HttpClient Client
+        public NotificationHandler(IWebhookConfig config)
         {
-            get
-            {
-                _client ??= new HttpClient();
-                return _client;
-            }
+            _client = new();
+            Config = config;
+            DiscordWebhooks = config.EnableNotification ? config.DiscordWebhook.Split(',') : null;
         }
 
-        private static string[]? DiscordWebhooks;
-
-        public static async Task SendNotification(IWebhookConfig c, ITeraRaid? encounter, Raid raid, RaidFilter filter, string time, IReadOnlyList<(int, int, int)> RewardsList, string hexColor, string spriteName, CancellationToken token)
+        public async Task SendNotification(ITeraRaid encounter, Raid raid, RaidFilter filter, string time, IReadOnlyList<(int, int, int)> RewardsList, string hexColor, string spriteName, CancellationToken token)
         {
-            if (encounter is null)
+            if (DiscordWebhooks is null || !Config.EnableNotification)
                 return;
 
-            DiscordWebhooks = c.EnableNotification ? c.DiscordWebhook.Split(',') : null;
-            if (DiscordWebhooks is null)
-                return;
-
-            var webhook = GenerateWebhook(c, encounter, raid, filter, time, RewardsList, hexColor, spriteName);
-            var content = new StringContent(JsonSerializer.Serialize(webhook), System.Text.Encoding.UTF8, "application/json");
+            var webhook = GenerateWebhook(encounter, raid, filter, time, RewardsList, hexColor, spriteName);
+            var content = new StringContent(JsonSerializer.Serialize(webhook), Encoding.UTF8, "application/json");
             foreach (var url in DiscordWebhooks)
-                await Client.PostAsync(url.Trim(), content, token).ConfigureAwait(false);
+                await _client.PostAsync(url.Trim(), content, token).ConfigureAwait(false);
         }
 
-        public static async Task SendScreenshot(IWebhookConfig c, ISwitchConnectionAsync nx, CancellationToken token)
+        public async Task SendErrorNotification(string error, string caption, CancellationToken token)
         {
-            DiscordWebhooks = c.EnableNotification ? c.DiscordWebhook.Split(',') : null;
-            if (DiscordWebhooks is null)
+            if (DiscordWebhooks is null || !Config.EnableNotification)
+                return;
+
+            var instance = Config.InstanceName != "" ? $"RaidCrawler {Config.InstanceName}" : "RaidCrawler";
+            var webhook = new
+            {
+                username = instance,
+                avatar_url = "https://www.serebii.net/scarletviolet/ribbons/mightiestmark.png",
+                content = Config.DiscordMessageContent,
+                embeds = new List<object>
+                {
+                    new
+                    {
+                        title = caption != "" ? caption : "RaidCrawler Error",
+                        description = error,
+                        color = 0xf7262a,
+                    }
+                }
+            };
+
+            var content = new StringContent(JsonSerializer.Serialize(webhook), Encoding.UTF8, "application/json");
+            foreach (var url in DiscordWebhooks)
+                await _client.PostAsync(url.Trim(), content, token).ConfigureAwait(false);
+        }
+
+        public async Task SendScreenshot(ISwitchConnectionAsync nx, CancellationToken token)
+        {
+            if (DiscordWebhooks is null || !Config.EnableNotification)
                 return;
 
             var data = await nx.PixelPeek(token).ConfigureAwait(false);
@@ -55,10 +77,10 @@ namespace RaidCrawler.Core.Discord
             content.Add(basic_info, "payload_json");
             content.Add(new ByteArrayContent(data), "screenshot.jpg", "screenshot.jpg");
             foreach (var url in DiscordWebhooks)
-                await Client.PostAsync(url.Trim(), content, token).ConfigureAwait(false);
+                await _client.PostAsync(url.Trim(), content, token).ConfigureAwait(false);
         }
 
-        public static object GenerateWebhook(IWebhookConfig c, ITeraRaid encounter, Raid raid, RaidFilter filter, string time, IReadOnlyList<(int, int, int)> RewardsList, string hexColor, string spriteName)
+        private object GenerateWebhook(ITeraRaid encounter, Raid raid, RaidFilter filter, string time, IReadOnlyList<(int, int, int)> rewardsList, string hexColor, string spriteName)
         {
             var strings = GameInfo.GetStrings(1);
             var param = encounter.GetParam();
@@ -69,38 +91,34 @@ namespace RaidCrawler.Core.Discord
             };
 
             Encounter9RNG.GenerateData(blank, param, EncounterCriteria.Unrestricted, raid.Seed);
-            var emoji = c.EnableEmoji;
-            var isevent = raid.IsEvent;
-
             var form = Utils.GetFormString(blank.Species, blank.Form, strings);
             var species = $"{strings.Species[encounter.Species]}{form}";
-            var difficulty = Difficulty(c, encounter.Stars, isevent, emoji);
+            var difficulty = Difficulty(encounter.Stars, raid.IsEvent);
             var nature = $"{strings.Natures[blank.Nature]}";
             var ability = $"{strings.Ability[blank.Ability]}";
-            var shiny = Shiny(c, raid.CheckIsShiny(encounter), ShinyExtensions.IsSquareShinyExist(blank), emoji);
-            var gender = Gender(c, blank.Gender, emoji);
+            var shiny = Shiny(raid.CheckIsShiny(encounter), ShinyExtensions.IsSquareShinyExist(blank));
+            var gender = GenderEmoji(blank.Gender);
             var teratype = raid.GetTeraType(encounter);
             var tera = $"{strings.types[teratype]}";
-            var teraemoji = TeraEmoji(c, $"{strings.types[teratype]}", emoji);
-            var ivs = IVsStringEmoji(c, ToSpeedLast(blank.IVs), c.IVsStyle, c.VerboseIVs, emoji);
+            var teraemoji = TeraEmoji(strings.types[teratype]);
+            var ivs = IVsStringEmoji(ToSpeedLast(blank.IVs));
             var moves = new ushort[4] { encounter.Move1, encounter.Move2, encounter.Move3, encounter.Move4 };
             var movestr = string.Concat(moves.Where(z => z != 0).Select(z => $"{strings.Move[z]}ㅤ\n")).Trim();
             var extramoves = string.Concat(encounter.ExtraMoves.Where(z => z != 0).Select(z => $"{strings.Move[z]}ㅤ\n")).Trim();
-            var area = $"{Areas.GetArea((int)(raid.Area - 1))}" + (c.ToggleDen ? $" [Den {raid.Den}]ㅤ" : "ㅤ");
-            var instance = " " + c.InstanceName;
-            var rewards = GetRewards(c, RewardsList, emoji);
+            var area = $"{Areas.GetArea((int)(raid.Area - 1))}" + (Config.ToggleDen ? $" [Den {raid.Den}]ㅤ" : "ㅤ");
+            var rewards = GetRewards(rewardsList);
             var SuccessWebHook = new
             {
-                username = "RaidCrawler" + instance,
+                username = "RaidCrawler " + Config.InstanceName,
                 avatar_url = "https://www.serebii.net/scarletviolet/ribbons/mightiestmark.png",
-                content = c.DiscordMessageContent,
+                content = Config.DiscordMessageContent,
                 embeds = new List<object>
                 {
                     new
                     {
                         title = $"{shiny} {species} {gender} {teraemoji}",
-                        description = $"",
-                        color = int.Parse(hexColor, System.Globalization.NumberStyles.HexNumber),
+                        description = "",
+                        color = int.Parse(hexColor, NumberStyles.HexNumber),
                         thumbnail = new
                         {
                             url = $"https://github.com/kwsch/PKHeX/blob/master/PKHeX.Drawing.PokeSprite/Resources/img/Artwork%20Pokemon%20Sprites/a{spriteName}.png?raw=true"
@@ -127,28 +145,25 @@ namespace RaidCrawler.Core.Discord
             return SuccessWebHook;
         }
 
-        private static string Difficulty(IWebhookConfig c, byte stars, bool isevent, bool emoji)
+        private string Difficulty(byte stars, bool isEvent)
         {
-            string mstar = emoji ? c.Emoji["7 Star"] : ":star:";
-            string bstar = emoji ? c.Emoji["Event Star"] : ":star:";
-            string ystar = emoji ? c.Emoji["Star"] : ":star:";
-            string s = stars == 7 ? string.Concat(Enumerable.Repeat(mstar, stars)) :
-                isevent ? string.Concat(Enumerable.Repeat(bstar, stars)) : string.Concat(Enumerable.Repeat(ystar, stars));
-            return s;
-        }
-        private static string Gender(IWebhookConfig c, int genderInt, bool emoji)
-        {
-            string gender = string.Empty;
-            switch (genderInt)
-            {
-                case 0: gender = emoji ? c.Emoji["Male"] : ":male_sign:"; break;
-                case 1: gender = emoji ? c.Emoji["Female"] : ":female_sign:"; break;
-                case 2: gender = ""; break;
-            }
-            return gender;
+            bool enable = Config.EnableEmoji;
+            string emoji = !enable ? ":star:"
+                                   : stars == 7 ? Config.Emoji["7 Star"]
+                                   : isEvent ? Config.Emoji["Event Star"]
+                                   : Config.Emoji["Star"];
+
+            return string.Concat(Enumerable.Repeat(emoji, stars));
         }
 
-        private static string GetRewards(IWebhookConfig c, IReadOnlyList<(int, int, int)> rewards, bool emoji)
+        private string GenderEmoji(int genderInt) => genderInt switch
+        {
+            (int)Gender.Male => Config.EnableEmoji ? Config.Emoji["Male"] : ":male_sign:",
+            (int)Gender.Female => Config.EnableEmoji ? Config.Emoji["Female"] : ":female_sign:",
+            _ => "",
+        };
+
+        private string GetRewards(IReadOnlyList<(int, int, int)> rewards)
         {
             string s = string.Empty;
             int abilitycapsule = 0;
@@ -160,7 +175,7 @@ namespace RaidCrawler.Core.Discord
             int bitterherba = 0;
             int spicyherba = 0;
 
-            for (int i = 0; i < rewards!.Count; i++)
+            for (int i = 0; i < rewards.Count; i++)
             {
                 switch (rewards[i].Item1)
                 {
@@ -175,27 +190,30 @@ namespace RaidCrawler.Core.Discord
                 }
             }
 
-            s += (abilitycapsule > 0) ? (emoji ? $"`{abilitycapsule}`{c.Emoji["Ability Capsule"]} " : $"`{abilitycapsule}` Ability Capsule  ") : "";
-            s += (bottlecap > 0) ? (emoji ? $"`{bottlecap}`{c.Emoji["Bottle Cap"]} " : $"`{bottlecap}` Bottle Cap  ") : "";
-            s += (abilitypatch > 0) ? (emoji ? $"`{abilitypatch}`{c.Emoji["Ability Patch"]} " : $"`{abilitypatch}` Ability Patch  ") : "";
-            s += (sweetherba > 0) ? (emoji ? $"`{sweetherba}`{c.Emoji["Sweet Herba"]} " : $"`{sweetherba}` Sweet Herba  ") : "";
-            s += (saltyherba > 0) ? (emoji ? $"`{saltyherba}`{c.Emoji["Salty Herba"]} " : $"`{saltyherba}` Salty Herba  ") : "";
-            s += (sourherba > 0) ? (emoji ? $"`{sourherba}`{c.Emoji["Sour Herba"]} " : $"`{sourherba}` Sour Herba  ") : "";
-            s += (bitterherba > 0) ? (emoji ? $"`{bitterherba}`{c.Emoji["Bitter Herba"]} " : $"`{bitterherba}` Bitter Herba  ") : "";
-            s += (spicyherba > 0) ? (emoji ? $"`{spicyherba}`{c.Emoji["Spicy Herba"]} " : $"`{spicyherba}` Spicy Herba  ") : "";
+            bool emoji = Config.EnableEmoji;
+            s += (abilitycapsule > 0) ? (emoji ? $"`{abilitycapsule}`{Config.Emoji["Ability Capsule"]} " : $"`{abilitycapsule}` Ability Capsule  ") : "";
+            s += (bottlecap > 0) ? (emoji ? $"`{bottlecap}`{Config.Emoji["Bottle Cap"]} " : $"`{bottlecap}` Bottle Cap  ") : "";
+            s += (abilitypatch > 0) ? (emoji ? $"`{abilitypatch}`{Config.Emoji["Ability Patch"]} " : $"`{abilitypatch}` Ability Patch  ") : "";
+            s += (sweetherba > 0) ? (emoji ? $"`{sweetherba}`{Config.Emoji["Sweet Herba"]} " : $"`{sweetherba}` Sweet Herba  ") : "";
+            s += (saltyherba > 0) ? (emoji ? $"`{saltyherba}`{Config.Emoji["Salty Herba"]} " : $"`{saltyherba}` Salty Herba  ") : "";
+            s += (sourherba > 0) ? (emoji ? $"`{sourherba}`{Config.Emoji["Sour Herba"]} " : $"`{sourherba}` Sour Herba  ") : "";
+            s += (bitterherba > 0) ? (emoji ? $"`{bitterherba}`{Config.Emoji["Bitter Herba"]} " : $"`{bitterherba}` Bitter Herba  ") : "";
+            s += (spicyherba > 0) ? (emoji ? $"`{spicyherba}`{Config.Emoji["Spicy Herba"]} " : $"`{spicyherba}` Spicy Herba  ") : "";
 
             return s;
         }
 
-        private static string IVsStringEmoji(IWebhookConfig c, int[] ivs, int style, bool verbose, bool emoji)
+        private string IVsStringEmoji(int[] ivs)
         {
             string s = string.Empty;
+            bool emoji = Config.EnableEmoji;
+            bool verbose = Config.VerboseIVs;
             var stats = new[] { "HP", "Atk", "Def", "SpA", "SpD", "Spe" };
-            var iv0 = new[] { c.Emoji["Health 0"], c.Emoji["Attack 0"], c.Emoji["Defense 0"], c.Emoji["SpAttack 0"], c.Emoji["SpDefense 0"], c.Emoji["Speed 0"] };
-            var iv31 = new[] { c.Emoji["Health 31"], c.Emoji["Attack 31"], c.Emoji["Defense 31"], c.Emoji["SpAttack 31"], c.Emoji["SpDefense 31"], c.Emoji["Speed 31"] };
+            var iv0 = new[] { Config.Emoji["Health 0"], Config.Emoji["Attack 0"], Config.Emoji["Defense 0"], Config.Emoji["SpAttack 0"], Config.Emoji["SpDefense 0"], Config.Emoji["Speed 0"] };
+            var iv31 = new[] { Config.Emoji["Health 31"], Config.Emoji["Attack 31"], Config.Emoji["Defense 31"], Config.Emoji["SpAttack 31"], Config.Emoji["SpDefense 31"], Config.Emoji["Speed 31"] };
             for (int i = 0; i < ivs.Length; i++)
             {
-                switch (style)
+                switch (Config.IVsStyle)
                 {
                     case 0:
                         {
@@ -229,14 +247,14 @@ namespace RaidCrawler.Core.Discord
             return s;
         }
 
-        private static string Shiny(IWebhookConfig c, bool shiny, bool square, bool emoji)
+        private string Shiny(bool shiny, bool square)
         {
-            string s;
+            bool emoji = Config.EnableEmoji;
+            string s = "";
             if (square && shiny)
-                s = $"{(emoji ? c.Emoji["Square Shiny"] : "Square shiny")}";
+                s = $"{(emoji ? Config.Emoji["Square Shiny"] : "Square shiny")}";
             else if (shiny)
-                s = $"{(emoji ? c.Emoji["Shiny"] : "Shiny")}";
-            else s = "";
+                s = $"{(emoji ? Config.Emoji["Shiny"] : "Shiny")}";
 
             return s;
         }
@@ -253,6 +271,6 @@ namespace RaidCrawler.Core.Discord
             return res;
         }
 
-        private static string TeraEmoji(IWebhookConfig c, string tera, bool emoji) => emoji ? c.Emoji[tera] : tera;
+        private string TeraEmoji(string tera) => Config.EnableEmoji ? Config.Emoji[tera] : tera;
     }
 }

@@ -27,6 +27,7 @@ namespace RaidCrawler.WinForms
         { Protocol = SwitchProtocol.WiFi, IP = "192.168.0.0", Port = 6000 };
 
         private readonly RaidContainer RaidContainer;
+        private readonly NotificationHandler Webhook;
 
         private List<RaidFilter> RaidFilters = new();
         private static readonly Image map = Image.FromStream(new MemoryStream(Utils.GetBinaryResource("paldea.png")));
@@ -89,6 +90,7 @@ namespace RaidCrawler.WinForms
                 Protocol = Config.Protocol,
             };
 
+            Webhook = new(Config);
             InitializeComponent();
 
             btnOpenMap.Enabled = false;
@@ -147,14 +149,6 @@ namespace RaidCrawler.WinForms
             else window.ShowDialog();
         }
 
-        private void ShowMessageBox(string msg, string caption = "")
-        {
-            caption = caption == "" ? "RaidCrawler Error" : caption;
-            if (InvokeRequired)
-                Invoke(() => { MessageBox.Show(msg, caption, MessageBoxButtons.OK); });
-            else MessageBox.Show(msg, caption, MessageBoxButtons.OK);
-        }
-
         private int GetRaidBoost()
         {
             if (InvokeRequired)
@@ -195,7 +189,7 @@ namespace RaidCrawler.WinForms
                 return;
             }
 
-            ShowMessageBox("Please enter a valid numerical USB port.");
+            Task.Run(async () => await ErrorHandler.DisplayMessageBox(this, Webhook, "Please enter a valid numerical USB port.", Source.Token).ConfigureAwait(false), Source.Token);
         }
 
         private void ButtonConnect_Click(object sender, EventArgs e)
@@ -221,14 +215,14 @@ namespace RaidCrawler.WinForms
                     if (!success)
                     {
                         ButtonEnable(new[] { ButtonConnect }, true);
-                        ShowMessageBox(err);
+                        await ErrorHandler.DisplayMessageBox(this, Webhook, err, token).ConfigureAwait(false);
                         return;
                     }
                 }
                 catch (Exception ex)
                 {
                     ButtonEnable(new[] { ButtonConnect }, true);
-                    ShowMessageBox(ex.Message);
+                    await ErrorHandler.DisplayMessageBox(this, Webhook, ex.Message, token).ConfigureAwait(false);
                     return;
                 }
 
@@ -249,7 +243,7 @@ namespace RaidCrawler.WinForms
                         if (!success)
                         {
                             ButtonEnable(new[] { ButtonConnect }, true);
-                            ShowMessageBox(err);
+                            await ErrorHandler.DisplayMessageBox(this, Webhook, err, token).ConfigureAwait(false);
                             return;
                         }
                     }
@@ -257,7 +251,7 @@ namespace RaidCrawler.WinForms
                     finally
                     {
                         ButtonEnable(new[] { ButtonConnect }, true);
-                        ShowMessageBox("Unable to detect Pokémon Scarlet or Pokémon Violet running on your Switch!");
+                        await ErrorHandler.DisplayMessageBox(this, Webhook, "Unable to detect Pokémon Scarlet or Pokémon Violet running on your Switch!", token).ConfigureAwait(false);
                     }
                     return;
                 }
@@ -277,7 +271,7 @@ namespace RaidCrawler.WinForms
                 catch (Exception ex)
                 {
                     ButtonEnable(new[] { ButtonConnect }, true);
-                    ShowMessageBox($"Error occurred while reading event raids: {ex.Message}");
+                    await ErrorHandler.DisplayMessageBox(this, Webhook, $"Error occurred while reading event raids: {ex.Message}", token).ConfigureAwait(false);
                     return;
                 }
 
@@ -289,7 +283,7 @@ namespace RaidCrawler.WinForms
                 catch (Exception ex)
                 {
                     ButtonEnable(new[] { ButtonConnect }, true);
-                    ShowMessageBox($"Error occurred while reading raids: {ex.Message}");
+                    await ErrorHandler.DisplayMessageBox(this, Webhook, $"Error occurred while reading raids: {ex.Message}", token).ConfigureAwait(false);
                     return;
                 }
 
@@ -322,11 +316,11 @@ namespace RaidCrawler.WinForms
                 {
                     (bool success, string err) = await ConnectionWrapper.DisconnectAsync(token).ConfigureAwait(false);
                     if (!success)
-                        ShowMessageBox(err);
+                        await ErrorHandler.DisplayMessageBox(this, Webhook, err, token).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
-                    ShowMessageBox(ex.Message);
+                    await ErrorHandler.DisplayMessageBox(this, Webhook, ex.Message, token).ConfigureAwait(false);
                 }
 
                 Source.Cancel();
@@ -481,7 +475,7 @@ namespace RaidCrawler.WinForms
                             };
 
                             var spriteName = GetSpriteNameForUrl(blank, satisfied.Item3.CheckIsShiny(satisfied.Item2));
-                            await NotificationHandler.SendNotification(Config, satisfied.Item2, satisfied.Item3, satisfied.Item1, time, satisfied.Item4, hexColor, spriteName, Source.Token).ConfigureAwait(false);
+                            await Webhook.SendNotification(satisfied.Item2, satisfied.Item3, satisfied.Item1, time, satisfied.Item4, hexColor, spriteName, Source.Token).ConfigureAwait(false);
                         }
                     }
 
@@ -490,7 +484,7 @@ namespace RaidCrawler.WinForms
                         await ConnectionWrapper.SaveGame(Config, token).ConfigureAwait(false);
 
                     if (Config.EnableAlertWindow)
-                        ShowMessageBox($"{Config.AlertWindowMessage}\n\nTime Spent: {time}", "Result found!");
+                        await ErrorHandler.DisplayMessageBox(this, Webhook, $"{Config.AlertWindowMessage}\n\nTime Spent: {time}", token, "Result found!").ConfigureAwait(false);
                     Invoke(() => Text = $"{formTitle} [Match Found in {time}]");
                 }
             }
@@ -499,14 +493,11 @@ namespace RaidCrawler.WinForms
                 UpdateStatus("Date advance stopped.");
                 SearchTimer.Stop();
                 if (ex is not TaskCanceledException)
-                    ShowMessageBox(ex.Message, "Date Advance Error");
+                    await ErrorHandler.DisplayMessageBox(this, Webhook, ex.Message, token, "Date Advance Error").ConfigureAwait(false);
             }
 
             if (InvokeRequired)
-            {
-                Invoke(() => { ButtonAdvanceDate.Visible = true; });
-                Invoke(() => { StopAdvance_Button.Visible = false; });
-            }
+                Invoke(() => { ButtonAdvanceDate.Visible = true; StopAdvance_Button.Visible = false; });
             else
             {
                 ButtonAdvanceDate.Visible = true;
@@ -538,7 +529,7 @@ namespace RaidCrawler.WinForms
         {
             if (IsReading)
             {
-                ShowMessageBox("Please wait for the current RAM read to finish.");
+                await ErrorHandler.DisplayMessageBox(this, Webhook, "Please wait for the current RAM read to finish.", token).ConfigureAwait(false);
                 return;
             }
 
@@ -549,7 +540,7 @@ namespace RaidCrawler.WinForms
             }
             catch (Exception ex)
             {
-                ShowMessageBox($"Error occurred while reading raids: {ex.Message}");
+                await ErrorHandler.DisplayMessageBox(this, Webhook, $"Error occurred while reading raids: {ex.Message}", token).ConfigureAwait(false);
             }
 
             ButtonEnable(new[] { ButtonViewRAM, ButtonAdvanceDate, ButtonDisconnect, ButtonDownloadEvents, SendScreenshot, ButtonReadRaids }, true);
@@ -559,7 +550,7 @@ namespace RaidCrawler.WinForms
         {
             if (IsReading)
             {
-                ShowMessageBox("Please wait for the current RAM read to finish.");
+                Task.Run(async () => await ErrorHandler.DisplayMessageBox(this, Webhook, "Please wait for the current RAM read to finish.", Source.Token).ConfigureAwait(false), Source.Token);
                 return;
             }
 
@@ -576,7 +567,7 @@ namespace RaidCrawler.WinForms
                 catch (Exception ex)
                 {
                     ButtonEnable(new[] { ButtonViewRAM }, true);
-                    ShowMessageBox(ex.Message);
+                    Task.Run(async () => await ErrorHandler.DisplayMessageBox(this, Webhook, ex.Message, Source.Token).ConfigureAwait(false), Source.Token);
                     return;
                 }
             }
@@ -603,7 +594,7 @@ namespace RaidCrawler.WinForms
 
             if (IsReading)
             {
-                ShowMessageBox("Please wait for the current RAM read to finish.");
+                Task.Run(async () => await ErrorHandler.DisplayMessageBox(this, Webhook, "Please wait for the current RAM read to finish.", Source.Token).ConfigureAwait(false), Source.Token);
                 return;
             }
 
@@ -621,7 +612,7 @@ namespace RaidCrawler.WinForms
             }
             catch (Exception ex)
             {
-                ShowMessageBox($"Error occurred while reading event raids: {ex.Message}");
+                await ErrorHandler.DisplayMessageBox(this, Webhook, $"Error occurred while reading event raids: {ex.Message}", token).ConfigureAwait(false);
             }
 
             ButtonEnable(new[] { ButtonViewRAM, ButtonAdvanceDate, ButtonDisconnect, ButtonDownloadEvents, SendScreenshot, ButtonReadRaids }, true);
@@ -771,8 +762,11 @@ namespace RaidCrawler.WinForms
 
                 PID.BackColor = raid.CheckIsShiny(encounter) ? Color.Gold : DefaultColor;
                 IVs.BackColor = IVs.Text is "31/31/31/31/31/31" ? Color.YellowGreen : DefaultColor;
+                return;
             }
-            else ShowMessageBox($"Unable to display raid at index {index}. Ensure there are no cheats running or anything else that might shift RAM (Edizon, overlays, etc.), then reboot your console and try again.");
+
+            var msg = $"Unable to display raid at index {index}. Ensure there are no cheats running or anything else that might shift RAM (Edizon, overlays, etc.), then reboot your console and try again.";
+            Task.Run(async () => await ErrorHandler.DisplayMessageBox(this, Webhook, msg, Source.Token).ConfigureAwait(false), Source.Token);
         }
 
         private static Image? GetDisplayGemImage(int teratype, Raid raid)
@@ -816,7 +810,7 @@ namespace RaidCrawler.WinForms
         {
             if (teraRaidView is null)
             {
-                ShowMessageBox("Something went terribly wrong: teraRaidView is not initialized.");
+                Task.Run(async () => await ErrorHandler.DisplayMessageBox(this, Webhook, "Something went terribly wrong: teraRaidView is not initialized.", Source.Token).ConfigureAwait(false), Source.Token);
                 return;
             }
 
@@ -835,196 +829,192 @@ namespace RaidCrawler.WinForms
                 int StarCount = encounter is TeraDistribution ? encounter.Stars : raid.GetStarCount(raid.Difficulty, Config.Progress, raid.IsBlack);
                 teraRaidView.Difficulty.Text = string.Concat(Enumerable.Repeat("⭐", StarCount));
 
-                if (encounter is not null)
+                var param = encounter.GetParam();
+                var blank = new PK9
                 {
-                    var param = encounter.GetParam();
-                    var blank = new PK9
+                    Species = encounter.Species,
+                    Form = encounter.Form
+                };
+
+                Encounter9RNG.GenerateData(blank, param, EncounterCriteria.Unrestricted, raid.Seed);
+                var img = blank.Sprite();
+
+                teraRaidView.picBoxPokemon.Image = img;
+                var form = Utils.GetFormString(blank.Species, blank.Form, RaidContainer.Strings);
+
+                teraRaidView.Species.Text = $"{RaidContainer.Strings.Species[encounter.Species]}{form}";
+                teraRaidView.Gender.Text = $"{(Gender)blank.Gender}";
+
+                var nature = blank.Nature;
+                teraRaidView.Nature.Text = $"{RaidContainer.Strings.Natures[nature]}";
+                teraRaidView.Ability.Text = $"{RaidContainer.Strings.Ability[blank.Ability]}";
+
+                teraRaidView.Move1.Text = encounter.Move1 > 0 ? RaidContainer.Strings.Move[encounter.Move1] : "---";
+                teraRaidView.Move2.Text = encounter.Move2 > 0 ? RaidContainer.Strings.Move[encounter.Move2] : "---";
+                teraRaidView.Move3.Text = encounter.Move3 > 0 ? RaidContainer.Strings.Move[encounter.Move3] : "---";
+                teraRaidView.Move4.Text = encounter.Move4 > 0 ? RaidContainer.Strings.Move[encounter.Move4] : "---";
+
+                var length = encounter.ExtraMoves.Length < 4 ? 4 : encounter.ExtraMoves.Length;
+                var extra_moves = new ushort[length];
+                for (int i = 0; i < encounter.ExtraMoves.Length; i++)
+                    extra_moves[i] = encounter.ExtraMoves[i];
+
+                teraRaidView.Move5.Text = extra_moves[0] > 0 ? RaidContainer.Strings.Move[extra_moves[0]] : "---";
+                teraRaidView.Move6.Text = extra_moves[1] > 0 ? RaidContainer.Strings.Move[extra_moves[1]] : "---";
+                teraRaidView.Move7.Text = extra_moves[2] > 0 ? RaidContainer.Strings.Move[extra_moves[2]] : "---";
+                teraRaidView.Move8.Text = extra_moves[3] > 0 ? RaidContainer.Strings.Move[extra_moves[3]] : "---";
+
+                var ivs = Utils.ToSpeedLast(blank.IVs);
+
+                // HP
+                teraRaidView.HP.Text = $"{ivs[0]:D2}";
+                teraRaidView.HP.BackColor = Color.FromArgb(0, 5, 25);
+                if (teraRaidView.HP.Text is "31")
+                    teraRaidView.HP.BackColor = Color.ForestGreen;
+                else if (teraRaidView.HP.Text is "00")
+                    teraRaidView.HP.BackColor = Color.DarkRed;
+
+                // ATK
+                teraRaidView.ATK.Text = $"{ivs[1]:D2}";
+                teraRaidView.ATK.BackColor = Color.FromArgb(0, 5, 25);
+                if (teraRaidView.ATK.Text is "31")
+                    teraRaidView.ATK.BackColor = Color.ForestGreen;
+                else if (teraRaidView.ATK.Text is "00")
+                    teraRaidView.ATK.BackColor = Color.DarkRed;
+
+                // DEF
+                teraRaidView.DEF.Text = $"{ivs[2]:D2}";
+                teraRaidView.DEF.BackColor = Color.FromArgb(0, 5, 25);
+                if (teraRaidView.DEF.Text is "31")
+                    teraRaidView.DEF.BackColor = Color.ForestGreen;
+                else if (teraRaidView.DEF.Text is "00")
+                    teraRaidView.DEF.BackColor = Color.DarkRed;
+
+                // SPA
+                teraRaidView.SPA.Text = $"{ivs[3]:D2}";
+                teraRaidView.SPA.BackColor = Color.FromArgb(0, 5, 25);
+                if (teraRaidView.SPA.Text is "31")
+                    teraRaidView.SPA.BackColor = Color.ForestGreen;
+                else if (teraRaidView.SPA.Text is "00")
+                    teraRaidView.SPA.BackColor = Color.DarkRed;
+
+                // SPD
+                teraRaidView.SPD.Text = $"{ivs[4]:D2}";
+                teraRaidView.SPD.BackColor = Color.FromArgb(0, 5, 25);
+                if (teraRaidView.SPD.Text is "31")
+                    teraRaidView.SPD.BackColor = Color.ForestGreen;
+                else if (teraRaidView.SPD.Text is "00")
+                    teraRaidView.SPD.BackColor = Color.DarkRed;
+
+                // SPEED
+                teraRaidView.SPEED.Text = $"{ivs[5]:D2}";
+                teraRaidView.SPEED.BackColor = Color.FromArgb(0, 5, 25);
+                if (teraRaidView.SPEED.Text is "31")
+                    teraRaidView.SPEED.BackColor = Color.ForestGreen;
+                else if (teraRaidView.SPEED.Text is "00")
+                    teraRaidView.SPEED.BackColor = Color.DarkRed;
+
+
+                var map = GenerateMap(raid, teratype);
+                if (map is null)
+                    Task.Run(async () => await ErrorHandler.DisplayMessageBox(this, Webhook, "Error generating map.", Source.Token).ConfigureAwait(false), Source.Token);
+                teraRaidView.Map.Image = map;
+
+                // Rewards
+                var rewards = RaidContainer.Rewards[index];
+
+                teraRaidView.textAbilityPatch.Text = "0";
+                teraRaidView.textAbilityPatch.ForeColor = Color.DimGray;
+                teraRaidView.labelAbilityPatch.ForeColor = Color.DimGray;
+
+                teraRaidView.textAbilityCapsule.Text = "0";
+                teraRaidView.textAbilityCapsule.ForeColor = Color.DimGray;
+                teraRaidView.labelAbilityCapsule.ForeColor = Color.DimGray;
+
+                teraRaidView.textBottleCap.Text = "0";
+                teraRaidView.textBottleCap.ForeColor = Color.DimGray;
+                teraRaidView.labelBottleCap.ForeColor = Color.DimGray;
+
+                teraRaidView.textSweetHerba.Text = "0";
+                teraRaidView.textSweetHerba.ForeColor = Color.DimGray;
+                teraRaidView.labelSweetHerba.ForeColor = Color.DimGray;
+
+                teraRaidView.textSaltyHerba.Text = "0";
+                teraRaidView.textSaltyHerba.ForeColor = Color.DimGray;
+                teraRaidView.labelSaltyHerba.ForeColor = Color.DimGray;
+
+                teraRaidView.textBitterHerba.Text = "0";
+                teraRaidView.textBitterHerba.ForeColor = Color.DimGray;
+                teraRaidView.labelBitterHerba.ForeColor = Color.DimGray;
+
+                teraRaidView.textSourHerba.Text = "0";
+                teraRaidView.textSourHerba.ForeColor = Color.DimGray;
+                teraRaidView.labelSourHerba.ForeColor = Color.DimGray;
+
+                teraRaidView.textSpicyHerba.Text = "0";
+                teraRaidView.textSpicyHerba.ForeColor = Color.DimGray;
+                teraRaidView.labelSpicyHerba.ForeColor = Color.DimGray;
+
+                for (int i = 0; i < rewards.Count; i++)
+                {
+                    if (rewards[i].Item1 == 645)
                     {
-                        Species = encounter.Species,
-                        Form = encounter.Form
-                    };
-
-                    Encounter9RNG.GenerateData(blank, param, EncounterCriteria.Unrestricted, raid.Seed);
-                    var img = blank.Sprite();
-
-                    teraRaidView.picBoxPokemon.Image = img;
-                    var form = Utils.GetFormString(blank.Species, blank.Form, RaidContainer.Strings);
-
-                    teraRaidView.Species.Text = $"{RaidContainer.Strings.Species[encounter.Species]}{form}";
-                    teraRaidView.Gender.Text = $"{(Gender)blank.Gender}";
-
-                    var nature = blank.Nature;
-                    teraRaidView.Nature.Text = $"{RaidContainer.Strings.Natures[nature]}";
-                    teraRaidView.Ability.Text = $"{RaidContainer.Strings.Ability[blank.Ability]}";
-
-                    teraRaidView.Move1.Text = encounter.Move1 > 0 ? RaidContainer.Strings.Move[encounter.Move1] : "---";
-                    teraRaidView.Move2.Text = encounter.Move2 > 0 ? RaidContainer.Strings.Move[encounter.Move2] : "---";
-                    teraRaidView.Move3.Text = encounter.Move3 > 0 ? RaidContainer.Strings.Move[encounter.Move3] : "---";
-                    teraRaidView.Move4.Text = encounter.Move4 > 0 ? RaidContainer.Strings.Move[encounter.Move4] : "---";
-
-                    var length = encounter.ExtraMoves.Length < 4 ? 4 : encounter.ExtraMoves.Length;
-                    var extra_moves = new ushort[length];
-                    for (int i = 0; i < encounter.ExtraMoves.Length; i++)
-                        extra_moves[i] = encounter.ExtraMoves[i];
-
-                    teraRaidView.Move5.Text = extra_moves[0] > 0 ? RaidContainer.Strings.Move[extra_moves[0]] : "---";
-                    teraRaidView.Move6.Text = extra_moves[1] > 0 ? RaidContainer.Strings.Move[extra_moves[1]] : "---";
-                    teraRaidView.Move7.Text = extra_moves[2] > 0 ? RaidContainer.Strings.Move[extra_moves[2]] : "---";
-                    teraRaidView.Move8.Text = extra_moves[3] > 0 ? RaidContainer.Strings.Move[extra_moves[3]] : "---";
-
-                    var ivs = Utils.ToSpeedLast(blank.IVs);
-
-                    // HP
-                    teraRaidView.HP.Text = $"{ivs[0]:D2}";
-                    teraRaidView.HP.BackColor = Color.FromArgb(0, 5, 25);
-                    if (teraRaidView.HP.Text is "31")
-                        teraRaidView.HP.BackColor = Color.ForestGreen;
-                    else if (teraRaidView.HP.Text is "00")
-                        teraRaidView.HP.BackColor = Color.DarkRed;
-
-                    // ATK
-                    teraRaidView.ATK.Text = $"{ivs[1]:D2}";
-                    teraRaidView.ATK.BackColor = Color.FromArgb(0, 5, 25);
-                    if (teraRaidView.ATK.Text is "31")
-                        teraRaidView.ATK.BackColor = Color.ForestGreen;
-                    else if (teraRaidView.ATK.Text is "00")
-                        teraRaidView.ATK.BackColor = Color.DarkRed;
-
-                    // DEF
-                    teraRaidView.DEF.Text = $"{ivs[2]:D2}";
-                    teraRaidView.DEF.BackColor = Color.FromArgb(0, 5, 25);
-                    if (teraRaidView.DEF.Text is "31")
-                        teraRaidView.DEF.BackColor = Color.ForestGreen;
-                    else if (teraRaidView.DEF.Text is "00")
-                        teraRaidView.DEF.BackColor = Color.DarkRed;
-
-                    // SPA
-                    teraRaidView.SPA.Text = $"{ivs[3]:D2}";
-                    teraRaidView.SPA.BackColor = Color.FromArgb(0, 5, 25);
-                    if (teraRaidView.SPA.Text is "31")
-                        teraRaidView.SPA.BackColor = Color.ForestGreen;
-                    else if (teraRaidView.SPA.Text is "00")
-                        teraRaidView.SPA.BackColor = Color.DarkRed;
-
-                    // SPD
-                    teraRaidView.SPD.Text = $"{ivs[4]:D2}";
-                    teraRaidView.SPD.BackColor = Color.FromArgb(0, 5, 25);
-                    if (teraRaidView.SPD.Text is "31")
-                        teraRaidView.SPD.BackColor = Color.ForestGreen;
-                    else if (teraRaidView.SPD.Text is "00")
-                        teraRaidView.SPD.BackColor = Color.DarkRed;
-
-                    // SPEED
-                    teraRaidView.SPEED.Text = $"{ivs[5]:D2}";
-                    teraRaidView.SPEED.BackColor = Color.FromArgb(0, 5, 25);
-                    if (teraRaidView.SPEED.Text is "31")
-                        teraRaidView.SPEED.BackColor = Color.ForestGreen;
-                    else if (teraRaidView.SPEED.Text is "00")
-                        teraRaidView.SPEED.BackColor = Color.DarkRed;
-
-
-                    var map = GenerateMap(raid, teratype);
-                    if (map is null)
-                        ShowMessageBox("Error generating map.");
-                    teraRaidView.Map.Image = map;
-
-                    // Rewards
-                    var rewards = RaidContainer.Rewards[index];
-
-                    teraRaidView.textAbilityPatch.Text = "0";
-                    teraRaidView.textAbilityPatch.ForeColor = Color.DimGray;
-                    teraRaidView.labelAbilityPatch.ForeColor = Color.DimGray;
-
-                    teraRaidView.textAbilityCapsule.Text = "0";
-                    teraRaidView.textAbilityCapsule.ForeColor = Color.DimGray;
-                    teraRaidView.labelAbilityCapsule.ForeColor = Color.DimGray;
-
-                    teraRaidView.textBottleCap.Text = "0";
-                    teraRaidView.textBottleCap.ForeColor = Color.DimGray;
-                    teraRaidView.labelBottleCap.ForeColor = Color.DimGray;
-
-                    teraRaidView.textSweetHerba.Text = "0";
-                    teraRaidView.textSweetHerba.ForeColor = Color.DimGray;
-                    teraRaidView.labelSweetHerba.ForeColor = Color.DimGray;
-
-                    teraRaidView.textSaltyHerba.Text = "0";
-                    teraRaidView.textSaltyHerba.ForeColor = Color.DimGray;
-                    teraRaidView.labelSaltyHerba.ForeColor = Color.DimGray;
-
-                    teraRaidView.textBitterHerba.Text = "0";
-                    teraRaidView.textBitterHerba.ForeColor = Color.DimGray;
-                    teraRaidView.labelBitterHerba.ForeColor = Color.DimGray;
-
-                    teraRaidView.textSourHerba.Text = "0";
-                    teraRaidView.textSourHerba.ForeColor = Color.DimGray;
-                    teraRaidView.labelSourHerba.ForeColor = Color.DimGray;
-
-                    teraRaidView.textSpicyHerba.Text = "0";
-                    teraRaidView.textSpicyHerba.ForeColor = Color.DimGray;
-                    teraRaidView.labelSpicyHerba.ForeColor = Color.DimGray;
-
-                    for (int i = 0; i < rewards.Count; i++)
-                    {
-                        if (rewards[i].Item1 == 645)
-                        {
-                            teraRaidView.textAbilityCapsule.Text = (int.Parse(teraRaidView.textAbilityCapsule.Text) + 1).ToString();
-                            teraRaidView.textAbilityCapsule.ForeColor = Color.White;
-                            teraRaidView.labelAbilityCapsule.ForeColor = Color.WhiteSmoke;
-                        }
-                        if (rewards[i].Item1 == 795)
-                        {
-                            teraRaidView.textBottleCap.Text = (int.Parse(teraRaidView.textBottleCap.Text) + 1).ToString();
-                            teraRaidView.textBottleCap.ForeColor = Color.White;
-                            teraRaidView.labelBottleCap.ForeColor = Color.WhiteSmoke;
-                        }
-                        if (rewards[i].Item1 == 1606)
-                        {
-                            teraRaidView.textAbilityPatch.Text = (int.Parse(teraRaidView.textAbilityPatch.Text) + 1).ToString();
-                            teraRaidView.textAbilityPatch.ForeColor = Color.White;
-                            teraRaidView.labelAbilityPatch.ForeColor = Color.WhiteSmoke;
-                        }
-                        if (rewards[i].Item1 == 1904)
-                        {
-                            teraRaidView.textSweetHerba.Text = (int.Parse(teraRaidView.textSweetHerba.Text) + 1).ToString();
-                            teraRaidView.textSweetHerba.ForeColor = Color.White;
-                            teraRaidView.labelSweetHerba.ForeColor = Color.WhiteSmoke;
-                        }
-                        if (rewards[i].Item1 == 1905)
-                        {
-                            teraRaidView.textSaltyHerba.Text = (int.Parse(teraRaidView.textSaltyHerba.Text) + 1).ToString();
-                            teraRaidView.textSaltyHerba.ForeColor = Color.White;
-                            teraRaidView.labelSaltyHerba.ForeColor = Color.WhiteSmoke;
-                        }
-                        if (rewards[i].Item1 == 1906)
-                        {
-                            teraRaidView.textSourHerba.Text = (int.Parse(teraRaidView.textSourHerba.Text) + 1).ToString();
-                            teraRaidView.textSourHerba.ForeColor = Color.White;
-                            teraRaidView.labelSourHerba.ForeColor = Color.WhiteSmoke;
-                        }
-                        if (rewards[i].Item1 == 1907)
-                        {
-                            teraRaidView.textBitterHerba.Text = (int.Parse(teraRaidView.textBitterHerba.Text) + 1).ToString();
-                            teraRaidView.textBitterHerba.ForeColor = Color.White;
-                            teraRaidView.labelBitterHerba.ForeColor = Color.WhiteSmoke;
-                        }
-                        if (rewards[i].Item1 == 1908)
-                        {
-                            teraRaidView.textSpicyHerba.Text = (int.Parse(teraRaidView.textSpicyHerba.Text) + 1).ToString();
-                            teraRaidView.textSpicyHerba.ForeColor = Color.White;
-                            teraRaidView.labelSpicyHerba.ForeColor = Color.WhiteSmoke;
-                        }
+                        teraRaidView.textAbilityCapsule.Text = (int.Parse(teraRaidView.textAbilityCapsule.Text) + 1).ToString();
+                        teraRaidView.textAbilityCapsule.ForeColor = Color.White;
+                        teraRaidView.labelAbilityCapsule.ForeColor = Color.WhiteSmoke;
                     }
+                    if (rewards[i].Item1 == 795)
+                    {
+                        teraRaidView.textBottleCap.Text = (int.Parse(teraRaidView.textBottleCap.Text) + 1).ToString();
+                        teraRaidView.textBottleCap.ForeColor = Color.White;
+                        teraRaidView.labelBottleCap.ForeColor = Color.WhiteSmoke;
+                    }
+                    if (rewards[i].Item1 == 1606)
+                    {
+                        teraRaidView.textAbilityPatch.Text = (int.Parse(teraRaidView.textAbilityPatch.Text) + 1).ToString();
+                        teraRaidView.textAbilityPatch.ForeColor = Color.White;
+                        teraRaidView.labelAbilityPatch.ForeColor = Color.WhiteSmoke;
+                    }
+                    if (rewards[i].Item1 == 1904)
+                    {
+                        teraRaidView.textSweetHerba.Text = (int.Parse(teraRaidView.textSweetHerba.Text) + 1).ToString();
+                        teraRaidView.textSweetHerba.ForeColor = Color.White;
+                        teraRaidView.labelSweetHerba.ForeColor = Color.WhiteSmoke;
+                    }
+                    if (rewards[i].Item1 == 1905)
+                    {
+                        teraRaidView.textSaltyHerba.Text = (int.Parse(teraRaidView.textSaltyHerba.Text) + 1).ToString();
+                        teraRaidView.textSaltyHerba.ForeColor = Color.White;
+                        teraRaidView.labelSaltyHerba.ForeColor = Color.WhiteSmoke;
+                    }
+                    if (rewards[i].Item1 == 1906)
+                    {
+                        teraRaidView.textSourHerba.Text = (int.Parse(teraRaidView.textSourHerba.Text) + 1).ToString();
+                        teraRaidView.textSourHerba.ForeColor = Color.White;
+                        teraRaidView.labelSourHerba.ForeColor = Color.WhiteSmoke;
+                    }
+                    if (rewards[i].Item1 == 1907)
+                    {
+                        teraRaidView.textBitterHerba.Text = (int.Parse(teraRaidView.textBitterHerba.Text) + 1).ToString();
+                        teraRaidView.textBitterHerba.ForeColor = Color.White;
+                        teraRaidView.labelBitterHerba.ForeColor = Color.WhiteSmoke;
+                    }
+                    if (rewards[i].Item1 == 1908)
+                    {
+                        teraRaidView.textSpicyHerba.Text = (int.Parse(teraRaidView.textSpicyHerba.Text) + 1).ToString();
+                        teraRaidView.textSpicyHerba.ForeColor = Color.White;
+                        teraRaidView.labelSpicyHerba.ForeColor = Color.WhiteSmoke;
+                    }
+                }
 
-                    var shiny = raid.CheckIsShiny(encounter);
-                    teraRaidView.Shiny.Visible = shiny;
-                    teraRaidView.picShinyAlert.Enabled = shiny;
-                }
-                else
-                {
-                    // TODO Clear all the fields.
-                }
+                var shiny = raid.CheckIsShiny(encounter);
+                teraRaidView.Shiny.Visible = shiny;
+                teraRaidView.picShinyAlert.Enabled = shiny;
+                return;
             }
-            else ShowMessageBox($"Unable to display raid at index {index}. Ensure there are no cheats running or anything else that might shift RAM (Edizon, overlays, etc.), then reboot your console and try again.");
+
+            var msg = $"Unable to display raid at index {index}. Ensure there are no cheats running or anything else that might shift RAM (Edizon, overlays, etc.), then reboot your console and try again.";
+            Task.Run(async () => await ErrorHandler.DisplayMessageBox(this, Webhook, msg, Source.Token).ConfigureAwait(false), Source.Token);
         }
 
         private string GetPIDString(Raid raid, ITeraRaid? enc)
@@ -1166,7 +1156,7 @@ namespace RaidCrawler.WinForms
             if (msg != string.Empty)
             {
                 msg += "\nMore info can be found in the \"raid_dbg.txt\" file.";
-                ShowMessageBox(msg, "Raid Read Error");
+                await ErrorHandler.DisplayMessageBox(this, Webhook, msg, token, "Raid Read Error").ConfigureAwait(false);
             }
 
             var raids = RaidContainer.Raids;
@@ -1194,7 +1184,10 @@ namespace RaidCrawler.WinForms
             {
                 ButtonEnable(new[] { ButtonPrevious, ButtonNext }, false);
                 if (raids.Count > RaidBlock.MAX_COUNT || raids.Count == 0)
-                    ShowMessageBox("Bad read, ensure there are no cheats running or anything else that might shift RAM (Edizon, overlays, etc.), then reboot your console and try again.");
+                {
+                    msg = "Bad read, ensure there are no cheats running or anything else that might shift RAM (Edizon, overlays, etc.), then reboot your console and try again.";
+                    await ErrorHandler.DisplayMessageBox(this, Webhook, msg, token, "Raid Read Error").ConfigureAwait(false);
+                }
             }
         }
 
@@ -1233,7 +1226,7 @@ namespace RaidCrawler.WinForms
             var raids = RaidContainer.Raids;
             if (raids.Count == 0)
             {
-                ShowMessageBox("Raids not loaded.");
+                Task.Run(async () => await ErrorHandler.DisplayMessageBox(this, Webhook, "Raids not loaded.", Source.Token).ConfigureAwait(false), Source.Token);
                 return;
             }
 
@@ -1243,7 +1236,7 @@ namespace RaidCrawler.WinForms
             var map = GenerateMap(raid, teratype);
             if (map is null)
             {
-                ShowMessageBox("Error generating map.");
+                Task.Run(async () => await ErrorHandler.DisplayMessageBox(this, Webhook, "Error generating map.", Source.Token).ConfigureAwait(false), Source.Token);
                 return;
             }
 
@@ -1255,14 +1248,14 @@ namespace RaidCrawler.WinForms
         {
             if (RaidContainer.Raids.Count == 0)
             {
-                ShowMessageBox("Raids not loaded.");
+                Task.Run(async () => await ErrorHandler.DisplayMessageBox(this, Webhook, "Raids not loaded.", Source.Token).ConfigureAwait(false), Source.Token);
                 return;
             }
 
             var rewards = RaidContainer.Rewards[ComboIndex.SelectedIndex];
             if (rewards is null)
             {
-                ShowMessageBox("Error while displaying rewards.");
+                Task.Run(async () => await ErrorHandler.DisplayMessageBox(this, Webhook, "Error while displaying rewards.", Source.Token).ConfigureAwait(false), Source.Token);
                 return;
             }
 
@@ -1290,7 +1283,7 @@ namespace RaidCrawler.WinForms
         {
             if (RaidContainer.Raids.Count == 0)
             {
-                ShowMessageBox("Raids not loaded.");
+                Task.Run(async () => await ErrorHandler.DisplayMessageBox(this, Webhook, "Raids not loaded.", Source.Token).ConfigureAwait(false), Source.Token);
                 return;
             }
 
@@ -1329,11 +1322,11 @@ namespace RaidCrawler.WinForms
             {
                 try
                 {
-                    await NotificationHandler.SendScreenshot(Config, ConnectionWrapper.Connection, Source.Token).ConfigureAwait(false);
+                    await Webhook.SendScreenshot(ConnectionWrapper.Connection, Source.Token).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
-                    ShowMessageBox($"Could not send the screenshot: {ex.Message}");
+                    await ErrorHandler.DisplayMessageBox(this, Webhook, $"Could not send the screenshot: {ex.Message}", Source.Token).ConfigureAwait(false);
                 }
             }, Source.Token);
         }
@@ -1386,9 +1379,11 @@ namespace RaidCrawler.WinForms
                 blank.SetSuggestedFormArgument();
 
                 var spriteName = GetSpriteNameForUrl(blank, raids[i].CheckIsShiny(encounters[i]));
-                await NotificationHandler.SendNotification(Config, encounters[i], raids[i], filter, time, rewards[i], hexColor, spriteName, token).ConfigureAwait(false);
+                await Webhook.SendNotification(encounters[i], raids[i], filter, time, rewards[i], hexColor, spriteName, token).ConfigureAwait(false);
+                return;
             }
-            else ShowMessageBox("Please connect to your device and ensure a raid has been found.");
+
+            await ErrorHandler.DisplayMessageBox(this, Webhook, "Please connect to your device and ensure a raid has been found.", token).ConfigureAwait(false);
         }
 
         public void ToggleStreamerView()
