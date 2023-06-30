@@ -90,14 +90,14 @@
             // 
             // Species
             // 
+            this.Species.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.Species.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.Species.Enabled = false;
             this.Species.FormattingEnabled = true;
             this.Species.Location = new System.Drawing.Point(104, 55);
             this.Species.Name = "Species";
-            this.Species.Size = new System.Drawing.Size(121, 23);
+            this.Species.Size = new System.Drawing.Size(178, 23);
             this.Species.TabIndex = 0;
-            this.Species.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            this.Species.AutoCompleteSource = AutoCompleteSource.ListItems;
             // 
             // SpeciesCheck
             // 
@@ -115,7 +115,7 @@
             this.Form.Enabled = false;
             this.Form.Location = new System.Drawing.Point(104, 82);
             this.Form.Name = "Form";
-            this.Form.Size = new System.Drawing.Size(121, 23);
+            this.Form.Size = new System.Drawing.Size(178, 23);
             this.Form.TabIndex = 0;
             // 
             // FormCheck
@@ -142,14 +142,14 @@
             // 
             // Nature
             // 
+            this.Nature.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.Nature.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.Nature.Enabled = false;
             this.Nature.FormattingEnabled = true;
             this.Nature.Location = new System.Drawing.Point(104, 111);
             this.Nature.Name = "Nature";
-            this.Nature.Size = new System.Drawing.Size(121, 23);
+            this.Nature.Size = new System.Drawing.Size(178, 23);
             this.Nature.TabIndex = 2;
-            this.Nature.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            this.Nature.AutoCompleteSource = AutoCompleteSource.ListItems;
             // 
             // StarCheck
             // 
@@ -176,7 +176,7 @@
             "7"});
             this.Stars.Location = new System.Drawing.Point(104, 140);
             this.Stars.Name = "Stars";
-            this.Stars.Size = new System.Drawing.Size(62, 23);
+            this.Stars.Size = new System.Drawing.Size(119, 23);
             this.Stars.TabIndex = 4;
             // 
             // ShinyCheck
@@ -194,7 +194,7 @@
             // 
             this.Add.Location = new System.Drawing.Point(12, 440);
             this.Add.Name = "Add";
-            this.Add.Size = new System.Drawing.Size(111, 23);
+            this.Add.Size = new System.Drawing.Size(132, 23);
             this.Add.TabIndex = 9;
             this.Add.Text = "Add Filter";
             this.Add.UseVisualStyleBackColor = true;
@@ -222,7 +222,7 @@
             this.PerfectIVFilterGroup.Controls.Add(this.HP);
             this.PerfectIVFilterGroup.Location = new System.Drawing.Point(12, 310);
             this.PerfectIVFilterGroup.Name = "PerfectIVFilterGroup";
-            this.PerfectIVFilterGroup.Size = new System.Drawing.Size(231, 124);
+            this.PerfectIVFilterGroup.Size = new System.Drawing.Size(270, 124);
             this.PerfectIVFilterGroup.TabIndex = 10;
             this.PerfectIVFilterGroup.TabStop = false;
             this.PerfectIVFilterGroup.Text = "IV Filters";
@@ -238,9 +238,9 @@
             ">=",
             "<=",
             "<"});
-            this.SpeComp.Location = new System.Drawing.Point(193, 54);
+            this.SpeComp.Location = new System.Drawing.Point(228, 54);
             this.SpeComp.Name = "SpeComp";
-            this.SpeComp.Size = new System.Drawing.Size(32, 23);
+            this.SpeComp.Size = new System.Drawing.Size(39, 23);
             this.SpeComp.TabIndex = 17;
             // 
             // SpaComp
@@ -254,9 +254,9 @@
             ">=",
             "<=",
             "<"});
-            this.SpaComp.Location = new System.Drawing.Point(117, 54);
+            this.SpaComp.Location = new System.Drawing.Point(138, 54);
             this.SpaComp.Name = "SpaComp";
-            this.SpaComp.Size = new System.Drawing.Size(32, 23);
+            this.SpaComp.Size = new System.Drawing.Size(39, 23);
             this.SpaComp.TabIndex = 15;
             // 
             // SpdComp
@@ -270,9 +270,9 @@
             ">=",
             "<=",
             "<"});
-            this.SpdComp.Location = new System.Drawing.Point(155, 54);
+            this.SpdComp.Location = new System.Drawing.Point(183, 54);
             this.SpdComp.Name = "SpdComp";
-            this.SpdComp.Size = new System.Drawing.Size(32, 23);
+            this.SpdComp.Size = new System.Drawing.Size(39, 23);
             this.SpdComp.TabIndex = 16;
             // 
             // DefComp
@@ -286,9 +286,9 @@
             ">=",
             "<=",
             "<"});
-            this.DefComp.Location = new System.Drawing.Point(79, 55);
+            this.DefComp.Location = new System.Drawing.Point(93, 54);
             this.DefComp.Name = "DefComp";
-            this.DefComp.Size = new System.Drawing.Size(32, 23);
+            this.DefComp.Size = new System.Drawing.Size(39, 23);
             this.DefComp.TabIndex = 14;
             // 
             // AtkComp
@@ -302,9 +302,9 @@
             ">=",
             "<=",
             "<"});
-            this.AtkComp.Location = new System.Drawing.Point(41, 54);
+            this.AtkComp.Location = new System.Drawing.Point(48, 54);
             this.AtkComp.Name = "AtkComp";
-            this.AtkComp.Size = new System.Drawing.Size(32, 23);
+            this.AtkComp.Size = new System.Drawing.Size(39, 23);
             this.AtkComp.TabIndex = 13;
             // 
             // HPComp
@@ -320,20 +320,20 @@
             "<"});
             this.HPComp.Location = new System.Drawing.Point(3, 54);
             this.HPComp.Name = "HPComp";
-            this.HPComp.Size = new System.Drawing.Size(32, 23);
+            this.HPComp.Size = new System.Drawing.Size(39, 23);
             this.HPComp.TabIndex = 12;
             // 
             // IVSPE
             // 
             this.IVSPE.Enabled = false;
-            this.IVSPE.Location = new System.Drawing.Point(193, 22);
+            this.IVSPE.Location = new System.Drawing.Point(228, 22);
             this.IVSPE.Maximum = new decimal(new int[] {
             31,
             0,
             0,
             0});
             this.IVSPE.Name = "IVSPE";
-            this.IVSPE.Size = new System.Drawing.Size(32, 23);
+            this.IVSPE.Size = new System.Drawing.Size(39, 23);
             this.IVSPE.TabIndex = 11;
             this.IVSPE.Value = new decimal(new int[] {
             31,
@@ -344,14 +344,14 @@
             // IVSPD
             // 
             this.IVSPD.Enabled = false;
-            this.IVSPD.Location = new System.Drawing.Point(155, 22);
+            this.IVSPD.Location = new System.Drawing.Point(183, 22);
             this.IVSPD.Maximum = new decimal(new int[] {
             31,
             0,
             0,
             0});
             this.IVSPD.Name = "IVSPD";
-            this.IVSPD.Size = new System.Drawing.Size(32, 23);
+            this.IVSPD.Size = new System.Drawing.Size(39, 23);
             this.IVSPD.TabIndex = 10;
             this.IVSPD.Value = new decimal(new int[] {
             31,
@@ -362,14 +362,14 @@
             // IVSPA
             // 
             this.IVSPA.Enabled = false;
-            this.IVSPA.Location = new System.Drawing.Point(117, 22);
+            this.IVSPA.Location = new System.Drawing.Point(138, 22);
             this.IVSPA.Maximum = new decimal(new int[] {
             31,
             0,
             0,
             0});
             this.IVSPA.Name = "IVSPA";
-            this.IVSPA.Size = new System.Drawing.Size(32, 23);
+            this.IVSPA.Size = new System.Drawing.Size(39, 23);
             this.IVSPA.TabIndex = 9;
             this.IVSPA.Value = new decimal(new int[] {
             31,
@@ -380,14 +380,14 @@
             // IVDEF
             // 
             this.IVDEF.Enabled = false;
-            this.IVDEF.Location = new System.Drawing.Point(79, 22);
+            this.IVDEF.Location = new System.Drawing.Point(93, 22);
             this.IVDEF.Maximum = new decimal(new int[] {
             31,
             0,
             0,
             0});
             this.IVDEF.Name = "IVDEF";
-            this.IVDEF.Size = new System.Drawing.Size(32, 23);
+            this.IVDEF.Size = new System.Drawing.Size(39, 23);
             this.IVDEF.TabIndex = 8;
             this.IVDEF.Value = new decimal(new int[] {
             31,
@@ -398,14 +398,14 @@
             // IVATK
             // 
             this.IVATK.Enabled = false;
-            this.IVATK.Location = new System.Drawing.Point(41, 22);
+            this.IVATK.Location = new System.Drawing.Point(48, 22);
             this.IVATK.Maximum = new decimal(new int[] {
             31,
             0,
             0,
             0});
             this.IVATK.Name = "IVATK";
-            this.IVATK.Size = new System.Drawing.Size(32, 23);
+            this.IVATK.Size = new System.Drawing.Size(39, 23);
             this.IVATK.TabIndex = 7;
             this.IVATK.Value = new decimal(new int[] {
             31,
@@ -423,7 +423,7 @@
             0,
             0});
             this.IVHP.Name = "IVHP";
-            this.IVHP.Size = new System.Drawing.Size(32, 23);
+            this.IVHP.Size = new System.Drawing.Size(39, 23);
             this.IVHP.TabIndex = 6;
             this.IVHP.Value = new decimal(new int[] {
             31,
@@ -435,7 +435,7 @@
             // 
             this.Spe.AutoSize = true;
             this.Spe.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.Spe.Location = new System.Drawing.Point(194, 84);
+            this.Spe.Location = new System.Drawing.Point(233, 83);
             this.Spe.Name = "Spe";
             this.Spe.Size = new System.Drawing.Size(30, 33);
             this.Spe.TabIndex = 5;
@@ -448,7 +448,7 @@
             // 
             this.SpD.AutoSize = true;
             this.SpD.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.SpD.Location = new System.Drawing.Point(154, 84);
+            this.SpD.Location = new System.Drawing.Point(187, 83);
             this.SpD.Name = "SpD";
             this.SpD.Size = new System.Drawing.Size(32, 33);
             this.SpD.TabIndex = 4;
@@ -461,7 +461,7 @@
             // 
             this.SpA.AutoSize = true;
             this.SpA.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.SpA.Location = new System.Drawing.Point(115, 84);
+            this.SpA.Location = new System.Drawing.Point(142, 83);
             this.SpA.Name = "SpA";
             this.SpA.Size = new System.Drawing.Size(32, 33);
             this.SpA.TabIndex = 3;
@@ -474,7 +474,7 @@
             // 
             this.Def.AutoSize = true;
             this.Def.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.Def.Location = new System.Drawing.Point(79, 84);
+            this.Def.Location = new System.Drawing.Point(99, 83);
             this.Def.Name = "Def";
             this.Def.Size = new System.Drawing.Size(29, 33);
             this.Def.TabIndex = 2;
@@ -487,7 +487,7 @@
             // 
             this.Atk.AutoSize = true;
             this.Atk.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.Atk.Location = new System.Drawing.Point(41, 84);
+            this.Atk.Location = new System.Drawing.Point(54, 84);
             this.Atk.Name = "Atk";
             this.Atk.Size = new System.Drawing.Size(29, 33);
             this.Atk.TabIndex = 1;
@@ -500,7 +500,7 @@
             // 
             this.HP.AutoSize = true;
             this.HP.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.HP.Location = new System.Drawing.Point(3, 84);
+            this.HP.Location = new System.Drawing.Point(10, 84);
             this.HP.Name = "HP";
             this.HP.Size = new System.Drawing.Size(27, 33);
             this.HP.TabIndex = 0;
@@ -522,6 +522,8 @@
             // 
             // TeraType
             // 
+            this.TeraType.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.TeraType.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.TeraType.Enabled = false;
             this.TeraType.FormattingEnabled = true;
             this.TeraType.Items.AddRange(new object[] {
@@ -534,15 +536,13 @@
             "7"});
             this.TeraType.Location = new System.Drawing.Point(104, 169);
             this.TeraType.Name = "TeraType";
-            this.TeraType.Size = new System.Drawing.Size(121, 23);
+            this.TeraType.Size = new System.Drawing.Size(178, 23);
             this.TeraType.TabIndex = 17;
-            this.TeraType.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            this.TeraType.AutoCompleteSource = AutoCompleteSource.ListItems;
             // 
             // ActiveFilters
             // 
             this.ActiveFilters.FormattingEnabled = true;
-            this.ActiveFilters.Location = new System.Drawing.Point(257, 23);
+            this.ActiveFilters.Location = new System.Drawing.Point(305, 23);
             this.ActiveFilters.Name = "ActiveFilters";
             this.ActiveFilters.Size = new System.Drawing.Size(185, 256);
             this.ActiveFilters.TabIndex = 20;
@@ -555,7 +555,7 @@
             this.FilterName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.FilterName.Location = new System.Drawing.Point(57, 23);
             this.FilterName.Name = "FilterName";
-            this.FilterName.Size = new System.Drawing.Size(168, 23);
+            this.FilterName.Size = new System.Drawing.Size(225, 23);
             this.FilterName.TabIndex = 21;
             this.FilterName.TextChanged += new System.EventHandler(this.FilterName_TextChanged);
             // 
@@ -570,9 +570,9 @@
             // 
             // Remove
             // 
-            this.Remove.Location = new System.Drawing.Point(132, 440);
+            this.Remove.Location = new System.Drawing.Point(150, 439);
             this.Remove.Name = "Remove";
-            this.Remove.Size = new System.Drawing.Size(111, 23);
+            this.Remove.Size = new System.Drawing.Size(132, 23);
             this.Remove.TabIndex = 23;
             this.Remove.Text = "Remove Filter";
             this.Remove.UseVisualStyleBackColor = true;
@@ -589,7 +589,7 @@
             ">=",
             "<=",
             "<"});
-            this.StarsComp.Location = new System.Drawing.Point(172, 140);
+            this.StarsComp.Location = new System.Drawing.Point(229, 140);
             this.StarsComp.Name = "StarsComp";
             this.StarsComp.Size = new System.Drawing.Size(53, 23);
             this.StarsComp.TabIndex = 18;
@@ -606,7 +606,7 @@
             ">=",
             "<=",
             "<"});
-            this.RewardsComp.Location = new System.Drawing.Point(172, 256);
+            this.RewardsComp.Location = new System.Drawing.Point(229, 256);
             this.RewardsComp.Name = "RewardsComp";
             this.RewardsComp.Size = new System.Drawing.Size(53, 23);
             this.RewardsComp.TabIndex = 27;
@@ -627,7 +627,7 @@
             this.Rewards.Enabled = false;
             this.Rewards.Location = new System.Drawing.Point(104, 227);
             this.Rewards.Name = "Rewards";
-            this.Rewards.Size = new System.Drawing.Size(96, 23);
+            this.Rewards.Size = new System.Drawing.Size(153, 23);
             this.Rewards.TabIndex = 28;
             this.Rewards.Text = "645,795,1606,1904,1905,1906,1907,1908";
             // 
@@ -650,12 +650,12 @@
             0,
             0});
             this.RewardsCount.Name = "RewardsCount";
-            this.RewardsCount.Size = new System.Drawing.Size(62, 23);
+            this.RewardsCount.Size = new System.Drawing.Size(119, 23);
             this.RewardsCount.TabIndex = 30;
             // 
             // ButtonOpenRewardsList
             // 
-            this.ButtonOpenRewardsList.Location = new System.Drawing.Point(206, 227);
+            this.ButtonOpenRewardsList.Location = new System.Drawing.Point(263, 227);
             this.ButtonOpenRewardsList.Name = "ButtonOpenRewardsList";
             this.ButtonOpenRewardsList.Size = new System.Drawing.Size(19, 23);
             this.ButtonOpenRewardsList.TabIndex = 31;
@@ -676,6 +676,8 @@
             // 
             // Gender
             // 
+            this.Gender.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.Gender.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.Gender.Enabled = false;
             this.Gender.FormattingEnabled = true;
             this.Gender.Items.AddRange(new object[] {
@@ -684,15 +686,13 @@
             "Genderless"});
             this.Gender.Location = new System.Drawing.Point(104, 198);
             this.Gender.Name = "Gender";
-            this.Gender.Size = new System.Drawing.Size(121, 23);
+            this.Gender.Size = new System.Drawing.Size(178, 23);
             this.Gender.TabIndex = 32;
-            this.Gender.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            this.Gender.AutoCompleteSource = AutoCompleteSource.ListItems;
             // 
             // LabelBatchFilters
             // 
             this.LabelBatchFilters.AutoSize = true;
-            this.LabelBatchFilters.Location = new System.Drawing.Point(257, 285);
+            this.LabelBatchFilters.Location = new System.Drawing.Point(305, 285);
             this.LabelBatchFilters.Name = "LabelBatchFilters";
             this.LabelBatchFilters.Size = new System.Drawing.Size(71, 15);
             this.LabelBatchFilters.TabIndex = 34;
@@ -701,7 +701,7 @@
             // BatchFilters
             // 
             this.BatchFilters.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.BatchFilters.Location = new System.Drawing.Point(257, 305);
+            this.BatchFilters.Location = new System.Drawing.Point(305, 305);
             this.BatchFilters.Multiline = true;
             this.BatchFilters.Name = "BatchFilters";
             this.BatchFilters.Size = new System.Drawing.Size(185, 157);
@@ -715,16 +715,16 @@
             this.SquareCheck.Size = new System.Drawing.Size(69, 19);
             this.SquareCheck.TabIndex = 36;
             this.SquareCheck.Text = "XOR = 0";
-            this.Tooltip.SetToolTip(this.SquareCheck, "If checked, only stop on \"Square\" shinies.\r\nThere is no display difference " +
-        "for these in SV, but they will appear\r\nas Square shiny in SwSh or any futu" +
-        "re game that supports them.");
+            this.Tooltip.SetToolTip(this.SquareCheck, "If checked, only stop on \"Square\" shinies.\r\nThere is no display difference for th" +
+        "ese in SV, but they will appear\r\nas Square shiny in SwSh or any future game that" +
+        " supports them.");
             this.SquareCheck.UseVisualStyleBackColor = true;
             // 
             // FilterSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(454, 474);
+            this.ClientSize = new System.Drawing.Size(502, 474);
             this.Controls.Add(this.SquareCheck);
             this.Controls.Add(this.BatchFilters);
             this.Controls.Add(this.LabelBatchFilters);
