@@ -48,7 +48,7 @@ namespace RaidCrawler.WinForms.SubForms
                     10000 => (Image?)Properties.Resources.ResourceManager.GetObject("material"),
                     20000 => (Image?)PKHeX.Drawing.PokeSprite.Properties.Resources.ResourceManager.GetObject("aitem_1862"),
                     _ => Rewards.IsTM(rewards[i].Item1)
-                        ? (Image?)Properties.Resources.ResourceManager.GetObject("tm")
+                        ? (Image?)PKHeX.Drawing.PokeSprite.Properties.Resources.ResourceManager.GetObject($"aitem_tm")
                         : (Image?)PKHeX.Drawing.PokeSprite.Properties.Resources.ResourceManager.GetObject($"aitem_{rewards[i].Item1}")
                 };
 
