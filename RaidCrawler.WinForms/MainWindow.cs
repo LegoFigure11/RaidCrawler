@@ -1259,7 +1259,7 @@ namespace RaidCrawler.WinForms
                 return;
             }
 
-            var form = new RewardsView(RaidContainer.Strings.Item, rewards);
+            var form = new RewardsView(RaidContainer.Strings.Item, RaidContainer.Strings.Move, rewards);
             ShowDialog(form);
         }
 

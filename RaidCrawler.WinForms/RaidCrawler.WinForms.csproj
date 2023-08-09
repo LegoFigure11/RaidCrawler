@@ -92,6 +92,7 @@
     <None Remove="Resources\raid_enemy_array" />
     <None Remove="Resources\shard.png" />
     <None Remove="Resources\shiny-no-loop.gif" />
+    <None Remove="Resources\tm.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -169,6 +170,7 @@
     <EmbeddedResource Include="Resources\material.png" />
     <EmbeddedResource Include="Resources\shard.png" />
     <EmbeddedResource Include="Resources\shiny-no-loop.gif" />
+    <EmbeddedResource Include="Resources\tm.png" />
   </ItemGroup>
 
   <ItemGroup>
