@@ -68,7 +68,7 @@ namespace RaidCrawler.Core.Structures
                 return true;
 
             var rewards = enc.GetRewards(container, raid, sandwichBoost);
-            var count = rewards.Where(z => RewardItems.Contains(z.Item1)).Count();
+            var count = rewards.Where(z => RewardItems.Contains(z.Item1)).Sum(o => o.Item2);
             return RewardsComp switch
             {
                 0 => count == RewardsCount,
