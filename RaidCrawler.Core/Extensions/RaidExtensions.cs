@@ -61,8 +61,7 @@ namespace RaidCrawler.Core.Structures
                         continue;
 
                     var total = container.Game == "Scarlet" ? encm.GetRandRateTotalScarlet(stage) : encm.GetRandRateTotalViolet(stage);
-                    if (total > 0)
-                        return enc;
+                    if (total > 0) return enc;
                 }
             }
             return null;
@@ -93,6 +92,13 @@ namespace RaidCrawler.Core.Structures
             for (int i = 0; i < count; i++)
             {
                 var raid = new Raid(data.AsSpan(i * Raid.SIZE, Raid.SIZE));
+
+                if (raid.Den == 0)
+                {
+                    eventct++;
+                    continue;
+                }
+
                 if (!raid.IsValid)
                     continue;
 
@@ -206,23 +212,23 @@ namespace RaidCrawler.Core.Structures
             // WW/IL re-run has DeliveryGroupID = 3, having a Might7 alongside it conflicts.
             bool special = possible_groups.Contains(3) && raid.Flags != 3;
             var groups = ids.GroupID;
-            if (special)
+
+            var mod = special ? 2 : raid.Flags != 3 ? 1 : 0;
+
+            for (int i = 0; i < groups.Table_Length; i++)
             {
-                for (int i = 0; i < groups.Table_Length; i++)
+                var ct = groups.Table(i) + mod;
+                if (special)
                 {
-                    var ct = groups.Table(i) + (special ? 2 : raid.Flags != 3 ? 1 : 0);
                     var result = possible_groups.Find(x => x == ct);
                     if (result > 0)
                         return ct;
                 }
-            }
-            else
-            {
-                for (int j = 0; j < groups.Table_Length; j++)
+                else
                 {
-                    var ct = groups.Table(j);
-                    if (!possible_groups.Contains(j + 1)) continue;
-                    if (eventct < ct) return j + 1;
+                    ct -= mod;
+                    if (!possible_groups.Contains(i + 1)) continue;
+                    if (eventct < ct) return i + 1;
                     eventct -= ct;
                 }
             }
