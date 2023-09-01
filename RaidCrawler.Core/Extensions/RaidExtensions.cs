@@ -210,27 +210,15 @@ namespace RaidCrawler.Core.Structures
                 return -1;
 
             // WW/IL re-run has DeliveryGroupID = 3, having a Might7 alongside it conflicts.
-            bool special = possible_groups.Contains(3) && raid.Flags != 3;
             var groups = ids.GroupID;
 
-            var mod = special ? 2 : raid.Flags != 3 ? 1 : 0;
 
             for (int i = 0; i < groups.Table_Length; i++)
             {
-                var ct = groups.Table(i) + mod;
-                if (special)
-                {
-                    var result = possible_groups.Find(x => x == ct);
-                    if (result > 0)
-                        return ct;
-                }
-                else
-                {
-                    ct -= mod;
-                    if (!possible_groups.Contains(i + 1)) continue;
-                    if (eventct < ct) return i + 1;
-                    eventct -= ct;
-                }
+                var ct = groups.Table(i);
+                if (!possible_groups.Contains(i + 1)) continue;
+                if (eventct < ct) return i + 1;
+                eventct -= ct;
             }
             throw new Exception("Found event out of priority range.");
         }
