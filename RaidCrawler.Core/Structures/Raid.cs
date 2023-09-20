@@ -1,4 +1,5 @@
 ﻿using PKHeX.Core;
+using pkNX.Structures.FlatBuffers.Gen9;
 using static System.Buffers.Binary.BinaryPrimitives;
 
 namespace RaidCrawler.Core.Structures
@@ -9,10 +10,16 @@ namespace RaidCrawler.Core.Structures
         public const byte SIZE = 0x20;
         private readonly byte[] Data; // Raw data
 
-        public Raid(Span<byte> data)
+        public Raid(
+            Span<byte> data,
+            RaidSerializationFormat RaidVersionType = RaidSerializationFormat.BaseROM
+        )
         {
             Data = data.ToArray();
+            RaidType = RaidVersionType;
         }
+
+        public RaidSerializationFormat RaidType;
 
         public bool IsValid => Validate();
         public bool IsActive => ReadUInt32LittleEndian(Data.AsSpan(0x00)) == 1;
@@ -56,7 +63,10 @@ namespace RaidCrawler.Core.Structures
             uint EC = (uint)rng.NextInt();
             uint TIDSID = (uint)rng.NextInt();
             uint PID = (uint)rng.NextInt();
-            var Shiny = (((PID >> 16) ^ (PID & 0xFFFF)) >> 4) == (((TIDSID >> 16) ^ (TIDSID & 0xFFFF)) >> 4) ? 1 : 0;
+            var Shiny =
+                (((PID >> 16) ^ (PID & 0xFFFF)) >> 4) == (((TIDSID >> 16) ^ (TIDSID & 0xFFFF)) >> 4)
+                    ? 1
+                    : 0;
             return new uint[] { EC, TIDSID, PID, (uint)Shiny };
         }
 

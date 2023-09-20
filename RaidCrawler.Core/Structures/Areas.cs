@@ -1,8 +1,11 @@
-﻿namespace RaidCrawler.Core.Structures
+﻿using pkNX.Structures.FlatBuffers.Gen9;
+
+namespace RaidCrawler.Core.Structures
 {
     public class Areas
     {
-        private static readonly string[] AreaList = new string[] {
+        private static readonly string[] AreaList = new string[]
+        {
             "South Province (Area 1)",
             "", // Unused
             "", // Unused
@@ -27,6 +30,26 @@
             "North Province (Area 2)",
         };
 
-        public static string GetArea(int index) => AreaList[index];
+        private static readonly string[] AreaListKitakami = new string[]
+        {
+            "Kitakami Road",
+            "Apple Hills",
+            "Reveler's Road",
+            "Oni Mountain",
+            "Infernal Pass",
+            "Crystal Pool",
+            "Wistful Fields",
+            "Mossfell Confluence",
+            "Fellhorn Gorge",
+            "Paradise Barrens",
+            "Timeless Woods",
+        };
+
+        public static string GetArea(int index, RaidSerializationFormat type) =>
+            type switch
+            {
+                RaidSerializationFormat.KitakamiROM => AreaListKitakami[index],
+                _ => AreaList[index],
+            };
     }
 }

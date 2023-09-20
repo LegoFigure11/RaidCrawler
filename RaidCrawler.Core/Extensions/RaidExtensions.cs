@@ -5,23 +5,43 @@ namespace RaidCrawler.Core.Structures
 {
     public static class RaidExtensions
     {
-        public static ITeraRaid? GetTeraEncounter(this Raid raid, RaidContainer container, int progress, int id)
-            => raid.IsEvent ? raid.GetDistributionEncounter(container, progress, raid.Flags == 3, id) : raid.GetEncounter(container, progress, raid.IsBlack);
+        public static ITeraRaid? GetTeraEncounter(
+            this Raid raid,
+            RaidContainer container,
+            int progress,
+            int id
+        ) =>
+            raid.IsEvent
+                ? raid.GetDistributionEncounter(container, progress, raid.Flags == 3, id)
+                : raid.RaidType == RaidSerializationFormat.KitakamiROM
+                    ? raid.GetEncounterKitakami(container, progress, raid.IsBlack)
+                    : raid.GetEncounterBase(container, progress, raid.IsBlack);
 
-        public static ITeraRaid? GetEncounter(this Raid raid, RaidContainer container, int stage, bool black)
+        public static ITeraRaid? GetEncounterBase(
+            this Raid raid,
+            RaidContainer container,
+            int stage,
+            bool black
+        )
         {
             var clone = new Xoroshiro128Plus(raid.Seed);
             var starcount = black ? 6 : raid.GetStarCount((uint)clone.NextInt(100), stage, false);
-            var total = container.Game == "Scarlet" ? GetRateTotalBaseSL(starcount) : GetRateTotalBaseVL(starcount);
+            var total =
+                container.Game == "Scarlet"
+                    ? GetRateTotalBaseSL(starcount)
+                    : GetRateTotalBaseVL(starcount);
             var speciesroll = clone.NextInt((ulong)total);
-            if (container.GemTeraRaids is not null)
+            if (container.GemTeraRaidsBase is not null)
             {
-                foreach (TeraEncounter enc in (TeraEncounter[])container.GemTeraRaids)
+                foreach (TeraEncounter enc in container.GemTeraRaidsBase)
                 {
                     if (enc.Stars != starcount)
                         continue;
 
-                    var minimum = container.Game == "Scarlet" ? enc.Entity.RandRateMinScarlet : enc.Entity.RandRateMinViolet;
+                    var minimum =
+                        container.Game == "Scarlet"
+                            ? enc.Entity.RandRateMinScarlet
+                            : enc.Entity.RandRateMinViolet;
                     if (minimum >= 0 && (uint)((int)speciesroll - minimum) < enc.Entity.RandRate)
                         return enc;
                 }
@@ -29,25 +49,72 @@ namespace RaidCrawler.Core.Structures
             return null;
         }
 
-        public static ITeraRaid? GetDistributionEncounter(this Raid raid, RaidContainer container, int stage, bool isFixed, int groupid)
+        public static ITeraRaid? GetEncounterKitakami(
+            this Raid raid,
+            RaidContainer container,
+            int stage,
+            bool black
+        )
         {
-            if (stage < 0 || container.DistTeraRaids is null)
+            var clone = new Xoroshiro128Plus(raid.Seed);
+            var starcount = black ? 6 : raid.GetStarCount((uint)clone.NextInt(100), stage, false);
+            var total =
+                container.Game == "Scarlet"
+                    ? GetRateTotalKitakamiSL(starcount)
+                    : GetRateTotalKitakamiVL(starcount);
+            var speciesroll = clone.NextInt((ulong)total);
+            if (container.GemTeraRaidsKitakami is not null)
+            {
+                foreach (TeraEncounter enc in container.GemTeraRaidsKitakami)
+                {
+                    if (enc.Stars != starcount)
+                        continue;
+
+                    var minimum =
+                        container.Game == "Scarlet"
+                            ? enc.Entity.RandRateMinScarlet
+                            : enc.Entity.RandRateMinViolet;
+                    if (minimum >= 0 && (uint)((int)speciesroll - minimum) < enc.Entity.RandRate)
+                        return enc;
+                }
+            }
+            return null;
+        }
+
+        public static ITeraRaid? GetDistributionEncounter(
+            this Raid raid,
+            RaidContainer container,
+            int stage,
+            bool isFixed,
+            int groupid
+        )
+        {
+            if (stage < 0)
                 return null;
 
             if (!isFixed)
             {
-                foreach (TeraDistribution enc in container.DistTeraRaids.Cast<TeraDistribution>())
+                if (container.DistTeraRaids == null)
+                    return null;
+
+                foreach (TeraDistribution enc in container.DistTeraRaids)
                 {
-                    if (enc.Entity is not EncounterDist9 encd || enc.DeliveryGroupID != groupid)
+                    if (enc.DeliveryGroupID != groupid)
                         continue;
 
-                    var total = container.Game == "Scarlet" ? encd.GetRandRateTotalScarlet(stage) : encd.GetRandRateTotalViolet(stage);
+                    var total =
+                        container.Game == "Scarlet"
+                            ? enc.Entity.GetRandRateTotalScarlet(stage)
+                            : enc.Entity.GetRandRateTotalViolet(stage);
                     if (total > 0)
                     {
                         var rand = new Xoroshiro128Plus(raid.Seed);
                         _ = rand.NextInt(100);
                         var val = rand.NextInt(total);
-                        var min = container.Game == "Scarlet" ? encd.GetRandRateMinScarlet(stage) : encd.GetRandRateMinViolet(stage);
+                        var min =
+                            container.Game == "Scarlet"
+                                ? enc.Entity.GetRandRateMinScarlet(stage)
+                                : enc.Entity.GetRandRateMinViolet(stage);
                         if ((uint)((int)val - min) < enc.RandRate)
                             return enc;
                     }
@@ -55,21 +122,35 @@ namespace RaidCrawler.Core.Structures
             }
             else
             {
-                foreach (TeraDistribution enc in container.DistTeraRaids.Cast<TeraDistribution>())
+                if (container.MightTeraRaids == null)
+                    return null;
+
+                foreach (TeraMight enc in container.MightTeraRaids)
                 {
-                    if (enc.Entity is not EncounterMight9 encm || enc.DeliveryGroupID != groupid)
+                    if (enc.DeliveryGroupID != groupid)
                         continue;
 
-                    var total = container.Game == "Scarlet" ? encm.GetRandRateTotalScarlet(stage) : encm.GetRandRateTotalViolet(stage);
-                    if (total > 0) return enc;
+                    var total =
+                        container.Game == "Scarlet"
+                            ? enc.Entity.GetRandRateTotalScarlet(stage)
+                            : enc.Entity.GetRandRateTotalViolet(stage);
+                    if (total > 0)
+                        return enc;
                 }
             }
             return null;
         }
 
-        public static (int delivery, int encounter) ReadAllRaids(this RaidContainer container, byte[] data, int storyPrg, int eventPrg, int boost)
+        public static (int delivery, int encounter) ReadAllRaids(
+            this RaidContainer container,
+            byte[] data,
+            int storyPrg,
+            int eventPrg,
+            int boost,
+            RaidSerializationFormat type
+        )
         {
-            var dbgFile = "raid_dbg.txt";
+            var dbgFile = $"raid_dbg_{type}.txt";
             if (File.Exists(dbgFile))
                 File.Delete(dbgFile);
 
@@ -77,9 +158,24 @@ namespace RaidCrawler.Core.Structures
             List<int> possible_groups = new();
             if (container.DistTeraRaids is not null)
             {
-                foreach (TeraDistribution e in container.DistTeraRaids.Cast<TeraDistribution>())
+                foreach (TeraDistribution e in container.DistTeraRaids)
                 {
-                    if (TeraDistribution.AvailableInGame(e.Entity, container.Game) && !possible_groups.Contains(e.DeliveryGroupID))
+                    if (
+                        TeraDistribution.AvailableInGame(e.Entity, container.Game)
+                        && !possible_groups.Contains(e.DeliveryGroupID)
+                    )
+                        possible_groups.Add(e.DeliveryGroupID);
+                }
+            }
+
+            if (container.MightTeraRaids is not null)
+            {
+                foreach (TeraMight e in container.MightTeraRaids)
+                {
+                    if (
+                        TeraMight.AvailableInGame(e.Entity, container.Game)
+                        && !possible_groups.Contains(e.DeliveryGroupID)
+                    )
                         possible_groups.Add(e.DeliveryGroupID);
                 }
             }
@@ -91,7 +187,7 @@ namespace RaidCrawler.Core.Structures
             int eventct = 0;
             for (int i = 0; i < count; i++)
             {
-                var raid = new Raid(data.AsSpan(i * Raid.SIZE, Raid.SIZE));
+                var raid = new Raid(data.AsSpan(i * Raid.SIZE, Raid.SIZE), type);
 
                 if (raid.Den == 0)
                 {
@@ -106,12 +202,18 @@ namespace RaidCrawler.Core.Structures
                 var raid_delivery_group_id = -1;
                 try
                 {
-                    raid_delivery_group_id = raid.GetDeliveryGroupID(container.DeliveryRaidPriority, possible_groups, eventct);
+                    raid_delivery_group_id = raid.GetDeliveryGroupID(
+                        container.DeliveryRaidPriority,
+                        possible_groups,
+                        eventct
+                    );
                 }
                 catch (Exception ex)
                 {
-                    var extra = $"Group ID: {raid_delivery_group_id}\nisFixed: {raid.Flags == 3}\nisBlack: {raid.IsBlack}\nisEvent: {raid.IsEvent}\n\n";
-                    var msg = $"{ex.Message}\nDen: {raid.Den}\nProgress: {progress}\nDifficulty: {raid.Difficulty}\n{extra}";
+                    var extra =
+                        $"Group ID: {raid_delivery_group_id}\nisFixed: {raid.Flags == 3}\nisBlack: {raid.IsBlack}\nisEvent: {raid.IsEvent}\n\n";
+                    var msg =
+                        $"{ex.Message}\nDen: {raid.Den}\nProgress: {progress}\nDifficulty: {raid.Difficulty}\n{extra}";
                     File.AppendAllText(dbgFile, msg);
                     failed.delivery++;
                     continue;
@@ -120,14 +222,17 @@ namespace RaidCrawler.Core.Structures
                 var encounter = raid.GetTeraEncounter(container, progress, raid_delivery_group_id);
                 if (encounter is null)
                 {
-                    var extra = $"Group ID: {raid_delivery_group_id}\nisFixed: {raid.Flags == 3}\nisBlack: {raid.IsBlack}\nisEvent: {raid.IsEvent}\n\n";
-                    var msg = $"No encounters found.\nDen: {raid.Den}\nProgress: {progress}\nDifficulty: {raid.Difficulty}\n{extra}";
+                    var extra =
+                        $"Group ID: {raid_delivery_group_id}\nisFixed: {raid.Flags == 3}\nisBlack: {raid.IsBlack}\nisEvent: {raid.IsEvent}\n\n";
+                    var msg =
+                        $"No encounters found.\nDen: {raid.Den}\nProgress: {progress}\nDifficulty: {raid.Difficulty}\n{extra}";
                     File.AppendAllText(dbgFile, msg);
                     failed.encounter++;
                     continue;
                 }
 
-                if (raid.IsEvent) eventct++;
+                if (raid.IsEvent)
+                    eventct++;
 
                 newRaids.Add(raid);
                 newTera.Add(encounter);
@@ -160,6 +265,10 @@ namespace RaidCrawler.Core.Structures
 
             if (encounter is TeraDistribution td && td.Entity is ITeraRaid9 gem)
                 return (int)gem.TeraType > 1 ? (int)gem.TeraType - 2 : raid.TeraType;
+
+            if (encounter is TeraMight tm && tm.Entity is ITeraRaid9 gemm)
+                return (int)gemm.TeraType > 1 ? (int)gemm.TeraType - 2 : raid.TeraType;
+
             return raid.TeraType;
         }
 
@@ -170,41 +279,51 @@ namespace RaidCrawler.Core.Structures
 
             return progress switch
             {
-                0 => difficulty switch
-                {
-                    > 80 => 2,
-                    _ => 1,
-                },
-                1 => difficulty switch
-                {
-                    > 70 => 3,
-                    > 30 => 2,
-                    _ => 1,
-                },
-                2 => difficulty switch
-                {
-                    > 70 => 4,
-                    > 40 => 3,
-                    > 20 => 2,
-                    _ => 1,
-                },
-                3 => difficulty switch
-                {
-                    > 75 => 5,
-                    > 40 => 4,
-                    _ => 3,
-                },
-                4 => difficulty switch
-                {
-                    > 70 => 5,
-                    > 30 => 4,
-                    _ => 3,
-                },
+                0
+                    => difficulty switch
+                    {
+                        > 80 => 2,
+                        _ => 1,
+                    },
+                1
+                    => difficulty switch
+                    {
+                        > 70 => 3,
+                        > 30 => 2,
+                        _ => 1,
+                    },
+                2
+                    => difficulty switch
+                    {
+                        > 70 => 4,
+                        > 40 => 3,
+                        > 20 => 2,
+                        _ => 1,
+                    },
+                3
+                    => difficulty switch
+                    {
+                        > 75 => 5,
+                        > 40 => 4,
+                        _ => 3,
+                    },
+                4
+                    => difficulty switch
+                    {
+                        > 70 => 5,
+                        > 30 => 4,
+                        _ => 3,
+                    },
                 _ => 1,
             };
         }
 
-        public static int GetDeliveryGroupID(this Raid raid, DeliveryGroupID ids, List<int> possible_groups, int eventct)
+        public static int GetDeliveryGroupID(
+            this Raid raid,
+            DeliveryGroupID ids,
+            List<int> possible_groups,
+            int eventct
+        )
         {
             if (!raid.IsEvent)
                 return -1;
@@ -212,37 +331,64 @@ namespace RaidCrawler.Core.Structures
             // WW/IL re-run has DeliveryGroupID = 3, having a Might7 alongside it conflicts.
             var groups = ids.GroupID;
 
-
             for (int i = 0; i < groups.Table_Length; i++)
             {
                 var ct = groups.Table(i);
-                if (!possible_groups.Contains(i + 1)) continue;
-                if (eventct < ct) return i + 1;
+                if (!possible_groups.Contains(i + 1))
+                    continue;
+                if (eventct < ct)
+                    return i + 1;
                 eventct -= ct;
             }
             throw new Exception("Found event out of priority range.");
         }
 
-        private static short GetRateTotalBaseSL(int star) => star switch
-        {
-            1 => 5800,
-            2 => 5300,
-            3 => 7400,
-            4 => 8800, // Scarlet has one more encounter.
-            5 => 9100,
-            6 => 6500,
-            _ => 0,
-        };
+        private static short GetRateTotalBaseSL(int star) =>
+            star switch
+            {
+                1 => 5800,
+                2 => 5300,
+                3 => 7400,
+                4 => 8800, // Scarlet has one more encounter.
+                5 => 9100,
+                6 => 6500,
+                _ => 0,
+            };
 
-        private static short GetRateTotalBaseVL(int star) => star switch
-        {
-            1 => 5800,
-            2 => 5300,
-            3 => 7400,
-            4 => 8700, // Violet has one less encounter.
-            5 => 9100,
-            6 => 6500,
-            _ => 0,
-        };
+        private static short GetRateTotalBaseVL(int star) =>
+            star switch
+            {
+                1 => 5800,
+                2 => 5300,
+                3 => 7400,
+                4 => 8700, // Violet has one less encounter.
+                5 => 9100,
+                6 => 6500,
+                _ => 0,
+            };
+
+        private static short GetRateTotalKitakamiSL(int star) =>
+            star switch
+            {
+                1 => 1500,
+                2 => 1500,
+                3 => 2500,
+                4 => 2100,
+                5 => 2250,
+                6 => 2575, // Scarlet has one more
+                _ => 0,
+            };
+
+        private static short GetRateTotalKitakamiVL(int star) =>
+            star switch
+            {
+                1 => 1500,
+                2 => 1500,
+                3 => 2500,
+                4 => 2100,
+                5 => 2250,
+                6 => 2574, // Violet has one less
+                _ => 0,
+            };
     }
 }

@@ -14,9 +14,15 @@ namespace RaidCrawler.WinForms.SubForms
             InitializeComponent();
             this.filters = filters;
             var settings = Properties.Settings.Default;
-            Species.DataSource = Enum.GetValues(typeof(Species)).Cast<Species>().Where(z => z != PKHeX.Core.Species.MAX_COUNT).ToArray();
+            Species.DataSource = Enum.GetValues(typeof(Species))
+                .Cast<Species>()
+                .Where(z => z != PKHeX.Core.Species.MAX_COUNT)
+                .ToArray();
             Nature.DataSource = Enum.GetValues(typeof(Nature));
-            TeraType.DataSource = Enum.GetValues(typeof(MoveType)).Cast<MoveType>().Where(z => z != MoveType.Any).ToArray();
+            TeraType.DataSource = Enum.GetValues(typeof(MoveType))
+                .Cast<MoveType>()
+                .Where(z => z != MoveType.Any)
+                .ToArray();
 
             Stars.SelectedIndex = 0;
             StarsComp.SelectedIndex = 0;
@@ -67,11 +73,16 @@ namespace RaidCrawler.WinForms.SubForms
             ShinyCheck.Checked = filter.Shiny;
             SquareCheck.Checked = filter.Square;
             CheckRewards.Checked = filter.RewardItems != null && filter.RewardsCount > 0;
-            Rewards.Text = filter.RewardItems != null ? string.Join(",", filter.RewardItems.Select(x => x.ToString()).ToArray())
-                                                        : "645,795,1606,1904,1905,1906,1907,1908";
+            Rewards.Text =
+                filter.RewardItems != null
+                    ? string.Join(",", filter.RewardItems.Select(x => x.ToString()).ToArray())
+                    : "645,795,1606,1904,1905,1906,1907,1908";
             RewardsComp.SelectedIndex = filter.RewardsComp;
             RewardsCount.Value = filter.RewardsCount;
-            BatchFilters.Text = filter.BatchFilters != null ? string.Join(Environment.NewLine, filter.BatchFilters) : string.Empty;
+            BatchFilters.Text =
+                filter.BatchFilters != null
+                    ? string.Join(Environment.NewLine, filter.BatchFilters)
+                    : string.Empty;
 
             var ivbin = filter.IVBin;
             HP.Checked = (ivbin & 1) == 1;
@@ -132,12 +143,27 @@ namespace RaidCrawler.WinForms.SubForms
             }
 
             RaidFilter filter = new();
-            var ivbin = ToInt(HP.Checked) << 0 | ToInt(Atk.Checked) << 1 | ToInt(Def.Checked) << 2 |
-                        ToInt(SpA.Checked) << 3 | ToInt(SpD.Checked) << 4 | ToInt(Spe.Checked) << 5;
-            var ivcomps = HPComp.SelectedIndex << 0 | AtkComp.SelectedIndex << 3 | DefComp.SelectedIndex << 6 |
-                          SpaComp.SelectedIndex << 9 | SpdComp.SelectedIndex << 12 | SpeComp.SelectedIndex << 15;
-            var ivvals = (int)IVHP.Value << 0 | (int)IVATK.Value << 5 | (int)IVDEF.Value << 10 |
-                         (int)IVSPA.Value << 15 | (int)IVSPD.Value << 20 | (int)IVSPE.Value << 25;
+            var ivbin =
+                ToInt(HP.Checked) << 0
+                | ToInt(Atk.Checked) << 1
+                | ToInt(Def.Checked) << 2
+                | ToInt(SpA.Checked) << 3
+                | ToInt(SpD.Checked) << 4
+                | ToInt(Spe.Checked) << 5;
+            var ivcomps =
+                HPComp.SelectedIndex << 0
+                | AtkComp.SelectedIndex << 3
+                | DefComp.SelectedIndex << 6
+                | SpaComp.SelectedIndex << 9
+                | SpdComp.SelectedIndex << 12
+                | SpeComp.SelectedIndex << 15;
+            var ivvals =
+                (int)IVHP.Value << 0
+                | (int)IVATK.Value << 5
+                | (int)IVDEF.Value << 10
+                | (int)IVSPA.Value << 15
+                | (int)IVSPD.Value << 20
+                | (int)IVSPE.Value << 25;
 
             filter.Name = FilterName.Text.Trim();
             filter.Species = SpeciesCheck.Checked ? Species.SelectedIndex : null;
@@ -152,10 +178,19 @@ namespace RaidCrawler.WinForms.SubForms
             filter.IVBin = ivbin;
             filter.IVVals = ivvals;
             filter.IVComps = ivcomps;
-            filter.RewardItems = CheckRewards.Checked ? Rewards.Text.Split(',').Where(z => int.TryParse(z.Trim(), out _) == true).Select(z => int.Parse(z.Trim())).ToArray() : null;
+            filter.RewardItems = CheckRewards.Checked
+                ? Rewards.Text
+                    .Split(',')
+                    .Where(z => int.TryParse(z.Trim(), out _) == true)
+                    .Select(z => int.Parse(z.Trim()))
+                    .ToArray()
+                : null;
             filter.RewardsCount = (int)RewardsCount.Value;
             filter.RewardsComp = RewardsComp.SelectedIndex;
-            filter.BatchFilters = BatchFilters.Text.Trim() == string.Empty ? null : BatchFilters.Text.Split(Environment.NewLine);
+            filter.BatchFilters =
+                BatchFilters.Text.Trim() == string.Empty
+                    ? null
+                    : BatchFilters.Text.Split(Environment.NewLine);
             filter.Enabled = true;
 
             if (filter.IsFilterSet())
@@ -256,7 +291,8 @@ namespace RaidCrawler.WinForms.SubForms
                 filters[i].Enabled = indexset.Contains(i);
 
             string output = JsonSerializer.Serialize(filters);
-            using StreamWriter sw = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "filters.json"));
+            using StreamWriter sw =
+                new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "filters.json"));
             sw.Write(output);
         }
 
@@ -285,9 +321,13 @@ namespace RaidCrawler.WinForms.SubForms
 
         private void FilterName_TextChanged(object sender, EventArgs e)
         {
-            if (ActiveFilters.SelectedIndex > -1 && FilterName.Text == filters[ActiveFilters.SelectedIndex].Name)
+            if (
+                ActiveFilters.SelectedIndex > -1
+                && FilterName.Text == filters[ActiveFilters.SelectedIndex].Name
+            )
                 Add.Text = "Update Filter";
-            else Add.Text = "Add Filter";
+            else
+                Add.Text = "Add Filter";
         }
 
         private void CheckRewards_CheckedChanged(object sender, EventArgs e)
@@ -305,14 +345,22 @@ namespace RaidCrawler.WinForms.SubForms
             if (form.ShowDialog() == DialogResult.OK)
             {
                 List<int> s = new();
-                if (form.CheckAbilityCapsule.Checked) s.Add(645);
-                if (form.CheckBottleCap.Checked) s.Add(795);
-                if (form.CheckAbilityPatch.Checked) s.Add(1606);
-                if (form.CheckSweet.Checked) s.Add(1904);
-                if (form.CheckSalty.Checked) s.Add(1905);
-                if (form.CheckSour.Checked) s.Add(1906);
-                if (form.CheckBitter.Checked) s.Add(1907);
-                if (form.CheckSpicy.Checked) s.Add(1908);
+                if (form.CheckAbilityCapsule.Checked)
+                    s.Add(645);
+                if (form.CheckBottleCap.Checked)
+                    s.Add(795);
+                if (form.CheckAbilityPatch.Checked)
+                    s.Add(1606);
+                if (form.CheckSweet.Checked)
+                    s.Add(1904);
+                if (form.CheckSalty.Checked)
+                    s.Add(1905);
+                if (form.CheckSour.Checked)
+                    s.Add(1906);
+                if (form.CheckBitter.Checked)
+                    s.Add(1907);
+                if (form.CheckSpicy.Checked)
+                    s.Add(1908);
 
                 Rewards.Text = string.Join(",", s);
             }
@@ -326,8 +374,20 @@ namespace RaidCrawler.WinForms.SubForms
             Graphics g = e.Graphics;
             RaidFilter filter = (RaidFilter)lb.Items[e.Index];
 
-            g.FillRectangle(new SolidBrush(((e.State & DrawItemState.Selected) == DrawItemState.Selected) ? ColorTranslator.FromHtml("#000078d7") : Color.White), e.Bounds);
-            g.DrawString(filter.Name, new Font(Name = "Segoe UI", 9), new SolidBrush(filter.Enabled ? e.ForeColor : Color.Gray), new PointF(e.Bounds.X, e.Bounds.Y));
+            g.FillRectangle(
+                new SolidBrush(
+                    ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
+                        ? ColorTranslator.FromHtml("#000078d7")
+                        : Color.White
+                ),
+                e.Bounds
+            );
+            g.DrawString(
+                filter.Name,
+                new Font(Name = "Segoe UI", 9),
+                new SolidBrush(filter.Enabled ? e.ForeColor : Color.Gray),
+                new PointF(e.Bounds.X, e.Bounds.Y)
+            );
 
             e.DrawFocusRectangle();
         }
@@ -335,7 +395,8 @@ namespace RaidCrawler.WinForms.SubForms
         private void ShinyCheck_CheckedChanged(object sender, EventArgs e)
         {
             SquareCheck.Enabled = ShinyCheck.Checked;
-            if (!ShinyCheck.Checked) SquareCheck.Checked = false;
+            if (!ShinyCheck.Checked)
+                SquareCheck.Checked = false;
         }
     }
 }

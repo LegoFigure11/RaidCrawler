@@ -67,13 +67,16 @@ namespace RaidCrawler.WinForms.SubForms
 
             ExperimentalView.Checked = c.StreamerView;
 
-            labelAppVersion.Text = "v" + v.Major + "." + v.Minor + "." + v.Build + "-" + shaField?.GetValue(null);
+            labelAppVersion.Text =
+                "v" + v.Major + "." + v.Minor + "." + v.Build + "-" + shaField?.GetValue(null);
             labelAppVersion.Left = (tabAbout.Width - labelAppVersion.Width) / 2;
-            labelAppName.Left = ((tabAbout.Width - labelAppName.Width) / 2) + (picAppIcon.Width / 2) + 2;
+            labelAppName.Left =
+                ((tabAbout.Width - labelAppName.Width) / 2) + (picAppIcon.Width / 2) + 2;
             picAppIcon.Left = labelAppName.Left - picAppIcon.Width - 2;
             linkLabel1.Left = (tabAbout.Width - linkLabel1.Width) / 2;
 
-            labelWebhooks.Text = "Webhooks are " + (DiscordWebhook.Enabled ? "enabled." : "disabled.");
+            labelWebhooks.Text =
+                "Webhooks are " + (DiscordWebhook.Enabled ? "enabled." : "disabled.");
         }
 
         private void EnableAlert_CheckedChanged(object sender, EventArgs e)
@@ -85,7 +88,8 @@ namespace RaidCrawler.WinForms.SubForms
         {
             DiscordWebhook.Enabled = EnableDiscordNotifications.Checked;
             DiscordMessageContent.Enabled = EnableDiscordNotifications.Checked;
-            labelWebhooks.Text = "Webhooks are " + (DiscordWebhook.Enabled ? "enabled." : "disabled.");
+            labelWebhooks.Text =
+                "Webhooks are " + (DiscordWebhook.Enabled ? "enabled." : "disabled.");
         }
 
         private void Config_Closing(object sender, EventArgs e)
@@ -132,7 +136,8 @@ namespace RaidCrawler.WinForms.SubForms
 
             JsonSerializerOptions options = new() { WriteIndented = true };
             string output = JsonSerializer.Serialize(c, options);
-            using StreamWriter sw = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.json"));
+            using StreamWriter sw =
+                new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.json"));
             sw.Write(output);
         }
 
@@ -167,7 +172,12 @@ namespace RaidCrawler.WinForms.SubForms
 
         private void LinkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(((LinkLabel)sender).Text) { UseShellExecute = true });
+            System.Diagnostics.Process.Start(
+                new System.Diagnostics.ProcessStartInfo(((LinkLabel)sender).Text)
+                {
+                    UseShellExecute = true
+                }
+            );
         }
 
         private void Game_SelectedIndexChanged(object sender, EventArgs e)
