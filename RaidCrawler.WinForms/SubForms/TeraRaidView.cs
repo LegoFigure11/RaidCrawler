@@ -3,14 +3,17 @@
     public partial class TeraRaidView : Form
     {
         private readonly object _lock = new();
+
         // Drag and Drop
         private bool drag = false;
         private Point start = new(0, 0);
 
         // Progress Bar
-        private readonly int pbWidth, pbHeight;
+        private readonly int pbWidth,
+            pbHeight;
         private readonly Bitmap bmp;
-        private double pbComplete, pbUnit;
+        private double pbComplete,
+            pbUnit;
         private Graphics? g;
 
         public TeraRaidView()
@@ -41,13 +44,19 @@
 
                     //draw progressbar
                     pbComplete -= pbUnit;
-                    g.FillRegion(Brushes.CornflowerBlue, new Region(new RectangleF(0, 0, (float)pbComplete, pbHeight)));
+                    g.FillRegion(
+                        Brushes.CornflowerBlue,
+                        new Region(new RectangleF(0, 0, (float)pbComplete, pbHeight))
+                    );
 
                     //load bitmap in picturebox picboxPB
                     pictureBox1.Image = bmp;
                     if (pbComplete <= 0)
                     {
-                        g.FillRectangle(new SolidBrush(Color.FromArgb(0, 5, 25)), new RectangleF(0, 0, pbWidth, pbHeight));
+                        g.FillRectangle(
+                            new SolidBrush(Color.FromArgb(0, 5, 25)),
+                            new RectangleF(0, 0, pbWidth, pbHeight)
+                        );
                         pictureBox1.Image = bmp;
                         g.Dispose();
                         pbComplete = -1;
@@ -65,7 +74,10 @@
                     pbComplete = -1;
                     g = Graphics.FromImage(bmp);
                     g.Clear(Color.LightSkyBlue);
-                    g.FillRectangle(new SolidBrush(Color.FromArgb(0, 5, 25)), new RectangleF(0, 0, pbWidth, pbHeight));
+                    g.FillRectangle(
+                        new SolidBrush(Color.FromArgb(0, 5, 25)),
+                        new RectangleF(0, 0, pbWidth, pbHeight)
+                    );
 
                     pictureBox1.Image = bmp;
                     g.Dispose();

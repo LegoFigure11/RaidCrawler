@@ -12,7 +12,7 @@ namespace RaidCrawler.Core.Structures
         public readonly ushort[] ExtraMoves;
         public ushort Species => Entity.Species;
         public byte Form => Entity.Form;
-        public sbyte Gender => Entity.Gender;
+        public byte Gender => Entity.Gender;
         public AbilityPermission Ability => Entity.Ability;
         public byte FlawlessIVCount => Entity.FlawlessIVCount;
         public Shiny Shiny => Entity.Shiny;
@@ -25,29 +25,49 @@ namespace RaidCrawler.Core.Structures
         public byte RandRate => Entity.RandRate;
         ushort[] ITeraRaid.ExtraMoves => ExtraMoves;
 
-        public TeraEncounter(EncounterTera9 enc, ulong fixedrewards, ulong lotteryrewards, ushort[] extras)
+        public TeraEncounter(
+            EncounterTera9 enc,
+            ulong fixedrewards,
+            ulong lotteryrewards,
+            ushort[] extras
+        )
         {
             Entity = enc;
             DropTableFix = fixedrewards;
             DropTableRandom = lotteryrewards;
-            ExtraMoves = extras.Where(z => z != 0 && !Entity.Moves.Contains(z)).Distinct().ToArray();
+            ExtraMoves = extras
+                .Where(z => z != 0 && !Entity.Moves.Contains(z))
+                .Distinct()
+                .ToArray();
             if (ExtraMoves.Length > 4)
                 Debug.WriteLine(ExtraMoves);
         }
 
-        public static ITeraRaid[] GetAllEncounters(string[] resources)
+        public static TeraEncounter[] GetAllEncounters(string[] resources)
         {
             var data = FlatbufferDumper.DumpBaseROMRaids(resources);
-            var encs = EncounterTera9.GetArray(data[0]);
+            var encs = EncounterTera9.GetArray(data[0], TeraRaidMapParent.Paldea); // TODO: add stuff for Kitakami too
             var extras = data[1];
             var rewards = TeraDistribution.GetRewardTables(data[2]);
             var result = new TeraEncounter[encs.Length];
             for (int i = 0; i < encs.Length; i++)
-                result[i] = new TeraEncounter(encs[i], rewards[i].Item1, rewards[i].Item2, TeraDistribution.GetExtraMoves(extras[(12 * i)..]));
+                result[i] = new TeraEncounter(
+                    encs[i],
+                    rewards[i].Item1,
+                    rewards[i].Item2,
+                    TeraDistribution.GetExtraMoves(extras[(12 * i)..])
+                );
             return result;
         }
 
-        public static List<(int, int, int)> GetRewards(TeraEncounter enc, uint seed, int teratype, IReadOnlyList<RaidFixedRewards>? fixed_rewards, IReadOnlyList<RaidLotteryRewards>? lottery_rewards, int boost)
+        public static List<(int, int, int)> GetRewards(
+            TeraEncounter enc,
+            uint seed,
+            int teratype,
+            IReadOnlyList<RaidFixedRewards>? fixed_rewards,
+            IReadOnlyList<RaidLotteryRewards>? lottery_rewards,
+            int boost
+        )
         {
             List<(int, int, int)> result = new();
             if (lottery_rewards is null || fixed_rewards is null)
@@ -57,7 +77,9 @@ namespace RaidCrawler.Core.Structures
             if (fixed_table is null)
                 return result;
 
-            var lottery_table = lottery_rewards.Where(z => z.TableName == enc.DropTableRandom).First();
+            var lottery_table = lottery_rewards
+                .Where(z => z.TableName == enc.DropTableRandom)
+                .First();
             if (lottery_table is null)
                 return result;
 
@@ -68,7 +90,17 @@ namespace RaidCrawler.Core.Structures
                 if (item is null || item.Category == 0 && item.ItemID == 0)
                     continue;
 
-                result.Add((item.ItemID == 0 ? item.Category == 2 ? Rewards.GetTeraShard(teratype) : Rewards.GetMaterial(enc.Species) : item.ItemID, item.Num, item.SubjectType));
+                result.Add(
+                    (
+                        item.ItemID == 0
+                            ? item.Category == 2
+                                ? Rewards.GetTeraShard(teratype)
+                                : Rewards.GetMaterial(enc.Species)
+                            : item.ItemID,
+                        item.Num,
+                        item.SubjectType
+                    )
+                );
             }
 
             // lottery reward
@@ -87,9 +119,20 @@ namespace RaidCrawler.Core.Structures
                     var item = lottery_table.GetRewardItem(j);
                     if (roll < item!.Rate)
                     {
-                        if (item.Category == 0) result.Add((item.ItemID, item.Num, 0));
-                        else if (item.Category == 1) result.Add(item.ItemID == 0 ? (Rewards.GetMaterial(enc.Species), item.Num, 0) : (item.ItemID, item.Num, 0));
-                        else result.Add(item.ItemID == 0 ? (Rewards.GetTeraShard(teratype), item.Num, 0) : (item.ItemID, item.Num, 0));
+                        if (item.Category == 0)
+                            result.Add((item.ItemID, item.Num, 0));
+                        else if (item.Category == 1)
+                            result.Add(
+                                item.ItemID == 0
+                                    ? (Rewards.GetMaterial(enc.Species), item.Num, 0)
+                                    : (item.ItemID, item.Num, 0)
+                            );
+                        else
+                            result.Add(
+                                item.ItemID == 0
+                                    ? (Rewards.GetTeraShard(teratype), item.Num, 0)
+                                    : (item.ItemID, item.Num, 0)
+                            );
                         break;
                     }
                     roll -= item!.Rate;

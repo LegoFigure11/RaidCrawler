@@ -25,7 +25,19 @@ namespace RaidCrawler.Core.Structures
 
         public bool IsFilterSet()
         {
-            if (Species == null && Form == null && Stars == null && Shiny == false && Square == false && Nature == null && TeraType == null && Gender == null && IVBin == 0 && (RewardItems == null || RewardsCount == 0) && BatchFilters == null)
+            if (
+                Species == null
+                && Form == null
+                && Stars == null
+                && Shiny == false
+                && Square == false
+                && Nature == null
+                && TeraType == null
+                && Gender == null
+                && IVBin == 0
+                && (RewardItems == null || RewardsCount == 0)
+                && BatchFilters == null
+            )
                 return false;
             return true;
         }
@@ -62,7 +74,12 @@ namespace RaidCrawler.Core.Structures
             };
         }
 
-        public bool IsRewardsSatisfied(RaidContainer container, ITeraRaid enc, Raid raid, int sandwichBoost)
+        public bool IsRewardsSatisfied(
+            RaidContainer container,
+            ITeraRaid enc,
+            Raid raid,
+            int sandwichBoost
+        )
         {
             if (RewardItems is null || RewardsCount == 0)
                 return true;
@@ -174,22 +191,37 @@ namespace RaidCrawler.Core.Structures
             return BatchEditing.IsFilterMatch(filters, blank);
         }
 
-        public bool FilterSatisfied(RaidContainer container, ITeraRaid enc, Raid raid, int SandwichBoost)
+        public bool FilterSatisfied(
+            RaidContainer container,
+            ITeraRaid enc,
+            Raid raid,
+            int SandwichBoost
+        )
         {
             var param = enc.GetParam();
-            var blank = new PK9
-            {
-                Species = enc.Species,
-                Form = enc.Form
-            };
+            var blank = new PK9 { Species = enc.Species, Form = enc.Form };
             Encounter9RNG.GenerateData(blank, param, EncounterCriteria.Unrestricted, raid.Seed);
 
-            return Enabled && IsIVsSatisfied(blank) && IsShinySatisfied(blank) && IsSquareSatisfied(blank) && IsSpeciesSatisfied(blank.Species) && IsFormSatisfied(blank.Form)
-                && IsNatureSatisfied(blank.Nature) && IsStarsSatisfied(enc) && IsTeraTypeSatisfied(raid)
-                && IsRewardsSatisfied(container, enc, raid, SandwichBoost) && IsGenderSatisfied(enc, blank.Gender) && IsBatchFilterSatisfied(blank);
+            return Enabled
+                && IsIVsSatisfied(blank)
+                && IsShinySatisfied(blank)
+                && IsSquareSatisfied(blank)
+                && IsSpeciesSatisfied(blank.Species)
+                && IsFormSatisfied(blank.Form)
+                && IsNatureSatisfied(blank.Nature)
+                && IsStarsSatisfied(enc)
+                && IsTeraTypeSatisfied(raid)
+                && IsRewardsSatisfied(container, enc, raid, SandwichBoost)
+                && IsGenderSatisfied(enc, blank.Gender)
+                && IsBatchFilterSatisfied(blank);
         }
 
-        public bool FilterSatisfied(RaidContainer container, IReadOnlyList<ITeraRaid> encounters, IReadOnlyList<Raid> raids, int sandwichBoost)
+        public bool FilterSatisfied(
+            RaidContainer container,
+            IReadOnlyList<ITeraRaid> encounters,
+            IReadOnlyList<Raid> raids,
+            int sandwichBoost
+        )
         {
             if (raids.Count != encounters.Count)
                 throw new Exception("Raid count does not match Encounter count");

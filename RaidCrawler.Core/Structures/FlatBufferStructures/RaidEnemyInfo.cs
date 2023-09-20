@@ -3,7 +3,12 @@
 // ReSharper disable once ClassNeverInstantiated.Global
 public partial class RaidEnemyInfo
 {
-    public void SerializePKHeX(BinaryWriter bw, byte star, sbyte rate, RaidSerializationFormat format)
+    public void SerializePKHeX(
+        BinaryWriter bw,
+        byte star,
+        sbyte rate,
+        RaidSerializationFormat format
+    )
     {
         BossPokePara.SerializePKHeX(bw, CaptureLv, format);
         BossPokeSize.SerializePKHeX();
@@ -18,7 +23,9 @@ public partial class RaidEnemyInfo
     {
         var b = BossPokePara;
         if (b.TalentType > 2)
-            throw new InvalidDataException($"Invalid talent type for {nameof(SerializeDistribution)}.");
+            throw new InvalidDataException(
+                $"Invalid talent type for {nameof(SerializeDistribution)}."
+            );
 
         bw.Write(b.Seikaku == 0 ? (byte)25 : (byte)(b.Seikaku - 1));
         bw.Write((byte)b.TalentValue.HP);

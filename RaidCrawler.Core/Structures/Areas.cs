@@ -2,7 +2,8 @@
 {
     public class Areas
     {
-        private static readonly string[] AreaList = new string[] {
+        private static readonly string[] AreaList = new string[]
+        {
             "South Province (Area 1)",
             "", // Unused
             "", // Unused

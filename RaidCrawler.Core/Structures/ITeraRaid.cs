@@ -7,7 +7,7 @@ namespace RaidCrawler.Core.Structures
         ushort[] ExtraMoves { get; }
         ushort Species { get; }
         byte Form { get; }
-        sbyte Gender { get; }
+        byte Gender { get; }
         AbilityPermission Ability { get; }
         byte FlawlessIVCount { get; }
         Shiny Shiny { get; }

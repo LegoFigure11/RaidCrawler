@@ -56,7 +56,10 @@ namespace RaidCrawler.Core.Structures
             uint EC = (uint)rng.NextInt();
             uint TIDSID = (uint)rng.NextInt();
             uint PID = (uint)rng.NextInt();
-            var Shiny = (((PID >> 16) ^ (PID & 0xFFFF)) >> 4) == (((TIDSID >> 16) ^ (TIDSID & 0xFFFF)) >> 4) ? 1 : 0;
+            var Shiny =
+                (((PID >> 16) ^ (PID & 0xFFFF)) >> 4) == (((TIDSID >> 16) ^ (TIDSID & 0xFFFF)) >> 4)
+                    ? 1
+                    : 0;
             return new uint[] { EC, TIDSID, PID, (uint)Shiny };
         }
 

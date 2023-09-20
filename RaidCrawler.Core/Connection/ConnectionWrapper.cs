@@ -11,7 +11,10 @@ namespace RaidCrawler.Core.Connection
     public class ConnectionWrapperAsync : Offsets
     {
         public readonly ISwitchConnectionAsync Connection;
-        public bool Connected { get => Connection is not null && IsConnected; }
+        public bool Connected
+        {
+            get => Connection is not null && IsConnected;
+        }
         private bool IsConnected { get; set; }
         private readonly bool CRLF;
         private readonly Action<string> _statusUpdate;
@@ -38,7 +41,9 @@ namespace RaidCrawler.Core.Connection
             {
                 _statusUpdate("Connecting...");
                 Connection.Connect();
-                BaseBlockKeyPointer = await Connection.PointerAll(BlockKeyPointer, token).ConfigureAwait(false);
+                BaseBlockKeyPointer = await Connection
+                    .PointerAll(BlockKeyPointer, token)
+                    .ConfigureAwait(false);
                 IsConnected = true;
                 _statusUpdate("Connected!");
                 return (true, "");
@@ -58,7 +63,9 @@ namespace RaidCrawler.Core.Connection
             try
             {
                 _statusUpdate("Disconnecting controller...");
-                await Connection.SendAsync(SwitchCommand.DetachController(CRLF), token).ConfigureAwait(false);
+                await Connection
+                    .SendAsync(SwitchCommand.DetachController(CRLF), token)
+                    .ConfigureAwait(false);
 
                 _statusUpdate("Disconnecting...");
                 Connection.Disconnect();
@@ -88,28 +95,43 @@ namespace RaidCrawler.Core.Connection
         private async Task<byte[]> ReadSaveBlock(uint key, int size, CancellationToken token)
         {
             var block_ofs = await SearchSaveKey(key, token).ConfigureAwait(false);
-            var data = await Connection.ReadBytesAbsoluteAsync(block_ofs + 8, 0x8, token).ConfigureAwait(false);
+            var data = await Connection
+                .ReadBytesAbsoluteAsync(block_ofs + 8, 0x8, token)
+                .ConfigureAwait(false);
             block_ofs = BitConverter.ToUInt64(data, 0);
 
-            var block = await Connection.ReadBytesAbsoluteAsync(block_ofs, size, token).ConfigureAwait(false);
+            var block = await Connection
+                .ReadBytesAbsoluteAsync(block_ofs, size, token)
+                .ConfigureAwait(false);
             return DecryptBlock(key, block);
         }
 
         private async Task<byte[]> ReadSaveBlockObject(uint key, CancellationToken token)
         {
             var header_ofs = await SearchSaveKey(key, token).ConfigureAwait(false);
-            var data = await Connection.ReadBytesAbsoluteAsync(header_ofs + 8, 8, token).ConfigureAwait(false);
+            var data = await Connection
+                .ReadBytesAbsoluteAsync(header_ofs + 8, 8, token)
+                .ConfigureAwait(false);
             header_ofs = BitConverter.ToUInt64(data);
 
-            var header = await Connection.ReadBytesAbsoluteAsync(header_ofs, 5, token).ConfigureAwait(false);
+            var header = await Connection
+                .ReadBytesAbsoluteAsync(header_ofs, 5, token)
+                .ConfigureAwait(false);
             header = DecryptBlock(key, header);
 
             var size = BitConverter.ToUInt32(header.AsSpan()[1..]);
-            var obj = await Connection.ReadBytesAbsoluteAsync(header_ofs, (int)size + 5, token).ConfigureAwait(false);
+            var obj = await Connection
+                .ReadBytesAbsoluteAsync(header_ofs, (int)size + 5, token)
+                .ConfigureAwait(false);
             return DecryptBlock(key, obj)[5..];
         }
 
-        public async Task<byte[]> ReadBlockDefault(uint key, string? cache, bool force, CancellationToken token)
+        public async Task<byte[]> ReadBlockDefault(
+            uint key,
+            string? cache,
+            bool force,
+            CancellationToken token
+        )
         {
             var folder = Path.Combine(Directory.GetCurrentDirectory(), "cache");
             Directory.CreateDirectory(folder);
@@ -125,7 +147,9 @@ namespace RaidCrawler.Core.Connection
 
         private async Task<ulong> SearchSaveKey(uint key, CancellationToken token)
         {
-            var data = await Connection.ReadBytesAbsoluteAsync(BaseBlockKeyPointer + 8, 16, token).ConfigureAwait(false);
+            var data = await Connection
+                .ReadBytesAbsoluteAsync(BaseBlockKeyPointer + 8, 16, token)
+                .ConfigureAwait(false);
             var start = BitConverter.ToUInt64(data.AsSpan()[..8]);
             var end = BitConverter.ToUInt64(data.AsSpan()[8..]);
 
@@ -141,7 +165,8 @@ namespace RaidCrawler.Core.Connection
 
                 if (found >= key)
                     end = mid;
-                else start = mid + 48;
+                else
+                    start = mid + 48;
             }
             return start;
         }
@@ -156,26 +181,46 @@ namespace RaidCrawler.Core.Connection
 
         private async Task Click(SwitchButton button, int delay, CancellationToken token)
         {
-            await Connection.SendAsync(SwitchCommand.Click(button, CRLF), token).ConfigureAwait(false);
+            await Connection
+                .SendAsync(SwitchCommand.Click(button, CRLF), token)
+                .ConfigureAwait(false);
             await Task.Delay(delay, token).ConfigureAwait(false);
         }
 
         private async Task Touch(int x, int y, int hold, int delay, CancellationToken token)
         {
-            var command = Encoding.ASCII.GetBytes($"touchHold {x} {y} {hold}{(CRLF ? "\r\n" : "")}");
+            var command = Encoding.ASCII.GetBytes(
+                $"touchHold {x} {y} {hold}{(CRLF ? "\r\n" : "")}"
+            );
             await Connection.SendAsync(command, token).ConfigureAwait(false);
             await Task.Delay(delay, token).ConfigureAwait(false);
         }
 
-        private async Task SetStick(SwitchStick stick, short x, short y, int hold, int delay, CancellationToken token)
+        private async Task SetStick(
+            SwitchStick stick,
+            short x,
+            short y,
+            int hold,
+            int delay,
+            CancellationToken token
+        )
         {
-            await Connection.SendAsync(SwitchCommand.SetStick(stick, x, y, CRLF), token).ConfigureAwait(false);
+            await Connection
+                .SendAsync(SwitchCommand.SetStick(stick, x, y, CRLF), token)
+                .ConfigureAwait(false);
             await Task.Delay(hold, token).ConfigureAwait(false);
-            await Connection.SendAsync(SwitchCommand.SetStick(stick, 0, 0, CRLF), token).ConfigureAwait(false);
+            await Connection
+                .SendAsync(SwitchCommand.SetStick(stick, 0, 0, CRLF), token)
+                .ConfigureAwait(false);
             await Task.Delay(delay, token).ConfigureAwait(false);
         }
 
-        private async Task PressAndHold(SwitchButton b, int hold, int delay, CancellationToken token)
+        private async Task PressAndHold(
+            SwitchButton b,
+            int hold,
+            int delay,
+            CancellationToken token
+        )
         {
             await Connection.SendAsync(SwitchCommand.Hold(b, CRLF), token).ConfigureAwait(false);
             await Task.Delay(hold, token).ConfigureAwait(false);
@@ -184,10 +229,18 @@ namespace RaidCrawler.Core.Connection
         }
 
         // Thank you to Anubis for sharing a more optimized routine, as well as CloseGame(), StartGame(), and SaveGame()!
-        public async Task AdvanceDate(IDateAdvanceConfig config, CancellationToken token, Action<int>? action = null)
+        public async Task AdvanceDate(
+            IDateAdvanceConfig config,
+            CancellationToken token,
+            Action<int>? action = null
+        )
         {
             // Not great, but when adding/removing clicks, make sure to account for command count for an accurate StreamerView progress bar.
-            int steps = (config.UseTouch ? 19 : 25) + (config.UseOvershoot ? 2 : config.SystemDownPresses) + (config.DodgeSystemUpdate ? 2 : 0) + config.DaysToSkip;
+            int steps =
+                (config.UseTouch ? 19 : 25)
+                + (config.UseOvershoot ? 2 : config.SystemDownPresses)
+                + (config.DodgeSystemUpdate ? 2 : 0)
+                + config.DaysToSkip;
 
             _statusUpdate("Changing date...");
             var BaseDelay = config.BaseDelay;
@@ -211,12 +264,14 @@ namespace RaidCrawler.Core.Connection
             }
             else
             {
-                await Click(DDOWN, config.NavigateToSettingsDelay + BaseDelay, token).ConfigureAwait(false);
+                await Click(DDOWN, config.NavigateToSettingsDelay + BaseDelay, token)
+                    .ConfigureAwait(false);
                 UpdateProgressBar(action, steps);
 
                 for (int i = 0; i < 5; i++)
                 {
-                    await Click(DRIGHT, config.NavigateToSettingsDelay + BaseDelay, token).ConfigureAwait(false);
+                    await Click(DRIGHT, config.NavigateToSettingsDelay + BaseDelay, token)
+                        .ConfigureAwait(false);
                     UpdateProgressBar(action, steps);
                 }
             }
@@ -226,8 +281,18 @@ namespace RaidCrawler.Core.Connection
 
             // Scroll to bottom
             if (config.UseSetStick)
-                await SetStick(SwitchStick.LEFT, 0, -30_000, config.HoldDuration, 0_100 + BaseDelay, token).ConfigureAwait(false);
-            else await PressAndHold(DDOWN, config.HoldDuration, 0_100 + BaseDelay, token).ConfigureAwait(false);
+                await SetStick(
+                        SwitchStick.LEFT,
+                        0,
+                        -30_000,
+                        config.HoldDuration,
+                        0_100 + BaseDelay,
+                        token
+                    )
+                    .ConfigureAwait(false);
+            else
+                await PressAndHold(DDOWN, config.HoldDuration, 0_100 + BaseDelay, token)
+                    .ConfigureAwait(false);
             UpdateProgressBar(action, steps);
 
             // Navigate to "Date and Time"
@@ -239,8 +304,18 @@ namespace RaidCrawler.Core.Connection
             if (config.UseOvershoot)
             {
                 if (config.UseSetStick)
-                    await SetStick(SwitchStick.LEFT, 0, -30_000, config.SystemOvershoot, 0_100 + BaseDelay, token).ConfigureAwait(false);
-                else await PressAndHold(DDOWN, config.SystemOvershoot, 0_100 + BaseDelay, token).ConfigureAwait(false);
+                    await SetStick(
+                            SwitchStick.LEFT,
+                            0,
+                            -30_000,
+                            config.SystemOvershoot,
+                            0_100 + BaseDelay,
+                            token
+                        )
+                        .ConfigureAwait(false);
+                else
+                    await PressAndHold(DDOWN, config.SystemOvershoot, 0_100 + BaseDelay, token)
+                        .ConfigureAwait(false);
                 UpdateProgressBar(action, steps);
 
                 await Click(DUP, 0_500 + BaseDelay, token).ConfigureAwait(false);
@@ -285,7 +360,8 @@ namespace RaidCrawler.Core.Connection
 
             for (int i = 0; i < 6; i++)
             {
-                await Click(DRIGHT, (i < 5 ? 0_050 : 0_100) + BaseDelay, token).ConfigureAwait(false);
+                await Click(DRIGHT, (i < 5 ? 0_050 : 0_100) + BaseDelay, token)
+                    .ConfigureAwait(false);
                 UpdateProgressBar(action, steps);
             }
 
@@ -296,7 +372,12 @@ namespace RaidCrawler.Core.Connection
             await Click(HOME, config.ReturnHomeDelay + BaseDelay, token).ConfigureAwait(false);
             UpdateProgressBar(action, steps);
 
-            await Click(HOME, (config.DodgeSystemUpdate ? 0_500 : config.ReturnGameDelay) + BaseDelay, token).ConfigureAwait(false);
+            await Click(
+                    HOME,
+                    (config.DodgeSystemUpdate ? 0_500 : config.ReturnGameDelay) + BaseDelay,
+                    token
+                )
+                .ConfigureAwait(false);
             UpdateProgressBar(action, steps);
 
             if (config.DodgeSystemUpdate)
@@ -345,7 +426,9 @@ namespace RaidCrawler.Core.Connection
                 await Click(A, 1_000, token).ConfigureAwait(false);
 
             _statusUpdate("Back in the overworld! Refreshing the base block key pointer...");
-            BaseBlockKeyPointer = await Connection.PointerAll(BlockKeyPointer, token).ConfigureAwait(false);
+            BaseBlockKeyPointer = await Connection
+                .PointerAll(BlockKeyPointer, token)
+                .ConfigureAwait(false);
         }
 
         public async Task SaveGame(IDateAdvanceConfig config, CancellationToken token)

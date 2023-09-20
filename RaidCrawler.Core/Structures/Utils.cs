@@ -14,7 +14,9 @@ namespace RaidCrawler.Core.Structures
             resourceNameMap = BuildLookup(thisAssembly.GetManifestResourceNames());
         }
 
-        private static Dictionary<string, string> BuildLookup(IReadOnlyCollection<string> manifestNames)
+        private static Dictionary<string, string> BuildLookup(
+            IReadOnlyCollection<string> manifestNames
+        )
         {
             var result = new Dictionary<string, string>(manifestNames.Count);
             foreach (var resName in manifestNames)
@@ -33,7 +35,9 @@ namespace RaidCrawler.Core.Structures
             System.Diagnostics.Debug.Assert(start != 0);
 
             // text file fetch excludes ".txt" (mixed case...); other extensions are used (all lowercase).
-            return resName.EndsWith(".txt", StringComparison.Ordinal) ? resName[start..^4].ToLowerInvariant() : resName[start..];
+            return resName.EndsWith(".txt", StringComparison.Ordinal)
+                ? resName[start..^4].ToLowerInvariant()
+                : resName[start..];
         }
 
         public static byte[] GetBinaryResource(string name)
@@ -63,7 +67,12 @@ namespace RaidCrawler.Core.Structures
             return reader.ReadToEnd();
         }
 
-        public static string GetFormString(ushort species, byte form, GameStrings formStrings, EntityContext context = EntityContext.Gen9)
+        public static string GetFormString(
+            ushort species,
+            byte form,
+            GameStrings formStrings,
+            EntityContext context = EntityContext.Gen9
+        )
         {
             var result = ShowdownParsing.GetStringFromForm(form, formStrings, species, context);
             if (result.Length > 0 && result[0] != '-')

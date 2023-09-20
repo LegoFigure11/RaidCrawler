@@ -18,7 +18,12 @@ namespace RaidCrawler.WinForms.SubForms
             DataTable dt = new();
             dt.Columns.Add("Emoji", typeof(string));
             dt.Columns.Add("Emoji Value", typeof(string));
-            emoji.ToList().ForEach(KeyValuePair => dt.Rows.Add(new object[] { KeyValuePair.Key, KeyValuePair.Value }));
+            emoji
+                .ToList()
+                .ForEach(
+                    KeyValuePair =>
+                        dt.Rows.Add(new object[] { KeyValuePair.Key, KeyValuePair.Value })
+                );
             dt.Columns[0].ReadOnly = true;
             return dt;
         }

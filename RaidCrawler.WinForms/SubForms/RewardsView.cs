@@ -5,7 +5,11 @@ namespace RaidCrawler.WinForms.SubForms
 {
     public partial class RewardsView : Form
     {
-        public RewardsView(IReadOnlyList<string> itemStrings, IReadOnlyList<string> moveStrings, IReadOnlyList<(int, int, int)> rewards)
+        public RewardsView(
+            IReadOnlyList<string> itemStrings,
+            IReadOnlyList<string> moveStrings,
+            IReadOnlyList<(int, int, int)> rewards
+        )
         {
             InitializeComponent();
             Bitmap rare = PKHeX.Drawing.PokeSprite.Properties.Resources.rare_icon;
@@ -25,7 +29,15 @@ namespace RaidCrawler.WinForms.SubForms
                 {
                     10000 => "Material",
                     20000 => "Tera Shard",
-                    _ => Rewards.IsTM(rewards[i].Item1) ? Rewards.GetNameTM(rewards[i].Item1, itemStrings, moveStrings, Rewards.TMIndexes) : itemStrings[rewards[i].Item1]
+                    _
+                        => Rewards.IsTM(rewards[i].Item1)
+                            ? Rewards.GetNameTM(
+                                rewards[i].Item1,
+                                itemStrings,
+                                moveStrings,
+                                Rewards.TMIndexes
+                            )
+                            : itemStrings[rewards[i].Item1]
                 };
 
                 var subject = rewards[i].Item3 switch
@@ -44,12 +56,25 @@ namespace RaidCrawler.WinForms.SubForms
                     1906 => (Image?)Properties.Resources.ResourceManager.GetObject("item_1906"),
                     1907 => (Image?)Properties.Resources.ResourceManager.GetObject("item_1907"),
                     1908 => (Image?)Properties.Resources.ResourceManager.GetObject("item_1908"),
-                    >= 1956 and <= 2159 => (Image?)Properties.Resources.ResourceManager.GetObject("material"),
+                    >= 1956
+                    and <= 2159
+                        => (Image?)Properties.Resources.ResourceManager.GetObject("material"),
                     10000 => (Image?)Properties.Resources.ResourceManager.GetObject("material"),
-                    20000 => (Image?)PKHeX.Drawing.PokeSprite.Properties.Resources.ResourceManager.GetObject("aitem_1862"),
-                    _ => Rewards.IsTM(rewards[i].Item1)
-                        ? (Image?)PKHeX.Drawing.PokeSprite.Properties.Resources.ResourceManager.GetObject($"aitem_tm")
-                        : (Image?)PKHeX.Drawing.PokeSprite.Properties.Resources.ResourceManager.GetObject($"aitem_{rewards[i].Item1}")
+                    20000
+                        => (Image?)
+                            PKHeX.Drawing.PokeSprite.Properties.Resources.ResourceManager.GetObject(
+                                "aitem_1862"
+                            ),
+                    _
+                        => Rewards.IsTM(rewards[i].Item1)
+                            ? (Image?)
+                                PKHeX.Drawing.PokeSprite.Properties.Resources.ResourceManager.GetObject(
+                                    $"aitem_tm"
+                                )
+                            : (Image?)
+                                PKHeX.Drawing.PokeSprite.Properties.Resources.ResourceManager.GetObject(
+                                    $"aitem_{rewards[i].Item1}"
+                                )
                 };
 
                 if (img != null && Rewards.RareRewards.Contains(rewards[i].Item1))
@@ -62,7 +87,10 @@ namespace RaidCrawler.WinForms.SubForms
                 Controls.Add(pictures[i]);
                 Controls.Add(labels[i]);
             }
-            ClientSize = new Size(ClientSize.Width, 12 + rewards.Count * (pictures[0].Size.Height + 12));
+            ClientSize = new Size(
+                ClientSize.Width,
+                12 + rewards.Count * (pictures[0].Size.Height + 12)
+            );
         }
     }
 }
