@@ -184,14 +184,14 @@ namespace RaidCrawler.Core.Structures
             List<Raid> newRaids = new();
             List<ITeraRaid> newTera = new();
             List<List<(int, int, int)>> newRewards = new();
-            int eventct = 0;
+            int eventCount = 0;
             for (int i = 0; i < count; i++)
             {
                 var raid = new Raid(data.AsSpan(i * Raid.SIZE, Raid.SIZE), type);
 
                 if (raid.Den == 0)
                 {
-                    eventct++;
+                    eventCount++;
                     continue;
                 }
 
@@ -199,19 +199,19 @@ namespace RaidCrawler.Core.Structures
                     continue;
 
                 var progress = raid.IsEvent ? eventPrg : storyPrg;
-                var raid_delivery_group_id = -1;
+                var raidDeliveryGroupID = -1;
                 try
                 {
-                    raid_delivery_group_id = raid.GetDeliveryGroupID(
+                    raidDeliveryGroupID = raid.GetDeliveryGroupID(
                         container.DeliveryRaidPriority,
                         possibleGroups,
-                        eventct
+                        eventCount
                     );
                 }
                 catch (Exception ex)
                 {
                     var extra =
-                        $"Group ID: {raid_delivery_group_id}\nisFixed: {raid.Flags == 3}\nisBlack: {raid.IsBlack}\nisEvent: {raid.IsEvent}\n\n";
+                        $"Group ID: {raidDeliveryGroupID}\nisFixed: {raid.Flags == 3}\nisBlack: {raid.IsBlack}\nisEvent: {raid.IsEvent}\n\n";
                     var msg =
                         $"{ex.Message}\nDen: {raid.Den}\nProgress: {progress}\nDifficulty: {raid.Difficulty}\n{extra}";
                     File.AppendAllText(dbgFile, msg);
@@ -219,11 +219,11 @@ namespace RaidCrawler.Core.Structures
                     continue;
                 }
 
-                var encounter = raid.GetTeraEncounter(container, progress, raid_delivery_group_id);
+                var encounter = raid.GetTeraEncounter(container, progress, raidDeliveryGroupID);
                 if (encounter is null)
                 {
                     var extra =
-                        $"Group ID: {raid_delivery_group_id}\nisFixed: {raid.Flags == 3}\nisBlack: {raid.IsBlack}\nisEvent: {raid.IsEvent}\n\n";
+                        $"Group ID: {raidDeliveryGroupID}\nisFixed: {raid.Flags == 3}\nisBlack: {raid.IsBlack}\nisEvent: {raid.IsEvent}\n\n";
                     var msg =
                         $"No encounters found.\nDen: {raid.Den}\nProgress: {progress}\nDifficulty: {raid.Difficulty}\n{extra}";
                     File.AppendAllText(dbgFile, msg);
@@ -232,7 +232,7 @@ namespace RaidCrawler.Core.Structures
                 }
 
                 if (raid.IsEvent)
-                    eventct++;
+                    eventCount++;
 
                 newRaids.Add(raid);
                 newTera.Add(encounter);
@@ -321,8 +321,8 @@ namespace RaidCrawler.Core.Structures
         public static int GetDeliveryGroupID(
             this Raid raid,
             DeliveryGroupID ids,
-            List<int> possible_groups,
-            int eventct
+            List<int> possibleGroups,
+            int eventCount
         )
         {
             if (!raid.IsEvent)
@@ -333,12 +333,12 @@ namespace RaidCrawler.Core.Structures
 
             for (int i = 0; i < groups.Table_Length; i++)
             {
-                var ct = groups.Table(i);
-                if (!possible_groups.Contains(i + 1))
+                var count = groups.Table(i);
+                if (!possibleGroups.Contains(i + 1))
                     continue;
-                if (eventct < ct)
+                if (eventCount < count)
                     return i + 1;
-                eventct -= ct;
+                eventCount -= count;
             }
             throw new Exception("Found event out of priority range.");
         }

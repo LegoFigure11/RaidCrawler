@@ -129,40 +129,40 @@ namespace RaidCrawler.Core.Structures
         public static List<(int, int, int)> GetRewards(
             TeraDistribution enc,
             uint seed,
-            int teratype,
-            IReadOnlyList<DeliveryRaidFixedRewardItem>? fixed_rewards,
-            IReadOnlyList<DeliveryRaidLotteryRewardItem>? lottery_rewards,
+            int teraType,
+            IReadOnlyList<DeliveryRaidFixedRewardItem>? fixedRewards,
+            IReadOnlyList<DeliveryRaidLotteryRewardItem>? lotteryRewards,
             int boost
         )
         {
             List<(int, int, int)> result = new();
-            if (lottery_rewards is null)
+            if (lotteryRewards is null)
                 return result;
 
-            if (fixed_rewards is null)
+            if (fixedRewards is null)
                 return result;
 
-            var fixed_table = fixed_rewards.Where(z => z.TableName == enc.DropTableFix).First();
-            if (fixed_table is null)
+            var fixedTable = fixedRewards.Where(z => z.TableName == enc.DropTableFix).First();
+            if (fixedTable is null)
                 return result;
 
-            var lottery_table = lottery_rewards
+            var lotteryTable = lotteryRewards
                 .Where(z => z.TableName == enc.DropTableRandom)
                 .First();
-            if (lottery_table is null)
+            if (lotteryTable is null)
                 return result;
 
             // fixed reward
             for (int i = 0; i < DeliveryRaidFixedRewardItem.Count; i++)
             {
-                var item = fixed_table.GetReward(i);
+                var item = fixedTable.GetReward(i);
                 if (item.Category == 0 && item.ItemID == 0)
                     continue;
                 result.Add(
                     (
                         item.ItemID == 0
                             ? item.Category == 2
-                                ? Rewards.GetTeraShard(teratype)
+                                ? Rewards.GetTeraShard(teraType)
                                 : Rewards.GetMaterial(enc.Species)
                             : item.ItemID,
                         item.Num,
@@ -174,7 +174,7 @@ namespace RaidCrawler.Core.Structures
             // lottery reward
             var total = 0;
             for (int i = 0; i < DeliveryRaidLotteryRewardItem.RewardItemCount; i++)
-                total += lottery_table.GetRewardItem(i).Rate;
+                total += lotteryTable.GetRewardItem(i).Rate;
 
             var rand = new Xoroshiro128Plus(seed);
             var count = (int)rand.NextInt(100);
@@ -185,7 +185,7 @@ namespace RaidCrawler.Core.Structures
                 var roll = (int)rand.NextInt((ulong)total);
                 for (int j = 0; j < DeliveryRaidLotteryRewardItem.RewardItemCount; j++)
                 {
-                    var item = lottery_table.GetRewardItem(j);
+                    var item = lotteryTable.GetRewardItem(j);
                     if (roll < item.Rate)
                     {
                         if (item.Category == 0)
@@ -199,7 +199,7 @@ namespace RaidCrawler.Core.Structures
                         else
                             result.Add(
                                 item.ItemID == 0
-                                    ? (Rewards.GetTeraShard(teratype), item.Num, 0)
+                                    ? (Rewards.GetTeraShard(teraType), item.Num, 0)
                                     : (item.ItemID, item.Num, 0)
                             );
                         break;
@@ -232,8 +232,8 @@ namespace RaidCrawler.Core.Structures
         public ushort Move2 => Entity.Moves.Move2;
         public ushort Move3 => Entity.Moves.Move3;
         public ushort Move4 => Entity.Moves.Move4;
-        public byte Stars => Entity is ITeraRaid9 t9 ? t9.Stars : (byte)0;
-        public byte RandRate => Entity is ITeraRaid9 t9 ? t9.RandRate : (byte)0;
+        public byte Stars => Entity.Stars;
+        public byte RandRate => Entity.RandRate;
         ushort[] ITeraRaid.ExtraMoves => ExtraMoves;
 
         public static bool AvailableInGame(ITeraRaid9 enc, string game)
@@ -275,15 +275,15 @@ namespace RaidCrawler.Core.Structures
 
         public TeraMight(
             EncounterMight9 enc,
-            ulong fixedrewards,
-            ulong lotteryrewards,
+            ulong fixedRewards,
+            ulong lotteryRewards,
             ushort[] extras,
             sbyte group
         )
         {
             Entity = enc;
-            DropTableFix = fixedrewards;
-            DropTableRandom = lotteryrewards;
+            DropTableFix = fixedRewards;
+            DropTableRandom = lotteryRewards;
             ExtraMoves = extras
                 .Where(z => z != 0 && !Entity.Moves.Contains(z))
                 .Distinct()
@@ -335,40 +335,40 @@ namespace RaidCrawler.Core.Structures
         public static List<(int, int, int)> GetRewards(
             TeraMight enc,
             uint seed,
-            int teratype,
-            IReadOnlyList<DeliveryRaidFixedRewardItem>? fixed_rewards,
-            IReadOnlyList<DeliveryRaidLotteryRewardItem>? lottery_rewards,
+            int teraType,
+            IReadOnlyList<DeliveryRaidFixedRewardItem>? fixedRewards,
+            IReadOnlyList<DeliveryRaidLotteryRewardItem>? lotteryRewards,
             int boost
         )
         {
             List<(int, int, int)> result = new();
-            if (lottery_rewards is null)
+            if (lotteryRewards is null)
                 return result;
 
-            if (fixed_rewards is null)
+            if (fixedRewards is null)
                 return result;
 
-            var fixed_table = fixed_rewards.Where(z => z.TableName == enc.DropTableFix).First();
-            if (fixed_table is null)
+            var fixedTable = fixedRewards.Where(z => z.TableName == enc.DropTableFix).First();
+            if (fixedTable is null)
                 return result;
 
-            var lottery_table = lottery_rewards
+            var lotteryTable = lotteryRewards
                 .Where(z => z.TableName == enc.DropTableRandom)
                 .First();
-            if (lottery_table is null)
+            if (lotteryTable is null)
                 return result;
 
             // fixed reward
             for (int i = 0; i < DeliveryRaidFixedRewardItem.Count; i++)
             {
-                var item = fixed_table.GetReward(i);
+                var item = fixedTable.GetReward(i);
                 if (item.Category == 0 && item.ItemID == 0)
                     continue;
                 result.Add(
                     (
                         item.ItemID == 0
                             ? item.Category == 2
-                                ? Rewards.GetTeraShard(teratype)
+                                ? Rewards.GetTeraShard(teraType)
                                 : Rewards.GetMaterial(enc.Species)
                             : item.ItemID,
                         item.Num,
@@ -380,7 +380,7 @@ namespace RaidCrawler.Core.Structures
             // lottery reward
             var total = 0;
             for (int i = 0; i < DeliveryRaidLotteryRewardItem.RewardItemCount; i++)
-                total += lottery_table.GetRewardItem(i).Rate;
+                total += lotteryTable.GetRewardItem(i).Rate;
 
             var rand = new Xoroshiro128Plus(seed);
             var count = (int)rand.NextInt(100);
@@ -391,7 +391,7 @@ namespace RaidCrawler.Core.Structures
                 var roll = (int)rand.NextInt((ulong)total);
                 for (int j = 0; j < DeliveryRaidLotteryRewardItem.RewardItemCount; j++)
                 {
-                    var item = lottery_table.GetRewardItem(j);
+                    var item = lotteryTable.GetRewardItem(j);
                     if (roll < item.Rate)
                     {
                         if (item.Category == 0)
@@ -405,7 +405,7 @@ namespace RaidCrawler.Core.Structures
                         else
                             result.Add(
                                 item.ItemID == 0
-                                    ? (Rewards.GetTeraShard(teratype), item.Num, 0)
+                                    ? (Rewards.GetTeraShard(teraType), item.Num, 0)
                                     : (item.ItemID, item.Num, 0)
                             );
                         break;
