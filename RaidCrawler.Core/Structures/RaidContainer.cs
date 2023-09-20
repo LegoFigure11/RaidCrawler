@@ -34,7 +34,7 @@ namespace RaidCrawler.Core.Structures
         };
 
         private readonly string[] Raid_data_su1 = new[]
-{
+        {
             "su1_raid_enemy_01_array.bin",
             "su1_raid_enemy_02_array.bin",
             "su1_raid_enemy_03_array.bin",
@@ -47,8 +47,14 @@ namespace RaidCrawler.Core.Structures
         {
             Game = game;
             Strings = GameInfo.GetStrings(1);
-            GemTeraRaidsBase = TeraEncounter.GetAllEncounters(Raid_data_base, TeraRaidMapParent.Paldea);
-            GemTeraRaidsKitakami = TeraEncounter.GetAllEncounters(Raid_data_su1, TeraRaidMapParent.Kitakami);
+            GemTeraRaidsBase = TeraEncounter.GetAllEncounters(
+                Raid_data_base,
+                TeraRaidMapParent.Paldea
+            );
+            GemTeraRaidsKitakami = TeraEncounter.GetAllEncounters(
+                Raid_data_su1,
+                TeraRaidMapParent.Kitakami
+            );
             BaseFixedRewards = JsonSerializer.Deserialize<IReadOnlyList<RaidFixedRewards>>(
                 Utils.GetStringResource("raid_fixed_reward_item_array.json") ?? "[]"
             );

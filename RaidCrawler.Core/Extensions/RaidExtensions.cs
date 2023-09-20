@@ -13,8 +13,9 @@ namespace RaidCrawler.Core.Structures
         ) =>
             raid.IsEvent
                 ? raid.GetDistributionEncounter(container, progress, raid.Flags == 3, id)
-                : raid.RaidType == RaidSerializationFormat.KitakamiROM ? raid.GetEncounterKitakami(container, progress, raid.IsBlack) :
-            raid.GetEncounterBase(container, progress, raid.IsBlack);
+                : raid.RaidType == RaidSerializationFormat.KitakamiROM
+                    ? raid.GetEncounterKitakami(container, progress, raid.IsBlack)
+                    : raid.GetEncounterBase(container, progress, raid.IsBlack);
 
         public static ITeraRaid? GetEncounterBase(
             this Raid raid,
@@ -49,11 +50,11 @@ namespace RaidCrawler.Core.Structures
         }
 
         public static ITeraRaid? GetEncounterKitakami(
-    this Raid raid,
-    RaidContainer container,
-    int stage,
-    bool black
-)
+            this Raid raid,
+            RaidContainer container,
+            int stage,
+            bool black
+        )
         {
             var clone = new Xoroshiro128Plus(raid.Seed);
             var starcount = black ? 6 : raid.GetStarCount((uint)clone.NextInt(100), stage, false);
@@ -366,26 +367,28 @@ namespace RaidCrawler.Core.Structures
                 _ => 0,
             };
 
-        private static short GetRateTotalKitakamiSL(int star) => star switch
-        {
-            1 => 1500,
-            2 => 1500,
-            3 => 2500,
-            4 => 2100,
-            5 => 2250,
-            6 => 2575, // Scarlet has one more
-            _ => 0,
-        };
+        private static short GetRateTotalKitakamiSL(int star) =>
+            star switch
+            {
+                1 => 1500,
+                2 => 1500,
+                3 => 2500,
+                4 => 2100,
+                5 => 2250,
+                6 => 2575, // Scarlet has one more
+                _ => 0,
+            };
 
-        private static short GetRateTotalKitakamiVL(int star) => star switch
-        {
-            1 => 1500,
-            2 => 1500,
-            3 => 2500,
-            4 => 2100,
-            5 => 2250,
-            6 => 2574, // Violet has one less
-            _ => 0,
-        };
+        private static short GetRateTotalKitakamiVL(int star) =>
+            star switch
+            {
+                1 => 1500,
+                2 => 1500,
+                3 => 2500,
+                4 => 2100,
+                5 => 2250,
+                6 => 2574, // Violet has one less
+                _ => 0,
+            };
     }
 }

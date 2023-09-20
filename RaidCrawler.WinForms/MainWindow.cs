@@ -854,7 +854,11 @@ namespace RaidCrawler.WinForms
                 try
                 {
                     var data = ConnectionWrapper.Connection
-                        .ReadBytesAbsoluteAsync(RaidBlockOffsetBase, (int)RaidBlock.SIZE_BASE, Source.Token)
+                        .ReadBytesAbsoluteAsync(
+                            RaidBlockOffsetBase,
+                            (int)RaidBlock.SIZE_BASE,
+                            Source.Token
+                        )
                         .Result;
                     window = new(data, RaidBlockOffsetBase);
                 }
@@ -1102,7 +1106,8 @@ namespace RaidCrawler.WinForms
                 Seed.Text = !HideSeed ? $"{raid.Seed:X8}" : "Hidden";
                 EC.Text = !HideSeed ? $"{raid.EC:X8}" : "Hidden";
                 PID.Text = GetPIDString(raid, encounter);
-                Area.Text = $"{Areas.GetArea((int)(raid.Area - 1), raid.RaidType)} - Den {raid.Den}";
+                Area.Text =
+                    $"{Areas.GetArea((int)(raid.Area - 1), raid.RaidType)} - Den {raid.Den}";
                 labelEvent.Visible = raid.IsEvent;
 
                 var teratype = raid.GetTeraType(encounter);
@@ -1263,7 +1268,8 @@ namespace RaidCrawler.WinForms
                 Raid raid = raids[index];
                 var encounter = RaidContainer.Encounters[index];
 
-                teraRaidView.Area.Text = $"{Areas.GetArea((int)(raid.Area - 1), raid.RaidType)} - Den {raid.Den}";
+                teraRaidView.Area.Text =
+                    $"{Areas.GetArea((int)(raid.Area - 1), raid.RaidType)} - Den {raid.Den}";
 
                 var teratype = raid.GetTeraType(encounter);
                 teraRaidView.TeraType.Image = (Bitmap)
@@ -1594,23 +1600,55 @@ namespace RaidCrawler.WinForms
                 0,
                 0
             );
-            if (den_locations_base is null || den_locations_base.Count == 0 || den_locations_kitakami is null || den_locations_kitakami.Count == 0)
+            if (
+                den_locations_base is null
+                || den_locations_base.Count == 0
+                || den_locations_kitakami is null
+                || den_locations_kitakami.Count == 0
+            )
                 return null;
 
             double x,
                 y;
-            var loc_data = raid.RaidType == RaidSerializationFormat.BaseROM ? den_locations_base : den_locations_kitakami;
+            var loc_data =
+                raid.RaidType == RaidSerializationFormat.BaseROM
+                    ? den_locations_base
+                    : den_locations_kitakami;
             var map = raid.RaidType == RaidSerializationFormat.BaseROM ? map_base : map_kitakami;
             try
             {
-                
-                
                 x =
-                    (((raid.RaidType == RaidSerializationFormat.BaseROM ? 1 : 2.766970605475146) * loc_data[$"{raid.Area}-{raid.DisplayType}-{raid.Den}"][0]) + (raid.RaidType == RaidSerializationFormat.BaseROM ? 2.072021484 : -248.08352352566726))
+                    (
+                        (
+                            (
+                                raid.RaidType == RaidSerializationFormat.BaseROM
+                                    ? 1
+                                    : 2.766970605475146
+                            ) * loc_data[$"{raid.Area}-{raid.DisplayType}-{raid.Den}"][0]
+                        )
+                        + (
+                            raid.RaidType == RaidSerializationFormat.BaseROM
+                                ? 2.072021484
+                                : -248.08352352566726
+                        )
+                    )
                     * 512
                     / 5000;
                 y =
-                    (((raid.RaidType == RaidSerializationFormat.BaseROM ? 1 : 2.5700782642623805) * loc_data[$"{raid.Area}-{raid.DisplayType}-{raid.Den}"][2]) + (raid.RaidType == RaidSerializationFormat.BaseROM ? 5505.240018 : 5070.808599816581))
+                    (
+                        (
+                            (
+                                raid.RaidType == RaidSerializationFormat.BaseROM
+                                    ? 1
+                                    : 2.5700782642623805
+                            ) * loc_data[$"{raid.Area}-{raid.DisplayType}-{raid.Den}"][2]
+                        )
+                        + (
+                            raid.RaidType == RaidSerializationFormat.BaseROM
+                                ? 5505.240018
+                                : 5070.808599816581
+                        )
+                    )
                     * 512
                     / 5000;
                 return ImageUtil.LayerImage(map, gem, (int)x, (int)y);
@@ -1662,7 +1700,9 @@ namespace RaidCrawler.WinForms
                 RaidBlockOffsetBase = await ConnectionWrapper.Connection
                     .PointerAll(ConnectionWrapper.RaidBlockPointerBase, token)
                     .ConfigureAwait(false);
-                RaidBlockOffsetKitakami = await ConnectionWrapper.Connection.PointerAll(ConnectionWrapper.RaidBlockPointerKitakami, token).ConfigureAwait(false);
+                RaidBlockOffsetKitakami = await ConnectionWrapper.Connection
+                    .PointerAll(ConnectionWrapper.RaidBlockPointerKitakami, token)
+                    .ConfigureAwait(false);
             }
 
             RaidContainer.ClearRaids();
@@ -1708,20 +1748,35 @@ namespace RaidCrawler.WinForms
 
             // Kitakami
             UpdateStatus("Reading Kitakami raid block...");
-            data = await ConnectionWrapper.Connection.ReadBytesAbsoluteAsync(RaidBlockOffsetKitakami, (int)RaidBlock.SIZE_KITAKAMI, token).ConfigureAwait(false);
+            data = await ConnectionWrapper.Connection
+                .ReadBytesAbsoluteAsync(
+                    RaidBlockOffsetKitakami,
+                    (int)RaidBlock.SIZE_KITAKAMI,
+                    token
+                )
+                .ConfigureAwait(false);
 
             msg = string.Empty;
-            (delivery, enc) = RaidContainer.ReadAllRaids(data, Config.Progress, Config.EventProgress, GetRaidBoost(), RaidSerializationFormat.KitakamiROM);
+            (delivery, enc) = RaidContainer.ReadAllRaids(
+                data,
+                Config.Progress,
+                Config.EventProgress,
+                GetRaidBoost(),
+                RaidSerializationFormat.KitakamiROM
+            );
             if (enc > 0)
                 msg += $"Failed to find encounters for {enc} raid(s).\n";
 
             if (delivery > 0)
-                msg += $"Invalid delivery group ID for {delivery} raid(s). Try deleting the \"cache\" folder.\n";
+                msg +=
+                    $"Invalid delivery group ID for {delivery} raid(s). Try deleting the \"cache\" folder.\n";
 
             if (msg != string.Empty)
             {
                 msg += "\nMore info can be found in the \"raid_dbg.txt\" file.";
-                await ErrorHandler.DisplayMessageBox(this, Webhook, msg, token, "Raid Read Error").ConfigureAwait(false);
+                await ErrorHandler
+                    .DisplayMessageBox(this, Webhook, msg, token, "Raid Read Error")
+                    .ConfigureAwait(false);
             }
 
             var allRaids = raids.Concat(RaidContainer.Raids).ToList().AsReadOnly();
@@ -1775,7 +1830,9 @@ namespace RaidCrawler.WinForms
                     Invoke(() =>
                     {
                         ComboIndex.SelectedIndex =
-                            ComboIndex.SelectedIndex < allRaids.Count ? ComboIndex.SelectedIndex : 0;
+                            ComboIndex.SelectedIndex < allRaids.Count
+                                ? ComboIndex.SelectedIndex
+                                : 0;
                     });
                 else
                     ComboIndex.SelectedIndex =
@@ -1784,7 +1841,10 @@ namespace RaidCrawler.WinForms
             else
             {
                 ButtonEnable(new[] { ButtonPrevious, ButtonNext }, false);
-                if (allRaids.Count > RaidBlock.MAX_COUNT_BASE + RaidBlock.MAX_COUNT_KITAKAMI || allRaids.Count == 0)
+                if (
+                    allRaids.Count > RaidBlock.MAX_COUNT_BASE + RaidBlock.MAX_COUNT_KITAKAMI
+                    || allRaids.Count == 0
+                )
                 {
                     msg =
                         "Bad read, ensure there are no cheats running or anything else that might shift RAM (Edizon, overlays, etc.), then reboot your console and try again.";

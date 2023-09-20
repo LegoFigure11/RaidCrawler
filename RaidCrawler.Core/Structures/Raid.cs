@@ -10,7 +10,10 @@ namespace RaidCrawler.Core.Structures
         public const byte SIZE = 0x20;
         private readonly byte[] Data; // Raw data
 
-        public Raid(Span<byte> data, RaidSerializationFormat RaidVersionType = RaidSerializationFormat.BaseROM)
+        public Raid(
+            Span<byte> data,
+            RaidSerializationFormat RaidVersionType = RaidSerializationFormat.BaseROM
+        )
         {
             Data = data.ToArray();
             RaidType = RaidVersionType;

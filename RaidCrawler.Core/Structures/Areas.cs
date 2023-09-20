@@ -30,7 +30,8 @@ namespace RaidCrawler.Core.Structures
             "North Province (Area 2)",
         };
 
-        private static readonly string[] AreaListKitakami = new string[] {
+        private static readonly string[] AreaListKitakami = new string[]
+        {
             "Kitakami Road",
             "Apple Hills",
             "Reveler's Road",
@@ -44,10 +45,11 @@ namespace RaidCrawler.Core.Structures
             "Timeless Woods",
         };
 
-        public static string GetArea(int index, RaidSerializationFormat type) => type switch
-        {
-            RaidSerializationFormat.KitakamiROM => AreaListKitakami[index],
-            _ => AreaList[index],
-        };
+        public static string GetArea(int index, RaidSerializationFormat type) =>
+            type switch
+            {
+                RaidSerializationFormat.KitakamiROM => AreaListKitakami[index],
+                _ => AreaList[index],
+            };
     }
 }
