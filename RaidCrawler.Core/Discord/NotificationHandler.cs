@@ -159,7 +159,7 @@ namespace RaidCrawler.Core.Discord
                 )
                 .Trim();
             var area =
-                $"{Areas.GetArea((int)(raid.Area - 1))}"
+                $"{Areas.GetArea((int)(raid.Area - 1), raid.RaidType)}"
                 + (Config.ToggleDen ? $" [Den {raid.Den}]ㅤ" : "ㅤ");
             var rewards = GetRewards(rewardsList);
             var SuccessWebHook = new

@@ -16,4 +16,9 @@ public enum RaidSerializationFormat
     /// 7 Star Distribution Raids
     /// </summary>
     Might,
+
+    /// <summary>
+    /// DLC1 ROM Raids
+    /// </summary>
+    KitakamiROM,
 }

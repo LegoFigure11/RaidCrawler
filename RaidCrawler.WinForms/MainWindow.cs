@@ -1,6 +1,7 @@
 using PKHeX.Core;
 using PKHeX.Drawing;
 using PKHeX.Drawing.PokeSprite;
+using pkNX.Structures.FlatBuffers.Gen9;
 using RaidCrawler.Core.Connection;
 using RaidCrawler.Core.Discord;
 using RaidCrawler.Core.Structures;
@@ -35,17 +36,22 @@ namespace RaidCrawler.WinForms
         private readonly NotificationHandler Webhook;
 
         private List<RaidFilter> RaidFilters = new();
-        private static readonly Image map = Image.FromStream(
+        private static readonly Image map_base = Image.FromStream(
             new MemoryStream(Utils.GetBinaryResource("paldea.png"))
         );
-        private static Dictionary<string, float[]>? den_locations;
+        private static readonly Image map_kitakami = Image.FromStream(
+            new MemoryStream(Utils.GetBinaryResource("kitakami.png"))
+        );
+        private static Dictionary<string, float[]>? den_locations_base;
+        private static Dictionary<string, float[]>? den_locations_kitakami;
 
         // statistics
         public int StatDaySkipTries = 0;
         public int StatDaySkipSuccess = 0;
         public string formTitle;
 
-        private ulong RaidBlockOffset = 0;
+        private ulong RaidBlockOffsetBase = 0;
+        private ulong RaidBlockOffsetKitakami = 0;
         private bool IsReading = false;
         private bool HideSeed = false;
         private bool ShowExtraMoves = false;
@@ -71,8 +77,11 @@ namespace RaidCrawler.WinForms
                 RaidFilters =
                     JsonSerializer.Deserialize<List<RaidFilter>>(File.ReadAllText(filterpath))
                     ?? new List<RaidFilter>();
-            den_locations = JsonSerializer.Deserialize<Dictionary<string, float[]>>(
-                Utils.GetStringResource("den_locations.json") ?? "{}"
+            den_locations_base = JsonSerializer.Deserialize<Dictionary<string, float[]>>(
+                Utils.GetStringResource("den_locations_base.json") ?? "{}"
+            );
+            den_locations_kitakami = JsonSerializer.Deserialize<Dictionary<string, float[]>>(
+                Utils.GetStringResource("den_locations_kitakami.json") ?? "{}"
             );
 
             var configpath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.json");
@@ -449,7 +458,7 @@ namespace RaidCrawler.WinForms
                     DateAdvanceSource.Cancel();
                     Source = new();
                     DateAdvanceSource = new();
-                    RaidBlockOffset = 0;
+                    RaidBlockOffsetBase = 0;
                     ButtonEnable(new[] { ButtonConnect }, true);
                 },
                 token
@@ -845,9 +854,9 @@ namespace RaidCrawler.WinForms
                 try
                 {
                     var data = ConnectionWrapper.Connection
-                        .ReadBytesAbsoluteAsync(RaidBlockOffset, (int)RaidBlock.SIZE, Source.Token)
+                        .ReadBytesAbsoluteAsync(RaidBlockOffsetBase, (int)RaidBlock.SIZE_BASE, Source.Token)
                         .Result;
-                    window = new(data, RaidBlockOffset);
+                    window = new(data, RaidBlockOffsetBase);
                 }
                 catch (Exception ex)
                 {
@@ -865,7 +874,7 @@ namespace RaidCrawler.WinForms
             else if (RaidContainer.Raids.Count > ComboIndex.SelectedIndex)
             {
                 var data = RaidContainer.Raids[ComboIndex.SelectedIndex].GetData();
-                window = new(data, RaidBlockOffset);
+                window = new(data, RaidBlockOffsetBase);
             }
 
             ShowDialog(window);
@@ -1093,7 +1102,7 @@ namespace RaidCrawler.WinForms
                 Seed.Text = !HideSeed ? $"{raid.Seed:X8}" : "Hidden";
                 EC.Text = !HideSeed ? $"{raid.EC:X8}" : "Hidden";
                 PID.Text = GetPIDString(raid, encounter);
-                Area.Text = $"{Areas.GetArea((int)(raid.Area - 1))} - Den {raid.Den}";
+                Area.Text = $"{Areas.GetArea((int)(raid.Area - 1), raid.RaidType)} - Den {raid.Den}";
                 labelEvent.Visible = raid.IsEvent;
 
                 var teratype = raid.GetTeraType(encounter);
@@ -1254,7 +1263,7 @@ namespace RaidCrawler.WinForms
                 Raid raid = raids[index];
                 var encounter = RaidContainer.Encounters[index];
 
-                teraRaidView.Area.Text = $"{Areas.GetArea((int)(raid.Area - 1))} - Den {raid.Den}";
+                teraRaidView.Area.Text = $"{Areas.GetArea((int)(raid.Area - 1), raid.RaidType)} - Den {raid.Den}";
 
                 var teratype = raid.GetTeraType(encounter);
                 teraRaidView.TeraType.Image = (Bitmap)
@@ -1585,19 +1594,23 @@ namespace RaidCrawler.WinForms
                 0,
                 0
             );
-            if (den_locations is null || den_locations.Count == 0)
+            if (den_locations_base is null || den_locations_base.Count == 0 || den_locations_kitakami is null || den_locations_kitakami.Count == 0)
                 return null;
 
             double x,
                 y;
+            var loc_data = raid.RaidType == RaidSerializationFormat.BaseROM ? den_locations_base : den_locations_kitakami;
+            var map = raid.RaidType == RaidSerializationFormat.BaseROM ? map_base : map_kitakami;
             try
             {
+                
+                
                 x =
-                    (den_locations[$"{raid.Area}-{raid.DisplayType}-{raid.Den}"][0] + 2.072021484)
+                    (((raid.RaidType == RaidSerializationFormat.BaseROM ? 1 : 2.766970605475146) * loc_data[$"{raid.Area}-{raid.DisplayType}-{raid.Den}"][0]) + (raid.RaidType == RaidSerializationFormat.BaseROM ? 2.072021484 : -248.08352352566726))
                     * 512
                     / 5000;
                 y =
-                    (den_locations[$"{raid.Area}-{raid.DisplayType}-{raid.Den}"][2] + 5255.240018)
+                    (((raid.RaidType == RaidSerializationFormat.BaseROM ? 1 : 2.5700782642623805) * loc_data[$"{raid.Area}-{raid.DisplayType}-{raid.Den}"][2]) + (raid.RaidType == RaidSerializationFormat.BaseROM ? 5505.240018 : 5070.808599816581))
                     * 512
                     / 5000;
                 return ImageUtil.LayerImage(map, gem, (int)x, (int)y);
@@ -1643,23 +1656,25 @@ namespace RaidCrawler.WinForms
 
         private async Task ReadRaids(CancellationToken token)
         {
-            if (RaidBlockOffset == 0)
+            if (RaidBlockOffsetBase == 0)
             {
-                UpdateStatus("Caching the raid block pointer...");
-                RaidBlockOffset = await ConnectionWrapper.Connection
-                    .PointerAll(ConnectionWrapper.RaidBlockPointer, token)
+                UpdateStatus("Caching the raid block pointers...");
+                RaidBlockOffsetBase = await ConnectionWrapper.Connection
+                    .PointerAll(ConnectionWrapper.RaidBlockPointerBase, token)
                     .ConfigureAwait(false);
+                RaidBlockOffsetKitakami = await ConnectionWrapper.Connection.PointerAll(ConnectionWrapper.RaidBlockPointerKitakami, token).ConfigureAwait(false);
             }
 
             RaidContainer.ClearRaids();
             RaidContainer.ClearEncounters();
             RaidContainer.ClearRewards();
 
-            UpdateStatus("Reading raid block...");
+            // Base
+            UpdateStatus("Reading Paldea raid block...");
             var data = await ConnectionWrapper.Connection
                 .ReadBytesAbsoluteAsync(
-                    RaidBlockOffset + RaidBlock.HEADER_SIZE,
-                    (int)(RaidBlock.SIZE - RaidBlock.HEADER_SIZE),
+                    RaidBlockOffsetBase + RaidBlock.HEADER_SIZE,
+                    (int)(RaidBlock.SIZE_BASE - RaidBlock.HEADER_SIZE),
                     token
                 )
                 .ConfigureAwait(false);
@@ -1669,7 +1684,8 @@ namespace RaidCrawler.WinForms
                 data,
                 Config.Progress,
                 Config.EventProgress,
-                GetRaidBoost()
+                GetRaidBoost(),
+                RaidSerializationFormat.BaseROM
             );
             if (enc > 0)
                 msg += $"Failed to find encounters for {enc} raid(s).\n";
@@ -1688,18 +1704,46 @@ namespace RaidCrawler.WinForms
 
             var raids = RaidContainer.Raids;
             var encounters = RaidContainer.Encounters;
+            var rewards = RaidContainer.Rewards;
+
+            // Kitakami
+            UpdateStatus("Reading Kitakami raid block...");
+            data = await ConnectionWrapper.Connection.ReadBytesAbsoluteAsync(RaidBlockOffsetKitakami, (int)RaidBlock.SIZE_KITAKAMI, token).ConfigureAwait(false);
+
+            msg = string.Empty;
+            (delivery, enc) = RaidContainer.ReadAllRaids(data, Config.Progress, Config.EventProgress, GetRaidBoost(), RaidSerializationFormat.KitakamiROM);
+            if (enc > 0)
+                msg += $"Failed to find encounters for {enc} raid(s).\n";
+
+            if (delivery > 0)
+                msg += $"Invalid delivery group ID for {delivery} raid(s). Try deleting the \"cache\" folder.\n";
+
+            if (msg != string.Empty)
+            {
+                msg += "\nMore info can be found in the \"raid_dbg.txt\" file.";
+                await ErrorHandler.DisplayMessageBox(this, Webhook, msg, token, "Raid Read Error").ConfigureAwait(false);
+            }
+
+            var allRaids = raids.Concat(RaidContainer.Raids).ToList().AsReadOnly();
+            var allEncounters = encounters.Concat(RaidContainer.Encounters).ToList().AsReadOnly();
+            var allRewards = rewards.Concat(RaidContainer.Rewards).ToList().AsReadOnly();
+
+            RaidContainer.SetRaids(allRaids);
+            RaidContainer.SetEncounters(allEncounters);
+            RaidContainer.SetRewards(allRewards);
+
             UpdateStatus("Completed!");
 
             var filterMatchCount = Enumerable
-                .Range(0, raids.Count)
+                .Range(0, allRaids.Count)
                 .Count(
                     c =>
                         RaidFilters.Any(
                             z =>
                                 z.FilterSatisfied(
                                     RaidContainer,
-                                    encounters[c],
-                                    raids[c],
+                                    allEncounters[c],
+                                    allRaids[c],
                                     GetRaidBoost()
                                 )
                         )
@@ -1712,12 +1756,12 @@ namespace RaidCrawler.WinForms
             else
                 LabelLoadedRaids.Text = $"Matches: {filterMatchCount}";
 
-            if (raids.Count > 0)
+            if (allRaids.Count > 0)
             {
                 ButtonEnable(new[] { ButtonPrevious, ButtonNext }, true);
                 var dataSource = Enumerable
-                    .Range(0, raids.Count)
-                    .Select(z => $"{z + 1:D} / {raids.Count:D}")
+                    .Range(0, allRaids.Count)
+                    .Select(z => $"{z + 1:D} / {allRaids.Count:D}")
                     .ToArray();
                 if (InvokeRequired)
                     Invoke(() =>
@@ -1731,16 +1775,16 @@ namespace RaidCrawler.WinForms
                     Invoke(() =>
                     {
                         ComboIndex.SelectedIndex =
-                            ComboIndex.SelectedIndex < raids.Count ? ComboIndex.SelectedIndex : 0;
+                            ComboIndex.SelectedIndex < allRaids.Count ? ComboIndex.SelectedIndex : 0;
                     });
                 else
                     ComboIndex.SelectedIndex =
-                        ComboIndex.SelectedIndex < raids.Count ? ComboIndex.SelectedIndex : 0;
+                        ComboIndex.SelectedIndex < allRaids.Count ? ComboIndex.SelectedIndex : 0;
             }
             else
             {
                 ButtonEnable(new[] { ButtonPrevious, ButtonNext }, false);
-                if (raids.Count > RaidBlock.MAX_COUNT || raids.Count == 0)
+                if (allRaids.Count > RaidBlock.MAX_COUNT_BASE + RaidBlock.MAX_COUNT_KITAKAMI || allRaids.Count == 0)
                 {
                     msg =
                         "Bad read, ensure there are no cheats running or anything else that might shift RAM (Edizon, overlays, etc.), then reboot your console and try again.";
@@ -2048,7 +2092,7 @@ namespace RaidCrawler.WinForms
             if (Config.StreamerView)
             {
                 teraRaidView = new();
-                teraRaidView.Map.Image = map;
+                teraRaidView.Map.Image = map_base;
                 teraRaidView.Show();
             }
             else if (!Config.StreamerView && teraRaidView is not null)

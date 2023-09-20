@@ -13,9 +13,10 @@ namespace RaidCrawler.Core.Structures
         ) =>
             raid.IsEvent
                 ? raid.GetDistributionEncounter(container, progress, raid.Flags == 3, id)
-                : raid.GetEncounter(container, progress, raid.IsBlack);
+                : raid.RaidType == RaidSerializationFormat.KitakamiROM ? raid.GetEncounterKitakami(container, progress, raid.IsBlack) :
+            raid.GetEncounterBase(container, progress, raid.IsBlack);
 
-        public static ITeraRaid? GetEncounter(
+        public static ITeraRaid? GetEncounterBase(
             this Raid raid,
             RaidContainer container,
             int stage,
@@ -29,9 +30,41 @@ namespace RaidCrawler.Core.Structures
                     ? GetRateTotalBaseSL(starcount)
                     : GetRateTotalBaseVL(starcount);
             var speciesroll = clone.NextInt((ulong)total);
-            if (container.GemTeraRaids is not null)
+            if (container.GemTeraRaidsBase is not null)
             {
-                foreach (TeraEncounter enc in (TeraEncounter[])container.GemTeraRaids)
+                foreach (TeraEncounter enc in container.GemTeraRaidsBase)
+                {
+                    if (enc.Stars != starcount)
+                        continue;
+
+                    var minimum =
+                        container.Game == "Scarlet"
+                            ? enc.Entity.RandRateMinScarlet
+                            : enc.Entity.RandRateMinViolet;
+                    if (minimum >= 0 && (uint)((int)speciesroll - minimum) < enc.Entity.RandRate)
+                        return enc;
+                }
+            }
+            return null;
+        }
+
+        public static ITeraRaid? GetEncounterKitakami(
+    this Raid raid,
+    RaidContainer container,
+    int stage,
+    bool black
+)
+        {
+            var clone = new Xoroshiro128Plus(raid.Seed);
+            var starcount = black ? 6 : raid.GetStarCount((uint)clone.NextInt(100), stage, false);
+            var total =
+                container.Game == "Scarlet"
+                    ? GetRateTotalKitakamiSL(starcount)
+                    : GetRateTotalKitakamiVL(starcount);
+            var speciesroll = clone.NextInt((ulong)total);
+            if (container.GemTeraRaidsKitakami is not null)
+            {
+                foreach (TeraEncounter enc in container.GemTeraRaidsKitakami)
                 {
                     if (enc.Stars != starcount)
                         continue;
@@ -112,10 +145,11 @@ namespace RaidCrawler.Core.Structures
             byte[] data,
             int storyPrg,
             int eventPrg,
-            int boost
+            int boost,
+            RaidSerializationFormat type
         )
         {
-            var dbgFile = "raid_dbg.txt";
+            var dbgFile = $"raid_dbg_{type}.txt";
             if (File.Exists(dbgFile))
                 File.Delete(dbgFile);
 
@@ -152,7 +186,7 @@ namespace RaidCrawler.Core.Structures
             int eventct = 0;
             for (int i = 0; i < count; i++)
             {
-                var raid = new Raid(data.AsSpan(i * Raid.SIZE, Raid.SIZE));
+                var raid = new Raid(data.AsSpan(i * Raid.SIZE, Raid.SIZE), type);
 
                 if (raid.Den == 0)
                 {
@@ -331,5 +365,27 @@ namespace RaidCrawler.Core.Structures
                 6 => 6500,
                 _ => 0,
             };
+
+        private static short GetRateTotalKitakamiSL(int star) => star switch
+        {
+            1 => 1500,
+            2 => 1500,
+            3 => 2500,
+            4 => 2100,
+            5 => 2250,
+            6 => 2575, // Scarlet has one more
+            _ => 0,
+        };
+
+        private static short GetRateTotalKitakamiVL(int star) => star switch
+        {
+            1 => 1500,
+            2 => 1500,
+            3 => 2500,
+            4 => 2100,
+            5 => 2250,
+            6 => 2574, // Violet has one less
+            _ => 0,
+        };
     }
 }

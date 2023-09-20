@@ -43,10 +43,10 @@ namespace RaidCrawler.Core.Structures
                 Debug.WriteLine(ExtraMoves);
         }
 
-        public static TeraEncounter[] GetAllEncounters(string[] resources)
+        public static TeraEncounter[] GetAllEncounters(string[] resources, TeraRaidMapParent map)
         {
             var data = FlatbufferDumper.DumpBaseROMRaids(resources);
-            var encs = EncounterTera9.GetArray(data[0], TeraRaidMapParent.Paldea); // TODO: add stuff for Kitakami too
+            var encs = EncounterTera9.GetArray(data[0], map);
             var extras = data[1];
             var rewards = TeraDistribution.GetRewardTables(data[2]);
             var result = new TeraEncounter[encs.Length];
