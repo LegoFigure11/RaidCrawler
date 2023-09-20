@@ -26,8 +26,8 @@ namespace RaidCrawler.Core.Structures
         public ushort Move2 => Entity.Moves.Move2;
         public ushort Move3 => Entity.Moves.Move3;
         public ushort Move4 => Entity.Moves.Move4;
-        public byte Stars => Entity is ITeraRaid9 t9 ? t9.Stars : (byte)0;
-        public byte RandRate => Entity is ITeraRaid9 t9 ? t9.RandRate : (byte)0;
+        public byte Stars => Entity.Stars;
+        public byte RandRate => Entity.RandRate;
         ushort[] ITeraRaid.ExtraMoves => ExtraMoves;
 
         public static bool AvailableInGame(ITeraRaid9 enc, string game)
@@ -69,15 +69,15 @@ namespace RaidCrawler.Core.Structures
 
         public TeraDistribution(
             EncounterDist9 enc,
-            ulong fixedrewards,
-            ulong lotteryrewards,
+            ulong fixedRewards,
+            ulong lotteryRewards,
             ushort[] extras,
             sbyte group
         )
         {
             Entity = enc;
-            DropTableFix = fixedrewards;
-            DropTableRandom = lotteryrewards;
+            DropTableFix = fixedRewards;
+            DropTableRandom = lotteryRewards;
             ExtraMoves = extras
                 .Where(z => z != 0 && !Entity.Moves.Contains(z))
                 .Distinct()

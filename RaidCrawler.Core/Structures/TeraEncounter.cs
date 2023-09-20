@@ -27,14 +27,14 @@ namespace RaidCrawler.Core.Structures
 
         public TeraEncounter(
             EncounterTera9 enc,
-            ulong fixedrewards,
-            ulong lotteryrewards,
+            ulong fixedRewards,
+            ulong lotteryRewards,
             ushort[] extras
         )
         {
             Entity = enc;
-            DropTableFix = fixedrewards;
-            DropTableRandom = lotteryrewards;
+            DropTableFix = fixedRewards;
+            DropTableRandom = lotteryRewards;
             ExtraMoves = extras
                 .Where(z => z != 0 && !Entity.Moves.Contains(z))
                 .Distinct()

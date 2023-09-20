@@ -856,7 +856,7 @@ namespace RaidCrawler.WinForms
                     var data = ConnectionWrapper.Connection
                         .ReadBytesAbsoluteAsync(
                             RaidBlockOffsetBase,
-                            (int)RaidBlock.SIZE_BASE,
+                            (int)RaidBlock.TOTAL_SIZE_BASE,
                             Source.Token
                         )
                         .Result;
@@ -1713,8 +1713,8 @@ namespace RaidCrawler.WinForms
             UpdateStatus("Reading Paldea raid block...");
             var data = await ConnectionWrapper.Connection
                 .ReadBytesAbsoluteAsync(
-                    RaidBlockOffsetBase + RaidBlock.HEADER_SIZE,
-                    (int)(RaidBlock.SIZE_BASE - RaidBlock.HEADER_SIZE),
+                    RaidBlockOffsetBase + RaidBlock.HEADER_SIZE_BASE,
+                    (int)(RaidBlock.TOTAL_SIZE_BASE - RaidBlock.HEADER_SIZE_BASE),
                     token
                 )
                 .ConfigureAwait(false);
@@ -1751,7 +1751,7 @@ namespace RaidCrawler.WinForms
             data = await ConnectionWrapper.Connection
                 .ReadBytesAbsoluteAsync(
                     RaidBlockOffsetKitakami,
-                    (int)RaidBlock.SIZE_KITAKAMI,
+                    (int)RaidBlock.TOTAL_SIZE_KITAKAMI,
                     token
                 )
                 .ConfigureAwait(false);
