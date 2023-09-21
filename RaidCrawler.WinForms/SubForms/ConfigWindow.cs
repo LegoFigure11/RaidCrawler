@@ -53,6 +53,9 @@ namespace RaidCrawler.WinForms.SubForms
             ReturnGame.Value = c.ReturnGameDelay;
             BaseDelay.Value = c.BaseDelay;
             SaveGameDelay.Value = c.SaveGameDelay;
+            SystemReset.Value = c.SystemReset;
+            PaldeaScanCheck.Checked = c.PaldeaScan;
+            KitakamiScanCheck.Checked = c.KitakamiScan;
 
             SystemDDownPresses.Enabled = !UseOvershoot.Checked;
             SystemOvershoot.Enabled = UseOvershoot.Checked;
@@ -116,6 +119,7 @@ namespace RaidCrawler.WinForms.SubForms
             c.HoldDuration = (int)Hold.Value;
             c.SystemDownPresses = (int)SystemDDownPresses.Value;
             c.SystemOvershoot = (int)SystemOvershoot.Value;
+            c.SystemReset = (int)SystemReset.Value;
             c.Submenu = (int)Submenu.Value;
             c.DateChange = (int)DateChange.Value;
             c.DaysToSkip = (int)DaysToSkip.Value;
@@ -123,6 +127,8 @@ namespace RaidCrawler.WinForms.SubForms
             c.ReturnGameDelay = (int)ReturnGame.Value;
             c.BaseDelay = (int)BaseDelay.Value;
             c.SaveGameDelay = (int)SaveGameDelay.Value;
+            c.PaldeaScan = PaldeaScanCheck.Checked;
+            c.KitakamiScan = KitakamiScanCheck.Checked;
 
             c.IVsStyle = IVstyle.SelectedIndex;
             c.VerboseIVs = IVverbose.Checked;

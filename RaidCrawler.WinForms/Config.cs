@@ -13,6 +13,8 @@ namespace RaidCrawler.WinForms
         public int Progress { get; set; } = 0;
         public int EventProgress { get; set; } = 0;
         public bool EnableFilters { get; set; } = true;
+        public bool PaldeaScan { get; set; } = true;
+        public bool KitakamiScan { get; set; } = true;
 
         // Match
         public bool FocusWindow { get; set; } = true;
@@ -44,6 +46,7 @@ namespace RaidCrawler.WinForms
         public int SystemOvershoot { get; set; } = 0_750;
         public int BaseDelay { get; set; } = 0;
         public int SaveGameDelay { get; set; } = 0;
+        public int SystemReset { get; set; } = 30;
 
         // Webhook
         public bool EnableEmoji { get; set; } = true;
