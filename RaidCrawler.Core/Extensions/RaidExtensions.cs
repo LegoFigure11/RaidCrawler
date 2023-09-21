@@ -13,7 +13,7 @@ namespace RaidCrawler.Core.Structures
         ) =>
             raid.IsEvent
                 ? raid.GetDistributionEncounter(container, progress, raid.Flags == 3, id)
-                : raid.RaidType == RaidSerializationFormat.KitakamiROM
+                : raid.MapParent == TeraRaidMapParent.Kitakami
                     ? raid.GetEncounterKitakami(container, progress, raid.IsBlack)
                     : raid.GetEncounterBase(container, progress, raid.IsBlack);
 
@@ -147,7 +147,7 @@ namespace RaidCrawler.Core.Structures
             int storyPrg,
             int eventPrg,
             int boost,
-            RaidSerializationFormat type
+            TeraRaidMapParent type
         )
         {
             var dbgFile = $"raid_dbg_{type}.txt";

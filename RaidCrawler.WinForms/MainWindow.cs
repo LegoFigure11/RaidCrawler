@@ -1,7 +1,6 @@
 using PKHeX.Core;
 using PKHeX.Drawing;
 using PKHeX.Drawing.PokeSprite;
-using pkNX.Structures.FlatBuffers.Gen9;
 using RaidCrawler.Core.Connection;
 using RaidCrawler.Core.Discord;
 using RaidCrawler.Core.Structures;
@@ -1117,7 +1116,7 @@ namespace RaidCrawler.WinForms
                 EC.Text = !HideSeed ? $"{raid.EC:X8}" : "Hidden";
                 PID.Text = GetPIDString(raid, encounter);
                 Area.Text =
-                    $"{Areas.GetArea((int)(raid.Area - 1), raid.RaidType)} - Den {raid.Den}";
+                    $"{Areas.GetArea((int)(raid.Area - 1), raid.MapParent)} - Den {raid.Den}";
                 labelEvent.Visible = raid.IsEvent;
 
                 var teratype = raid.GetTeraType(encounter);
@@ -1279,7 +1278,7 @@ namespace RaidCrawler.WinForms
                 var encounter = RaidContainer.Encounters[index];
 
                 teraRaidView.Area.Text =
-                    $"{Areas.GetArea((int)(raid.Area - 1), raid.RaidType)} - Den {raid.Den}";
+                    $"{Areas.GetArea((int)(raid.Area - 1), raid.MapParent)} - Den {raid.Den}";
 
                 var teratype = raid.GetTeraType(encounter);
                 teraRaidView.TeraType.Image = (Bitmap)
@@ -1621,23 +1620,23 @@ namespace RaidCrawler.WinForms
             double x,
                 y;
             var loc_data =
-                raid.RaidType == RaidSerializationFormat.BaseROM
+                raid.MapParent == TeraRaidMapParent.Paldea
                     ? den_locations_base
                     : den_locations_kitakami;
-            var map = raid.RaidType == RaidSerializationFormat.BaseROM ? map_base : map_kitakami;
+            var map = raid.MapParent == TeraRaidMapParent.Paldea ? map_base : map_kitakami;
             try
             {
                 x =
                     (
                         (
                             (
-                                raid.RaidType == RaidSerializationFormat.BaseROM
+                                raid.MapParent == TeraRaidMapParent.Paldea
                                     ? 1
                                     : 2.766970605475146
                             ) * loc_data[$"{raid.Area}-{raid.DisplayType}-{raid.Den}"][0]
                         )
                         + (
-                            raid.RaidType == RaidSerializationFormat.BaseROM
+                            raid.MapParent == TeraRaidMapParent.Paldea
                                 ? 2.072021484
                                 : -248.08352352566726
                         )
@@ -1648,13 +1647,13 @@ namespace RaidCrawler.WinForms
                     (
                         (
                             (
-                                raid.RaidType == RaidSerializationFormat.BaseROM
+                                raid.MapParent == TeraRaidMapParent.Paldea
                                     ? 1
                                     : 2.5700782642623805
                             ) * loc_data[$"{raid.Area}-{raid.DisplayType}-{raid.Den}"][2]
                         )
                         + (
-                            raid.RaidType == RaidSerializationFormat.BaseROM
+                            raid.MapParent == TeraRaidMapParent.Paldea
                                 ? 5505.240018
                                 : 5070.808599816581
                         )
@@ -1736,7 +1735,7 @@ namespace RaidCrawler.WinForms
                 data = await ConnectionWrapper.Connection
                     .ReadBytesAbsoluteAsync(RaidBlockOffsetBase + RaidBlock.HEADER_SIZE, (int)(RaidBlock.SIZE_BASE - RaidBlock.HEADER_SIZE), token).ConfigureAwait(false);
 
-                (delivery, enc) = RaidContainer.ReadAllRaids(data, Config.Progress, Config.EventProgress, GetRaidBoost(), RaidSerializationFormat.BaseROM);
+                (delivery, enc) = RaidContainer.ReadAllRaids(data, Config.Progress, Config.EventProgress, GetRaidBoost(), TeraRaidMapParent.Paldea);
                 if (enc > 0)
                     msg += $"Failed to find encounters for {enc} raid(s).\n";
 
@@ -1778,7 +1777,7 @@ namespace RaidCrawler.WinForms
                     Config.Progress,
                     Config.EventProgress,
                     GetRaidBoost(),
-                    RaidSerializationFormat.KitakamiROM
+                    TeraRaidMapParent.Kitakami
                 );
                 if (enc > 0)
                     msg += $"Failed to find encounters for {enc} raid(s).\n";

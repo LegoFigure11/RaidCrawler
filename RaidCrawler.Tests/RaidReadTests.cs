@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
-using Xunit;
 using System.ComponentModel;
+using Xunit;
 
 namespace RaidCrawler.Tests;
 

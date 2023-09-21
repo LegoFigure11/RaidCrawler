@@ -1,5 +1,4 @@
 ﻿using PKHeX.Core;
-using pkNX.Structures.FlatBuffers.Gen9;
 using static System.Buffers.Binary.BinaryPrimitives;
 
 namespace RaidCrawler.Core.Structures
@@ -12,14 +11,14 @@ namespace RaidCrawler.Core.Structures
 
         public Raid(
             Span<byte> data,
-            RaidSerializationFormat RaidVersionType = RaidSerializationFormat.BaseROM
+            TeraRaidMapParent map = TeraRaidMapParent.Paldea
         )
         {
             Data = data.ToArray();
-            RaidType = RaidVersionType;
+            MapParent = map;
         }
 
-        public RaidSerializationFormat RaidType;
+        public TeraRaidMapParent MapParent;
 
         public bool IsValid => Validate();
         public bool IsActive => ReadUInt32LittleEndian(Data.AsSpan(0x00)) == 1;

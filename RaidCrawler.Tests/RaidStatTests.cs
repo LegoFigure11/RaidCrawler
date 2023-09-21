@@ -1,8 +1,8 @@
 using FluentAssertions;
-using Xunit;
-using System.ComponentModel;
 using PKHeX.Core;
 using RaidCrawler.Core.Structures;
+using System.ComponentModel;
+using Xunit;
 
 namespace RaidCrawler.Tests;
 
