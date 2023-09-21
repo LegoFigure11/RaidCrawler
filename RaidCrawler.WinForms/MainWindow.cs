@@ -593,7 +593,7 @@ namespace RaidCrawler.WinForms
                     await ConnectionWrapper
                         .AdvanceDate(Config, token, action)
                         .ConfigureAwait(false);
-                    await ReadRaids(token).ConfigureAwait(false);                    
+                    await ReadRaids(token).ConfigureAwait(false);
                     raids = RaidContainer.Raids;
 
                     Invoke(DisplayRaid);
@@ -1756,6 +1756,9 @@ namespace RaidCrawler.WinForms
             var raids = RaidContainer.Raids;
             var encounters = RaidContainer.Encounters;
             var rewards = RaidContainer.Rewards;
+            RaidContainer.ClearRaids();
+            RaidContainer.ClearEncounters();
+            RaidContainer.ClearRewards();
 
             // Kitakami
             if (Config.KitakamiScan)

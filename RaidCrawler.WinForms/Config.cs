@@ -46,7 +46,7 @@ namespace RaidCrawler.WinForms
         public int SystemOvershoot { get; set; } = 0_750;
         public int BaseDelay { get; set; } = 0;
         public int SaveGameDelay { get; set; } = 0;
-        public int SystemReset { get; set; } = 50;
+        public int SystemReset { get; set; } = 30;
 
         // Webhook
         public bool EnableEmoji { get; set; } = true;
