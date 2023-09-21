@@ -580,7 +580,7 @@ namespace RaidCrawler.WinForms
                     if (skips >= Config.SystemReset)
                     {
                         await ConnectionWrapper.CloseGame(token).ConfigureAwait(false);
-                        await ConnectionWrapper.StartGame(token).ConfigureAwait(false);
+                        await ConnectionWrapper.StartGame(Config, token).ConfigureAwait(false);
                         RaidBlockOffsetBase = 0;
                         RaidBlockOffsetKitakami = 0;
                         skips = 0;

@@ -54,6 +54,8 @@ namespace RaidCrawler.WinForms.SubForms
             BaseDelay.Value = c.BaseDelay;
             SaveGameDelay.Value = c.SaveGameDelay;
             SystemReset.Value = c.SystemReset;
+            RelaunchDelay.Value = c.RelaunchDelay;
+            ExtraOverworldWait.Value = c.ExtraOverworldWait;
             PaldeaScanCheck.Checked = c.PaldeaScan;
             KitakamiScanCheck.Checked = c.KitakamiScan;
 
@@ -127,6 +129,8 @@ namespace RaidCrawler.WinForms.SubForms
             c.ReturnGameDelay = (int)ReturnGame.Value;
             c.BaseDelay = (int)BaseDelay.Value;
             c.SaveGameDelay = (int)SaveGameDelay.Value;
+            c.RelaunchDelay = (int)RelaunchDelay.Value;
+            c.ExtraOverworldWait = (int)ExtraOverworldWait.Value;
             c.PaldeaScan = PaldeaScanCheck.Checked;
             c.KitakamiScan = KitakamiScanCheck.Checked;
 
