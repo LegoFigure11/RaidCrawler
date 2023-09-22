@@ -1745,7 +1745,7 @@ namespace RaidCrawler.WinForms
 
                 if (msg != string.Empty)
                 {
-                    msg += "\nMore info can be found in the \"raid_dbg.txt\" file.";
+                    msg += $"\nMore info can be found in the \"raid_dbg_{TeraRaidMapParent.Paldea}.txt\" file.";
                     await ErrorHandler
                         .DisplayMessageBox(this, Webhook, msg, token, "Raid Read Error")
                         .ConfigureAwait(false);
@@ -1788,7 +1788,7 @@ namespace RaidCrawler.WinForms
 
                 if (msg != string.Empty)
                 {
-                    msg += "\nMore info can be found in the \"raid_dbg.txt\" file.";
+                    msg += $"\nMore info can be found in the \"raid_dbg_{TeraRaidMapParent.Kitakami}.txt\" file.";
                     await ErrorHandler
                         .DisplayMessageBox(this, Webhook, msg, token, "Raid Read Error")
                         .ConfigureAwait(false);
