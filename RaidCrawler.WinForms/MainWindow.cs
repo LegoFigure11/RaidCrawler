@@ -1,7 +1,6 @@
 using PKHeX.Core;
 using PKHeX.Drawing;
 using PKHeX.Drawing.PokeSprite;
-using pkNX.Structures.FlatBuffers.Gen9;
 using RaidCrawler.Core.Connection;
 using RaidCrawler.Core.Discord;
 using RaidCrawler.Core.Structures;
@@ -564,11 +563,21 @@ namespace RaidCrawler.WinForms
 
                 var stop = false;
                 var raids = RaidContainer.Raids;
+                int skips = 0;
+
                 while (!stop)
                 {
+                    if (skips >= Config.SystemReset)
+                    {
+                        await ConnectionWrapper.CloseGame(token).ConfigureAwait(false);
+                        await ConnectionWrapper.StartGame(Config, token).ConfigureAwait(false);
+                        RaidBlockOffsetBase = 0;
+                        RaidBlockOffsetKitakami = 0;
+                        skips = 0;
+                    }
+
                     var previousSeeds = raids.Select(z => z.Seed).ToList();
                     UpdateStatus("Changing date...");
-
                     bool streamer = Config.StreamerView && teraRaidView is not null;
                     Action<int>? action = streamer ? teraRaidView!.UpdateProgressBar : null;
                     await ConnectionWrapper
@@ -582,7 +591,7 @@ namespace RaidCrawler.WinForms
                         Invoke(DisplayPrettyRaid);
 
                     stop = StopAdvanceDate(previousSeeds);
-
+                    skips++;
                     var advanceText =
                         $"Day Skip Successes {GetStatDaySkipSuccess()} / {GetStatDaySkipTries()}";
                     Invoke(() => Label_DayAdvance.Text = advanceText);
@@ -1098,7 +1107,7 @@ namespace RaidCrawler.WinForms
                 EC.Text = !HideSeed ? $"{raid.EC:X8}" : "Hidden";
                 PID.Text = GetPIDString(raid, encounter);
                 Area.Text =
-                    $"{Areas.GetArea((int)(raid.Area - 1), raid.RaidType)} - Den {raid.Den}";
+                    $"{Areas.GetArea((int)(raid.Area - 1), raid.MapParent)} - Den {raid.Den}";
                 labelEvent.Visible = raid.IsEvent;
 
                 var teraType = raid.GetTeraType(encounter);
@@ -1260,7 +1269,7 @@ namespace RaidCrawler.WinForms
                 var encounter = RaidContainer.Encounters[index];
 
                 teraRaidView.Area.Text =
-                    $"{Areas.GetArea((int)(raid.Area - 1), raid.RaidType)} - Den {raid.Den}";
+                    $"{Areas.GetArea((int)(raid.Area - 1), raid.MapParent)} - Den {raid.Den}";
 
                 var teraType = raid.GetTeraType(encounter);
                 teraRaidView.TeraType.Image = (Bitmap)
@@ -1601,24 +1610,24 @@ namespace RaidCrawler.WinForms
 
             double x,
                 y;
-            var locData =
-                raid.RaidType == RaidSerializationFormat.BaseROM
-                    ? DenLocationsBase
-                    : DenLocationsKitakami;
-            var map = raid.RaidType == RaidSerializationFormat.BaseROM ? MapBase : MapKitakami;
+            var loc_data =
+                raid.MapParent == TeraRaidMapParent.Paldea
+                    ? den_locations_base
+                    : den_locations_kitakami;
+            var map = raid.MapParent == TeraRaidMapParent.Paldea ? MapBase : MapKitakami;
             try
             {
                 x =
                     (
                         (
                             (
-                                raid.RaidType == RaidSerializationFormat.BaseROM
+                                raid.MapParent == TeraRaidMapParent.Paldea
                                     ? 1
                                     : 2.766970605475146
                             ) * locData[$"{raid.Area}-{raid.DisplayType}-{raid.Den}"][0]
                         )
                         + (
-                            raid.RaidType == RaidSerializationFormat.BaseROM
+                            raid.MapParent == TeraRaidMapParent.Paldea
                                 ? 2.072021484
                                 : -248.08352352566726
                         )
@@ -1629,13 +1638,13 @@ namespace RaidCrawler.WinForms
                     (
                         (
                             (
-                                raid.RaidType == RaidSerializationFormat.BaseROM
+                                raid.MapParent == TeraRaidMapParent.Paldea
                                     ? 1
                                     : 2.5700782642623805
                             ) * locData[$"{raid.Area}-{raid.DisplayType}-{raid.Den}"][2]
                         )
                         + (
-                            raid.RaidType == RaidSerializationFormat.BaseROM
+                            raid.MapParent == TeraRaidMapParent.Paldea
                                 ? 5505.240018
                                 : 5070.808599816581
                         )
@@ -1685,6 +1694,12 @@ namespace RaidCrawler.WinForms
 
         private async Task ReadRaids(CancellationToken token)
         {
+            if (!Config.PaldeaScan && !Config.KitakamiScan)
+            {
+                await ErrorHandler.DisplayMessageBox(this, Webhook, "Please select a location to scan in your General Settings.", token, "No locations selected").ConfigureAwait(false);
+                return;
+            }
+
             if (RaidBlockOffsetBase == 0)
             {
                 UpdateStatus("Caching the raid block pointers...");
@@ -1700,74 +1715,75 @@ namespace RaidCrawler.WinForms
             RaidContainer.ClearEncounters();
             RaidContainer.ClearRewards();
 
-            // Base
-            UpdateStatus("Reading Paldea raid block...");
-            var data = await ConnectionWrapper.Connection
-                .ReadBytesAbsoluteAsync(
-                    RaidBlockOffsetBase + RaidBlock.HEADER_SIZE_BASE,
-                    (int)(RaidBlock.TOTAL_SIZE_BASE - RaidBlock.HEADER_SIZE_BASE),
-                    token
-                )
-                .ConfigureAwait(false);
-
+            // Base            
+            byte[]? data = null!;
             var msg = string.Empty;
-            (int delivery, int enc) = RaidContainer.ReadAllRaids(
-                data,
-                Config.Progress,
-                Config.EventProgress,
-                GetRaidBoost(),
-                RaidSerializationFormat.BaseROM
-            );
-            if (enc > 0)
-                msg += $"Failed to find encounters for {enc} raid(s).\n";
+            int delivery, enc;
 
-            if (delivery > 0)
-                msg +=
-                    $"Invalid delivery group ID for {delivery} raid(s). Try deleting the \"cache\" folder.\n";
-
-            if (msg != string.Empty)
+            if (Config.PaldeaScan)
             {
-                msg += "\nMore info can be found in the \"raid_dbg.txt\" file.";
-                await ErrorHandler
-                    .DisplayMessageBox(this, Webhook, msg, token, "Raid Read Error")
-                    .ConfigureAwait(false);
+                UpdateStatus("Reading Paldea raid block...");
+                data = await ConnectionWrapper.Connection
+                    .ReadBytesAbsoluteAsync(RaidBlockOffsetBase + RaidBlock.HEADER_SIZE_BASE, (int)(RaidBlock.TOTAL_SIZE_BASE - RaidBlock.HEADER_SIZE_BASE), token).ConfigureAwait(false);
+
+                (delivery, enc) = RaidContainer.ReadAllRaids(data, Config.Progress, Config.EventProgress, GetRaidBoost(), TeraRaidMapParent.Paldea);
+                if (enc > 0)
+                    msg += $"Failed to find encounters for {enc} raid(s).\n";
+
+                if (delivery > 0)
+                    msg +=
+                        $"Invalid delivery group ID for {delivery} raid(s). Try deleting the \"cache\" folder.\n";
+
+                if (msg != string.Empty)
+                {
+                    msg += "\nMore info can be found in the \"raid_dbg.txt\" file.";
+                    await ErrorHandler
+                        .DisplayMessageBox(this, Webhook, msg, token, "Raid Read Error")
+                        .ConfigureAwait(false);
+                }
             }
 
             var raids = RaidContainer.Raids;
             var encounters = RaidContainer.Encounters;
             var rewards = RaidContainer.Rewards;
+            RaidContainer.ClearRaids();
+            RaidContainer.ClearEncounters();
+            RaidContainer.ClearRewards();
 
             // Kitakami
-            UpdateStatus("Reading Kitakami raid block...");
-            data = await ConnectionWrapper.Connection
-                .ReadBytesAbsoluteAsync(
-                    RaidBlockOffsetKitakami,
-                    (int)RaidBlock.TOTAL_SIZE_KITAKAMI,
-                    token
-                )
-                .ConfigureAwait(false);
-
-            msg = string.Empty;
-            (delivery, enc) = RaidContainer.ReadAllRaids(
-                data,
-                Config.Progress,
-                Config.EventProgress,
-                GetRaidBoost(),
-                RaidSerializationFormat.KitakamiROM
-            );
-            if (enc > 0)
-                msg += $"Failed to find encounters for {enc} raid(s).\n";
-
-            if (delivery > 0)
-                msg +=
-                    $"Invalid delivery group ID for {delivery} raid(s). Try deleting the \"cache\" folder.\n";
-
-            if (msg != string.Empty)
+            if (Config.KitakamiScan)
             {
-                msg += "\nMore info can be found in the \"raid_dbg.txt\" file.";
-                await ErrorHandler
-                    .DisplayMessageBox(this, Webhook, msg, token, "Raid Read Error")
+                UpdateStatus("Reading Kitakami raid block...");
+                data = await ConnectionWrapper.Connection
+                    .ReadBytesAbsoluteAsync(
+                        RaidBlockOffsetKitakami,
+                        (int)RaidBlock.TOTAL_SIZE_KITAKAMI,
+                        token
+                    )
                     .ConfigureAwait(false);
+
+                msg = string.Empty;
+                (delivery, enc) = RaidContainer.ReadAllRaids(
+                    data,
+                    Config.Progress,
+                    Config.EventProgress,
+                    GetRaidBoost(),
+                    TeraRaidMapParent.Kitakami
+                );
+                if (enc > 0)
+                    msg += $"Failed to find encounters for {enc} raid(s).\n";
+
+                if (delivery > 0)
+                    msg +=
+                        $"Invalid delivery group ID for {delivery} raid(s). Try deleting the \"cache\" folder.\n";
+
+                if (msg != string.Empty)
+                {
+                    msg += "\nMore info can be found in the \"raid_dbg.txt\" file.";
+                    await ErrorHandler
+                        .DisplayMessageBox(this, Webhook, msg, token, "Raid Read Error")
+                        .ConfigureAwait(false);
+                }
             }
 
             var allRaids = raids.Concat(RaidContainer.Raids).ToList().AsReadOnly();

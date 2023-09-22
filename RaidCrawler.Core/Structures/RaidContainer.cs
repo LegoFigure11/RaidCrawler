@@ -1,6 +1,6 @@
 ﻿using PKHeX.Core;
-using System.Text.Json;
 using pkNX.Structures.FlatBuffers.Gen9;
+using System.Text.Json;
 
 namespace RaidCrawler.Core.Structures
 {

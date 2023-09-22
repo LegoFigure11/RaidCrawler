@@ -65,6 +65,9 @@ namespace RaidCrawler.WinForms.SubForms
             ExperimentalView = new CheckBox();
             tabControl1 = new TabControl();
             tabGeneral = new TabPage();
+            LocationGroup = new GroupBox();
+            KitakamiScanCheck = new CheckBox();
+            PaldeaScanCheck = new CheckBox();
             Protocol_dropdown = new ComboBox();
             Protocol_label = new Label();
             label23 = new Label();
@@ -76,6 +79,10 @@ namespace RaidCrawler.WinForms.SubForms
             StoryProgress = new ComboBox();
             tabMatch = new TabPage();
             tabAdvanceDate = new TabPage();
+            RelaunchDelay = new NumericUpDown();
+            L_RelaunchDelay = new Label();
+            SystemReset = new NumericUpDown();
+            L_SystemReset = new Label();
             UseSetStick = new CheckBox();
             DodgeSystemUpdate = new CheckBox();
             SaveGameDelay = new NumericUpDown();
@@ -107,6 +114,8 @@ namespace RaidCrawler.WinForms.SubForms
             labelAppName = new Label();
             picAppIcon = new PictureBox();
             labelAppVersion = new Label();
+            ExtraOverworldWait = new NumericUpDown();
+            L_ExtraOverworldWait = new Label();
             ((System.ComponentModel.ISupportInitialize)SystemDDownPresses).BeginInit();
             ((System.ComponentModel.ISupportInitialize)NavigateToSettings).BeginInit();
             ((System.ComponentModel.ISupportInitialize)OpenSettings).BeginInit();
@@ -119,8 +128,11 @@ namespace RaidCrawler.WinForms.SubForms
             ((System.ComponentModel.ISupportInitialize)DaysToSkip).BeginInit();
             tabControl1.SuspendLayout();
             tabGeneral.SuspendLayout();
+            LocationGroup.SuspendLayout();
             tabMatch.SuspendLayout();
             tabAdvanceDate.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)RelaunchDelay).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)SystemReset).BeginInit();
             ((System.ComponentModel.ISupportInitialize)SaveGameDelay).BeginInit();
             ((System.ComponentModel.ISupportInitialize)SystemOvershoot).BeginInit();
             ((System.ComponentModel.ISupportInitialize)BaseDelay).BeginInit();
@@ -128,6 +140,7 @@ namespace RaidCrawler.WinForms.SubForms
             tabExperimental.SuspendLayout();
             tabAbout.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)picAppIcon).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)ExtraOverworldWait).BeginInit();
             SuspendLayout();
             // 
             // FocusWindow
@@ -191,7 +204,7 @@ namespace RaidCrawler.WinForms.SubForms
             // L_BaseDelay
             // 
             L_BaseDelay.AutoSize = true;
-            L_BaseDelay.Location = new Point(6, 142);
+            L_BaseDelay.Location = new Point(8, 142);
             L_BaseDelay.Name = "L_BaseDelay";
             L_BaseDelay.Size = new Size(196, 15);
             L_BaseDelay.TabIndex = 8;
@@ -209,7 +222,7 @@ namespace RaidCrawler.WinForms.SubForms
             // L_DdownInput
             // 
             L_DdownInput.AutoSize = true;
-            L_DdownInput.Location = new Point(6, 287);
+            L_DdownInput.Location = new Point(8, 287);
             L_DdownInput.Name = "L_DdownInput";
             L_DdownInput.Size = new Size(228, 15);
             L_DdownInput.TabIndex = 11;
@@ -245,7 +258,7 @@ namespace RaidCrawler.WinForms.SubForms
             // L_OpenHOME
             // 
             L_OpenHOME.AutoSize = true;
-            L_OpenHOME.Location = new Point(6, 171);
+            L_OpenHOME.Location = new Point(8, 171);
             L_OpenHOME.Name = "L_OpenHOME";
             L_OpenHOME.Size = new Size(140, 15);
             L_OpenHOME.TabIndex = 19;
@@ -254,7 +267,7 @@ namespace RaidCrawler.WinForms.SubForms
             // L_NavigateSettings
             // 
             L_NavigateSettings.AutoSize = true;
-            L_NavigateSettings.Location = new Point(6, 200);
+            L_NavigateSettings.Location = new Point(8, 200);
             L_NavigateSettings.Name = "L_NavigateSettings";
             L_NavigateSettings.Size = new Size(146, 15);
             L_NavigateSettings.TabIndex = 20;
@@ -263,7 +276,7 @@ namespace RaidCrawler.WinForms.SubForms
             // L_OpenSettingsDelay
             // 
             L_OpenSettingsDelay.AutoSize = true;
-            L_OpenSettingsDelay.Location = new Point(6, 229);
+            L_OpenSettingsDelay.Location = new Point(8, 229);
             L_OpenSettingsDelay.Name = "L_OpenSettingsDelay";
             L_OpenSettingsDelay.Size = new Size(114, 15);
             L_OpenSettingsDelay.TabIndex = 21;
@@ -272,7 +285,7 @@ namespace RaidCrawler.WinForms.SubForms
             // L_ScrollSystem
             // 
             L_ScrollSystem.AutoSize = true;
-            L_ScrollSystem.Location = new Point(6, 258);
+            L_ScrollSystem.Location = new Point(8, 258);
             L_ScrollSystem.Name = "L_ScrollSystem";
             L_ScrollSystem.Size = new Size(187, 15);
             L_ScrollSystem.TabIndex = 23;
@@ -290,7 +303,7 @@ namespace RaidCrawler.WinForms.SubForms
             // L_SubmenuDelay
             // 
             L_SubmenuDelay.AutoSize = true;
-            L_SubmenuDelay.Location = new Point(6, 316);
+            L_SubmenuDelay.Location = new Point(8, 316);
             L_SubmenuDelay.Name = "L_SubmenuDelay";
             L_SubmenuDelay.Size = new Size(123, 15);
             L_SubmenuDelay.TabIndex = 25;
@@ -308,7 +321,7 @@ namespace RaidCrawler.WinForms.SubForms
             // L_DateChangeDelay
             // 
             L_DateChangeDelay.AutoSize = true;
-            L_DateChangeDelay.Location = new Point(6, 345);
+            L_DateChangeDelay.Location = new Point(8, 345);
             L_DateChangeDelay.Name = "L_DateChangeDelay";
             L_DateChangeDelay.Size = new Size(138, 15);
             L_DateChangeDelay.TabIndex = 27;
@@ -326,7 +339,7 @@ namespace RaidCrawler.WinForms.SubForms
             // L_ReturnHomeDelay
             // 
             L_ReturnHomeDelay.AutoSize = true;
-            L_ReturnHomeDelay.Location = new Point(6, 403);
+            L_ReturnHomeDelay.Location = new Point(8, 403);
             L_ReturnHomeDelay.Name = "L_ReturnHomeDelay";
             L_ReturnHomeDelay.Size = new Size(160, 15);
             L_ReturnHomeDelay.TabIndex = 29;
@@ -344,7 +357,7 @@ namespace RaidCrawler.WinForms.SubForms
             // L_ReOpenGameDelay
             // 
             L_ReOpenGameDelay.AutoSize = true;
-            L_ReOpenGameDelay.Location = new Point(6, 432);
+            L_ReOpenGameDelay.Location = new Point(8, 432);
             L_ReOpenGameDelay.Name = "L_ReOpenGameDelay";
             L_ReOpenGameDelay.Size = new Size(119, 15);
             L_ReOpenGameDelay.TabIndex = 31;
@@ -362,7 +375,7 @@ namespace RaidCrawler.WinForms.SubForms
             // L_DaysToSkip
             // 
             L_DaysToSkip.AutoSize = true;
-            L_DaysToSkip.Location = new Point(6, 374);
+            L_DaysToSkip.Location = new Point(8, 374);
             L_DaysToSkip.Name = "L_DaysToSkip";
             L_DaysToSkip.Size = new Size(179, 15);
             L_DaysToSkip.TabIndex = 33;
@@ -437,11 +450,12 @@ namespace RaidCrawler.WinForms.SubForms
             tabControl1.Location = new Point(0, 0);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(380, 543);
+            tabControl1.Size = new Size(380, 631);
             tabControl1.TabIndex = 41;
             // 
             // tabGeneral
             // 
+            tabGeneral.Controls.Add(LocationGroup);
             tabGeneral.Controls.Add(Protocol_dropdown);
             tabGeneral.Controls.Add(Protocol_label);
             tabGeneral.Controls.Add(label23);
@@ -454,10 +468,45 @@ namespace RaidCrawler.WinForms.SubForms
             tabGeneral.Location = new Point(4, 24);
             tabGeneral.Name = "tabGeneral";
             tabGeneral.Padding = new Padding(3);
-            tabGeneral.Size = new Size(372, 515);
+            tabGeneral.Size = new Size(372, 603);
             tabGeneral.TabIndex = 5;
             tabGeneral.Text = "General";
             tabGeneral.UseVisualStyleBackColor = true;
+            // 
+            // LocationGroup
+            // 
+            LocationGroup.Controls.Add(KitakamiScanCheck);
+            LocationGroup.Controls.Add(PaldeaScanCheck);
+            LocationGroup.Location = new Point(8, 137);
+            LocationGroup.Name = "LocationGroup";
+            LocationGroup.Size = new Size(200, 73);
+            LocationGroup.TabIndex = 115;
+            LocationGroup.TabStop = false;
+            LocationGroup.Text = "Scan Locations";
+            // 
+            // KitakamiScanCheck
+            // 
+            KitakamiScanCheck.AutoSize = true;
+            KitakamiScanCheck.Checked = true;
+            KitakamiScanCheck.CheckState = CheckState.Checked;
+            KitakamiScanCheck.Location = new Point(6, 47);
+            KitakamiScanCheck.Name = "KitakamiScanCheck";
+            KitakamiScanCheck.Size = new Size(72, 19);
+            KitakamiScanCheck.TabIndex = 113;
+            KitakamiScanCheck.Text = "Kitakami";
+            KitakamiScanCheck.UseVisualStyleBackColor = true;
+            // 
+            // PaldeaScanCheck
+            // 
+            PaldeaScanCheck.AutoSize = true;
+            PaldeaScanCheck.Checked = true;
+            PaldeaScanCheck.CheckState = CheckState.Checked;
+            PaldeaScanCheck.Location = new Point(6, 22);
+            PaldeaScanCheck.Name = "PaldeaScanCheck";
+            PaldeaScanCheck.Size = new Size(61, 19);
+            PaldeaScanCheck.TabIndex = 112;
+            PaldeaScanCheck.Text = "Paldea";
+            PaldeaScanCheck.UseVisualStyleBackColor = true;
             // 
             // Protocol_dropdown
             // 
@@ -560,13 +609,19 @@ namespace RaidCrawler.WinForms.SubForms
             tabMatch.Location = new Point(4, 24);
             tabMatch.Name = "tabMatch";
             tabMatch.Padding = new Padding(3);
-            tabMatch.Size = new Size(372, 515);
+            tabMatch.Size = new Size(372, 578);
             tabMatch.TabIndex = 0;
             tabMatch.Text = "Match";
             tabMatch.UseVisualStyleBackColor = true;
             // 
             // tabAdvanceDate
             // 
+            tabAdvanceDate.Controls.Add(ExtraOverworldWait);
+            tabAdvanceDate.Controls.Add(L_ExtraOverworldWait);
+            tabAdvanceDate.Controls.Add(RelaunchDelay);
+            tabAdvanceDate.Controls.Add(L_RelaunchDelay);
+            tabAdvanceDate.Controls.Add(SystemReset);
+            tabAdvanceDate.Controls.Add(L_SystemReset);
             tabAdvanceDate.Controls.Add(UseSetStick);
             tabAdvanceDate.Controls.Add(DodgeSystemUpdate);
             tabAdvanceDate.Controls.Add(SaveGameDelay);
@@ -602,10 +657,46 @@ namespace RaidCrawler.WinForms.SubForms
             tabAdvanceDate.Location = new Point(4, 24);
             tabAdvanceDate.Name = "tabAdvanceDate";
             tabAdvanceDate.Padding = new Padding(3);
-            tabAdvanceDate.Size = new Size(372, 515);
+            tabAdvanceDate.Size = new Size(372, 603);
             tabAdvanceDate.TabIndex = 1;
             tabAdvanceDate.Text = "Advance Date";
             tabAdvanceDate.UseVisualStyleBackColor = true;
+            // 
+            // RelaunchDelay
+            // 
+            RelaunchDelay.Location = new Point(296, 489);
+            RelaunchDelay.Maximum = new decimal(new int[] { 20000, 0, 0, 0 });
+            RelaunchDelay.Name = "RelaunchDelay";
+            RelaunchDelay.Size = new Size(68, 23);
+            RelaunchDelay.TabIndex = 49;
+            // 
+            // L_RelaunchDelay
+            // 
+            L_RelaunchDelay.AutoSize = true;
+            L_RelaunchDelay.Location = new Point(8, 491);
+            L_RelaunchDelay.Name = "L_RelaunchDelay";
+            L_RelaunchDelay.Size = new Size(198, 15);
+            L_RelaunchDelay.TabIndex = 48;
+            L_RelaunchDelay.Text = "Extra time to wait to relaunch game:";
+            // 
+            // SystemReset
+            // 
+            SystemReset.Location = new Point(296, 459);
+            SystemReset.Maximum = new decimal(new int[] { 2000, 0, 0, 0 });
+            SystemReset.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            SystemReset.Name = "SystemReset";
+            SystemReset.Size = new Size(68, 23);
+            SystemReset.TabIndex = 47;
+            SystemReset.Value = new decimal(new int[] { 30, 0, 0, 0 });
+            // 
+            // L_SystemReset
+            // 
+            L_SystemReset.AutoSize = true;
+            L_SystemReset.Location = new Point(8, 461);
+            L_SystemReset.Name = "L_SystemReset";
+            L_SystemReset.Size = new Size(203, 15);
+            L_SystemReset.TabIndex = 46;
+            L_SystemReset.Text = "Relaunch game after this many skips:";
             // 
             // UseSetStick
             // 
@@ -630,7 +721,7 @@ namespace RaidCrawler.WinForms.SubForms
             // 
             // SaveGameDelay
             // 
-            SaveGameDelay.Location = new Point(296, 488);
+            SaveGameDelay.Location = new Point(296, 578);
             SaveGameDelay.Name = "SaveGameDelay";
             SaveGameDelay.Size = new Size(68, 23);
             SaveGameDelay.TabIndex = 43;
@@ -638,7 +729,7 @@ namespace RaidCrawler.WinForms.SubForms
             // L_SaveGame
             // 
             L_SaveGame.AutoSize = true;
-            L_SaveGame.Location = new Point(6, 490);
+            L_SaveGame.Location = new Point(8, 580);
             L_SaveGame.Name = "L_SaveGame";
             L_SaveGame.Size = new Size(186, 15);
             L_SaveGame.TabIndex = 42;
@@ -658,7 +749,7 @@ namespace RaidCrawler.WinForms.SubForms
             // L_OvershootHold
             // 
             L_OvershootHold.AutoSize = true;
-            L_OvershootHold.Location = new Point(6, 461);
+            L_OvershootHold.Location = new Point(8, 551);
             L_OvershootHold.Name = "L_OvershootHold";
             L_OvershootHold.Size = new Size(236, 15);
             L_OvershootHold.TabIndex = 40;
@@ -666,7 +757,7 @@ namespace RaidCrawler.WinForms.SubForms
             // 
             // SystemOvershoot
             // 
-            SystemOvershoot.Location = new Point(296, 459);
+            SystemOvershoot.Location = new Point(296, 549);
             SystemOvershoot.Maximum = new decimal(new int[] { 1200, 0, 0, 0 });
             SystemOvershoot.Name = "SystemOvershoot";
             SystemOvershoot.Size = new Size(68, 23);
@@ -709,7 +800,7 @@ namespace RaidCrawler.WinForms.SubForms
             tabWebhook.Controls.Add(EnableEmoji);
             tabWebhook.Location = new Point(4, 24);
             tabWebhook.Name = "tabWebhook";
-            tabWebhook.Size = new Size(372, 515);
+            tabWebhook.Size = new Size(372, 603);
             tabWebhook.TabIndex = 3;
             tabWebhook.Text = "Webhook";
             tabWebhook.UseVisualStyleBackColor = true;
@@ -727,7 +818,7 @@ namespace RaidCrawler.WinForms.SubForms
             // labelWebhooks
             // 
             labelWebhooks.AutoSize = true;
-            labelWebhooks.Location = new Point(7, 463);
+            labelWebhooks.Location = new Point(10, 576);
             labelWebhooks.Name = "labelWebhooks";
             labelWebhooks.Size = new Size(85, 15);
             labelWebhooks.TabIndex = 44;
@@ -761,7 +852,7 @@ namespace RaidCrawler.WinForms.SubForms
             // 
             // btnTestWebHook
             // 
-            btnTestWebHook.Location = new Point(257, 459);
+            btnTestWebHook.Location = new Point(260, 572);
             btnTestWebHook.Name = "btnTestWebHook";
             btnTestWebHook.Size = new Size(104, 23);
             btnTestWebHook.TabIndex = 22;
@@ -851,7 +942,7 @@ namespace RaidCrawler.WinForms.SubForms
             tabExperimental.Location = new Point(4, 24);
             tabExperimental.Name = "tabExperimental";
             tabExperimental.Padding = new Padding(3);
-            tabExperimental.Size = new Size(372, 515);
+            tabExperimental.Size = new Size(372, 578);
             tabExperimental.TabIndex = 2;
             tabExperimental.Text = "Experimental";
             tabExperimental.UseVisualStyleBackColor = true;
@@ -881,7 +972,7 @@ namespace RaidCrawler.WinForms.SubForms
             tabAbout.Location = new Point(4, 24);
             tabAbout.Name = "tabAbout";
             tabAbout.Padding = new Padding(3);
-            tabAbout.Size = new Size(372, 515);
+            tabAbout.Size = new Size(372, 578);
             tabAbout.TabIndex = 4;
             tabAbout.Text = "About";
             tabAbout.UseVisualStyleBackColor = true;
@@ -927,11 +1018,29 @@ namespace RaidCrawler.WinForms.SubForms
             labelAppVersion.Text = "v0.0.0-000000";
             labelAppVersion.TextAlign = ContentAlignment.MiddleCenter;
             // 
+            // ExtraOverworldWait
+            // 
+            ExtraOverworldWait.Location = new Point(296, 519);
+            ExtraOverworldWait.Maximum = new decimal(new int[] { 1000000, 0, 0, 0 });
+            ExtraOverworldWait.Name = "ExtraOverworldWait";
+            ExtraOverworldWait.Size = new Size(68, 23);
+            ExtraOverworldWait.TabIndex = 51;
+            // 
+            // L_ExtraOverworldWait
+            // 
+            L_ExtraOverworldWait.AutoSize = true;
+            L_ExtraOverworldWait.Location = new Point(8, 521);
+            L_ExtraOverworldWait.Name = "L_ExtraOverworldWait";
+            L_ExtraOverworldWait.Size = new Size(218, 15);
+            L_ExtraOverworldWait.TabIndex = 50;
+            L_ExtraOverworldWait.Text = "Extra time to wait for Overworld to load:";
+            L_ExtraOverworldWait.UseMnemonic = false;
+            // 
             // ConfigWindow
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(380, 543);
+            ClientSize = new Size(380, 631);
             Controls.Add(tabControl1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
@@ -952,10 +1061,14 @@ namespace RaidCrawler.WinForms.SubForms
             tabControl1.ResumeLayout(false);
             tabGeneral.ResumeLayout(false);
             tabGeneral.PerformLayout();
+            LocationGroup.ResumeLayout(false);
+            LocationGroup.PerformLayout();
             tabMatch.ResumeLayout(false);
             tabMatch.PerformLayout();
             tabAdvanceDate.ResumeLayout(false);
             tabAdvanceDate.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)RelaunchDelay).EndInit();
+            ((System.ComponentModel.ISupportInitialize)SystemReset).EndInit();
             ((System.ComponentModel.ISupportInitialize)SaveGameDelay).EndInit();
             ((System.ComponentModel.ISupportInitialize)SystemOvershoot).EndInit();
             ((System.ComponentModel.ISupportInitialize)BaseDelay).EndInit();
@@ -966,6 +1079,7 @@ namespace RaidCrawler.WinForms.SubForms
             tabAbout.ResumeLayout(false);
             tabAbout.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)picAppIcon).EndInit();
+            ((System.ComponentModel.ISupportInitialize)ExtraOverworldWait).EndInit();
             ResumeLayout(false);
         }
 
@@ -1047,5 +1161,14 @@ namespace RaidCrawler.WinForms.SubForms
         private CheckBox SaveGame;
         private CheckBox DodgeSystemUpdate;
         private CheckBox UseSetStick;
+        private CheckBox PaldeaScanCheck;
+        private GroupBox LocationGroup;
+        private CheckBox KitakamiScanCheck;
+        private NumericUpDown SystemReset;
+        private Label L_SystemReset;
+        private NumericUpDown RelaunchDelay;
+        private Label L_RelaunchDelay;
+        private NumericUpDown ExtraOverworldWait;
+        private Label L_ExtraOverworldWait;
     }
 }

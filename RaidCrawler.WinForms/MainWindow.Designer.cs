@@ -554,7 +554,7 @@
             // 
             ConfigSettings.Location = new Point(12, 302);
             ConfigSettings.Name = "ConfigSettings";
-            ConfigSettings.Size = new Size(203, 23);
+            ConfigSettings.Size = new Size(200, 23);
             ConfigSettings.TabIndex = 115;
             ConfigSettings.Text = "Open Settings";
             ConfigSettings.UseVisualStyleBackColor = true;

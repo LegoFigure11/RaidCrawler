@@ -404,7 +404,7 @@ namespace RaidCrawler.Core.Connection
             _statusUpdate("Closed out of the game!");
         }
 
-        public async Task StartGame(CancellationToken token)
+        public async Task StartGame(IDateAdvanceConfig config, CancellationToken token)
         {
             // Open game.
             _statusUpdate("Starting the game!");
@@ -413,6 +413,9 @@ namespace RaidCrawler.Core.Connection
             // Attempt to dodge an update prompt;
             await Click(DUP, 0_600, token).ConfigureAwait(false);
             await Click(A, 1_000, token).ConfigureAwait(false);
+
+            // Allow time for profile check if required
+            await Task.Delay(config.RelaunchDelay, token).ConfigureAwait(false);
 
             // If they have DLC on the system and can't use it, requires an UP + A to start the game.
             // Should be harmless otherwise since they'll be in loading screen.
@@ -424,6 +427,9 @@ namespace RaidCrawler.Core.Connection
 
             for (int i = 0; i < 20; i++)
                 await Click(A, 1_000, token).ConfigureAwait(false);
+
+            // Particularly slow switches need more time to load the overworld
+            await Task.Delay(config.ExtraOverworldWait, token).ConfigureAwait(false);
 
             _statusUpdate("Back in the overworld! Refreshing the base block key pointer...");
             BaseBlockKeyPointer = await Connection

@@ -1,4 +1,4 @@
-﻿using pkNX.Structures.FlatBuffers.Gen9;
+﻿using PKHeX.Core;
 
 namespace RaidCrawler.Core.Structures
 {
@@ -45,10 +45,10 @@ namespace RaidCrawler.Core.Structures
             "Timeless Woods",
         };
 
-        public static string GetArea(int index, RaidSerializationFormat type) =>
+        public static string GetArea(int index, TeraRaidMapParent type) =>
             type switch
             {
-                RaidSerializationFormat.KitakamiROM => AreaListKitakami[index],
+                TeraRaidMapParent.Kitakami => AreaListKitakami[index],
                 _ => AreaList[index],
             };
     }

@@ -3,8 +3,8 @@ using RaidCrawler.Core.Interfaces;
 using RaidCrawler.Core.Structures;
 using SysBot.Base;
 using System.Globalization;
-using System.Text.Json;
 using System.Text;
+using System.Text.Json;
 
 namespace RaidCrawler.Core.Discord
 {
@@ -159,7 +159,7 @@ namespace RaidCrawler.Core.Discord
                 )
                 .Trim();
             var area =
-                $"{Areas.GetArea((int)(raid.Area - 1), raid.RaidType)}"
+                $"{Areas.GetArea((int)(raid.Area - 1), raid.MapParent)}"
                 + (Config.ToggleDen ? $" [Den {raid.Den}]ㅤ" : "ㅤ");
             var rewards = GetRewards(rewardsList);
             var SuccessWebHook = new
@@ -410,38 +410,38 @@ namespace RaidCrawler.Core.Discord
                 switch (Config.IVsStyle)
                 {
                     case 0:
-                    {
-                        s += ivs[i] switch
                         {
-                            0
-                                => emoji
-                                    ? $"{iv0[i]:D}{(verbose ? " " + stats[i] : string.Empty)}"
-                                    : $"`{"✓":D}`{(verbose ? " " + stats[i] : string.Empty)}",
-                            31
-                                => emoji
-                                    ? $"{iv31[i]:D}{(verbose ? " " + stats[i] : string.Empty)}"
-                                    : $"`{"✓":D}`{(verbose ? " " + stats[i] : string.Empty)}",
-                            _ => $"`{ivs[i]:D}`{(verbose ? " " + stats[i] : string.Empty)}",
-                        };
+                            s += ivs[i] switch
+                            {
+                                0
+                                    => emoji
+                                        ? $"{iv0[i]:D}{(verbose ? " " + stats[i] : string.Empty)}"
+                                        : $"`{"✓":D}`{(verbose ? " " + stats[i] : string.Empty)}",
+                                31
+                                    => emoji
+                                        ? $"{iv31[i]:D}{(verbose ? " " + stats[i] : string.Empty)}"
+                                        : $"`{"✓":D}`{(verbose ? " " + stats[i] : string.Empty)}",
+                                _ => $"`{ivs[i]:D}`{(verbose ? " " + stats[i] : string.Empty)}",
+                            };
 
-                        if (i < 5)
-                            s += " / ";
-                        break;
-                    }
+                            if (i < 5)
+                                s += " / ";
+                            break;
+                        }
                     case 1:
-                    {
-                        s += $"`{ivs[i]:D}`{(verbose ? " " + stats[i] : string.Empty)}";
-                        if (i < 5)
-                            s += " / ";
-                        break;
-                    }
+                        {
+                            s += $"`{ivs[i]:D}`{(verbose ? " " + stats[i] : string.Empty)}";
+                            if (i < 5)
+                                s += " / ";
+                            break;
+                        }
                     case 2:
-                    {
-                        s += $"{ivs[i]:D}{(verbose ? " " + stats[i] : string.Empty)}";
-                        if (i < 5)
-                            s += " / ";
-                        break;
-                    }
+                        {
+                            s += $"{ivs[i]:D}{(verbose ? " " + stats[i] : string.Empty)}";
+                            if (i < 5)
+                                s += " / ";
+                            break;
+                        }
                 }
             }
             return s;
