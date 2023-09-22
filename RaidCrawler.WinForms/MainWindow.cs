@@ -1610,10 +1610,10 @@ namespace RaidCrawler.WinForms
 
             double x,
                 y;
-            var loc_data =
+            var locData =
                 raid.MapParent == TeraRaidMapParent.Paldea
-                    ? den_locations_base
-                    : den_locations_kitakami;
+                    ? DenLocationsBase
+                    : DenLocationsKitakami;
             var map = raid.MapParent == TeraRaidMapParent.Paldea ? MapBase : MapKitakami;
             try
             {
