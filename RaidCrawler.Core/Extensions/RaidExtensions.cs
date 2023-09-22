@@ -375,7 +375,7 @@ namespace RaidCrawler.Core.Structures
                 3 => 2500,
                 4 => 2100,
                 5 => 2250,
-                6 => 2575, // Scarlet has one more
+                6 => 2475, // Scarlet has one less encounter
                 _ => 0,
             };
 
@@ -387,7 +387,7 @@ namespace RaidCrawler.Core.Structures
                 3 => 2500,
                 4 => 2100,
                 5 => 2250,
-                6 => 2574, // Violet has one less
+                6 => 2574, // Violet has one more encounter
                 _ => 0,
             };
     }
