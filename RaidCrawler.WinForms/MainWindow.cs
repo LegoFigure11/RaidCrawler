@@ -92,7 +92,7 @@ namespace RaidCrawler.WinForms
             else
                 Config = new();
 
-            formTitle = $"RaidCrawler v{v.Major}.{v.Minor}.{v.Build} {Config.InstanceName}";
+            formTitle = $"RaidCrawler v{v.Major}.{v.Minor}.{v.Build}{build} {Config.InstanceName}";
             Text = formTitle;
 
             // load raids
