@@ -567,10 +567,23 @@ namespace RaidCrawler.WinForms
 
                 while (!stop)
                 {
+                    bool streamer = Config.StreamerView && teraRaidView is not null;
+                    Action<int>? action = streamer ? teraRaidView!.UpdateProgressBar : null;
+
                     if (skips >= Config.SystemReset)
                     {
                         await ConnectionWrapper.CloseGame(token).ConfigureAwait(false);
                         await ConnectionWrapper.StartGame(Config, token).ConfigureAwait(false);
+
+                        // Raids for the current and next day are already generated in a save.
+                        // Attempt to advance one day and save to avoid rescanning the same
+                        // first raids every reset.
+                        UpdateStatus("Skipping previously scanned raids...");
+                        await ConnectionWrapper
+                            .AdvanceDate(Config, token, action)
+                            .ConfigureAwait(false);
+                        await ConnectionWrapper.SaveGame(Config, token).ConfigureAwait(false);
+
                         RaidBlockOffsetBase = 0;
                         RaidBlockOffsetKitakami = 0;
                         skips = 0;
@@ -578,8 +591,6 @@ namespace RaidCrawler.WinForms
 
                     var previousSeeds = raids.Select(z => z.Seed).ToList();
                     UpdateStatus("Changing date...");
-                    bool streamer = Config.StreamerView && teraRaidView is not null;
-                    Action<int>? action = streamer ? teraRaidView!.UpdateProgressBar : null;
                     await ConnectionWrapper
                         .AdvanceDate(Config, token, action)
                         .ConfigureAwait(false);
