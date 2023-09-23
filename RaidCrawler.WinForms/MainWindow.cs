@@ -1663,10 +1663,10 @@ namespace RaidCrawler.WinForms
         {
             var raids = RaidContainer.Raids;
             var curSeeds = raids.Select(x => x.Seed).ToArray();
-            var didRaidsChange = curSeeds.Except(previousSeeds).ToArray().Length == 0;
+            var didRaidsChange = curSeeds.Except(previousSeeds).ToArray().Length != 0;
 
             StatDaySkipTries++;
-            if (didRaidsChange)
+            if (!didRaidsChange)
                 return false;
 
             StatDaySkipSuccess++;
