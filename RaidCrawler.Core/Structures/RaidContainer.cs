@@ -23,7 +23,8 @@ namespace RaidCrawler.Core.Structures
         public string Game { get; private set; } = "Scarlet";
         public GameStrings Strings { get; private set; }
 
-        private readonly string[] Raid_data_base = new[]
+        // Files containing serialized data for all possible 1 through 6 star raids
+        private readonly string[] RaidDataBase = new[]
         {
             "raid_enemy_01_array.bin",
             "raid_enemy_02_array.bin",
@@ -33,7 +34,7 @@ namespace RaidCrawler.Core.Structures
             "raid_enemy_06_array.bin",
         };
 
-        private readonly string[] Raid_data_su1 = new[]
+        private readonly string[] RaidDataKitakami = new[]
         {
             "su1_raid_enemy_01_array.bin",
             "su1_raid_enemy_02_array.bin",
@@ -48,11 +49,11 @@ namespace RaidCrawler.Core.Structures
             Game = game;
             Strings = GameInfo.GetStrings(1);
             GemTeraRaidsBase = TeraEncounter.GetAllEncounters(
-                Raid_data_base,
+                RaidDataBase,
                 TeraRaidMapParent.Paldea
             );
             GemTeraRaidsKitakami = TeraEncounter.GetAllEncounters(
-                Raid_data_su1,
+                RaidDataKitakami,
                 TeraRaidMapParent.Kitakami
             );
             BaseFixedRewards = JsonSerializer.Deserialize<IReadOnlyList<RaidFixedRewards>>(
