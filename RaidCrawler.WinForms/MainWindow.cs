@@ -856,7 +856,7 @@ namespace RaidCrawler.WinForms
                     var data = ConnectionWrapper.Connection
                         .ReadBytesAbsoluteAsync(
                             RaidBlockOffsetBase,
-                            (int)RaidBlock.TOTAL_SIZE_BASE,
+                            (int)RaidBlock.SIZE_BASE,
                             Source.Token
                         )
                         .Result;
@@ -1768,7 +1768,7 @@ namespace RaidCrawler.WinForms
                 data = await ConnectionWrapper.Connection
                     .ReadBytesAbsoluteAsync(
                         RaidBlockOffsetKitakami,
-                        (int)RaidBlock.TOTAL_SIZE_KITAKAMI,
+                        (int)RaidBlock.SIZE_KITAKAMI,
                         token
                     )
                     .ConfigureAwait(false);
