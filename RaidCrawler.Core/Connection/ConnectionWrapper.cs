@@ -245,12 +245,24 @@ namespace RaidCrawler.Core.Connection
             _statusUpdate("Changing date...");
             var BaseDelay = config.BaseDelay;
 
-            // Sometimes the first command drops, click twice with shorter delays for good measure.
-            await Click(B, 0_100, token).ConfigureAwait(false);
-            UpdateProgressBar(action, steps);
+            if (!config.UseMapTrick)
+            {
+                // Sometimes the first command drops, click twice with shorter delays for good measure.
+                await Click(B, 0_100, token).ConfigureAwait(false);
+                UpdateProgressBar(action, steps);
 
-            await Click(B, 0_100, token).ConfigureAwait(false);
-            UpdateProgressBar(action, steps);
+                await Click(B, 0_100, token).ConfigureAwait(false);
+                UpdateProgressBar(action, steps);
+            }
+            else
+            {
+                await Click(ZL, 0_100, token).ConfigureAwait(false);
+                await Click(ZL, 1_500, token).ConfigureAwait(false);
+                UpdateProgressBar(action, steps);
+
+                await Click(ZR, 2_000, token).ConfigureAwait(false);
+                UpdateProgressBar(action, steps);
+            }
 
             // HOME Menu
             await Click(HOME, config.OpenHomeDelay + BaseDelay, token).ConfigureAwait(false);
