@@ -9,10 +9,7 @@ namespace RaidCrawler.Core.Structures
         public const byte SIZE = 0x20;
         private readonly byte[] Data; // Raw data
 
-        public Raid(
-            Span<byte> data,
-            TeraRaidMapParent map = TeraRaidMapParent.Paldea
-        )
+        public Raid(Span<byte> data, TeraRaidMapParent map = TeraRaidMapParent.Paldea)
         {
             Data = data.ToArray();
             MapParent = map;
