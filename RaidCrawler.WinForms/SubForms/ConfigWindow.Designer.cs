@@ -79,6 +79,8 @@ namespace RaidCrawler.WinForms.SubForms
             StoryProgress = new ComboBox();
             tabMatch = new TabPage();
             tabAdvanceDate = new TabPage();
+            ExtraOverworldWait = new NumericUpDown();
+            L_ExtraOverworldWait = new Label();
             RelaunchDelay = new NumericUpDown();
             L_RelaunchDelay = new Label();
             SystemReset = new NumericUpDown();
@@ -114,8 +116,7 @@ namespace RaidCrawler.WinForms.SubForms
             labelAppName = new Label();
             picAppIcon = new PictureBox();
             labelAppVersion = new Label();
-            ExtraOverworldWait = new NumericUpDown();
-            L_ExtraOverworldWait = new Label();
+            UseMapTrick = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)SystemDDownPresses).BeginInit();
             ((System.ComponentModel.ISupportInitialize)NavigateToSettings).BeginInit();
             ((System.ComponentModel.ISupportInitialize)OpenSettings).BeginInit();
@@ -131,6 +132,7 @@ namespace RaidCrawler.WinForms.SubForms
             LocationGroup.SuspendLayout();
             tabMatch.SuspendLayout();
             tabAdvanceDate.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)ExtraOverworldWait).BeginInit();
             ((System.ComponentModel.ISupportInitialize)RelaunchDelay).BeginInit();
             ((System.ComponentModel.ISupportInitialize)SystemReset).BeginInit();
             ((System.ComponentModel.ISupportInitialize)SaveGameDelay).BeginInit();
@@ -140,7 +142,6 @@ namespace RaidCrawler.WinForms.SubForms
             tabExperimental.SuspendLayout();
             tabAbout.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)picAppIcon).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)ExtraOverworldWait).BeginInit();
             SuspendLayout();
             // 
             // FocusWindow
@@ -392,7 +393,7 @@ namespace RaidCrawler.WinForms.SubForms
             // UseTouch
             // 
             UseTouch.AutoSize = true;
-            UseTouch.Location = new Point(8, 25);
+            UseTouch.Location = new Point(8, 18);
             UseTouch.Name = "UseTouch";
             UseTouch.Size = new Size(267, 19);
             UseTouch.TabIndex = 36;
@@ -609,13 +610,14 @@ namespace RaidCrawler.WinForms.SubForms
             tabMatch.Location = new Point(4, 24);
             tabMatch.Name = "tabMatch";
             tabMatch.Padding = new Padding(3);
-            tabMatch.Size = new Size(372, 578);
+            tabMatch.Size = new Size(372, 603);
             tabMatch.TabIndex = 0;
             tabMatch.Text = "Match";
             tabMatch.UseVisualStyleBackColor = true;
             // 
             // tabAdvanceDate
             // 
+            tabAdvanceDate.Controls.Add(UseMapTrick);
             tabAdvanceDate.Controls.Add(ExtraOverworldWait);
             tabAdvanceDate.Controls.Add(L_ExtraOverworldWait);
             tabAdvanceDate.Controls.Add(RelaunchDelay);
@@ -662,6 +664,24 @@ namespace RaidCrawler.WinForms.SubForms
             tabAdvanceDate.Text = "Advance Date";
             tabAdvanceDate.UseVisualStyleBackColor = true;
             // 
+            // ExtraOverworldWait
+            // 
+            ExtraOverworldWait.Location = new Point(296, 519);
+            ExtraOverworldWait.Maximum = new decimal(new int[] { 1000000, 0, 0, 0 });
+            ExtraOverworldWait.Name = "ExtraOverworldWait";
+            ExtraOverworldWait.Size = new Size(68, 23);
+            ExtraOverworldWait.TabIndex = 51;
+            // 
+            // L_ExtraOverworldWait
+            // 
+            L_ExtraOverworldWait.AutoSize = true;
+            L_ExtraOverworldWait.Location = new Point(8, 521);
+            L_ExtraOverworldWait.Name = "L_ExtraOverworldWait";
+            L_ExtraOverworldWait.Size = new Size(218, 15);
+            L_ExtraOverworldWait.TabIndex = 50;
+            L_ExtraOverworldWait.Text = "Extra time to wait for Overworld to load:";
+            L_ExtraOverworldWait.UseMnemonic = false;
+            // 
             // RelaunchDelay
             // 
             RelaunchDelay.Location = new Point(296, 489);
@@ -701,7 +721,7 @@ namespace RaidCrawler.WinForms.SubForms
             // UseSetStick
             // 
             UseSetStick.AutoSize = true;
-            UseSetStick.Location = new Point(8, 109);
+            UseSetStick.Location = new Point(8, 102);
             UseSetStick.Name = "UseSetStick";
             UseSetStick.Size = new Size(222, 19);
             UseSetStick.TabIndex = 45;
@@ -712,7 +732,7 @@ namespace RaidCrawler.WinForms.SubForms
             // DodgeSystemUpdate
             // 
             DodgeSystemUpdate.AutoSize = true;
-            DodgeSystemUpdate.Location = new Point(8, 88);
+            DodgeSystemUpdate.Location = new Point(8, 81);
             DodgeSystemUpdate.Name = "DodgeSystemUpdate";
             DodgeSystemUpdate.Size = new Size(184, 19);
             DodgeSystemUpdate.TabIndex = 44;
@@ -738,7 +758,7 @@ namespace RaidCrawler.WinForms.SubForms
             // SaveGame
             // 
             SaveGame.AutoSize = true;
-            SaveGame.Location = new Point(8, 67);
+            SaveGame.Location = new Point(8, 60);
             SaveGame.Name = "SaveGame";
             SaveGame.Size = new Size(164, 19);
             SaveGame.TabIndex = 41;
@@ -767,7 +787,7 @@ namespace RaidCrawler.WinForms.SubForms
             // UseOvershoot
             // 
             UseOvershoot.AutoSize = true;
-            UseOvershoot.Location = new Point(8, 46);
+            UseOvershoot.Location = new Point(8, 39);
             UseOvershoot.Name = "UseOvershoot";
             UseOvershoot.Size = new Size(355, 19);
             UseOvershoot.TabIndex = 38;
@@ -942,7 +962,7 @@ namespace RaidCrawler.WinForms.SubForms
             tabExperimental.Location = new Point(4, 24);
             tabExperimental.Name = "tabExperimental";
             tabExperimental.Padding = new Padding(3);
-            tabExperimental.Size = new Size(372, 578);
+            tabExperimental.Size = new Size(372, 603);
             tabExperimental.TabIndex = 2;
             tabExperimental.Text = "Experimental";
             tabExperimental.UseVisualStyleBackColor = true;
@@ -972,7 +992,7 @@ namespace RaidCrawler.WinForms.SubForms
             tabAbout.Location = new Point(4, 24);
             tabAbout.Name = "tabAbout";
             tabAbout.Padding = new Padding(3);
-            tabAbout.Size = new Size(372, 578);
+            tabAbout.Size = new Size(372, 603);
             tabAbout.TabIndex = 4;
             tabAbout.Text = "About";
             tabAbout.UseVisualStyleBackColor = true;
@@ -1018,23 +1038,15 @@ namespace RaidCrawler.WinForms.SubForms
             labelAppVersion.Text = "v0.0.0-000000";
             labelAppVersion.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // ExtraOverworldWait
+            // UseMapTrick
             // 
-            ExtraOverworldWait.Location = new Point(296, 519);
-            ExtraOverworldWait.Maximum = new decimal(new int[] { 1000000, 0, 0, 0 });
-            ExtraOverworldWait.Name = "ExtraOverworldWait";
-            ExtraOverworldWait.Size = new Size(68, 23);
-            ExtraOverworldWait.TabIndex = 51;
-            // 
-            // L_ExtraOverworldWait
-            // 
-            L_ExtraOverworldWait.AutoSize = true;
-            L_ExtraOverworldWait.Location = new Point(8, 521);
-            L_ExtraOverworldWait.Name = "L_ExtraOverworldWait";
-            L_ExtraOverworldWait.Size = new Size(218, 15);
-            L_ExtraOverworldWait.TabIndex = 50;
-            L_ExtraOverworldWait.Text = "Extra time to wait for Overworld to load:";
-            L_ExtraOverworldWait.UseMnemonic = false;
+            UseMapTrick.AutoSize = true;
+            UseMapTrick.Location = new Point(8, 123);
+            UseMapTrick.Name = "UseMapTrick";
+            UseMapTrick.Size = new Size(164, 19);
+            UseMapTrick.TabIndex = 52;
+            UseMapTrick.Text = "Use Map Trick to avoid lag";
+            UseMapTrick.UseVisualStyleBackColor = true;
             // 
             // ConfigWindow
             // 
@@ -1067,6 +1079,7 @@ namespace RaidCrawler.WinForms.SubForms
             tabMatch.PerformLayout();
             tabAdvanceDate.ResumeLayout(false);
             tabAdvanceDate.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)ExtraOverworldWait).EndInit();
             ((System.ComponentModel.ISupportInitialize)RelaunchDelay).EndInit();
             ((System.ComponentModel.ISupportInitialize)SystemReset).EndInit();
             ((System.ComponentModel.ISupportInitialize)SaveGameDelay).EndInit();
@@ -1079,7 +1092,6 @@ namespace RaidCrawler.WinForms.SubForms
             tabAbout.ResumeLayout(false);
             tabAbout.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)picAppIcon).EndInit();
-            ((System.ComponentModel.ISupportInitialize)ExtraOverworldWait).EndInit();
             ResumeLayout(false);
         }
 
@@ -1170,5 +1182,6 @@ namespace RaidCrawler.WinForms.SubForms
         private Label L_RelaunchDelay;
         private NumericUpDown ExtraOverworldWait;
         private Label L_ExtraOverworldWait;
+        private CheckBox UseMapTrick;
     }
 }

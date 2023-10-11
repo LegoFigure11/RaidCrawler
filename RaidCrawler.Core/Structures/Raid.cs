@@ -9,10 +9,7 @@ namespace RaidCrawler.Core.Structures
         public const byte SIZE = 0x20;
         private readonly byte[] Data; // Raw data
 
-        public Raid(
-            Span<byte> data,
-            TeraRaidMapParent map = TeraRaidMapParent.Paldea
-        )
+        public Raid(Span<byte> data, TeraRaidMapParent map = TeraRaidMapParent.Paldea)
         {
             Data = data.ToArray();
             MapParent = map;
@@ -23,7 +20,7 @@ namespace RaidCrawler.Core.Structures
         public bool IsValid => Validate();
         public bool IsActive => ReadUInt32LittleEndian(Data.AsSpan(0x00)) == 1;
         public uint Area => ReadUInt32LittleEndian(Data.AsSpan(0x04));
-        public uint DisplayType => ReadUInt32LittleEndian(Data.AsSpan(0x08));
+        public uint LotteryGroup => ReadUInt32LittleEndian(Data.AsSpan(0x08));
         public uint Den => ReadUInt32LittleEndian(Data.AsSpan(0x0C));
         public uint Seed => ReadUInt32LittleEndian(Data.AsSpan(0x10));
         public uint Flags => ReadUInt32LittleEndian(Data.AsSpan(0x18));
@@ -43,7 +40,12 @@ namespace RaidCrawler.Core.Structures
 
         private bool Validate()
         {
-            if (Seed == 0 || !IsActive || Area > 22)
+            if (
+                Seed == 0
+                || !IsActive
+                || (MapParent == TeraRaidMapParent.Paldea && Area > 22)
+                || (MapParent == TeraRaidMapParent.Kitakami && Area > 11)
+            )
                 return false;
 
             GenerateGenericRaidData(Seed);

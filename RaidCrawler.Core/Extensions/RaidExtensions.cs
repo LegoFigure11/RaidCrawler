@@ -25,7 +25,9 @@ namespace RaidCrawler.Core.Structures
         )
         {
             var clone = new Xoroshiro128Plus(raid.Seed);
-            var starCount = isBlack ? 6 : raid.GetStarCount((uint)clone.NextInt(100), progress, false);
+            var starCount = isBlack
+                ? 6
+                : raid.GetStarCount((uint)clone.NextInt(100), progress, false);
             var total =
                 container.Game == "Scarlet"
                     ? GetRateTotalBaseSL(starCount)
@@ -57,7 +59,9 @@ namespace RaidCrawler.Core.Structures
         )
         {
             var clone = new Xoroshiro128Plus(raid.Seed);
-            var starCount = isBlack ? 6 : raid.GetStarCount((uint)clone.NextInt(100), progress, false);
+            var starCount = isBlack
+                ? 6
+                : raid.GetStarCount((uint)clone.NextInt(100), progress, false);
             var total =
                 container.Game == "Scarlet"
                     ? GetRateTotalKitakamiSL(starCount)
