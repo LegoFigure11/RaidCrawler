@@ -567,9 +567,6 @@ namespace RaidCrawler.WinForms
 
                 while (!stop)
                 {
-                    bool streamer = Config.StreamerView && teraRaidView is not null;
-                    Action<int>? action = streamer ? teraRaidView!.UpdateProgressBar : null;
-
                     if (skips >= Config.SystemReset)
                     {
                         // When raids are generated, the game determines raids for both the current and next day.
@@ -589,6 +586,8 @@ namespace RaidCrawler.WinForms
 
                     var previousSeeds = raids.Select(z => z.Seed).ToList();
                     UpdateStatus("Changing date...");
+                    bool streamer = Config.StreamerView && teraRaidView is not null;
+                    Action<int>? action = streamer ? teraRaidView!.UpdateProgressBar : null;
                     await ConnectionWrapper
                         .AdvanceDate(Config, token, action)
                         .ConfigureAwait(false);
