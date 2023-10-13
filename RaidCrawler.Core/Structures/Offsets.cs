@@ -7,21 +7,21 @@
 
         public IReadOnlyList<long> RaidBlockPointerBase = new List<long>()
         {
-            0x4622A30,
+            0x4623A30,
             0x198,
             0x88,
             0x40
         };
         public IReadOnlyList<long> RaidBlockPointerKitakami = new List<long>()
         {
-            0x4622A30,
+            0x4623A30,
             0x198,
             0x88,
             0xCD8
         };
         public IReadOnlyList<long> BlockKeyPointer = new List<long>()
         {
-            0x4616648,
+            0x4617648,
             0xD8,
             0x0,
             0x0,
