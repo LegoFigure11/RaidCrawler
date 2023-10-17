@@ -581,7 +581,7 @@ namespace RaidCrawler.WinForms
                     bool streamer = Config.StreamerView && teraRaidView is not null;
                     Action<int>? action = streamer ? teraRaidView!.UpdateProgressBar : null;
                     await ConnectionWrapper
-                        .AdvanceDate(Config, token, action)
+                        .AdvanceDate(Config, skips, token, action)
                         .ConfigureAwait(false);
                     await ReadRaids(token).ConfigureAwait(false);
                     raids = RaidContainer.Raids;

@@ -228,9 +228,26 @@ namespace RaidCrawler.Core.Connection
             await Task.Delay(delay, token).ConfigureAwait(false);
         }
 
+        private async Task SkipHour(int hours, int delay, CancellationToken token)
+        {
+            var command = Encoding.ASCII.GetBytes($"timeSkipForward{(CRLF ? "\r\n" : "")}");
+            for (int i = 0; i < hours; i++)
+            {
+                await Connection.SendAsync(command, token).ConfigureAwait(false);
+                await Task.Delay(delay, token).ConfigureAwait(false);
+            }
+        }
+
+        private async Task ResetTime(CancellationToken token)
+        {
+            var command = Encoding.ASCII.GetBytes($"resetTime{(CRLF ? "\r\n" : "")}");
+            await Connection.SendAsync(command, token).ConfigureAwait(false);
+        }
+
         // Thank you to Anubis for sharing a more optimized routine, as well as CloseGame(), StartGame(), and SaveGame()!
         public async Task AdvanceDate(
             IDateAdvanceConfig config,
+            int skips,
             CancellationToken token,
             Action<int>? action = null
         )
@@ -242,167 +259,185 @@ namespace RaidCrawler.Core.Connection
                 + (config.DodgeSystemUpdate ? 2 : 0)
                 + config.DaysToSkip;
 
+            if (config.ZyroMethod)
+                steps = 3;
+
             _statusUpdate("Changing date...");
             var BaseDelay = config.BaseDelay;
 
-            if (!config.UseMapTrick)
+            if (config.ZyroMethod)
             {
-                // Sometimes the first command drops, click twice with shorter delays for good measure.
-                await Click(B, 0_100, token).ConfigureAwait(false);
-                UpdateProgressBar(action, steps);
-
-                await Click(B, 0_100, token).ConfigureAwait(false);
-                UpdateProgressBar(action, steps);
-            }
-            else
-            {
-                await Click(ZL, 0_100, token).ConfigureAwait(false);
-                await Click(ZL, 1_500, token).ConfigureAwait(false);
-                UpdateProgressBar(action, steps);
-
-                await Click(ZR, 2_000, token).ConfigureAwait(false);
-                UpdateProgressBar(action, steps);
-            }
-
-            // HOME Menu
-            await Click(HOME, config.OpenHomeDelay + BaseDelay, token).ConfigureAwait(false);
-            UpdateProgressBar(action, steps);
-
-            // Navigate to Settings
-            if (config.UseTouch)
-            {
-                await Touch(0_840, 0_540, 0_050, 0, token).ConfigureAwait(false);
-                UpdateProgressBar(action, steps);
-            }
-            else
-            {
-                await Click(DDOWN, config.NavigateToSettingsDelay + BaseDelay, token)
-                    .ConfigureAwait(false);
-                UpdateProgressBar(action, steps);
-
-                for (int i = 0; i < 5; i++)
+                if (skips % 2 == 0)
                 {
-                    await Click(DRIGHT, config.NavigateToSettingsDelay + BaseDelay, token)
-                        .ConfigureAwait(false);
+                    await SkipHour(24, 0, token).ConfigureAwait(false);
+                }
+                else
+                {
+                    await ResetTime(token).ConfigureAwait(false);
+                }
+                await Task.Delay(3_000, token).ConfigureAwait(false);
+            }
+            else
+            {
+                if (!config.UseMapTrick)
+                {
+                    // Sometimes the first command drops, click twice with shorter delays for good measure.
+                    await Click(B, 0_100, token).ConfigureAwait(false);
+                    UpdateProgressBar(action, steps);
+
+                    await Click(B, 0_100, token).ConfigureAwait(false);
                     UpdateProgressBar(action, steps);
                 }
-            }
+                else
+                {
+                    await Click(ZL, 0_100, token).ConfigureAwait(false);
+                    await Click(ZL, 1_500, token).ConfigureAwait(false);
+                    UpdateProgressBar(action, steps);
 
-            await Click(A, config.OpenSettingsDelay + BaseDelay, token).ConfigureAwait(false);
-            UpdateProgressBar(action, steps);
+                    await Click(ZR, 2_000, token).ConfigureAwait(false);
+                    UpdateProgressBar(action, steps);
+                }
 
-            // Scroll to bottom
-            if (config.UseSetStick)
-                await SetStick(
-                        SwitchStick.LEFT,
-                        0,
-                        -30_000,
-                        config.HoldDuration,
-                        0_100 + BaseDelay,
-                        token
-                    )
-                    .ConfigureAwait(false);
-            else
-                await PressAndHold(DDOWN, config.HoldDuration, 0_100 + BaseDelay, token)
-                    .ConfigureAwait(false);
-            UpdateProgressBar(action, steps);
+                // HOME Menu
+                await Click(HOME, config.OpenHomeDelay + BaseDelay, token).ConfigureAwait(false);
+                UpdateProgressBar(action, steps);
 
-            // Navigate to "Date and Time"
-            _statusUpdate("Navigating to \"Date and Time\"...");
-            await Click(A, 0_300 + BaseDelay, token).ConfigureAwait(false);
-            UpdateProgressBar(action, steps);
+                // Navigate to Settings
+                if (config.UseTouch)
+                {
+                    await Touch(0_840, 0_540, 0_050, 0, token).ConfigureAwait(false);
+                    UpdateProgressBar(action, steps);
+                }
+                else
+                {
+                    await Click(DDOWN, config.NavigateToSettingsDelay + BaseDelay, token)
+                        .ConfigureAwait(false);
+                    UpdateProgressBar(action, steps);
 
-            // Hold down to overshoot Date/Time by one. DUP to recover.
-            if (config.UseOvershoot)
-            {
+                    for (int i = 0; i < 5; i++)
+                    {
+                        await Click(DRIGHT, config.NavigateToSettingsDelay + BaseDelay, token)
+                            .ConfigureAwait(false);
+                        UpdateProgressBar(action, steps);
+                    }
+                }
+
+                await Click(A, config.OpenSettingsDelay + BaseDelay, token).ConfigureAwait(false);
+                UpdateProgressBar(action, steps);
+
+                // Scroll to bottom
                 if (config.UseSetStick)
                     await SetStick(
                             SwitchStick.LEFT,
                             0,
                             -30_000,
-                            config.SystemOvershoot,
+                            config.HoldDuration,
                             0_100 + BaseDelay,
                             token
                         )
                         .ConfigureAwait(false);
                 else
-                    await PressAndHold(DDOWN, config.SystemOvershoot, 0_100 + BaseDelay, token)
+                    await PressAndHold(DDOWN, config.HoldDuration, 0_100 + BaseDelay, token)
                         .ConfigureAwait(false);
                 UpdateProgressBar(action, steps);
 
-                await Click(DUP, 0_500 + BaseDelay, token).ConfigureAwait(false);
+                // Navigate to "Date and Time"
+                _statusUpdate("Navigating to \"Date and Time\"...");
+                await Click(A, 0_300 + BaseDelay, token).ConfigureAwait(false);
                 UpdateProgressBar(action, steps);
-            }
-            else
-            {
-                for (int i = 0; i < config.SystemDownPresses; i++)
+
+                // Hold down to overshoot Date/Time by one. DUP to recover.
+                if (config.UseOvershoot)
                 {
-                    await Click(DDOWN, 0_100 + BaseDelay, token).ConfigureAwait(false);
+                    if (config.UseSetStick)
+                        await SetStick(
+                                SwitchStick.LEFT,
+                                0,
+                                -30_000,
+                                config.SystemOvershoot,
+                                0_100 + BaseDelay,
+                                token
+                            )
+                            .ConfigureAwait(false);
+                    else
+                        await PressAndHold(DDOWN, config.SystemOvershoot, 0_100 + BaseDelay, token)
+                            .ConfigureAwait(false);
+                    UpdateProgressBar(action, steps);
+
+                    await Click(DUP, 0_500 + BaseDelay, token).ConfigureAwait(false);
                     UpdateProgressBar(action, steps);
                 }
-            }
-
-            // Enter Date/Time
-            await Click(A, config.Submenu + BaseDelay, token).ConfigureAwait(false);
-            UpdateProgressBar(action, steps);
-
-            // Open Date/Time settings
-            if (config.UseTouch)
-            {
-                await Touch(0_950, 0_400, 0_050, 0, token).ConfigureAwait(false);
-                UpdateProgressBar(action, steps);
-            }
-            else
-            {
-                for (int i = 0; i < 2; i++)
+                else
                 {
-                    await Click(DDOWN, 0_100 + BaseDelay, token).ConfigureAwait(false);
+                    for (int i = 0; i < config.SystemDownPresses; i++)
+                    {
+                        await Click(DDOWN, 0_100 + BaseDelay, token).ConfigureAwait(false);
+                        UpdateProgressBar(action, steps);
+                    }
+                }
+
+                // Enter Date/Time
+                await Click(A, config.Submenu + BaseDelay, token).ConfigureAwait(false);
+                UpdateProgressBar(action, steps);
+
+                // Open Date/Time settings
+                if (config.UseTouch)
+                {
+                    await Touch(0_950, 0_400, 0_050, 0, token).ConfigureAwait(false);
                     UpdateProgressBar(action, steps);
                 }
-            }
+                else
+                {
+                    for (int i = 0; i < 2; i++)
+                    {
+                        await Click(DDOWN, 0_100 + BaseDelay, token).ConfigureAwait(false);
+                        UpdateProgressBar(action, steps);
+                    }
+                }
 
-            await Click(A, config.DateChange + BaseDelay, token).ConfigureAwait(false);
-            UpdateProgressBar(action, steps);
-
-            for (int i = 0; i < config.DaysToSkip; i++)
-            {
-                await Click(DUP, 0_100 + BaseDelay, token).ConfigureAwait(false);
+                await Click(A, config.DateChange + BaseDelay, token).ConfigureAwait(false);
                 UpdateProgressBar(action, steps);
-            }
 
-            for (int i = 0; i < 6; i++)
-            {
-                await Click(DRIGHT, (i < 5 ? 0_050 : 0_100) + BaseDelay, token)
+                for (int i = 0; i < config.DaysToSkip; i++)
+                {
+                    await Click(DUP, 0_100 + BaseDelay, token).ConfigureAwait(false);
+                    UpdateProgressBar(action, steps);
+                }
+
+                for (int i = 0; i < 6; i++)
+                {
+                    await Click(DRIGHT, (i < 5 ? 0_050 : 0_100) + BaseDelay, token)
+                        .ConfigureAwait(false);
+                    UpdateProgressBar(action, steps);
+                }
+
+                await Click(A, 0_150 + config.DateChange + BaseDelay, token).ConfigureAwait(false);
+                UpdateProgressBar(action, steps);
+
+                // Return to game
+                await Click(HOME, config.ReturnHomeDelay + BaseDelay, token).ConfigureAwait(false);
+                UpdateProgressBar(action, steps);
+
+                await Click(
+                        HOME,
+                        (config.DodgeSystemUpdate ? 0_500 : config.ReturnGameDelay) + BaseDelay,
+                        token
+                    )
                     .ConfigureAwait(false);
                 UpdateProgressBar(action, steps);
+
+                if (config.DodgeSystemUpdate)
+                {
+                    // Attempt to dodge an update prompt.
+                    await Click(DUP, 0_600 + BaseDelay, token).ConfigureAwait(false);
+                    UpdateProgressBar(action, steps);
+
+                    await Click(A, config.ReturnGameDelay + BaseDelay, token).ConfigureAwait(false);
+                    UpdateProgressBar(action, steps);
+                }
+
+                _statusUpdate("Back in the game...");
             }
-
-            await Click(A, 0_150 + config.DateChange + BaseDelay, token).ConfigureAwait(false);
-            UpdateProgressBar(action, steps);
-
-            // Return to game
-            await Click(HOME, config.ReturnHomeDelay + BaseDelay, token).ConfigureAwait(false);
-            UpdateProgressBar(action, steps);
-
-            await Click(
-                    HOME,
-                    (config.DodgeSystemUpdate ? 0_500 : config.ReturnGameDelay) + BaseDelay,
-                    token
-                )
-                .ConfigureAwait(false);
-            UpdateProgressBar(action, steps);
-
-            if (config.DodgeSystemUpdate)
-            {
-                // Attempt to dodge an update prompt.
-                await Click(DUP, 0_600 + BaseDelay, token).ConfigureAwait(false);
-                UpdateProgressBar(action, steps);
-
-                await Click(A, config.ReturnGameDelay + BaseDelay, token).ConfigureAwait(false);
-                UpdateProgressBar(action, steps);
-            }
-
-            _statusUpdate("Back in the game...");
         }
 
         public async Task CloseGame(CancellationToken token)

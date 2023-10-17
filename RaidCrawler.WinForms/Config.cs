@@ -27,6 +27,7 @@ namespace RaidCrawler.WinForms
         public string DiscordMessageContent { get; set; } = string.Empty;
 
         // Date Advance
+        public bool ZyroMethod { get; set; } = false;
         public bool UseTouch { get; set; } = false;
         public bool UseOvershoot { get; set; } = false;
         public bool DodgeSystemUpdate { get; set; } = false;
