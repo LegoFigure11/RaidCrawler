@@ -671,9 +671,9 @@ namespace RaidCrawler.WinForms.SubForms
             ZyroMethod.AutoSize = true;
             ZyroMethod.Location = new Point(8, 21);
             ZyroMethod.Name = "ZyroMethod";
-            ZyroMethod.Size = new Size(286, 19);
+            ZyroMethod.Size = new Size(332, 19);
             ZyroMethod.TabIndex = 53;
-            ZyroMethod.Text = "Use Zyro's sysbot-base fork methods (4-5x faster)";
+            ZyroMethod.Text = "Use Zyro's usb-botbase fork methods (approx. 4-5x faster)";
             ZyroMethod.UseVisualStyleBackColor = true;
             // 
             // UseMapTrick
