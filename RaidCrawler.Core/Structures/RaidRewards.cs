@@ -486,7 +486,11 @@ namespace RaidCrawler.Core.Structures
                 Species.Sandshrew or Species.Sandslash => 2439,
                 Species.Cleffa or Species.Clefairy or Species.Clefable => 2440,
                 Species.Vulpix or Species.Ninetales => 2441,
-                Species.Poliwag or Species.Poliwhirl or Species.Poliwrath or Species.Politoed => 2442,
+                Species.Poliwag
+                or Species.Poliwhirl
+                or Species.Poliwrath
+                or Species.Politoed
+                    => 2442,
                 Species.Bellsprout or Species.Weepinbell or Species.Victreebel => 2443,
                 Species.Geodude or Species.Graveler or Species.Golem => 2444,
                 Species.Koffing or Species.Weezing => 2445,

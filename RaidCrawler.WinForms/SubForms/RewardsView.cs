@@ -56,8 +56,9 @@ namespace RaidCrawler.WinForms.SubForms
                     1906 => (Image?)Properties.Resources.ResourceManager.GetObject("item_1906"),
                     1907 => (Image?)Properties.Resources.ResourceManager.GetObject("item_1907"),
                     1908 => (Image?)Properties.Resources.ResourceManager.GetObject("item_1908"),
-                    (>= 1956 and <= 2159) or (>= 2438 and <= 2478) =>
-                            (Image?)Properties.Resources.ResourceManager.GetObject("material"),
+                    (>= 1956 and <= 2159)
+                    or (>= 2438 and <= 2478)
+                        => (Image?)Properties.Resources.ResourceManager.GetObject("material"),
                     10000 => (Image?)Properties.Resources.ResourceManager.GetObject("material"),
                     20000
                         => (Image?)
