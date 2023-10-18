@@ -569,11 +569,19 @@ namespace RaidCrawler.WinForms
                 {
                     if (skips >= Config.SystemReset)
                     {
+                        // When raids are generated, the game determines raids for both the current and next day.
+                        // In order to avoid rescanning the same raids on a reset, save the game before reset.
+                        await ConnectionWrapper.SaveGame(Config, token).ConfigureAwait(false);
                         await ConnectionWrapper.CloseGame(token).ConfigureAwait(false);
                         await ConnectionWrapper.StartGame(Config, token).ConfigureAwait(false);
+
                         RaidBlockOffsetBase = 0;
                         RaidBlockOffsetKitakami = 0;
                         skips = 0;
+
+                        // Read the initial raids upon reopening the game to correctly detect if the next advance fails
+                        await ReadRaids(token).ConfigureAwait(false);
+                        raids = RaidContainer.Raids;
                     }
 
                     var previousSeeds = raids.Select(z => z.Seed).ToList();
