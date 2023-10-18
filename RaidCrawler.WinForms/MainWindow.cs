@@ -380,7 +380,8 @@ namespace RaidCrawler.WinForms
                             ButtonDownloadEvents,
                             SendScreenshot,
                             btnOpenMap,
-                            Rewards
+                            Rewards,
+                            B_ResetTime
                         },
                         true
                     );
@@ -423,7 +424,8 @@ namespace RaidCrawler.WinForms
                             ButtonDisconnect,
                             ButtonViewRAM,
                             ButtonDownloadEvents,
-                            SendScreenshot
+                            SendScreenshot,
+                            B_ResetTime
                         },
                         false
                     );
@@ -2200,6 +2202,31 @@ namespace RaidCrawler.WinForms
                 shiny
             )[1..];
             return spriteName.Replace('_', '-').Insert(0, "_");
+        }
+
+        private void B_ResetTime_Click(object sender, EventArgs e)
+        {
+            Task.Run(async () =>
+            {
+                try
+                {
+                    UpdateStatus("Resetting date...");
+                    await ConnectionWrapper.ResetTime(Source.Token).ConfigureAwait(false);
+                    UpdateStatus("Date reset!");
+                }
+                catch (Exception ex)
+                {
+                    await ErrorHandler
+                        .DisplayMessageBox(
+                            this,
+                            Webhook,
+                            $"Could not reset the date: {ex.Message}",
+                            Source.Token
+                        )
+                        .ConfigureAwait(false);
+                    return;
+                }
+            });
         }
     }
 }

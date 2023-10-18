@@ -238,7 +238,7 @@ namespace RaidCrawler.Core.Connection
             }
         }
 
-        private async Task ResetTime(CancellationToken token)
+        public async Task ResetTime(CancellationToken token)
         {
             var command = Encoding.ASCII.GetBytes($"resetTime{(CRLF ? "\r\n" : "")}");
             await Connection.SendAsync(command, token).ConfigureAwait(false);

@@ -90,6 +90,7 @@
             USB_Port_label = new Label();
             USB_Port_TB = new TextBox();
             StopAdvance_Button = new Button();
+            B_ResetTime = new Button();
             ((System.ComponentModel.ISupportInitialize)Sprite).BeginInit();
             ((System.ComponentModel.ISupportInitialize)GemIcon).BeginInit();
             ((System.ComponentModel.ISupportInitialize)SearchTimer).BeginInit();
@@ -554,7 +555,7 @@
             // 
             ConfigSettings.Location = new Point(12, 302);
             ConfigSettings.Name = "ConfigSettings";
-            ConfigSettings.Size = new Size(200, 23);
+            ConfigSettings.Size = new Size(97, 23);
             ConfigSettings.TabIndex = 115;
             ConfigSettings.Text = "Open Settings";
             ConfigSettings.UseVisualStyleBackColor = true;
@@ -703,11 +704,23 @@
             StopAdvance_Button.Visible = false;
             StopAdvance_Button.Click += StopAdvanceButton_Click;
             // 
+            // B_ResetTime
+            // 
+            B_ResetTime.Enabled = false;
+            B_ResetTime.Location = new Point(117, 302);
+            B_ResetTime.Name = "B_ResetTime";
+            B_ResetTime.Size = new Size(97, 23);
+            B_ResetTime.TabIndex = 130;
+            B_ResetTime.Text = "Reset Date";
+            B_ResetTime.UseVisualStyleBackColor = true;
+            B_ResetTime.Click += B_ResetTime_Click;
+            // 
             // MainWindow
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(580, 357);
+            Controls.Add(B_ResetTime);
             Controls.Add(StopAdvance_Button);
             Controls.Add(USB_Port_TB);
             Controls.Add(USB_Port_label);
@@ -835,5 +848,6 @@
         private TextBox USB_Port_TB;
         private Button StopAdvance_Button;
         private ToolStripStatusLabel Label_DayAdvance;
+        private Button B_ResetTime;
     }
 }
