@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net7.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
 	<LangVersion>11</LangVersion>
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
@@ -172,8 +172,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="NLog" Version="5.1.1" />
-    <PackageReference Include="PKHeX.Core" Version="23.9.25" />
+    <PackageReference Include="NLog" Version="5.2.7" />
+    <PackageReference Include="PKHeX.Core" Version="23.10.12" />
     <PackageReference Include="GitVersion.MsBuild" Version="5.12.0">
     <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
