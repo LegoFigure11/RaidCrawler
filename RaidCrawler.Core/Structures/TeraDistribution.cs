@@ -19,7 +19,7 @@ public class TeraDistribution : ITeraRaid
     public AbilityPermission Ability => Entity.Ability;
     public byte FlawlessIVCount => Entity.FlawlessIVCount;
     public Shiny Shiny => Entity.Shiny;
-    public Nature Nature => Nature.Random;
+    public Nature Nature => Entity.Nature;
     public byte Level => Entity.Level;
     public IndividualValueSet IVs => Entity.IVs;
     public ushort Move1 => Entity.Moves.Move1;
