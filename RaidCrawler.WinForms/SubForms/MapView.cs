@@ -1,11 +1,10 @@
-﻿namespace RaidCrawler.WinForms.SubForms
+﻿namespace RaidCrawler.WinForms.SubForms;
+
+public partial class MapView : Form
 {
-    public partial class MapView : Form
+    public MapView(Image map)
     {
-        public MapView(Image map)
-        {
-            InitializeComponent();
-            Map.Image = map;
-        }
+        InitializeComponent();
+        Map.Image = map;
     }
 }

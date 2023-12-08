@@ -1,96 +1,81 @@
-﻿using PKHeX.Drawing;
+using PKHeX.Drawing;
 using RaidCrawler.Core.Structures;
 
-namespace RaidCrawler.WinForms.SubForms
+namespace RaidCrawler.WinForms.SubForms;
+
+public partial class RewardsView : Form
 {
-    public partial class RewardsView : Form
+    public RewardsView(IReadOnlyList<string> itemStrings, IReadOnlyList<string> moveStrings, IReadOnlyList<(int, int, int)> rewards)
     {
-        public RewardsView(
-            IReadOnlyList<string> itemStrings,
-            IReadOnlyList<string> moveStrings,
-            IReadOnlyList<(int, int, int)> rewards
-        )
+        InitializeComponent();
+        var rare = PKHeX.Drawing.PokeSprite.Properties.Resources.rare_icon;
+        var pictures = new PictureBox[rewards.Count];
+        var labels = new Label[rewards.Count];
+        for (int i = 0; i < rewards.Count; i++)
         {
-            InitializeComponent();
-            Bitmap rare = PKHeX.Drawing.PokeSprite.Properties.Resources.rare_icon;
-            PictureBox[] pictures = new PictureBox[rewards.Count];
-            Label[] labels = new Label[rewards.Count];
-            for (int i = 0; i < rewards.Count; i++)
+            var pb = pictures[i] = new PictureBox
             {
-                pictures[i] = new PictureBox
-                {
-                    Size = new Size(24, 24),
-                    Location = new Point(12, (i * 36) + 12),
-                    SizeMode = PictureBoxSizeMode.CenterImage
-                };
+                Size = new Size(24, 24),
+                Location = new Point(12, (i * 36) + 12),
+                SizeMode = PictureBoxSizeMode.CenterImage,
+            };
 
-                labels[i] = new Label();
-                var item = rewards[i].Item1 switch
-                {
-                    10000 => "Material",
-                    20000 => "Tera Shard",
-                    _
-                        => Rewards.IsTM(rewards[i].Item1)
-                            ? Rewards.GetNameTM(
-                                rewards[i].Item1,
-                                itemStrings,
-                                moveStrings,
-                                Rewards.TMIndexes
-                            )
-                            : itemStrings[rewards[i].Item1]
-                };
+            var label = labels[i] = new Label();
+            var reward = rewards[i];
+            var item = reward.Item1 switch
+            {
+                10000 => "Material",
+                20000 => "Tera Shard",
+                _ => Rewards.IsTM(reward.Item1)
+                   ? Rewards.GetNameTM(reward.Item1, itemStrings, moveStrings, Rewards.TMIndexes)
+                   : itemStrings[reward.Item1],
+            };
 
-                var subject = rewards[i].Item3 switch
-                {
-                    1 => "(Host)",
-                    2 => "(Client)",
-                    3 => "(Once)",
-                    _ => string.Empty
-                };
+            var subject = reward.Item3 switch
+            {
+                1 => "(Host)",
+                2 => "(Client)",
+                3 => "(Once)",
+                _ => string.Empty,
+            };
 
-                var img = rewards[i].Item1 switch
-                {
-                    // Handling for sprites that pkhex doesn't have
-                    1904 => (Image?)Properties.Resources.ResourceManager.GetObject("item_1904"),
-                    1905 => (Image?)Properties.Resources.ResourceManager.GetObject("item_1905"),
-                    1906 => (Image?)Properties.Resources.ResourceManager.GetObject("item_1906"),
-                    1907 => (Image?)Properties.Resources.ResourceManager.GetObject("item_1907"),
-                    1908 => (Image?)Properties.Resources.ResourceManager.GetObject("item_1908"),
-                    (>= 1956 and <= 2159)
-                    or (>= 2438 and <= 2478)
-                        => (Image?)Properties.Resources.ResourceManager.GetObject("material"),
-                    10000 => (Image?)Properties.Resources.ResourceManager.GetObject("material"),
-                    20000
-                        => (Image?)
-                            PKHeX.Drawing.PokeSprite.Properties.Resources.ResourceManager.GetObject(
-                                "aitem_1862"
-                            ),
-                    _
-                        => Rewards.IsTM(rewards[i].Item1)
-                            ? (Image?)
-                                PKHeX.Drawing.PokeSprite.Properties.Resources.ResourceManager.GetObject(
-                                    $"aitem_tm"
-                                )
-                            : (Image?)
-                                PKHeX.Drawing.PokeSprite.Properties.Resources.ResourceManager.GetObject(
-                                    $"aitem_{rewards[i].Item1}"
-                                )
-                };
+            var img = GetItem(rewards, i);
 
-                if (img != null && Rewards.RareRewards.Contains(rewards[i].Item1))
-                    img = ImageUtil.LayerImage(img, rare, 0, 0, 0.7);
+            if (img != null && Rewards.RareRewards.Contains(reward.Item1))
+                img = ImageUtil.LayerImage(img, rare, 0, 0, 0.7);
 
-                pictures[i].Image = img;
-                labels[i].Text = $"{item} x{rewards[i].Item2} {subject}".TrimEnd();
-                labels[i].Location = new Point(60, 12 + i * (pictures[i].Size.Height + 12));
-                labels[i].Size = new Size(ClientSize.Width - 60 - 10, labels[i].Height);
-                Controls.Add(pictures[i]);
-                Controls.Add(labels[i]);
-            }
-            ClientSize = new Size(
-                ClientSize.Width,
-                12 + rewards.Count * (pictures[0].Size.Height + 12)
-            );
+            pb.Image = img;
+            label.Text = $"{item} x{reward.Item2} {subject}".TrimEnd();
+            label.Location = new Point(60, 12 + (i * (pb.Size.Height + 12)));
+            label.Size = new Size(ClientSize.Width - 60 - 10, label.Height);
+            Controls.Add(pb);
+            Controls.Add(label);
         }
+        ClientSize = ClientSize with { Height = 12 + (rewards.Count * (pictures[0].Size.Height + 12)) };
     }
+
+    private static Image? GetItem(IReadOnlyList<(int, int, int)> rewards, int i)
+    {
+        var (rc, item) = GetItemResourceName(rewards[i].Item1);
+        var manager = rc
+            ? Properties.Resources.ResourceManager
+            : PKHeX.Drawing.PokeSprite.Properties.Resources.ResourceManager;
+        return (Image?)manager.GetObject(item);
+    }
+
+    private static (bool rc, string item) GetItemResourceName(int id) => id switch
+    {
+        // Handling for sprites that pkhex doesn't have
+        1904 => (true, "item_1904"),
+        1905 => (true, "item_1905"),
+        1906 => (true, "item_1906"),
+        1907 => (true, "item_1907"),
+        1908 => (true, "item_1908"),
+        (>= 1956 and <= 2159) or (>= 2438 and <= 2478) => (true, "material"),
+        10000 => (true, "material"),
+
+        // pkhex can give us the sprites
+        20000 => (false, "aitem_1862"),
+        _ => (false, Rewards.IsTM(id) ? "aitem_tm" : $"aitem_{id}"),
+    };
 }
