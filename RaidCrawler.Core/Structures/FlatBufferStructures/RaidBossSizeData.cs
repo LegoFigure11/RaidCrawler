@@ -1,4 +1,4 @@
-﻿namespace pkNX.Structures.FlatBuffers.Gen9;
+namespace pkNX.Structures.FlatBuffers.Gen9;
 
 // ReSharper disable once ClassNeverInstantiated.Global
 public partial class RaidBossSizeData

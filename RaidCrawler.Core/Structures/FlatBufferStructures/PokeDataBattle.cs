@@ -1,4 +1,4 @@
-﻿using PKHeX.Core;
+using PKHeX.Core;
 
 namespace pkNX.Structures.FlatBuffers.Gen9;
 
@@ -12,18 +12,11 @@ public partial class PokeDataBattle
 
         // If any PointUp for a move is nonzero, throw an exception.
         if (Waza1.PointUp != 0 || Waza2.PointUp != 0 || Waza3.PointUp != 0 || Waza4.PointUp != 0)
-            throw new ArgumentOutOfRangeException(
-                nameof(WazaSet.PointUp),
-                $"No {nameof(WazaSet.PointUp)} allowed!"
-            );
+            throw new ArgumentOutOfRangeException(nameof(WazaSet.PointUp), $"No {nameof(WazaSet.PointUp)} allowed!");
 
         // flag BallId if not none
         if (BallId != 0)
-            throw new ArgumentOutOfRangeException(
-                nameof(BallId),
-                BallId,
-                $"No {nameof(BallId)} allowed!"
-            );
+            throw new ArgumentOutOfRangeException(nameof(BallId), BallId, $"No {nameof(BallId)} allowed!");
 
         bw.Write(SpeciesConverter.GetNational9(DevId));
         bw.Write((byte)FormId);
@@ -51,24 +44,10 @@ public partial class PokeDataBattle
     private void AssertRegularFormat()
     {
         if (TalentType != 1)
-            throw new ArgumentOutOfRangeException(
-                nameof(TalentType),
-                TalentType,
-                "Invalid talent type."
-            );
-
+            throw new ArgumentOutOfRangeException(nameof(TalentType), TalentType, "Invalid talent type.");
         if (TalentVnum == 0 && DevId != (ushort)Species.Pachirisu && Level != 35) // nice mistake gamefreak -- 3star Pachirisu is 0 IVs.
-            throw new ArgumentOutOfRangeException(
-                nameof(TalentVnum),
-                TalentVnum,
-                "No min flawless IVs?"
-            );
-
+            throw new ArgumentOutOfRangeException(nameof(TalentVnum), TalentVnum, "No min flawless IVs?");
         if (Seikaku != 0)
-            throw new ArgumentOutOfRangeException(
-                nameof(Seikaku),
-                Seikaku,
-                $"No {nameof(Seikaku)} allowed!"
-            );
+            throw new ArgumentOutOfRangeException(nameof(Seikaku), Seikaku, $"No {nameof(Seikaku)} allowed!");
     }
 }

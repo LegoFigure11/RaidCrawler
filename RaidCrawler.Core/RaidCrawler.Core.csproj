@@ -6,13 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-	<PackageReference Include="FlatSharp.Compiler" Version="7.1.0">
+	<PackageReference Include="FlatSharp.Compiler" Version="7.4.0">
 	  <PrivateAssets>all</PrivateAssets>
 	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	</PackageReference>
-	<PackageReference Include="FlatSharp.Runtime" Version="7.1.0" />
+	<PackageReference Include="FlatSharp.Runtime" Version="7.4.0" />
     <PackageReference Include="LibUsbDotNet" Version="2.2.29" />
-    <PackageReference Include="PKHeX.Core" Version="23.9.25" />
+    <PackageReference Include="PKHeX.Core" Version="23.10.12" />
 	<Reference Include="SysBot.Base">
 	  <HintPath>deps\SysBot.Base.dll</HintPath>
 	</Reference>
