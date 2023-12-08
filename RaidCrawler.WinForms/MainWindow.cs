@@ -218,7 +218,7 @@ public partial class MainWindow : Form
     {
         lock (_connectLock)
         {
-            if (ConnectionWrapper is not { Connected: true })
+            if (ConnectionWrapper is { Connected: true })
                 return;
 
             ConnectionWrapper = new(ConnectionConfig, UpdateStatus);
@@ -1401,7 +1401,7 @@ public partial class MainWindow : Form
 
         foreach (RaidFilter rf in RaidFilters)
         {
-            var index = RaidBoost.SelectedIndex;
+            var index = Invoke(() => RaidBoost.SelectedIndex);
             var encounters = RaidContainer.Encounters;
             if (rf.FilterSatisfied(RaidContainer, encounters, raids, index))
                 return true;
