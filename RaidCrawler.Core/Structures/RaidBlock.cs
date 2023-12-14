@@ -9,4 +9,7 @@ public static class RaidBlock
 
     public const uint MAX_COUNT_KITAKAMI = 100;
     public const uint SIZE_KITAKAMI = Raid.SIZE * MAX_COUNT_KITAKAMI;
+
+    public const uint MAX_COUNT_BLUEBERRY = 100;
+    public const uint SIZE_BLUEBERRY = Raid.SIZE * MAX_COUNT_BLUEBERRY;
 }
