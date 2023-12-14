@@ -45,6 +45,7 @@ public partial class MainWindow : Form
 
     private ulong RaidBlockOffsetBase;
     private ulong RaidBlockOffsetKitakami;
+    private ulong RaidBlockOffsetBlueberry;
     private bool IsReading;
     private bool HideSeed;
     private bool ShowExtraMoves;
@@ -493,6 +494,7 @@ public partial class MainWindow : Form
 
                     RaidBlockOffsetBase = 0;
                     RaidBlockOffsetKitakami = 0;
+                    RaidBlockOffsetBlueberry = 0;
                     skips = 0;
 
                     // Read the initial raids upon reopening the game to correctly detect if the next advance fails
@@ -1412,7 +1414,7 @@ public partial class MainWindow : Form
 
     private async Task ReadRaids(CancellationToken token)
     {
-        if (Config is { PaldeaScan: false, KitakamiScan: false })
+        if (Config is { PaldeaScan: false, KitakamiScan: false, BlueberryScan: false })
         {
             await this.DisplayMessageBox(Webhook, "Please select a location to scan in your General Settings.", token, "No locations selected").ConfigureAwait(false);
             return;
@@ -1426,6 +1428,9 @@ public partial class MainWindow : Form
                 .ConfigureAwait(false);
             RaidBlockOffsetKitakami = await ConnectionWrapper.Connection
                 .PointerAll(RaidBlockPointerKitakami.ToArray(), token)
+                .ConfigureAwait(false);
+            RaidBlockOffsetBlueberry = await ConnectionWrapper.Connection
+                .PointerAll(RaidBlockPointerBlueberry.ToArray(), token)
                 .ConfigureAwait(false);
         }
 
@@ -1493,6 +1498,37 @@ public partial class MainWindow : Form
         var allRaids = raids.Concat(RaidContainer.Raids).ToList().AsReadOnly();
         var allEncounters = encounters.Concat(RaidContainer.Encounters).ToList().AsReadOnly();
         var allRewards = rewards.Concat(RaidContainer.Rewards).ToList().AsReadOnly();
+        RaidContainer.ClearRaids();
+        RaidContainer.ClearEncounters();
+        RaidContainer.ClearRewards();
+
+        // Blueberry
+        if (Config.BlueberryScan)
+        {
+            UpdateStatus("Reading Blueberry raid block...");
+            var data = await ConnectionWrapper.Connection
+                .ReadBytesAbsoluteAsync(RaidBlockOffsetBlueberry, (int)RaidBlock.SIZE_BLUEBERRY, token)
+                .ConfigureAwait(false);
+
+            msg = string.Empty;
+            (delivery, enc) = RaidContainer.ReadAllRaids(data, Config.Progress, Config.EventProgress, GetRaidBoost(), TeraRaidMapParent.Kitakami);
+            if (enc > 0)
+                msg += $"Failed to find encounters for {enc} raid(s).\n";
+
+            if (delivery > 0)
+                msg += $"Invalid delivery group ID for {delivery} raid(s). Try deleting the \"cache\" folder.\n";
+
+            if (msg != string.Empty)
+            {
+                msg += $"\nMore info can be found in the \"raid_dbg_{TeraRaidMapParent.Kitakami}.txt\" file.";
+                await this.DisplayMessageBox(Webhook, msg, token, "Raid Read Error")
+                    .ConfigureAwait(false);
+            }
+        }
+
+        allRaids = allRaids.Concat(RaidContainer.Raids).ToList().AsReadOnly();
+        allEncounters = allEncounters.Concat(RaidContainer.Encounters).ToList().AsReadOnly();
+        allRewards = allRewards.Concat(RaidContainer.Rewards).ToList().AsReadOnly();
 
         RaidContainer.SetRaids(allRaids);
         RaidContainer.SetEncounters(allEncounters);

@@ -15,6 +15,7 @@ public class ClientConfig : IDateAdvanceConfig, IWebhookConfig
     public bool EnableFilters { get; set; } = true;
     public bool PaldeaScan { get; set; } = true;
     public bool KitakamiScan { get; set; } = true;
+    public bool BlueberryScan { get; set; } = true;
 
     // Match
     public bool FocusWindow { get; set; } = true;

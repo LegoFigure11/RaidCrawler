@@ -118,6 +118,7 @@ namespace RaidCrawler.WinForms.SubForms
             labelAppName = new Label();
             picAppIcon = new PictureBox();
             labelAppVersion = new Label();
+            BlueberryScanCheck = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)SystemDDownPresses).BeginInit();
             ((System.ComponentModel.ISupportInitialize)NavigateToSettings).BeginInit();
             ((System.ComponentModel.ISupportInitialize)OpenSettings).BeginInit();
@@ -179,7 +180,7 @@ namespace RaidCrawler.WinForms.SubForms
             // LabelMatchFound
             // 
             LabelMatchFound.AutoSize = true;
-            LabelMatchFound.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            LabelMatchFound.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             LabelMatchFound.Location = new Point(6, 3);
             LabelMatchFound.Name = "LabelMatchFound";
             LabelMatchFound.Size = new Size(137, 15);
@@ -196,7 +197,7 @@ namespace RaidCrawler.WinForms.SubForms
             // L_AdvanceDate
             // 
             L_AdvanceDate.AutoSize = true;
-            L_AdvanceDate.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            L_AdvanceDate.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             L_AdvanceDate.Location = new Point(6, 3);
             L_AdvanceDate.Name = "L_AdvanceDate";
             L_AdvanceDate.Size = new Size(233, 15);
@@ -422,7 +423,7 @@ namespace RaidCrawler.WinForms.SubForms
             // label13
             // 
             label13.AutoSize = true;
-            label13.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            label13.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             label13.Location = new Point(6, 3);
             label13.Name = "label13";
             label13.Size = new Size(84, 15);
@@ -477,11 +478,12 @@ namespace RaidCrawler.WinForms.SubForms
             // 
             // LocationGroup
             // 
+            LocationGroup.Controls.Add(BlueberryScanCheck);
             LocationGroup.Controls.Add(KitakamiScanCheck);
             LocationGroup.Controls.Add(PaldeaScanCheck);
             LocationGroup.Location = new Point(8, 137);
             LocationGroup.Name = "LocationGroup";
-            LocationGroup.Size = new Size(200, 73);
+            LocationGroup.Size = new Size(200, 93);
             LocationGroup.TabIndex = 115;
             LocationGroup.TabStop = false;
             LocationGroup.Text = "Scan Locations";
@@ -534,7 +536,7 @@ namespace RaidCrawler.WinForms.SubForms
             // label23
             // 
             label23.AutoSize = true;
-            label23.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            label23.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             label23.Location = new Point(6, 3);
             label23.Name = "label23";
             label23.Size = new Size(118, 15);
@@ -869,7 +871,7 @@ namespace RaidCrawler.WinForms.SubForms
             // label21
             // 
             label21.AutoSize = true;
-            label21.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            label21.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             label21.Location = new Point(8, 3);
             label21.Name = "label21";
             label21.Size = new Size(100, 15);
@@ -917,7 +919,7 @@ namespace RaidCrawler.WinForms.SubForms
             // LocationSettings_label
             // 
             LocationSettings_label.AutoSize = true;
-            LocationSettings_label.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            LocationSettings_label.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             LocationSettings_label.Location = new Point(7, 231);
             LocationSettings_label.Name = "LocationSettings_label";
             LocationSettings_label.Size = new Size(103, 15);
@@ -946,7 +948,7 @@ namespace RaidCrawler.WinForms.SubForms
             // label19
             // 
             label19.AutoSize = true;
-            label19.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            label19.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             label19.Location = new Point(7, 178);
             label19.Name = "label19";
             label19.Size = new Size(48, 15);
@@ -956,7 +958,7 @@ namespace RaidCrawler.WinForms.SubForms
             // label18
             // 
             label18.AutoSize = true;
-            label18.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            label18.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             label18.Location = new Point(7, 129);
             label18.Name = "label18";
             label18.Size = new Size(68, 15);
@@ -1033,7 +1035,7 @@ namespace RaidCrawler.WinForms.SubForms
             // labelAppName
             // 
             labelAppName.AutoSize = true;
-            labelAppName.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point);
+            labelAppName.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
             labelAppName.Location = new Point(135, 164);
             labelAppName.Name = "labelAppName";
             labelAppName.Size = new Size(119, 25);
@@ -1059,6 +1061,18 @@ namespace RaidCrawler.WinForms.SubForms
             labelAppVersion.TabIndex = 0;
             labelAppVersion.Text = "v0.0.0-000000";
             labelAppVersion.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // BlueberryScanCheck
+            // 
+            BlueberryScanCheck.AutoSize = true;
+            BlueberryScanCheck.Checked = true;
+            BlueberryScanCheck.CheckState = CheckState.Checked;
+            BlueberryScanCheck.Location = new Point(6, 72);
+            BlueberryScanCheck.Name = "BlueberryScanCheck";
+            BlueberryScanCheck.Size = new Size(76, 19);
+            BlueberryScanCheck.TabIndex = 114;
+            BlueberryScanCheck.Text = "Blueberry";
+            BlueberryScanCheck.UseVisualStyleBackColor = true;
             // 
             // ConfigWindow
             // 
@@ -1196,5 +1210,6 @@ namespace RaidCrawler.WinForms.SubForms
         private Label L_ExtraOverworldWait;
         private CheckBox UseMapTrick;
         private CheckBox ZyroMethod;
+        private CheckBox BlueberryScanCheck;
     }
 }
