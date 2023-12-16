@@ -35,8 +35,12 @@ public partial class MainWindow : Form
     private static readonly Image MapKitakami = Image.FromStream(
         new MemoryStream(Utils.GetBinaryResource("kitakami.png"))
     );
+    private static readonly Image MapBlueberry = Image.FromStream(
+        new MemoryStream(Utils.GetBinaryResource("blueberry.png"))
+    );
     private static Dictionary<string, float[]>? DenLocationsBase;
     private static Dictionary<string, float[]>? DenLocationsKitakami;
+    private static Dictionary<string, float[]>? DenLocationsBlueberry;
 
     // statistics
     public int StatDaySkipTries;
@@ -70,9 +74,10 @@ public partial class MainWindow : Form
         var v = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version!;
         var filterPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "filters.json");
         if (File.Exists(filterPath))
-            RaidFilters = JsonSerializer.Deserialize<List<RaidFilter>>(File.ReadAllText(filterPath)) ?? new List<RaidFilter>();
+            RaidFilters = JsonSerializer.Deserialize<List<RaidFilter>>(File.ReadAllText(filterPath)) ?? [];
         DenLocationsBase = JsonSerializer.Deserialize<Dictionary<string, float[]>>(Utils.GetStringResource("den_locations_base.json") ?? "{}");
         DenLocationsKitakami = JsonSerializer.Deserialize<Dictionary<string, float[]>>(Utils.GetStringResource("den_locations_kitakami.json") ?? "{}");
+        DenLocationsBlueberry = JsonSerializer.Deserialize<Dictionary<string, float[]>>(Utils.GetStringResource("den_locations_blueberry.json") ?? "{}");
 
         var configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.json");
         if (File.Exists(configPath))
@@ -1358,11 +1363,18 @@ public partial class MainWindow : Form
         if (DenLocationsBase is null || DenLocationsBase.Count == 0 || DenLocationsKitakami is null || DenLocationsKitakami.Count == 0)
             return null;
 
-        var locData =
-            raid.MapParent == TeraRaidMapParent.Paldea
-                ? DenLocationsBase
-                : DenLocationsKitakami;
-        var map = raid.MapParent == TeraRaidMapParent.Paldea ? MapBase : MapKitakami;
+        var locData = raid.MapParent switch
+        {
+            TeraRaidMapParent.Paldea => DenLocationsBase,
+            TeraRaidMapParent.Kitakami => DenLocationsKitakami,
+            _ => DenLocationsBlueberry,
+        };
+        var map = raid.MapParent switch
+        {
+            TeraRaidMapParent.Paldea => MapBase,
+            TeraRaidMapParent.Kitakami => MapKitakami,
+            _ => MapBlueberry,
+        };
         try
         {
             (double x, double y) = GetCoordinate(raid, locData);
