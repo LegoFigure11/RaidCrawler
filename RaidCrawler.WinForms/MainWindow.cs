@@ -1376,14 +1376,14 @@ public partial class MainWindow : Form
 
     private static (double x, double y) GetCoordinate(Raid raid, IReadOnlyDictionary<string, float[]> locData)
     {
-        double x = (((raid.MapParent == TeraRaidMapParent.Paldea ? 1 : 2.766970605475146) * locData[$"{raid.Area}-{raid.LotteryGroup}-{raid.Den}"][0])
-                   + (raid.MapParent == TeraRaidMapParent.Paldea ? 2.072021484 : -248.08352352566726))
-                   * 512
-                   / 5000;
-        double y = (((raid.MapParent == TeraRaidMapParent.Paldea ? 1 : 2.5700782642623805) * locData[$"{raid.Area}-{raid.LotteryGroup}-{raid.Den}"][2])
-                   + (raid.MapParent == TeraRaidMapParent.Paldea ? 5505.240018 : 5070.808599816581))
-                   * 512
-                   / 5000;
+        (double a, double b, double c, double d, short e, short f) = raid.MapParent switch
+        {
+            TeraRaidMapParent.Paldea => (MapMagic.X_MULT_BASE, MapMagic.X_ADD_BASE, MapMagic.Y_MULT_BASE, MapMagic.Y_ADD_BASE, MapMagic.MULT_CONST_BASE, MapMagic.DIV_CONST_BASE),
+            TeraRaidMapParent.Kitakami => (MapMagic.X_MULT_KITAKAMI, MapMagic.X_ADD_KITAKAMI, MapMagic.Y_MULT_KITAKAMI, MapMagic.Y_ADD_KITAKMI, MapMagic.MULT_CONST_KITAKAMI, MapMagic.DIV_CONST_KITAKAMI),
+            _ => (MapMagic.X_MULT_BLUEBERRY, MapMagic.X_ADD_BLUEBERRY, MapMagic.Y_MULT_BLUEBERRY, MapMagic.Y_ADD_BLUEBERRY, MapMagic.MULT_CONST_BLUEBERRY, MapMagic.DIV_CONST_BLUEBERRY)
+        };
+        double x = ((a * locData[$"{raid.Area}-{raid.LotteryGroup}-{raid.Den}"][0]) + b) * e / f;
+        double y = ((c * locData[$"{raid.Area}-{raid.LotteryGroup}-{raid.Den}"][2]) + d) * e / f;
         return (x, y);
     }
 
