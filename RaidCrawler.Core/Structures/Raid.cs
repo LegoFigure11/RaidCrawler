@@ -51,6 +51,8 @@ public class Raid(Span<byte> Data, TeraRaidMapParent MapParent = TeraRaidMapPare
             return Area <= 22;
         if (MapParent == TeraRaidMapParent.Kitakami)
             return Area <= 11;
+        if (MapParent == TeraRaidMapParent.Blueberry)
+            return Area <= 8;
         return false;
     }
 

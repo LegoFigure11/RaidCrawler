@@ -8,6 +8,7 @@ public record RaidContainer
 {
     public readonly TeraEncounter[]? GemTeraRaidsBase;
     public readonly TeraEncounter[]? GemTeraRaidsKitakami;
+    public readonly TeraEncounter[]? GemTeraRaidsBlueberry;
     public TeraDistribution[]? DistTeraRaids;
     public TeraMight[]? MightTeraRaids;
     public readonly IReadOnlyList<RaidFixedRewards>? BaseFixedRewards;
@@ -44,12 +45,23 @@ public record RaidContainer
         "su1_raid_enemy_06_array.bin",
     ];
 
+    private readonly string[] RaidDataBlueberry =
+    [
+        "su2_raid_enemy_01_array.bin",
+        "su2_raid_enemy_02_array.bin",
+        "su2_raid_enemy_03_array.bin",
+        "su2_raid_enemy_04_array.bin",
+        "su2_raid_enemy_05_array.bin",
+        "su2_raid_enemy_06_array.bin",
+    ];
+
     public RaidContainer(string game)
     {
         Game = game;
         Strings = GameInfo.GetStrings(1);
         GemTeraRaidsBase = TeraEncounter.GetAllEncounters(RaidDataBase, TeraRaidMapParent.Paldea);
         GemTeraRaidsKitakami = TeraEncounter.GetAllEncounters(RaidDataKitakami, TeraRaidMapParent.Kitakami);
+        GemTeraRaidsBlueberry = TeraEncounter.GetAllEncounters(RaidDataBlueberry, TeraRaidMapParent.Blueberry);
         BaseFixedRewards = JsonSerializer.Deserialize<IReadOnlyList<RaidFixedRewards>>(Utils.GetStringResource("raid_fixed_reward_item_array.json") ?? "[]");
         BaseLotteryRewards = JsonSerializer.Deserialize<IReadOnlyList<RaidLotteryRewards>>(Utils.GetStringResource("raid_lottery_reward_item_array.json") ?? "[]");
     }

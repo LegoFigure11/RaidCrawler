@@ -28,15 +28,19 @@ public partial class MainWindow : Form
     private readonly RaidContainer RaidContainer;
     private readonly NotificationHandler Webhook;
 
-    private List<RaidFilter> RaidFilters = new();
+    private List<RaidFilter> RaidFilters = [];
     private static readonly Image MapBase = Image.FromStream(
         new MemoryStream(Utils.GetBinaryResource("paldea.png"))
     );
     private static readonly Image MapKitakami = Image.FromStream(
         new MemoryStream(Utils.GetBinaryResource("kitakami.png"))
     );
+    private static readonly Image MapBlueberry = Image.FromStream(
+        new MemoryStream(Utils.GetBinaryResource("blueberry.png"))
+    );
     private static Dictionary<string, float[]>? DenLocationsBase;
     private static Dictionary<string, float[]>? DenLocationsKitakami;
+    private static Dictionary<string, float[]>? DenLocationsBlueberry;
 
     // statistics
     public int StatDaySkipTries;
@@ -45,6 +49,7 @@ public partial class MainWindow : Form
 
     private ulong RaidBlockOffsetBase;
     private ulong RaidBlockOffsetKitakami;
+    private ulong RaidBlockOffsetBlueberry;
     private bool IsReading;
     private bool HideSeed;
     private bool ShowExtraMoves;
@@ -69,9 +74,10 @@ public partial class MainWindow : Form
         var v = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version!;
         var filterPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "filters.json");
         if (File.Exists(filterPath))
-            RaidFilters = JsonSerializer.Deserialize<List<RaidFilter>>(File.ReadAllText(filterPath)) ?? new List<RaidFilter>();
+            RaidFilters = JsonSerializer.Deserialize<List<RaidFilter>>(File.ReadAllText(filterPath)) ?? [];
         DenLocationsBase = JsonSerializer.Deserialize<Dictionary<string, float[]>>(Utils.GetStringResource("den_locations_base.json") ?? "{}");
         DenLocationsKitakami = JsonSerializer.Deserialize<Dictionary<string, float[]>>(Utils.GetStringResource("den_locations_kitakami.json") ?? "{}");
+        DenLocationsBlueberry = JsonSerializer.Deserialize<Dictionary<string, float[]>>(Utils.GetStringResource("den_locations_blueberry.json") ?? "{}");
 
         var configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.json");
         if (File.Exists(configPath))
@@ -493,6 +499,7 @@ public partial class MainWindow : Form
 
                     RaidBlockOffsetBase = 0;
                     RaidBlockOffsetKitakami = 0;
+                    RaidBlockOffsetBlueberry = 0;
                     skips = 0;
 
                     // Read the initial raids upon reopening the game to correctly detect if the next advance fails
@@ -1356,11 +1363,18 @@ public partial class MainWindow : Form
         if (DenLocationsBase is null || DenLocationsBase.Count == 0 || DenLocationsKitakami is null || DenLocationsKitakami.Count == 0)
             return null;
 
-        var locData =
-            raid.MapParent == TeraRaidMapParent.Paldea
-                ? DenLocationsBase
-                : DenLocationsKitakami;
-        var map = raid.MapParent == TeraRaidMapParent.Paldea ? MapBase : MapKitakami;
+        var locData = raid.MapParent switch
+        {
+            TeraRaidMapParent.Paldea => DenLocationsBase,
+            TeraRaidMapParent.Kitakami => DenLocationsKitakami,
+            _ => DenLocationsBlueberry,
+        };
+        var map = raid.MapParent switch
+        {
+            TeraRaidMapParent.Paldea => MapBase,
+            TeraRaidMapParent.Kitakami => MapKitakami,
+            _ => MapBlueberry,
+        };
         try
         {
             (double x, double y) = GetCoordinate(raid, locData);
@@ -1374,14 +1388,14 @@ public partial class MainWindow : Form
 
     private static (double x, double y) GetCoordinate(Raid raid, IReadOnlyDictionary<string, float[]> locData)
     {
-        double x = (((raid.MapParent == TeraRaidMapParent.Paldea ? 1 : 2.766970605475146) * locData[$"{raid.Area}-{raid.LotteryGroup}-{raid.Den}"][0])
-                   + (raid.MapParent == TeraRaidMapParent.Paldea ? 2.072021484 : -248.08352352566726))
-                   * 512
-                   / 5000;
-        double y = (((raid.MapParent == TeraRaidMapParent.Paldea ? 1 : 2.5700782642623805) * locData[$"{raid.Area}-{raid.LotteryGroup}-{raid.Den}"][2])
-                   + (raid.MapParent == TeraRaidMapParent.Paldea ? 5505.240018 : 5070.808599816581))
-                   * 512
-                   / 5000;
+        (double a, double b, double c, double d, short e, short f) = raid.MapParent switch
+        {
+            TeraRaidMapParent.Paldea => (MapMagic.X_MULT_BASE, MapMagic.X_ADD_BASE, MapMagic.Y_MULT_BASE, MapMagic.Y_ADD_BASE, MapMagic.MULT_CONST_BASE, MapMagic.DIV_CONST_BASE),
+            TeraRaidMapParent.Kitakami => (MapMagic.X_MULT_KITAKAMI, MapMagic.X_ADD_KITAKAMI, MapMagic.Y_MULT_KITAKAMI, MapMagic.Y_ADD_KITAKMI, MapMagic.MULT_CONST_KITAKAMI, MapMagic.DIV_CONST_KITAKAMI),
+            _ => (MapMagic.X_MULT_BLUEBERRY, MapMagic.X_ADD_BLUEBERRY, MapMagic.Y_MULT_BLUEBERRY, MapMagic.Y_ADD_BLUEBERRY, MapMagic.MULT_CONST_BLUEBERRY, MapMagic.DIV_CONST_BLUEBERRY)
+        };
+        double x = ((a * locData[$"{raid.Area}-{raid.LotteryGroup}-{raid.Den}"][0]) + b) * e / f;
+        double y = ((c * locData[$"{raid.Area}-{raid.LotteryGroup}-{raid.Den}"][2]) + d) * e / f;
         return (x, y);
     }
 
@@ -1412,7 +1426,7 @@ public partial class MainWindow : Form
 
     private async Task ReadRaids(CancellationToken token)
     {
-        if (Config is { PaldeaScan: false, KitakamiScan: false })
+        if (Config is { PaldeaScan: false, KitakamiScan: false, BlueberryScan: false })
         {
             await this.DisplayMessageBox(Webhook, "Please select a location to scan in your General Settings.", token, "No locations selected").ConfigureAwait(false);
             return;
@@ -1426,6 +1440,9 @@ public partial class MainWindow : Form
                 .ConfigureAwait(false);
             RaidBlockOffsetKitakami = await ConnectionWrapper.Connection
                 .PointerAll(RaidBlockPointerKitakami.ToArray(), token)
+                .ConfigureAwait(false);
+            RaidBlockOffsetBlueberry = await ConnectionWrapper.Connection
+                .PointerAll(RaidBlockPointerBlueberry.ToArray(), token)
                 .ConfigureAwait(false);
         }
 
@@ -1493,6 +1510,37 @@ public partial class MainWindow : Form
         var allRaids = raids.Concat(RaidContainer.Raids).ToList().AsReadOnly();
         var allEncounters = encounters.Concat(RaidContainer.Encounters).ToList().AsReadOnly();
         var allRewards = rewards.Concat(RaidContainer.Rewards).ToList().AsReadOnly();
+        RaidContainer.ClearRaids();
+        RaidContainer.ClearEncounters();
+        RaidContainer.ClearRewards();
+
+        // Blueberry
+        if (Config.BlueberryScan)
+        {
+            UpdateStatus("Reading Blueberry raid block...");
+            var data = await ConnectionWrapper.Connection
+                .ReadBytesAbsoluteAsync(RaidBlockOffsetBlueberry, (int)RaidBlock.SIZE_BLUEBERRY, token)
+                .ConfigureAwait(false);
+
+            msg = string.Empty;
+            (delivery, enc) = RaidContainer.ReadAllRaids(data, Config.Progress, Config.EventProgress, GetRaidBoost(), TeraRaidMapParent.Blueberry);
+            if (enc > 0)
+                msg += $"Failed to find encounters for {enc} raid(s).\n";
+
+            if (delivery > 0)
+                msg += $"Invalid delivery group ID for {delivery} raid(s). Try deleting the \"cache\" folder.\n";
+
+            if (msg != string.Empty)
+            {
+                msg += $"\nMore info can be found in the \"raid_dbg_{TeraRaidMapParent.Blueberry}.txt\" file.";
+                await this.DisplayMessageBox(Webhook, msg, token, "Raid Read Error")
+                    .ConfigureAwait(false);
+            }
+        }
+
+        allRaids = allRaids.Concat(RaidContainer.Raids).ToList().AsReadOnly();
+        allEncounters = allEncounters.Concat(RaidContainer.Encounters).ToList().AsReadOnly();
+        allRewards = allRewards.Concat(RaidContainer.Rewards).ToList().AsReadOnly();
 
         RaidContainer.SetRaids(allRaids);
         RaidContainer.SetEncounters(allEncounters);
@@ -1612,7 +1660,7 @@ public partial class MainWindow : Form
         var raids = RaidContainer.Raids;
         var encounters = RaidContainer.Encounters;
 
-        List<List<(int, int, int)>> newRewards = new();
+        List<List<(int, int, int)>> newRewards = [];
         for (int i = 0; i < raids.Count; i++)
         {
             var raid = raids[i];

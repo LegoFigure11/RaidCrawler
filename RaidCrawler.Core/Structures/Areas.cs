@@ -45,9 +45,22 @@ public static class Areas
         "Timeless Woods",
     ];
 
+    private static readonly string[] AreaListBlueberry =
+    [
+        "Savannna Biome",
+        "Coastal Biome",
+        "Canyon Biome",
+        "Polar Biome",
+        "Savanna Biome",
+        "Coastal Biome",
+        "Canyon Biome",
+        "Polar Biome",
+    ];
+
     public static string GetArea(int index, TeraRaidMapParent type) => type switch
     {
         TeraRaidMapParent.Kitakami => AreaListKitakami[index],
+        TeraRaidMapParent.Blueberry => AreaListBlueberry[index],
         _ => AreaList[index],
     };
 }

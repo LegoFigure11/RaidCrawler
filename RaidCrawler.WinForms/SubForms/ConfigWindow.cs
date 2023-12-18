@@ -60,6 +60,7 @@ public partial class ConfigWindow : Form
         ExtraOverworldWait.Value = c.ExtraOverworldWait;
         PaldeaScanCheck.Checked = c.PaldeaScan;
         KitakamiScanCheck.Checked = c.KitakamiScan;
+        BlueberryScanCheck.Checked = c.BlueberryScan;
 
         SystemDDownPresses.Enabled = !UseOvershoot.Checked;
         SystemOvershoot.Enabled = UseOvershoot.Checked;
@@ -138,6 +139,7 @@ public partial class ConfigWindow : Form
         c.ExtraOverworldWait = (int)ExtraOverworldWait.Value;
         c.PaldeaScan = PaldeaScanCheck.Checked;
         c.KitakamiScan = KitakamiScanCheck.Checked;
+        c.BlueberryScan = BlueberryScanCheck.Checked;
 
         c.IVsStyle = IVstyle.SelectedIndex;
         c.VerboseIVs = IVverbose.Checked;
