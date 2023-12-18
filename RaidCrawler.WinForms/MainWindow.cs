@@ -28,7 +28,7 @@ public partial class MainWindow : Form
     private readonly RaidContainer RaidContainer;
     private readonly NotificationHandler Webhook;
 
-    private List<RaidFilter> RaidFilters = new();
+    private List<RaidFilter> RaidFilters = [];
     private static readonly Image MapBase = Image.FromStream(
         new MemoryStream(Utils.GetBinaryResource("paldea.png"))
     );
@@ -1523,7 +1523,7 @@ public partial class MainWindow : Form
                 .ConfigureAwait(false);
 
             msg = string.Empty;
-            (delivery, enc) = RaidContainer.ReadAllRaids(data, Config.Progress, Config.EventProgress, GetRaidBoost(), TeraRaidMapParent.Kitakami);
+            (delivery, enc) = RaidContainer.ReadAllRaids(data, Config.Progress, Config.EventProgress, GetRaidBoost(), TeraRaidMapParent.Blueberry);
             if (enc > 0)
                 msg += $"Failed to find encounters for {enc} raid(s).\n";
 
@@ -1532,7 +1532,7 @@ public partial class MainWindow : Form
 
             if (msg != string.Empty)
             {
-                msg += $"\nMore info can be found in the \"raid_dbg_{TeraRaidMapParent.Kitakami}.txt\" file.";
+                msg += $"\nMore info can be found in the \"raid_dbg_{TeraRaidMapParent.Blueberry}.txt\" file.";
                 await this.DisplayMessageBox(Webhook, msg, token, "Raid Read Error")
                     .ConfigureAwait(false);
             }
@@ -1660,7 +1660,7 @@ public partial class MainWindow : Form
         var raids = RaidContainer.Raids;
         var encounters = RaidContainer.Encounters;
 
-        List<List<(int, int, int)>> newRewards = new();
+        List<List<(int, int, int)>> newRewards = [];
         for (int i = 0; i < raids.Count; i++)
         {
             var raid = raids[i];

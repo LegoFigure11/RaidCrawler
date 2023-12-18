@@ -171,7 +171,7 @@
             // LabelLoadedRaids
             // 
             LabelLoadedRaids.AutoSize = true;
-            LabelLoadedRaids.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            LabelLoadedRaids.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             LabelLoadedRaids.Location = new Point(12, 103);
             LabelLoadedRaids.Name = "LabelLoadedRaids";
             LabelLoadedRaids.Size = new Size(67, 15);
@@ -180,7 +180,7 @@
             // 
             // TeraType
             // 
-            TeraType.Font = new Font("Consolas", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            TeraType.Font = new Font("Consolas", 9F);
             TeraType.Location = new Point(296, 152);
             TeraType.Margin = new Padding(4, 3, 4, 3);
             TeraType.Name = "TeraType";
@@ -200,7 +200,7 @@
             // 
             // PID
             // 
-            PID.Font = new Font("Consolas", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            PID.Font = new Font("Consolas", 9F);
             PID.Location = new Point(296, 68);
             PID.Margin = new Padding(4, 3, 4, 3);
             PID.Name = "PID";
@@ -220,7 +220,7 @@
             // 
             // EC
             // 
-            EC.Font = new Font("Consolas", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            EC.Font = new Font("Consolas", 9F);
             EC.Location = new Point(296, 40);
             EC.Margin = new Padding(4, 3, 4, 3);
             EC.Name = "EC";
@@ -240,7 +240,7 @@
             // 
             // Seed
             // 
-            Seed.Font = new Font("Consolas", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            Seed.Font = new Font("Consolas", 9F);
             Seed.Location = new Point(296, 12);
             Seed.Margin = new Padding(4, 3, 4, 3);
             Seed.Name = "Seed";
@@ -262,7 +262,7 @@
             // ButtonNext
             // 
             ButtonNext.Enabled = false;
-            ButtonNext.Location = new Point(149, 68);
+            ButtonNext.Location = new Point(168, 67);
             ButtonNext.Name = "ButtonNext";
             ButtonNext.Size = new Size(45, 25);
             ButtonNext.TabIndex = 56;
@@ -273,7 +273,7 @@
             // ButtonPrevious
             // 
             ButtonPrevious.Enabled = false;
-            ButtonPrevious.Location = new Point(30, 68);
+            ButtonPrevious.Location = new Point(13, 68);
             ButtonPrevious.Name = "ButtonPrevious";
             ButtonPrevious.Size = new Size(45, 25);
             ButtonPrevious.TabIndex = 55;
@@ -283,7 +283,7 @@
             // 
             // Area
             // 
-            Area.Font = new Font("Consolas", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            Area.Font = new Font("Consolas", 9F);
             Area.Location = new Point(296, 236);
             Area.Margin = new Padding(4, 3, 4, 3);
             Area.Name = "Area";
@@ -304,7 +304,7 @@
             // 
             // IVs
             // 
-            IVs.Font = new Font("Consolas", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            IVs.Font = new Font("Consolas", 9F);
             IVs.Location = new Point(296, 208);
             IVs.Margin = new Padding(4, 3, 4, 3);
             IVs.Name = "IVs";
@@ -337,7 +337,7 @@
             // labelEvent
             // 
             labelEvent.AutoSize = true;
-            labelEvent.Font = new Font("Segoe UI", 9F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            labelEvent.Font = new Font("Segoe UI", 9F, FontStyle.Bold | FontStyle.Italic);
             labelEvent.ForeColor = SystemColors.ControlText;
             labelEvent.Location = new Point(496, 64);
             labelEvent.Name = "labelEvent";
@@ -349,7 +349,7 @@
             // 
             // Difficulty
             // 
-            Difficulty.Font = new Font("Consolas", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            Difficulty.Font = new Font("Consolas", 9F);
             Difficulty.Location = new Point(470, 152);
             Difficulty.Margin = new Padding(4, 3, 4, 3);
             Difficulty.Name = "Difficulty";
@@ -380,7 +380,7 @@
             // 
             // Species
             // 
-            Species.Font = new Font("Consolas", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            Species.Font = new Font("Consolas", 9F);
             Species.Location = new Point(296, 96);
             Species.Margin = new Padding(4, 3, 4, 3);
             Species.Name = "Species";
@@ -410,7 +410,7 @@
             // 
             // Move1
             // 
-            Move1.Font = new Font("Consolas", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            Move1.Font = new Font("Consolas", 9F);
             Move1.Location = new Point(296, 264);
             Move1.Margin = new Padding(4, 3, 4, 3);
             Move1.Name = "Move1";
@@ -421,7 +421,7 @@
             // 
             // Move2
             // 
-            Move2.Font = new Font("Consolas", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            Move2.Font = new Font("Consolas", 9F);
             Move2.Location = new Point(434, 264);
             Move2.Margin = new Padding(4, 3, 4, 3);
             Move2.Name = "Move2";
@@ -432,7 +432,7 @@
             // 
             // Move4
             // 
-            Move4.Font = new Font("Consolas", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            Move4.Font = new Font("Consolas", 9F);
             Move4.Location = new Point(434, 292);
             Move4.Margin = new Padding(4, 3, 4, 3);
             Move4.Name = "Move4";
@@ -443,7 +443,7 @@
             // 
             // Move3
             // 
-            Move3.Font = new Font("Consolas", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            Move3.Font = new Font("Consolas", 9F);
             Move3.Location = new Point(296, 292);
             Move3.Margin = new Padding(4, 3, 4, 3);
             Move3.Name = "Move3";
@@ -454,7 +454,7 @@
             // 
             // Nature
             // 
-            Nature.Font = new Font("Consolas", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            Nature.Font = new Font("Consolas", 9F);
             Nature.Location = new Point(470, 180);
             Nature.Margin = new Padding(4, 3, 4, 3);
             Nature.Name = "Nature";
@@ -474,7 +474,7 @@
             // 
             // Gender
             // 
-            Gender.Font = new Font("Consolas", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            Gender.Font = new Font("Consolas", 9F);
             Gender.Location = new Point(296, 180);
             Gender.Margin = new Padding(4, 3, 4, 3);
             Gender.Name = "Gender";
@@ -513,7 +513,7 @@
             // 
             // Ability
             // 
-            Ability.Font = new Font("Consolas", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            Ability.Font = new Font("Consolas", 9F);
             Ability.Location = new Point(296, 124);
             Ability.Margin = new Padding(4, 3, 4, 3);
             Ability.Name = "Ability";
@@ -597,9 +597,9 @@
             ComboIndex.DropDownStyle = ComboBoxStyle.DropDownList;
             ComboIndex.Enabled = false;
             ComboIndex.FormattingEnabled = true;
-            ComboIndex.Location = new Point(80, 68);
+            ComboIndex.Location = new Point(64, 68);
             ComboIndex.Name = "ComboIndex";
-            ComboIndex.Size = new Size(64, 23);
+            ComboIndex.Size = new Size(98, 23);
             ComboIndex.TabIndex = 120;
             ComboIndex.SelectedIndexChanged += ComboIndex_SelectedIndexChanged;
             // 

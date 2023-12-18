@@ -9,9 +9,12 @@ public static class RaidExtensions
     {
         if (raid.IsEvent)
             return raid.GetDistributionEncounter(container, progress, raid.Flags == 3, id);
-        if (raid.MapParent == TeraRaidMapParent.Kitakami)
-            return raid.GetEncounterKitakami(container, progress, raid.IsBlack);
-        return raid.GetEncounterBase(container, progress, raid.IsBlack);
+        return raid.MapParent switch
+        {
+            TeraRaidMapParent.Paldea => raid.GetEncounterBase(container, progress, raid.IsBlack),
+            TeraRaidMapParent.Kitakami => raid.GetEncounterKitakami(container, progress, raid.IsBlack),
+            _ => raid.GetEncounterBlueberry(container, progress, raid.IsBlack),
+        };
     }
 
     public static ITeraRaid? GetEncounterBase(this Raid raid, RaidContainer container, int progress, bool isBlack)
@@ -57,6 +60,32 @@ public static class RaidExtensions
         if (container.GemTeraRaidsKitakami is not null)
         {
             foreach (TeraEncounter enc in container.GemTeraRaidsKitakami)
+            {
+                if (enc.Stars != starCount)
+                    continue;
+
+                var minimum =
+                    container.Game == "Scarlet"
+                        ? enc.Entity.RandRateMinScarlet
+                        : enc.Entity.RandRateMinViolet;
+                if (minimum >= 0 && (uint)((int)speciesRoll - minimum) < enc.Entity.RandRate)
+                    return enc;
+            }
+        }
+        return null;
+    }
+
+    public static ITeraRaid? GetEncounterBlueberry(this Raid raid, RaidContainer container, int progress, bool isBlack)
+    {
+        var clone = new Xoroshiro128Plus(raid.Seed);
+        var starCount = isBlack
+            ? 6
+            : raid.GetStarCount((uint)clone.NextInt(100), progress, false);
+        var total = GetRateTotalBlueberry(starCount);
+        var speciesRoll = clone.NextInt((ulong)total);
+        if (container.GemTeraRaidsBlueberry is not null)
+        {
+            foreach (TeraEncounter enc in container.GemTeraRaidsBlueberry)
             {
                 if (enc.Stars != starCount)
                     continue;
@@ -341,6 +370,18 @@ public static class RaidExtensions
         4 => 2100,
         5 => 2250,
         6 => 2574, // Violet has one more encounter
+        _ => 0,
+    };
+
+    private static short GetRateTotalBlueberry(int star) => star switch
+    {
+        // Both games have the same number of encounters
+        1 => 1100,
+        2 => 1100,
+        3 => 2000,
+        4 => 1900,
+        5 => 2100,
+        6 => 2600,
         _ => 0,
     };
 }
