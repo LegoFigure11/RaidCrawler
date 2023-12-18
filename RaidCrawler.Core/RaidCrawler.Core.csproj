@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -31,6 +31,7 @@
     <None Remove="Resources\Base\raid_fixed_reward_item_array.json" />
     <None Remove="Resources\Base\raid_lottery_reward_item_array.json" />
     <None Remove="Resources\Blueberry\blueberry.png" />
+    <None Remove="Resources\Blueberry\den_locations_blueberry.json" />
     <None Remove="Resources\Blueberry\su2_raid_enemy_01_array.bin" />
     <None Remove="Resources\Blueberry\su2_raid_enemy_02_array.bin" />
     <None Remove="Resources\Blueberry\su2_raid_enemy_03_array.bin" />
@@ -59,6 +60,7 @@
     <EmbeddedResource Include="Resources\Base\raid_fixed_reward_item_array.json" />
     <EmbeddedResource Include="Resources\Base\raid_lottery_reward_item_array.json" />
     <EmbeddedResource Include="Resources\Blueberry\blueberry.png" />
+    <EmbeddedResource Include="Resources\Blueberry\den_locations_blueberry.json" />
     <EmbeddedResource Include="Resources\Blueberry\su2_raid_enemy_01_array.bin" />
     <EmbeddedResource Include="Resources\Blueberry\su2_raid_enemy_02_array.bin" />
     <EmbeddedResource Include="Resources\Blueberry\su2_raid_enemy_03_array.bin" />
