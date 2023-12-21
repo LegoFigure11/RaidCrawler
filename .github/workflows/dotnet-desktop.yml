@@ -27,6 +27,7 @@ jobs:
         dotnet-version: |
           6.0.x
           7.0.x
+          8.0.x
 
     - name: Restore the solution
       run: dotnet restore
@@ -42,4 +43,4 @@ jobs:
       with:
         name: RaidCrawler
         path: |
-          ./RaidCrawler.WinForms/bin/x64/Release/net7.0-windows/win-x64/publish/
+          ./RaidCrawler.WinForms/bin/x64/Release/net8.0-windows/win-x64/publish/
