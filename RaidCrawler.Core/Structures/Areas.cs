@@ -47,7 +47,7 @@ public static class Areas
 
     private static readonly string[] AreaListBlueberry =
     [
-        "Savannna Biome",
+        "Savanna Biome",
         "Coastal Biome",
         "Canyon Biome",
         "Polar Biome",
