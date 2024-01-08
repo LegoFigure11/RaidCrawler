@@ -5,6 +5,8 @@ namespace RaidCrawler.WinForms.SubForms;
 public partial class ConfigWindow : Form
 {
     private readonly ClientConfig c;
+    public delegate void ThemeChangedEventHandler(string newTheme);
+    public event ThemeChangedEventHandler ThemeChanged;
 
     public ConfigWindow(ClientConfig c)
     {
@@ -110,9 +112,13 @@ public partial class ConfigWindow : Form
         {
             this.SetLightTheme();
         }
+
         // Save the selected theme to the configuration
-        this.c.Theme = ThemeComboBox.SelectedItem.ToString();
+        this.c.Theme = selectedTheme; // Use the variable you have defined
         SaveConfig();
+
+        // Invoke the ThemeChanged event with the correct variable
+        ThemeChanged?.Invoke(selectedTheme);
     }
 
     private void SaveConfig()
