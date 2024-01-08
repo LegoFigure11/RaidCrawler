@@ -68,6 +68,7 @@ public partial class MainWindow : Form
 #if DEBUG
         var date = File.GetLastWriteTime(AppContext.BaseDirectory);
         var build = $" (dev-{date:yyyyMMdd})";
+
 #else
         var build = "";
 #endif
@@ -136,6 +137,151 @@ public partial class MainWindow : Form
             LabelSwitchIP.Visible = true;
             USB_Port_TB.Visible = false;
             USB_Port_label.Visible = false;
+        }
+        ApplyTheme(Config.Theme);
+    }
+
+    private void ApplyTheme(string theme)
+    {
+        if (theme == "Dark")
+            SetDarkTheme();
+        else
+            SetLightTheme();
+    }
+    private void SetDarkTheme()
+    {
+        // backgroundColor: This is the primary background color applied to the main areas of the form or application window.
+        // It is the color that most of the background elements of the UI will use.
+        Color backgroundColor = Color.FromArgb(85, 85, 85);
+
+        // textColor: This is the color applied to the text across the application. It is meant to contrast well
+        // against the background colors for readability.
+        Color textColor = Color.FromArgb(255, 255, 255);
+
+        // controlBackgroundColor: This color is used as the background for various controls such as Panels or GroupBoxes.
+        // It can be the same as the general background color or slightly different to create a layered visual effect.
+        Color controlBackgroundColor = Color.FromArgb(85, 85, 85);
+
+        // controlDarkColor: This color is a darker shade used for certain UI controls that may need to be differentiated from
+        // other elements, often used for input fields like TextBoxes or ComboBoxes to indicate interactivity.
+        Color controlDarkColor = Color.FromArgb(75, 75, 75);
+
+        // borderColor: Used for the borders of controls that require it, such as buttons or text boxes. This color
+        // is meant to be subtle yet visible enough to define the boundaries of interactive elements.
+        Color borderColor = Color.FromArgb(100, 100, 102);
+
+        // buttonHighlightColor: This is a highlight color used to indicate interactive UI elements such as buttons when they
+        // are hovered over or focused. It provides a visual cue to the user that the element is interactive.
+        Color buttonHighlightColor = Color.FromArgb(139, 0, 0);
+
+
+        this.BackColor = backgroundColor;
+        this.ForeColor = textColor;
+
+        // Apply to all controls on the form
+        foreach (Control ctrl in this.Controls)
+        {
+            ApplyDarkTheme(ctrl, backgroundColor, textColor, controlBackgroundColor, controlDarkColor, borderColor, buttonHighlightColor);
+        }
+    }
+
+    private void ApplyDarkTheme(Control control, Color backgroundColor, Color textColor, Color controlBackgroundColor, Color controlDarkColor, Color borderColor, Color buttonHighlightColor)
+    {
+        control.BackColor = controlBackgroundColor;
+        control.ForeColor = textColor;
+
+        if (control is Button btn)
+        {
+            btn.FlatStyle = FlatStyle.Flat;
+            btn.BackColor = controlDarkColor;
+            btn.ForeColor = textColor;
+            btn.FlatAppearance.BorderColor = borderColor;
+            btn.FlatAppearance.BorderSize = 1;
+            btn.FlatAppearance.MouseOverBackColor = buttonHighlightColor;
+        }
+        else if (control is TextBox txtBox)
+        {
+            txtBox.BorderStyle = BorderStyle.FixedSingle;
+            txtBox.BackColor = controlDarkColor;
+            txtBox.ForeColor = textColor;
+        }
+        else if (control is ComboBox cmbBox)
+        {
+            cmbBox.FlatStyle = FlatStyle.Flat;
+            cmbBox.BackColor = controlDarkColor;
+            cmbBox.ForeColor = textColor;
+            // Note: The ComboBox drop-down list part cannot be styled this way.
+        }
+        else if (control is Label lbl)
+        {
+            lbl.ForeColor = textColor;
+        }
+        else if (control is GroupBox grpBox)
+        {
+            grpBox.ForeColor = textColor;
+            grpBox.BackColor = backgroundColor;
+            // Note: GroupBox doesn't support border color change directly.
+        }
+        else if (control is Panel pnl)
+        {
+            pnl.BackColor = controlDarkColor;
+        }
+        else if (control is DataGridView dgv)
+        {
+            dgv.BackgroundColor = controlDarkColor;
+            dgv.ForeColor = textColor;
+            dgv.ColumnHeadersDefaultCellStyle.BackColor = controlBackgroundColor;
+            dgv.ColumnHeadersDefaultCellStyle.ForeColor = textColor;
+            dgv.DefaultCellStyle.BackColor = controlDarkColor;
+            dgv.DefaultCellStyle.ForeColor = textColor;
+            dgv.EnableHeadersVisualStyles = false;
+        }
+
+        // Apply theme to child controls (recursive call)
+        foreach (Control childControl in control.Controls)
+        {
+            ApplyDarkTheme(childControl, backgroundColor, textColor, controlBackgroundColor, controlDarkColor, borderColor, buttonHighlightColor);
+        }
+    }
+
+
+    private void SetLightTheme()
+    {
+        Color backgroundColor = SystemColors.Control;
+        Color textColor = SystemColors.ControlText;
+        Color controlColor = SystemColors.Window;
+        Color borderColor = SystemColors.ActiveBorder;
+
+        this.BackColor = backgroundColor;
+        this.ForeColor = textColor;
+
+        // Apply to all controls on the form
+        foreach (Control ctrl in this.Controls)
+        {
+            ApplyLightTheme(ctrl, backgroundColor, textColor, controlColor, borderColor);
+        }
+    }
+
+    private void ApplyLightTheme(Control control, Color backgroundColor, Color textColor, Color controlColor, Color borderColor)
+    {
+        control.BackColor = controlColor;
+        control.ForeColor = textColor;
+
+        if (control is Button btn)
+        {
+            btn.FlatStyle = FlatStyle.Standard;
+            btn.FlatAppearance.BorderColor = borderColor;
+        }
+        else if (control is TextBox txtBox)
+        {
+            txtBox.BorderStyle = BorderStyle.Fixed3D;
+            txtBox.BackColor = backgroundColor;
+            txtBox.ForeColor = textColor;
+        }
+
+        foreach (Control childControl in control.Controls)
+        {
+            ApplyLightTheme(childControl, backgroundColor, textColor, controlColor, borderColor);
         }
     }
 
@@ -383,7 +529,8 @@ public partial class MainWindow : Form
                         .DisconnectAsync(token)
                         .ConfigureAwait(false);
                     if (!success)
-                        await this.DisplayMessageBox(Webhook, err, token).ConfigureAwait(false); }
+                        await this.DisplayMessageBox(Webhook, err, token).ConfigureAwait(false);
+                }
                 catch (Exception ex)
                 {
                     await this
@@ -1718,16 +1865,16 @@ public partial class MainWindow : Form
     private void SendScreenshot_Click(object sender, EventArgs e)
     {
         Task.Run(async () =>
+        {
+            try
             {
-                try
-                {
-                    await Webhook.SendScreenshot(ConnectionWrapper.Connection, Source.Token).ConfigureAwait(false);
-                }
-                catch (Exception ex)
-                {
-                    await this.DisplayMessageBox(Webhook, $"Could not send the screenshot: {ex.Message}", Source.Token).ConfigureAwait(false);
-                }
-            },
+                await Webhook.SendScreenshot(ConnectionWrapper.Connection, Source.Token).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                await this.DisplayMessageBox(Webhook, $"Could not send the screenshot: {ex.Message}", Source.Token).ConfigureAwait(false);
+            }
+        },
             Source.Token
         );
     }

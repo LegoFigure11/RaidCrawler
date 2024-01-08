@@ -1,4 +1,4 @@
-﻿namespace RaidCrawler.WinForms
+namespace RaidCrawler.WinForms
 {
     partial class MainWindow
     {

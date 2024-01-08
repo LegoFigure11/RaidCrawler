@@ -1,4 +1,4 @@
-﻿using SysBot.Base;
+using SysBot.Base;
 
 namespace RaidCrawler.WinForms.SubForms
 {
@@ -8,6 +8,7 @@ namespace RaidCrawler.WinForms.SubForms
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
+        private System.Windows.Forms.Label labelTheme;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -551,6 +552,30 @@ namespace RaidCrawler.WinForms.SubForms
             LabelEventProgress.Size = new Size(117, 15);
             LabelEventProgress.TabIndex = 108;
             LabelEventProgress.Text = "Event Progress Level:";
+            //
+            // New Theme Setting
+            //
+            // Theme label setup
+            Label labelChooseTheme = new Label();
+            labelChooseTheme.AutoSize = true;
+            labelChooseTheme.Location = new System.Drawing.Point(15, 250); // Adjust the location as needed, align with ThemeComboBox
+            labelChooseTheme.Name = "labelChooseTheme";
+            labelChooseTheme.Size = new System.Drawing.Size(80, 13); // Adjust the size as needed
+            labelChooseTheme.Text = "Choose Theme:";
+            // Add the label to the form or to a specific container like a TabPage
+            this.tabGeneral.Controls.Add(labelChooseTheme);
+            // ThemeComboBox setup
+            this.ThemeComboBox = new System.Windows.Forms.ComboBox();
+            this.ThemeComboBox.FormattingEnabled = true;
+            this.ThemeComboBox.Items.AddRange(new object[] { "Light", "Dark" });
+            this.ThemeComboBox.Location = new System.Drawing.Point(111, 250); // Adjust the location as needed
+            this.ThemeComboBox.Name = "ThemeComboBox";
+            this.ThemeComboBox.Size = new System.Drawing.Size(96, 23); // Adjust the size as needed
+            this.ThemeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList; // Prevents user from typing
+            this.ThemeComboBox.SelectedIndex = 0; // Set default selected index if you have a default theme
+            this.ThemeComboBox.SelectedIndexChanged += new System.EventHandler(this.ThemeComboBox_SelectedIndexChanged);
+            // Add ThemeComboBox to the form
+            this.tabGeneral.Controls.Add(this.ThemeComboBox);
             // 
             // EventProgress
             // 
@@ -1211,5 +1236,8 @@ namespace RaidCrawler.WinForms.SubForms
         private CheckBox UseMapTrick;
         private CheckBox ZyroMethod;
         private CheckBox BlueberryScanCheck;
+        private ComboBox ThemeComboBox;
     }
+
 }
+
