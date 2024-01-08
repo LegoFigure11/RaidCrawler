@@ -147,6 +147,9 @@ public partial class MainWindow : Form
             SetDarkTheme();
         else
             SetLightTheme();
+
+        this.Invalidate();
+        this.Refresh();
     }
     private void SetDarkTheme()
     {
@@ -941,7 +944,14 @@ public partial class MainWindow : Form
     private void ConfigSettings_Click(object sender, EventArgs e)
     {
         var form = new ConfigWindow(Config);
-        ShowDialog(form);
+        form.ThemeChanged += OnThemeChanged;
+        form.ShowDialog();
+        form.ThemeChanged -= OnThemeChanged; // Unsubscribe from the event
+    }
+
+    private void OnThemeChanged(string newTheme)
+    {
+        ApplyTheme(newTheme);
     }
 
     private void EnableFilters_Click(object sender, EventArgs e)

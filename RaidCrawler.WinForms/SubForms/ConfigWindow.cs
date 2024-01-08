@@ -5,6 +5,8 @@ namespace RaidCrawler.WinForms.SubForms;
 public partial class ConfigWindow : Form
 {
     private readonly ClientConfig c;
+    public delegate void ThemeChangedEventHandler(string newTheme);
+    public event ThemeChangedEventHandler ThemeChanged;
 
     public ConfigWindow(ClientConfig c)
     {
@@ -98,7 +100,6 @@ public partial class ConfigWindow : Form
 
     private void ThemeComboBox_SelectedIndexChanged(object sender, EventArgs e)
     {
-        // Null check for safety
         if (this.ThemeComboBox.SelectedItem == null) return;
 
         string selectedTheme = this.ThemeComboBox.SelectedItem.ToString();
@@ -110,9 +111,11 @@ public partial class ConfigWindow : Form
         {
             this.SetLightTheme();
         }
-        // Save the selected theme to the configuration
-        this.c.Theme = ThemeComboBox.SelectedItem.ToString();
+
+        this.c.Theme = selectedTheme; 
         SaveConfig();
+
+        ThemeChanged?.Invoke(selectedTheme);
     }
 
     private void SaveConfig()
