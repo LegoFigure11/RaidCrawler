@@ -15,7 +15,7 @@ public partial class ConfigWindow : Form
         var shaField = gitVersionInformationType?.GetField("ShortSha");
 
         InitializeComponent();
-
+        ThemeComboBox.SelectedItem = c.Theme;
         InstanceName.Text = c.InstanceName;
         StoryProgress.SelectedIndex = c.Progress;
         EventProgress.SelectedIndex = c.EventProgress;
