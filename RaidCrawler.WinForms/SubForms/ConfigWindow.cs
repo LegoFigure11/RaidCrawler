@@ -100,6 +100,7 @@ public partial class ConfigWindow : Form
 
     private void ThemeComboBox_SelectedIndexChanged(object sender, EventArgs e)
     {
+        // Null check for safety
         if (this.ThemeComboBox.SelectedItem == null) return;
 
         string selectedTheme = this.ThemeComboBox.SelectedItem.ToString();
@@ -112,9 +113,11 @@ public partial class ConfigWindow : Form
             this.SetLightTheme();
         }
 
-        this.c.Theme = selectedTheme; 
+        // Save the selected theme to the configuration
+        this.c.Theme = selectedTheme; // Use the variable you have defined
         SaveConfig();
 
+        // Invoke the ThemeChanged event with the correct variable
         ThemeChanged?.Invoke(selectedTheme);
     }
 
