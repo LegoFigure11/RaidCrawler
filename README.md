@@ -9,6 +9,7 @@
 
 
 **Gengar's Version - Dark Theme Included!**
+
 ![Dark Theme](https://github.com/bdawg1989/RaidCrawler/assets/80122551/fb7cde90-40bf-4275-a78f-4960940b02d8)
 
 
