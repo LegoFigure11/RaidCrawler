@@ -7,6 +7,10 @@
 
 **Basic usage guide:** [Click here](https://billo-guides.github.io/cfw/sv/raidcrawler) (thanks [Billo](https://github.com/Billo-PS)!)
 
-![](https://i.imgur.com/TNOvbdY.png)
+
+**Gengar's Version - Dark Theme Included!**
+
+![Dark Theme](https://github.com/bdawg1989/RaidCrawler/assets/80122551/fb7cde90-40bf-4275-a78f-4960940b02d8)
+
 
 Leverages SysBot.Base.dll from [kwsch/SysBot.NET](https://github.com/kwsch/SysBot.NET)
