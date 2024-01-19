@@ -383,7 +383,8 @@ public partial class MainWindow : Form
                         .DisconnectAsync(token)
                         .ConfigureAwait(false);
                     if (!success)
-                        await this.DisplayMessageBox(Webhook, err, token).ConfigureAwait(false); }
+                        await this.DisplayMessageBox(Webhook, err, token).ConfigureAwait(false);
+                }
                 catch (Exception ex)
                 {
                     await this
@@ -1388,14 +1389,9 @@ public partial class MainWindow : Form
 
     private static (double x, double y) GetCoordinate(Raid raid, IReadOnlyDictionary<string, float[]> locData)
     {
-        (double a, double b, double c, double d, short e, short f) = raid.MapParent switch
-        {
-            TeraRaidMapParent.Paldea => (MapMagic.X_MULT_BASE, MapMagic.X_ADD_BASE, MapMagic.Y_MULT_BASE, MapMagic.Y_ADD_BASE, MapMagic.MULT_CONST_BASE, MapMagic.DIV_CONST_BASE),
-            TeraRaidMapParent.Kitakami => (MapMagic.X_MULT_KITAKAMI, MapMagic.X_ADD_KITAKAMI, MapMagic.Y_MULT_KITAKAMI, MapMagic.Y_ADD_KITAKMI, MapMagic.MULT_CONST_KITAKAMI, MapMagic.DIV_CONST_KITAKAMI),
-            _ => (MapMagic.X_MULT_BLUEBERRY, MapMagic.X_ADD_BLUEBERRY, MapMagic.Y_MULT_BLUEBERRY, MapMagic.Y_ADD_BLUEBERRY, MapMagic.MULT_CONST_BLUEBERRY, MapMagic.DIV_CONST_BLUEBERRY)
-        };
-        double x = ((a * locData[$"{raid.Area}-{raid.LotteryGroup}-{raid.Den}"][0]) + b) * e / f;
-        double y = ((c * locData[$"{raid.Area}-{raid.LotteryGroup}-{raid.Den}"][2]) + d) * e / f;
+        var m = MapMagic.GetMapMagic(raid.MapParent);
+        double x = ((m.MultX * locData[$"{raid.Area}-{raid.LotteryGroup}-{raid.Den}"][0]) + m.AddX) * m.MultConst / m.DivConst;
+        double y = ((m.MultY * locData[$"{raid.Area}-{raid.LotteryGroup}-{raid.Den}"][2]) + m.AddY) * m.MultConst / m.DivConst;
         return (x, y);
     }
 
