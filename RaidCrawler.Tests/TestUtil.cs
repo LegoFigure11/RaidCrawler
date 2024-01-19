@@ -1,4 +1,4 @@
-﻿using RaidCrawler.Core.Structures;
+using RaidCrawler.Core.Structures;
 using System.Reflection;
 using System.Text.Json;
 
@@ -33,7 +33,7 @@ public class TestUtil
         return reader.ReadToEnd();
     }
 
-    public ((int delivery, int enc), RaidContainer?) GetRaidContainer(string path, int storyPrg)
+    public ((int delivery, int encounter, List<int> raidDeliveryGroupIDList), RaidContainer?) GetRaidContainer(string path, int storyPrg)
     {
         var game = GetGame(path);
         var container = new RaidContainer(game);
@@ -47,7 +47,7 @@ public class TestUtil
             delivery_raid_prio
         );
         if (priority == 0)
-            return ((-1, -1), null);
+            return ((-1, -1, new List<int>()), null);
 
         var delivery_raid_fbs = GetBinaryTestResource(
             GetTestResourceName(path, "raid_enemy_array")
@@ -71,8 +71,9 @@ public class TestUtil
 
         // Read embedded base data and read all raids.
         var baseData = GetBinaryTestResource(GetTestResourceName(path, "base"));
+        var (delivery, encounter, raidDeliveryGroupIDList) = container.ReadAllRaids(baseData, storyPrg, 0, eventPrg, 0);
         var failed = container.ReadAllRaids(baseData, storyPrg, 0, eventPrg, 0);
-        return (failed, container);
+        return ((delivery, encounter, raidDeliveryGroupIDList), container);
     }
 
     public IReadOnlyList<RaidFilter> GetRaidFilter(string path)

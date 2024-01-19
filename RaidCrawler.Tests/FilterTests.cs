@@ -26,7 +26,7 @@ public class FilterTests : TestUtil
     {
         var raid = GetRaidContainer(path, storyPrg);
         raid.Item1.delivery.Should().Be(0);
-        raid.Item1.enc.Should().Be(0);
+        raid.Item1.encounter.Should().Be(0);
 
         var container = raid.Item2;
         container.Should().NotBeNull();

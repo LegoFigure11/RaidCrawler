@@ -21,7 +21,7 @@ public class RaidStatTests : TestUtil
     {
         var raids = GetRaidContainer(path, storyPrg);
         raids.Item1.delivery.Should().Be(0);
-        raids.Item1.enc.Should().Be(0);
+        raids.Item1.encounter.Should().Be(0);
 
         var container = raids.Item2;
         container.Should().NotBeNull();

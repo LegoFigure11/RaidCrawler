@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using System.ComponentModel;
 using Xunit;
 
@@ -23,7 +23,7 @@ public class RaidReadTests : TestUtil
     {
         var raid = GetRaidContainer(path, storyPrg);
         raid.Item1.delivery.Should().Be(0);
-        raid.Item1.enc.Should().Be(0);
+        raid.Item1.encounter.Should().Be(0); // Corrected from 'enc' to 'encounter'
 
         var container = raid.Item2;
         container.Should().NotBeNull();
@@ -33,4 +33,5 @@ public class RaidReadTests : TestUtil
         container.GetRaidCount().Should().Be(expectedRaids);
         raidCount.Should().Be(encCount);
     }
+
 }
