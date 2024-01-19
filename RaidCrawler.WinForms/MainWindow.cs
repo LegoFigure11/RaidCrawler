@@ -1618,8 +1618,8 @@ public partial class MainWindow : Form
             var data = await ConnectionWrapper.Connection
                 .ReadBytesAbsoluteAsync(RaidBlockOffsetBase + RaidBlock.HEADER_SIZE, (int)RaidBlock.SIZE_BASE, token)
                 .ConfigureAwait(false);
-
-            (delivery, enc) = RaidContainer.ReadAllRaids(data, Config.Progress, Config.EventProgress, GetRaidBoost(), TeraRaidMapParent.Paldea);
+            List<int> raidDeliveryGroupIDList;
+            (delivery, enc, raidDeliveryGroupIDList) = RaidContainer.ReadAllRaids(data, Config.Progress, Config.EventProgress, GetRaidBoost(), TeraRaidMapParent.Paldea);
             if (enc > 0)
                 msg += $"Failed to find encounters for {enc} raid(s).\n";
 
@@ -1649,7 +1649,8 @@ public partial class MainWindow : Form
                 .ConfigureAwait(false);
 
             msg = string.Empty;
-            (delivery, enc) = RaidContainer.ReadAllRaids(data, Config.Progress, Config.EventProgress, GetRaidBoost(), TeraRaidMapParent.Kitakami);
+            List<int> raidDeliveryGroupIDList;
+            (delivery, enc, raidDeliveryGroupIDList) = RaidContainer.ReadAllRaids(data, Config.Progress, Config.EventProgress, GetRaidBoost(), TeraRaidMapParent.Kitakami);
             if (enc > 0)
                 msg += $"Failed to find encounters for {enc} raid(s).\n";
 
@@ -1680,7 +1681,8 @@ public partial class MainWindow : Form
                 .ConfigureAwait(false);
 
             msg = string.Empty;
-            (delivery, enc) = RaidContainer.ReadAllRaids(data, Config.Progress, Config.EventProgress, GetRaidBoost(), TeraRaidMapParent.Blueberry);
+            List<int> raidDeliveryGroupIDList;
+            (delivery, enc, raidDeliveryGroupIDList) = RaidContainer.ReadAllRaids(data, Config.Progress, Config.EventProgress, GetRaidBoost(), TeraRaidMapParent.Blueberry);
             if (enc > 0)
                 msg += $"Failed to find encounters for {enc} raid(s).\n";
 

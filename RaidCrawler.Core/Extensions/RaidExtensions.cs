@@ -155,7 +155,7 @@ public static class RaidExtensions
         return null;
     }
 
-    public static (int delivery, int encounter) ReadAllRaids(this RaidContainer container, byte[] data, int storyPrg, int eventPrg, int boost, TeraRaidMapParent type)
+    public static (int delivery, int encounter, List<int> raidDeliveryGroupID) ReadAllRaids(this RaidContainer container, byte[] data, int storyPrg, int eventPrg, int boost, TeraRaidMapParent type)
     {
         var dbgFile = $"raid_dbg_{type}.txt";
         if (File.Exists(dbgFile))
@@ -185,6 +185,7 @@ public static class RaidExtensions
         List<Raid> newRaids = [];
         List<ITeraRaid> newTera = [];
         List<List<(int, int, int)>> newRewards = [];
+        List<int> raidDeliveryGroupIDList = new List<int>();
         int eventCount = 0;
         for (int i = 0; i < count; i++)
         {
@@ -204,7 +205,9 @@ public static class RaidExtensions
             var raidDeliveryGroupID = -1;
             try
             {
+                // Directly assign the value without re-declaring the variable
                 raidDeliveryGroupID = raid.GetDeliveryGroupID(container.DeliveryRaidPriority, possibleGroups, eventCount);
+                raidDeliveryGroupIDList.Add(raidDeliveryGroupID);  // Add each ID to the list
             }
             catch (Exception ex)
             {
@@ -236,7 +239,7 @@ public static class RaidExtensions
         container.SetRaids(newRaids);
         container.SetEncounters(newTera);
         container.SetRewards(newRewards);
-        return failed;
+        return (failed.delivery, failed.encounter, raidDeliveryGroupIDList);
     }
 
     public static bool CheckIsShiny(this Raid raid, ITeraRaid? enc)
