@@ -25,7 +25,7 @@ namespace RaidCrawler.Core.Structures
             MultY = 1,
             AddY = 5505.240018,
             MultConst = 512,
-            DivConst = 500,
+            DivConst = 5000,
         };
 
         private static readonly MapMagic Kitakami = new()
@@ -35,7 +35,7 @@ namespace RaidCrawler.Core.Structures
             MultY = 2.5700782642623805,
             AddY = 5070.808599816581,
             MultConst = 512,
-            DivConst = 500,
+            DivConst = 5000,
         };
 
         private static readonly MapMagic Blueberry = new()
