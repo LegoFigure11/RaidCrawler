@@ -11,6 +11,7 @@ public class RaidFilter
     public int StarsComp { get; set; }
     public bool Shiny { get; set; }
     public bool Square { get; set; }
+    public bool RareEC { get; set; }
     public int? Nature { get; set; }
     public int? TeraType { get; set; }
     public int? Gender { get; set; }
@@ -28,6 +29,7 @@ public class RaidFilter
                               || Stars != null
                               || Shiny
                               || Square
+                              || RareEC
                               || Nature != null
                               || TeraType != null
                               || Gender != null
@@ -99,6 +101,14 @@ public class RaidFilter
             return true;
 
         return blank.IsShiny && ShinyExtensions.IsSquareShinyExist(blank);
+    }
+
+    public bool IsRareECSatisfied(PK9 blank)
+    {
+        if (!RareEC)
+            return true;
+
+        return blank.EncryptionConstant % 100 == 0;
     }
 
     public bool IsTeraTypeSatisfied(Raid raid, ITeraRaid enc)
@@ -182,6 +192,7 @@ public class RaidFilter
                && IsIVsSatisfied(blank)
                && IsShinySatisfied(blank)
                && IsSquareSatisfied(blank)
+               && IsRareECSatisfied(blank)
                && IsSpeciesSatisfied(blank.Species)
                && IsFormSatisfied(blank.Form)
                && IsNatureSatisfied(blank.Nature)

@@ -60,7 +60,10 @@
   <metadata name="Tooltip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
-  <metadata name="Tooltip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
+  <data name="ECCheck.ToolTip" xml:space="preserve">
+    <value>If checked, only stop on results where the remainder of the
+Encryption Constant (EC) divided by 100 is 0. This will result
+in Dunsparce evolving into 3-Segment form, and Tandemaus
+evolving into Family of Three form.</value>
+  </data>
 </root>
