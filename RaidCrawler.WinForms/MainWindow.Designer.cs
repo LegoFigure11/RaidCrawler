@@ -711,7 +711,7 @@
             B_ResetTime.Name = "B_ResetTime";
             B_ResetTime.Size = new Size(97, 23);
             B_ResetTime.TabIndex = 130;
-            B_ResetTime.Text = "Reset Date";
+            B_ResetTime.Text = "Fix Date (NTP)";
             B_ResetTime.UseVisualStyleBackColor = true;
             B_ResetTime.Click += B_ResetTime_Click;
             // 
