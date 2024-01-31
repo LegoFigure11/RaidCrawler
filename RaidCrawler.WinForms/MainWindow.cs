@@ -1804,7 +1804,7 @@ public partial class MainWindow : Form
             try
             {
                 UpdateStatus("Resetting date...");
-                await ConnectionWrapper.ResetTime(Source.Token).ConfigureAwait(false);
+                await ConnectionWrapper.ResetTimeNTP(Source.Token).ConfigureAwait(false);
                 UpdateStatus("Date reset!");
             }
             catch (Exception ex)
