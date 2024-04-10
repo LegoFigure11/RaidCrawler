@@ -340,7 +340,7 @@ public partial class MainWindow : Form
                     return;
                 }
 
-                ButtonEnable(true, ButtonAdvanceDate, ButtonReadRaids, ButtonDisconnect, ButtonViewRAM, ButtonDownloadEvents, SendScreenshot, btnOpenMap, Rewards, B_ResetTime);
+                ButtonEnable(true, ButtonAdvanceDate, ButtonReadRaids, ButtonDisconnect, ButtonViewRAM, ButtonDownloadEvents, SendScreenshot, btnOpenMap, Rewards, B_DateTools);
                 if (InvokeRequired)
                 {
                     Invoke(() =>
@@ -376,7 +376,7 @@ public partial class MainWindow : Form
         Task.Run(
             async () =>
             {
-                ButtonEnable(false, ButtonAdvanceDate, ButtonReadRaids, ButtonDisconnect, ButtonViewRAM, ButtonDownloadEvents, SendScreenshot, B_ResetTime);
+                ButtonEnable(false, ButtonAdvanceDate, ButtonReadRaids, ButtonDisconnect, ButtonViewRAM, ButtonDownloadEvents, SendScreenshot, B_DateTools);
                 try
                 {
                     (bool success, string err) = await ConnectionWrapper
@@ -1797,19 +1797,19 @@ public partial class MainWindow : Form
         return spriteName.Replace('_', '-').Insert(0, "_");
     }
 
-    private void B_ResetTime_Click(object sender, EventArgs e)
+    private void B_DateTools_Click(object sender, EventArgs e)
     {
         Task.Run(async () =>
         {
             try
             {
-                UpdateStatus("Resetting date...");
-                await ConnectionWrapper.ResetTimeNTP(Source.Token).ConfigureAwait(false);
-                UpdateStatus("Date reset!");
+                var tick = await ConnectionWrapper.GetCurrentTime(Source.Token).ConfigureAwait(false);
+                var form = new TickModifier(tick, ConnectionWrapper, Webhook, Source.Token);
+                ShowDialog(form);
             }
             catch (Exception ex)
             {
-                await this.DisplayMessageBox(Webhook, $"Could not reset the date: {ex.Message}", Source.Token).ConfigureAwait(false);
+                await this.DisplayMessageBox(Webhook, $"Could not read the date: {ex.Message}", Source.Token).ConfigureAwait(false);
             }
         });
     }

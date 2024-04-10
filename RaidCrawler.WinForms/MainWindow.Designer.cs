@@ -90,7 +90,7 @@
             USB_Port_label = new Label();
             USB_Port_TB = new TextBox();
             StopAdvance_Button = new Button();
-            B_ResetTime = new Button();
+            B_DateTools = new Button();
             ((System.ComponentModel.ISupportInitialize)Sprite).BeginInit();
             ((System.ComponentModel.ISupportInitialize)GemIcon).BeginInit();
             ((System.ComponentModel.ISupportInitialize)SearchTimer).BeginInit();
@@ -704,23 +704,23 @@
             StopAdvance_Button.Visible = false;
             StopAdvance_Button.Click += StopAdvanceButton_Click;
             // 
-            // B_ResetTime
+            // B_DateTools
             // 
-            B_ResetTime.Enabled = false;
-            B_ResetTime.Location = new Point(117, 302);
-            B_ResetTime.Name = "B_ResetTime";
-            B_ResetTime.Size = new Size(97, 23);
-            B_ResetTime.TabIndex = 130;
-            B_ResetTime.Text = "Fix Date (NTP)";
-            B_ResetTime.UseVisualStyleBackColor = true;
-            B_ResetTime.Click += B_ResetTime_Click;
+            B_DateTools.Enabled = false;
+            B_DateTools.Location = new Point(117, 302);
+            B_DateTools.Name = "B_DateTools";
+            B_DateTools.Size = new Size(97, 23);
+            B_DateTools.TabIndex = 130;
+            B_DateTools.Text = "Date Tools";
+            B_DateTools.UseVisualStyleBackColor = true;
+            B_DateTools.Click += B_DateTools_Click;
             // 
             // MainWindow
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(580, 357);
-            Controls.Add(B_ResetTime);
+            Controls.Add(B_DateTools);
             Controls.Add(StopAdvance_Button);
             Controls.Add(USB_Port_TB);
             Controls.Add(USB_Port_label);
@@ -848,6 +848,6 @@
         private TextBox USB_Port_TB;
         private Button StopAdvance_Button;
         private ToolStripStatusLabel Label_DayAdvance;
-        private Button B_ResetTime;
+        private Button B_DateTools;
     }
 }

@@ -234,6 +234,20 @@ public class ConnectionWrapperAsync(SwitchConnectionConfig Config, Action<string
         await Connection.SendAsync(command, token).ConfigureAwait(false);
     }
 
+    public async Task<ulong> GetCurrentTime(CancellationToken token)
+    {
+        var command = Encoding.ASCII.GetBytes($"getCurrentTime{(CRLF ? "\r\n" : "")}");
+        var res = await Connection.ReadRaw(command, 17, token).ConfigureAwait(false);
+        ulong.TryParse(Encoding.ASCII.GetString(res).Trim('\n'), System.Globalization.NumberStyles.AllowHexSpecifier, null, out var time);
+        return time;
+    }
+
+    public async Task SetCurrentTime(ulong date, CancellationToken token)
+    {
+        var command = Encoding.ASCII.GetBytes($"setCurrentTime {date}{(CRLF ? "\r\n" : "")}");
+        await Connection.SendAsync(command, token).ConfigureAwait(false);
+    }
+
     // Thank you to Anubis for sharing a more optimized routine, as well as CloseGame(), StartGame(), and SaveGame()!
     public async Task AdvanceDate(
         IDateAdvanceConfig config,
