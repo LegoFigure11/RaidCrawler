@@ -803,10 +803,10 @@ public partial class MainWindow : Form
         Config.EnableFilters = CheckEnableFilters.Checked;
     }
 
+    private readonly JsonSerializerOptions options = new() { WriteIndented = true };
     private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
     {
         var configpath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.json");
-        JsonSerializerOptions options = new() { WriteIndented = true };
         string output = JsonSerializer.Serialize(Config, options);
         using StreamWriter sw = new(configpath);
         sw.Write(output);
@@ -1361,8 +1361,12 @@ public partial class MainWindow : Form
         var gem = new Bitmap(original, new Size(30, 30));
         SpriteUtil.GetSpriteGlow(gem, 0xFF, 0xFF, 0xFF, out var glow, true);
         gem = ImageUtil.LayerImage(gem, ImageUtil.GetBitmap(glow, gem.Width, gem.Height, gem.PixelFormat), 0, 0);
-        if (DenLocationsBase is null || DenLocationsBase.Count == 0 || DenLocationsKitakami is null || DenLocationsKitakami.Count == 0)
+        if (DenLocationsBase is null || DenLocationsBase.Count == 0 ||
+            DenLocationsKitakami is null || DenLocationsKitakami.Count == 0 ||
+            DenLocationsBlueberry is null || DenLocationsBlueberry.Count == 0)
+        {
             return null;
+        }
 
         var locData = raid.MapParent switch
         {
