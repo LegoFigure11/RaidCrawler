@@ -4,12 +4,13 @@ namespace RaidCrawler.Core.Structures
 {
     public class MapMagic
     {
-        public double MultX { get; init; }
-        public double MultY { get; init; }
-        public double AddX { get; init; }
-        public double AddY { get; init; }
-        public short MultConst { get; init; }
-        public short DivConst { get; init; }
+        public double ScaleX { get; init; }
+        public double ScaleZ { get; init; }
+        public double OffsetZ { get; init; }
+        public double ConvertWidth(double s) => (512 / ScaleX) * s;
+        public double ConvertHeight(double s) => (512 / ScaleZ) * s;
+        public double ConvertX(double x) => (512 / ScaleX) * x;
+        public double ConvertZ(double z) => (512 / ScaleZ) * (z + OffsetZ);
 
         public static MapMagic GetMapMagic(TeraRaidMapParent parent) => parent switch
         {
@@ -20,32 +21,23 @@ namespace RaidCrawler.Core.Structures
 
         private static readonly MapMagic Base = new()
         {
-            MultX = 1,
-            AddX = 2.072021484,
-            MultY = 1,
-            AddY = 5505.240018,
-            MultConst = 512,
-            DivConst = 5000,
+            ScaleX = 5000,
+            ScaleZ = 5000,
+            OffsetZ = 5500,
         };
 
         private static readonly MapMagic Kitakami = new()
         {
-            MultX = 2.766970605475146,
-            AddX = -248.08352352566726,
-            MultY = 2.5700782642623805,
-            AddY = 5070.808599816581,
-            MultConst = 512,
-            DivConst = 5000,
+            ScaleX = 2000,
+            ScaleZ = 2000,
+            OffsetZ = 2000,
         };
 
         private static readonly MapMagic Blueberry = new()
         {
-            MultX = 0.2566504136675,
-            AddX = 0.893932258207,
-            MultY = 0.2559781068906,
-            AddY = 511.5361519625,
-            MultConst = 1,
-            DivConst = 1,
+            ScaleX = 2000,
+            ScaleZ = 2000,
+            OffsetZ = 2000,
         };
     }
 }

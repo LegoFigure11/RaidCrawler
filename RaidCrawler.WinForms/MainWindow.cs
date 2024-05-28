@@ -1382,8 +1382,8 @@ public partial class MainWindow : Form
         };
         try
         {
-            (double x, double y) = GetCoordinate(raid, locData);
-            return ImageUtil.LayerImage(map, gem, (int)x, (int)y);
+            (double x, double z) = GetCoordinate(raid, locData, gem);
+            return ImageUtil.LayerImage(map, gem, (int)x, (int)z);
         }
         catch
         {
@@ -1391,12 +1391,13 @@ public partial class MainWindow : Form
         }
     }
 
-    private static (double x, double y) GetCoordinate(Raid raid, IReadOnlyDictionary<string, float[]> locData)
+    private static (double x, double y) GetCoordinate(Raid raid, IReadOnlyDictionary<string, float[]> locData, Bitmap gem)
     {
         var m = MapMagic.GetMapMagic(raid.MapParent);
-        double x = ((m.MultX * locData[$"{raid.Area}-{raid.LotteryGroup}-{raid.Den}"][0]) + m.AddX) * m.MultConst / m.DivConst;
-        double y = ((m.MultY * locData[$"{raid.Area}-{raid.LotteryGroup}-{raid.Den}"][2]) + m.AddY) * m.MultConst / m.DivConst;
-        return (x, y);
+        double x = m.ConvertX(locData[$"{raid.Area}-{raid.LotteryGroup}-{raid.Den}"][0]) - (gem.Size.Width / 2);
+        double z = m.ConvertZ(locData[$"{raid.Area}-{raid.LotteryGroup}-{raid.Den}"][2]) - (gem.Size.Height / 2);
+
+        return (x, z);
     }
 
     private bool StopAdvanceDate(IEnumerable<uint> previousSeeds)

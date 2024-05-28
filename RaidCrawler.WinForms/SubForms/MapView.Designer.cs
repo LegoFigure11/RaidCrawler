@@ -28,31 +28,30 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.Map = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.Map)).BeginInit();
-            this.SuspendLayout();
+            Map = new PictureBox();
+            ((System.ComponentModel.ISupportInitialize)Map).BeginInit();
+            SuspendLayout();
             // 
             // Map
             // 
-            this.Map.Location = new System.Drawing.Point(0, 0);
-            this.Map.Name = "Map";
-            this.Map.Size = new System.Drawing.Size(512, 512);
-            this.Map.TabIndex = 0;
-            this.Map.TabStop = false;
+            Map.Location = new Point(0, 0);
+            Map.Name = "Map";
+            Map.Size = new Size(512, 512);
+            Map.TabIndex = 0;
+            Map.TabStop = false;
             // 
             // MapView
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(512, 512);
-            this.Controls.Add(this.Map);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "MapView";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Possible Den Location(s)";
-            ((System.ComponentModel.ISupportInitialize)(this.Map)).EndInit();
-            this.ResumeLayout(false);
-
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(512, 512);
+            Controls.Add(Map);
+            FormBorderStyle = FormBorderStyle.FixedToolWindow;
+            Name = "MapView";
+            StartPosition = FormStartPosition.CenterParent;
+            Text = "Raid Location";
+            ((System.ComponentModel.ISupportInitialize)Map).EndInit();
+            ResumeLayout(false);
         }
 
         #endregion
