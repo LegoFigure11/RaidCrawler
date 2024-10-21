@@ -3,7 +3,7 @@
 ![Download Count](https://img.shields.io/github/downloads/LegoFigure11/RaidCrawler/total?label=total%20downloads)
 [![Build Status](https://img.shields.io/github/actions/workflow/status/LegoFigure11/RaidCrawler/dotnet-desktop.yml?branch=main)](https://nightly.link/LegoFigure11/RaidCrawler/workflows/dotnet-desktop/main/RaidCrawler.zip)
 
-[sys-botbase](https://github.com/olliz0r/sys-botbase) client Raid Viewer for Pokémon Scarlet and Violet.
+[sys-botbase](https://github.com/LegoFigure11/usb-botbase) client Raid Viewer for Pokémon Scarlet and Violet.
 
 **Basic usage guide:** [Click here](https://billo-guides.github.io/cfw/sv/raidcrawler) (thanks [Billo](https://github.com/Billo-PS)!)
 
