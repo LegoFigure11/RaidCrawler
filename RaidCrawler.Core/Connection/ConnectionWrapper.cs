@@ -309,7 +309,7 @@ public class ConnectionWrapperAsync(SwitchConnectionConfig Config, Action<string
             // Navigate to Settings
             if (config.UseTouch)
             {
-                await Touch(0_840, 0_540, 0_050, 0, token).ConfigureAwait(false);
+                await Touch(0_909, 0_540, 0_050, 0, token).ConfigureAwait(false);
                 UpdateProgressBar(action, steps);
             }
             else
