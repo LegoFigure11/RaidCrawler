@@ -318,7 +318,7 @@ public class ConnectionWrapperAsync(SwitchConnectionConfig Config, Action<string
                     .ConfigureAwait(false);
                 UpdateProgressBar(action, steps);
 
-                for (int i = 0; i < 5; i++)
+                for (int i = 0; i < 7; i++)
                 {
                     await Click(DRIGHT, config.NavigateToSettingsDelay + BaseDelay, token)
                         .ConfigureAwait(false);
