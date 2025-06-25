@@ -1,24 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <ImplicitUsings>enable</ImplicitUsings>
-	<Platforms>x64</Platforms>
+    <Platforms>x64</Platforms>
   </PropertyGroup>
-
   <ItemGroup>
-	<PackageReference Include="FlatSharp.Compiler" Version="7.4.0">
-	  <PrivateAssets>all</PrivateAssets>
-	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-	</PackageReference>
-	<PackageReference Include="FlatSharp.Runtime" Version="7.4.0" />
-    <PackageReference Include="LibUsbDotNet" Version="2.2.29" />
-    <PackageReference Include="PKHeX.Core" Version="23.12.19" />
-	<Reference Include="SysBot.Base">
-	  <HintPath>deps\SysBot.Base.dll</HintPath>
-	</Reference>
-	<FlatSharpSchema Include="Schemas\*.fbs" />
+    <PackageReference Include="FlatSharp.Compiler">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="FlatSharp.Runtime"/>
+    <PackageReference Include="LibUsbDotNet"/>
+    <PackageReference Include="PKHeX.Core"/>
+    <Reference Include="SysBot.Base">
+      <HintPath>deps\SysBot.Base.dll</HintPath>
+    </Reference>
+    <FlatSharpSchema Include="Schemas\*.fbs" />
   </ItemGroup>
-
   <ItemGroup>
     <None Remove="Resources\Base\den_locations_base.json" />
     <None Remove="Resources\Base\paldea.png" />
@@ -47,7 +44,6 @@
     <None Remove="Resources\Kitakami\su1_raid_enemy_05_array.bin" />
     <None Remove="Resources\Kitakami\su1_raid_enemy_06_array.bin" />
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Include="Resources\Base\den_locations_base.json" />
     <EmbeddedResource Include="Resources\Base\paldea.png" />
@@ -76,5 +72,4 @@
     <EmbeddedResource Include="Resources\Kitakami\su1_raid_enemy_05_array.bin" />
     <EmbeddedResource Include="Resources\Kitakami\su1_raid_enemy_06_array.bin" />
   </ItemGroup>
-
 </Project>

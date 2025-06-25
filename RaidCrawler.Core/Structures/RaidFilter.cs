@@ -1,4 +1,5 @@
 using PKHeX.Core;
+using System.Diagnostics.Metrics;
 
 namespace RaidCrawler.Core.Structures;
 
@@ -119,7 +120,7 @@ public class RaidFilter
         return raid.GetTeraType(enc) == TeraType;
     }
 
-    public bool IsNatureSatisfied(int nature)
+    public bool IsNatureSatisfied(byte nature)
     {
         if (Nature is null)
             return true;
@@ -131,8 +132,9 @@ public class RaidFilter
     {
         if (IVBin == 0)
             return true;
-
-        var ivs = Utils.ToSpeedLast(blank.IVs);
+        Span<int> ivArray = stackalloc int[6];
+        blank.GetIVs(ivArray);
+        var ivs = Utils.ToSpeedLast(ivArray);
         for (int i = 0; i < 6; i++)
         {
             var iv = IVVals >> i * 5 & 31;
@@ -181,12 +183,18 @@ public class RaidFilter
         RaidContainer container,
         ITeraRaid enc,
         Raid raid,
-        int SandwichBoost
+    int SandwichBoost
     )
     {
         var param = enc.GetParam();
         var blank = new PK9 { Species = enc.Species, Form = enc.Form };
-        Encounter9RNG.GenerateData(blank, param, EncounterCriteria.Unrestricted, raid.Seed);
+        var criteria = new EncounterCriteria { Shiny = enc.Shiny };
+        bool check = Encounter9RNG.GenerateData(blank, param, criteria, raid.Seed);
+        if (!check)
+        {
+            criteria = new EncounterCriteria { Shiny = blank.IsShiny ? PKHeX.Core.Shiny.Always : PKHeX.Core.Shiny.Random };
+            Encounter9RNG.GenerateData(blank, param, criteria, raid.Seed);
+        }
 
         return Enabled
                && IsIVsSatisfied(blank)
@@ -195,7 +203,7 @@ public class RaidFilter
                && IsRareECSatisfied(blank)
                && IsSpeciesSatisfied(blank.Species)
                && IsFormSatisfied(blank.Form)
-               && IsNatureSatisfied(blank.Nature)
+               && IsNatureSatisfied((byte)blank.Nature)
                && IsStarsSatisfied(enc)
                && IsTeraTypeSatisfied(raid, enc)
                && IsRewardsSatisfied(container, enc, raid, SandwichBoost)

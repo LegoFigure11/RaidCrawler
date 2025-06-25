@@ -58,7 +58,7 @@ public record RaidContainer
     public RaidContainer(string game)
     {
         Game = game;
-        Strings = GameInfo.GetStrings(1);
+        Strings = GameInfo.GetStrings("en");
         GemTeraRaidsBase = TeraEncounter.GetAllEncounters(RaidDataBase, TeraRaidMapParent.Paldea);
         GemTeraRaidsKitakami = TeraEncounter.GetAllEncounters(RaidDataKitakami, TeraRaidMapParent.Kitakami);
         GemTeraRaidsBlueberry = TeraEncounter.GetAllEncounters(RaidDataBlueberry, TeraRaidMapParent.Blueberry);

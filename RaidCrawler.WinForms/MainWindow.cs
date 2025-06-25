@@ -23,7 +23,6 @@ public partial class MainWindow : Form
     private readonly ClientConfig Config;
     private ConnectionWrapperAsync ConnectionWrapper = default!;
 
-    private readonly SwitchConnectionConfig ConnectionConfig;
 
     private readonly RaidContainer RaidContainer;
     private readonly NotificationHandler Webhook;
@@ -62,6 +61,13 @@ public partial class MainWindow : Form
     private bool StopAdvances =>
         !Config.EnableFilters || RaidFilters.Count == 0 || RaidFilters.All(x => !x.Enabled);
 
+    private SwitchConnectionConfig GetConnectionConfig() => new()
+    {
+        IP = Config.IP,
+        Port = Config.Protocol is SwitchProtocol.WiFi ? 6000 : Config.UsbPort,
+        Protocol = Config.Protocol,
+    };
+
     public MainWindow()
     {
         Config = new ClientConfig();
@@ -90,12 +96,6 @@ public partial class MainWindow : Form
             Config = new();
         }
 
-        ConnectionConfig = new SwitchConnectionConfig
-        {
-            Protocol = SwitchProtocol.WiFi,
-            IP = "192.168.0.0",
-            Port = 6000,
-        };
         formTitle = $"RaidCrawler v{v.Major}.{v.Minor}.{v.Build}{build} {Config.InstanceName}";
         Text = formTitle;
 
@@ -106,14 +106,6 @@ public partial class MainWindow : Form
         SpriteBuilder.ShowTeraOpacityStripe = 0xAF;
         SpriteBuilder.ShowTeraOpacityBackground = 0xFF;
         SpriteUtil.ChangeMode(SpriteBuilderMode.SpritesArtwork5668);
-
-        var protocol = Config.Protocol;
-        ConnectionConfig = new()
-        {
-            IP = Config.IP,
-            Port = protocol is SwitchProtocol.WiFi ? 6000 : Config.UsbPort,
-            Protocol = Config.Protocol,
-        };
 
         Webhook = new(Config);
         InitializeComponent();
@@ -201,7 +193,6 @@ public partial class MainWindow : Form
     {
         TextBox textBox = (TextBox)sender;
         Config.IP = textBox.Text;
-        ConnectionConfig.IP = textBox.Text;
     }
 
     private void USB_Port_Changed(object sender, EventArgs e)
@@ -213,7 +204,6 @@ public partial class MainWindow : Form
         if (int.TryParse(textBox.Text, out int port) && port >= 0)
         {
             Config.UsbPort = port;
-            ConnectionConfig.Port = port;
             return;
         }
 
@@ -227,7 +217,7 @@ public partial class MainWindow : Form
             if (ConnectionWrapper is { Connected: true })
                 return;
 
-            ConnectionWrapper = new(ConnectionConfig, UpdateStatus);
+            ConnectionWrapper = new(GetConnectionConfig(), UpdateStatus);
             Connect(Source.Token);
         }
     }
@@ -930,12 +920,18 @@ public partial class MainWindow : Form
             };
             Difficulty.Text = string.Concat(Enumerable.Repeat("☆", starCount));
 
-            var param = encounter.GetParam();
+            var param = encounter.GetParam() with { Shiny = encounter.Shiny };
             var blank = new PK9 { Species = encounter.Species, Form = encounter.Form };
+            var criteria = new EncounterCriteria { Shiny = encounter.Shiny };
+            bool check = Encounter9RNG.GenerateData(blank, param, criteria, raid.Seed);
+            if (!check)
+            {
+                criteria = new EncounterCriteria { Shiny = blank.IsShiny ? Shiny.Always : Shiny.Random };
+                Encounter9RNG.GenerateData(blank, param, criteria, raid.Seed);
+            }
 
-            Encounter9RNG.GenerateData(blank, param, EncounterCriteria.Unrestricted, raid.Seed);
             var img = blank.Sprite();
-            img = ApplyTeraColor((byte)teraType, img, SpriteBackgroundType.BottomStripe);
+            img = ApplyTeraColor((byte)teraType, img, SpriteBackgroundType.BottomStripe) as Bitmap;
 
             var form = ShowdownParsing.GetStringFromForm(
                 encounter.Form,
@@ -952,7 +948,7 @@ public partial class MainWindow : Form
             Gender.Text = $"{(Gender)blank.Gender}";
 
             var nature = blank.Nature;
-            Nature.Text = $"{RaidContainer.Strings.Natures[nature]}";
+            Nature.Text = $"{RaidContainer.Strings.Natures[(byte)nature]}";
             Ability.Text = $"{RaidContainer.Strings.Ability[blank.Ability]}";
 
             var extraMoves = new ushort[] { 0, 0, 0, 0 };
@@ -1085,8 +1081,13 @@ public partial class MainWindow : Form
 
             var param = encounter.GetParam();
             var blank = new PK9 { Species = encounter.Species, Form = encounter.Form };
+            var criteria = new EncounterCriteria { Shiny = encounter.Shiny };
+            bool check = Encounter9RNG.GenerateData(blank, param, criteria, raid.Seed);
+            if (!check) {
+                criteria = new EncounterCriteria { Shiny = blank.IsShiny ? Shiny.Always : Shiny.Random };
+                Encounter9RNG.GenerateData(blank, param, criteria, raid.Seed);
+            }
 
-            Encounter9RNG.GenerateData(blank, param, EncounterCriteria.Unrestricted, raid.Seed);
             var img = blank.Sprite();
 
             teraRaidView.picBoxPokemon.Image = img;
@@ -1097,7 +1098,7 @@ public partial class MainWindow : Form
             teraRaidView.Gender.Text = $"{(Gender)blank.Gender}";
 
             var nature = blank.Nature;
-            teraRaidView.Nature.Text = $"{RaidContainer.Strings.Natures[nature]}";
+            teraRaidView.Nature.Text = $"{RaidContainer.Strings.Natures[(byte)nature]}";
             teraRaidView.Ability.Text = $"{RaidContainer.Strings.Ability[blank.Ability]}";
 
             teraRaidView.Move1.Text =
@@ -1326,7 +1327,10 @@ public partial class MainWindow : Form
         var thk = SpriteBuilder.ShowTeraThicknessStripe;
         var op = SpriteBuilder.ShowTeraOpacityStripe;
         var bg = SpriteBuilder.ShowTeraOpacityBackground;
-        return ApplyColor(img, type, color, thk, op, bg);
+        var result = ApplyColor(img, type, color, thk, op, bg);
+
+        // Explicitly cast the result to Bitmap to resolve CS0266
+        return result is Bitmap bitmap ? bitmap : new Bitmap(result);
     }
 
     private static Image ApplyColor(Image img, SpriteBackgroundType type, Color color, int thick, byte opacStripe, byte opacBack)
@@ -1594,14 +1598,12 @@ public partial class MainWindow : Form
     public void Protocol_SelectedIndexChanged(SwitchProtocol protocol)
     {
         Config.Protocol = protocol;
-        ConnectionConfig.Protocol = protocol;
         if (protocol is SwitchProtocol.USB)
         {
             InputSwitchIP.Visible = false;
             LabelSwitchIP.Visible = false;
             USB_Port_label.Visible = true;
             USB_Port_TB.Visible = true;
-            ConnectionConfig.Port = Config.UsbPort;
         }
         else
         {
@@ -1609,7 +1611,6 @@ public partial class MainWindow : Form
             LabelSwitchIP.Visible = true;
             USB_Port_label.Visible = false;
             USB_Port_TB.Visible = false;
-            ConnectionConfig.Port = 6000;
         }
     }
 
@@ -1719,16 +1720,16 @@ public partial class MainWindow : Form
     private void SendScreenshot_Click(object sender, EventArgs e)
     {
         Task.Run(async () =>
+        {
+            try
             {
-                try
-                {
-                    await Webhook.SendScreenshot(ConnectionWrapper.Connection, Source.Token).ConfigureAwait(false);
-                }
-                catch (Exception ex)
-                {
-                    await this.DisplayMessageBox(Webhook, $"Could not send the screenshot: {ex.Message}", Source.Token).ConfigureAwait(false);
-                }
-            },
+                await Webhook.SendScreenshot(ConnectionWrapper.Connection, Source.Token).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                await this.DisplayMessageBox(Webhook, $"Could not send the screenshot: {ex.Message}", Source.Token).ConfigureAwait(false);
+            }
+        },
             Source.Token
         );
     }

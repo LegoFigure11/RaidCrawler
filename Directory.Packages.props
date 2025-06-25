@@ -1,0 +1,20 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+    <NoWarn>$(NoWarn);NU1507</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageVersion Include="coverlet.collector" Version="6.0.0" />
+    <PackageVersion Include="FlatSharp.Compiler" Version="7.9.0" />
+    <PackageVersion Include="FlatSharp.Runtime" Version="7.9.0" />
+    <PackageVersion Include="FluentAssertions" Version="6.12.0" />
+    <PackageVersion Include="GitVersion.MsBuild" Version="6.3.0" />
+    <PackageVersion Include="LibUsbDotNet" Version="2.2.75" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageVersion Include="NLog" Version="5.5.0" />
+    <PackageVersion Include="PKHeX.Core" Version="25.5.18" />
+    <PackageVersion Include="xunit" Version="2.6.2" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="2.5.4" />
+  </ItemGroup>
+</Project>
