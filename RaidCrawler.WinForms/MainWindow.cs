@@ -62,6 +62,8 @@ public partial class MainWindow : Form
     private bool StopAdvances =>
         !Config.EnableFilters || RaidFilters.Count == 0 || RaidFilters.All(x => !x.Enabled);
 
+    private readonly Version CurrentVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version!;
+
     public MainWindow()
     {
         Config = new ClientConfig();
@@ -71,7 +73,7 @@ public partial class MainWindow : Form
 #else
         var build = "";
 #endif
-        var v = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version!;
+        var v = CurrentVersion;
         var filterPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "filters.json");
         if (File.Exists(filterPath))
             RaidFilters = JsonSerializer.Deserialize<List<RaidFilter>>(File.ReadAllText(filterPath)) ?? [];
@@ -195,6 +197,7 @@ public partial class MainWindow : Form
         DefaultColor = IVs.BackColor;
         RaidBoost.SelectedIndex = 0;
         ToggleStreamerView();
+        CheckForUpdates();
     }
 
     private void InputSwitchIP_Changed(object sender, EventArgs e)
@@ -1823,5 +1826,37 @@ public partial class MainWindow : Form
                 await this.DisplayMessageBox(Webhook, $"Could not read the date: {ex.Message}", Source.Token).ConfigureAwait(false);
             }
         });
+    }
+
+
+    private void CheckForUpdates()
+    {
+        Task.Run(async () =>
+        {
+            Version? latestVersion;
+            try { latestVersion = Utils.GetLatestVersion(); }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Exception while checking for latest version: {ex}");
+                return;
+            }
+
+            if (latestVersion is null || latestVersion <= CurrentVersion)
+                return;
+
+            while (!IsHandleCreated) // Wait for form to be ready
+                await Task.Delay(2_000).ConfigureAwait(false);
+            await InvokeAsync(() => NotifyNewVersionAvailable(latestVersion));
+        });
+    }
+
+    private void NotifyNewVersionAvailable(Version version)
+    {
+        Text += $" - Update v{version.Major}.{version.Minor}.{version.Build} available!";
+        UpdateStatus($"Update v{version.Major}.{version.Minor}.{version.Build} available!");
+#if !DEBUG
+        MessageBox.Show($"Update available! v{version.Major}.{version.Minor}.{version.Build}");
+        Process.Start(new ProcessStartInfo("https://github.com/LegoFigure11/RaidCrawler/releases/") { UseShellExecute = true });
+#endif
     }
 }
