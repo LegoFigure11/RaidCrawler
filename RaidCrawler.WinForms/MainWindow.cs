@@ -933,9 +933,10 @@ public partial class MainWindow : Form
             var param = encounter.GetParam();
             var blank = new PK9 { Species = encounter.Species, Form = encounter.Form };
 
-            Encounter9RNG.GenerateData(blank, param, EncounterCriteria.Unrestricted, raid.Seed);
+            raid.GenerateDataPK9(blank, param, encounter.Shiny, raid.Seed);
+
             var img = blank.Sprite();
-            img = ApplyTeraColor((byte)teraType, img, SpriteBackgroundType.BottomStripe);
+            img = (Bitmap)ApplyTeraColor((byte)teraType, img, SpriteBackgroundType.BottomStripe);
 
             var form = ShowdownParsing.GetStringFromForm(
                 encounter.Form,
@@ -952,7 +953,7 @@ public partial class MainWindow : Form
             Gender.Text = $"{(Gender)blank.Gender}";
 
             var nature = blank.Nature;
-            Nature.Text = $"{RaidContainer.Strings.Natures[nature]}";
+            Nature.Text = $"{RaidContainer.Strings.Natures[(int)nature]}";
             Ability.Text = $"{RaidContainer.Strings.Ability[blank.Ability]}";
 
             var extraMoves = new ushort[] { 0, 0, 0, 0 };
@@ -975,8 +976,10 @@ public partial class MainWindow : Form
                 ? RaidContainer.Strings.Move[extraMoves[3]]
                 : RaidContainer.Strings.Move[encounter.Move4];
 
-            IVs.Text = IVsString(Utils.ToSpeedLast(blank.IVs));
-            toolTip.SetToolTip(IVs, IVsString(Utils.ToSpeedLast(blank.IVs), true));
+            Span<int> _ivs = stackalloc int[6];
+            blank.GetIVs(_ivs);
+            IVs.Text = IVsString(Utils.ToSpeedLast(_ivs));
+            toolTip.SetToolTip(IVs, IVsString(Utils.ToSpeedLast(_ivs), true));
 
             PID.BackColor = raid.CheckIsShiny(encounter) ? Color.Gold : DefaultColor;
             IVs.BackColor = IVs.Text is "31/31/31/31/31/31" ? Color.YellowGreen : DefaultColor;
@@ -1086,7 +1089,8 @@ public partial class MainWindow : Form
             var param = encounter.GetParam();
             var blank = new PK9 { Species = encounter.Species, Form = encounter.Form };
 
-            Encounter9RNG.GenerateData(blank, param, EncounterCriteria.Unrestricted, raid.Seed);
+            raid.GenerateDataPK9(blank, param, encounter.Shiny, raid.Seed);
+
             var img = blank.Sprite();
 
             teraRaidView.picBoxPokemon.Image = img;
@@ -1097,7 +1101,7 @@ public partial class MainWindow : Form
             teraRaidView.Gender.Text = $"{(Gender)blank.Gender}";
 
             var nature = blank.Nature;
-            teraRaidView.Nature.Text = $"{RaidContainer.Strings.Natures[nature]}";
+            teraRaidView.Nature.Text = $"{RaidContainer.Strings.Natures[(int)nature]}";
             teraRaidView.Ability.Text = $"{RaidContainer.Strings.Ability[blank.Ability]}";
 
             teraRaidView.Move1.Text =
@@ -1123,7 +1127,9 @@ public partial class MainWindow : Form
             teraRaidView.Move8.Text =
                 extraMoves[3] > 0 ? RaidContainer.Strings.Move[extraMoves[3]] : "---";
 
-            var ivs = Utils.ToSpeedLast(blank.IVs);
+            Span<int> _ivs = stackalloc int[6];
+            blank.GetIVs(_ivs);
+            var ivs = Utils.ToSpeedLast(_ivs);
 
             // HP
             teraRaidView.HP.Text = $"{ivs[0]:D2}";

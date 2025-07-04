@@ -13,26 +13,26 @@ public class Raid(Span<byte> Data, TeraRaidMapParent MapParent = TeraRaidMapPare
 
     public readonly TeraRaidMapParent MapParent = MapParent;
 
-    public bool IsValid => Validate();
-    public bool IsActive => ReadUInt32LittleEndian(Data.AsSpan(0x00)) == 1;
-    public uint Area => ReadUInt32LittleEndian(Data.AsSpan(0x04));
+    public bool IsValid      => Validate();
+    public bool IsActive     => ReadUInt32LittleEndian(Data.AsSpan(0x00)) == 1;
+    public uint Area         => ReadUInt32LittleEndian(Data.AsSpan(0x04));
     public uint LotteryGroup => ReadUInt32LittleEndian(Data.AsSpan(0x08));
-    public uint Den => ReadUInt32LittleEndian(Data.AsSpan(0x0C));
-    public uint Seed => ReadUInt32LittleEndian(Data.AsSpan(0x10));
-    public uint Flags => ReadUInt32LittleEndian(Data.AsSpan(0x18));
-    public bool IsBlack => Flags == 1;
-    public bool IsEvent => Flags >= 2;
+    public uint Den          => ReadUInt32LittleEndian(Data.AsSpan(0x0C));
+    public uint Seed         => ReadUInt32LittleEndian(Data.AsSpan(0x10));
+    public uint Flags        => ReadUInt32LittleEndian(Data.AsSpan(0x18));
+    public bool IsBlack      => Flags == 1;
+    public bool IsEvent      => Flags >= 2;
 
-    public int TeraType => GetTeraType(Seed);
-    public uint Difficulty => GetDifficulty(Seed);
+    public int TeraType      => GetTeraType(Seed);
+    public uint Difficulty   => GetDifficulty(Seed);
 
-    public uint EC => GenericRaidData[0];
-    public uint PID => GenericRaidData[2];
-    public bool IsShiny => GenericRaidData[3] == 1;
+    public uint EC           => GenericRaidData[0];
+    public uint PID          => GenericRaidData[2];
+    public bool IsShiny      => GenericRaidData[3] == 1;
 
     private uint[] GenericRaidData => GenerateGenericRaidData(Seed);
 
-    public byte[] GetData() => Data;
+    public byte[] GetData()  => Data;
 
     private bool Validate()
     {
@@ -47,13 +47,13 @@ public class Raid(Span<byte> Data, TeraRaidMapParent MapParent = TeraRaidMapPare
 
     private bool IsValidMap()
     {
-        if (MapParent == TeraRaidMapParent.Paldea)
-            return Area <= 22;
-        if (MapParent == TeraRaidMapParent.Kitakami)
-            return Area <= 11;
-        if (MapParent == TeraRaidMapParent.Blueberry)
-            return Area <= 8;
-        return false;
+        return MapParent switch
+        {
+            TeraRaidMapParent.Paldea    => Area <= 22,
+            TeraRaidMapParent.Kitakami  => Area <= 11,
+            TeraRaidMapParent.Blueberry => Area <= 8,
+            _                           => false
+        };
     }
 
     private static int GetTeraType(uint Seed)
@@ -68,7 +68,7 @@ public class Raid(Span<byte> Data, TeraRaidMapParent MapParent = TeraRaidMapPare
         uint EC = (uint)rng.NextInt();
         uint TIDSID = (uint)rng.NextInt();
         uint PID = (uint)rng.NextInt();
-        bool IsShiny = (((PID >> 16) ^ (PID & 0xFFFF)) >> 4) == ((TIDSID >> 16) ^ (TIDSID & 0xFFFF)) >> 4;
+        bool IsShiny = ((PID >> 16) ^ (PID & 0xFFFF)) >> 4 == ((TIDSID >> 16) ^ (TIDSID & 0xFFFF)) >> 4;
         var Shiny = IsShiny ? 1u : 0;
         return [EC, TIDSID, PID, Shiny];
     }
@@ -77,5 +77,16 @@ public class Raid(Span<byte> Data, TeraRaidMapParent MapParent = TeraRaidMapPare
     {
         var rng = new Xoroshiro128Plus(Seed);
         return (uint)rng.NextInt(100);
+    }
+
+    public void GenerateDataPK9(PK9 pk, GenerateParam9 param, Shiny isShiny, uint seed)
+    {
+        var criteria = new EncounterCriteria { Shiny = isShiny };
+        bool check = Encounter9RNG.GenerateData(pk, param, criteria, seed);
+        if (!check)
+        {
+            criteria = new EncounterCriteria { Shiny = pk.IsShiny ? Shiny.Always : Shiny.Random };
+            Encounter9RNG.GenerateData(pk, param, criteria, seed);
+        }
     }
 }

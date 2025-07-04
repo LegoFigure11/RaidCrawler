@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
-	<LangVersion>12</LangVersion>
+    <TargetFramework>net9.0-windows</TargetFramework>
+	<LangVersion>13</LangVersion>
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -177,6 +177,7 @@
     <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="PKHeX.Core" Version="25.6.9" />
   </ItemGroup>
 
   <ItemGroup>

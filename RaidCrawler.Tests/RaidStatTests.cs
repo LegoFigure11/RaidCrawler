@@ -2,6 +2,7 @@ using FluentAssertions;
 using PKHeX.Core;
 using RaidCrawler.Core.Structures;
 using System.ComponentModel;
+using System.Diagnostics.Metrics;
 using Xunit;
 
 namespace RaidCrawler.Tests;
@@ -33,10 +34,13 @@ public class RaidStatTests : TestUtil
         var param = enc.GetParam();
         var blank = new PK9 { Species = enc.Species, Form = enc.Form };
 
-        Encounter9RNG.GenerateData(blank, param, EncounterCriteria.Unrestricted, raid.Seed);
-        var encIVs = Utils.ToSpeedLast(blank.IVs);
+        raid.GenerateDataPK9(blank, param, enc.Shiny, raid.Seed);
+
+        Span<int> _ivs = stackalloc int[6];
+        blank.GetIVs(_ivs);
+        var encIVs = Utils.ToSpeedLast(_ivs);
         encIVs.SequenceEqual(ivs).Should().BeTrue();
-        blank.Nature.Should().Be((int)nature);
+        blank.Nature.Should().Be(nature);
         blank.IsShiny.Should().Be(shiny);
     }
 }

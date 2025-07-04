@@ -1,4 +1,5 @@
 using PKHeX.Core;
+using System.Numerics;
 using System.Reflection;
 
 namespace RaidCrawler.Core.Structures;

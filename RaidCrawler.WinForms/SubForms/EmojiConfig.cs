@@ -26,7 +26,7 @@ public partial class EmojiConfig : Form
     private void EmojiGrid_Changed(object sender, EventArgs e)
     {
         var dict = new Dictionary<string, string>();
-        var dt = (DataTable)EmojiGrid.DataSource;
+        var dt = (DataTable)EmojiGrid.DataSource!;
         dt.AsEnumerable().ToList().ForEach(row => dict.Add((string)row[0], (string)row[1]));
         c.Emoji = dict;
     }

@@ -13,13 +13,11 @@ public partial class FilterSettings : Form
     {
         InitializeComponent();
         this.filters = filters;
-        Species.DataSource = Enum.GetValues(typeof(Species))
-            .Cast<Species>()
+        Species.DataSource = Enum.GetValues<Species>()
             .Where(z => z != PKHeX.Core.Species.MAX_COUNT)
             .ToArray();
-        Nature.DataSource = Enum.GetValues(typeof(Nature));
-        TeraType.DataSource = Enum.GetValues(typeof(MoveType))
-            .Cast<MoveType>()
+        Nature.DataSource = Enum.GetValues<Nature>();
+        TeraType.DataSource = Enum.GetValues<MoveType>()
             .Where(z => z != MoveType.Any)
             .ToArray();
 

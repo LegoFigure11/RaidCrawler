@@ -76,22 +76,25 @@ public class NotificationHandler(IWebhookConfig config)
 
     private object GenerateWebhook(ITeraRaid encounter, Raid raid, RaidFilter filter, string time, IReadOnlyList<(int, int, int)> rewardsList, string hexColor, string spriteName)
     {
-        var strings = GameInfo.GetStrings(1);
+        var strings = GameInfo.GetStrings("en");
         var param = encounter.GetParam();
         var blank = new PK9 { Species = encounter.Species, Form = encounter.Form };
 
-        Encounter9RNG.GenerateData(blank, param, EncounterCriteria.Unrestricted, raid.Seed);
+        raid.GenerateDataPK9(blank, param, encounter.Shiny, raid.Seed);
+
         var form = Utils.GetFormString(blank.Species, blank.Form, strings);
         var species = $"{strings.Species[encounter.Species]}{form}";
         var difficulty = Difficulty(encounter.Stars, raid.IsEvent);
-        var nature = $"{strings.Natures[blank.Nature]}";
+        var nature = $"{strings.Natures[(int)blank.Nature]}";
         var ability = $"{strings.Ability[blank.Ability]}";
         var shiny = Shiny(raid.CheckIsShiny(encounter), ShinyExtensions.IsSquareShinyExist(blank));
         var gender = GenderEmoji(blank.Gender);
         var teratype = raid.GetTeraType(encounter);
         var tera = $"{strings.types[teratype]}";
         var teraemoji = TeraEmoji(strings.types[teratype]);
-        var ivs = IVsStringEmoji(ToSpeedLast(blank.IVs));
+        Span<int> _ivs = stackalloc int[6];
+        blank.GetIVs(_ivs);
+        var ivs = IVsStringEmoji(ToSpeedLast(_ivs));
         ushort[] moves =
         [
             encounter.Move1,

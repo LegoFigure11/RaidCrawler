@@ -1,4 +1,5 @@
 using PKHeX.Core;
+using System.Diagnostics.Metrics;
 
 namespace RaidCrawler.Core.Structures;
 
@@ -132,7 +133,9 @@ public class RaidFilter
         if (IVBin == 0)
             return true;
 
-        var ivs = Utils.ToSpeedLast(blank.IVs);
+        Span<int> _ivs = stackalloc int[6];
+        blank.GetIVs(_ivs);
+        var ivs = Utils.ToSpeedLast(_ivs);
         for (int i = 0; i < 6; i++)
         {
             var iv = IVVals >> i * 5 & 31;
@@ -186,7 +189,8 @@ public class RaidFilter
     {
         var param = enc.GetParam();
         var blank = new PK9 { Species = enc.Species, Form = enc.Form };
-        Encounter9RNG.GenerateData(blank, param, EncounterCriteria.Unrestricted, raid.Seed);
+
+        raid.GenerateDataPK9(blank, param, enc.Shiny, raid.Seed);
 
         return Enabled
                && IsIVsSatisfied(blank)
@@ -195,7 +199,7 @@ public class RaidFilter
                && IsRareECSatisfied(blank)
                && IsSpeciesSatisfied(blank.Species)
                && IsFormSatisfied(blank.Form)
-               && IsNatureSatisfied(blank.Nature)
+               && IsNatureSatisfied((int)blank.Nature)
                && IsStarsSatisfied(enc)
                && IsTeraTypeSatisfied(raid, enc)
                && IsRewardsSatisfied(container, enc, raid, SandwichBoost)
