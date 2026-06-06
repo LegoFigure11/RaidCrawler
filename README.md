@@ -7,6 +7,6 @@
 
 **Basic usage guide:** [Click here](https://billo-guides.github.io/cfw/sv/raidcrawler) (thanks [Billo](https://github.com/Billo-PS)!)
 
-![](https://i.imgur.com/TNOvbdY.png)
+![Tool image](https://legofigure11.github.io/tools/desktop/res/RaidCrawler/README.png)
 
 Leverages SysBot.Base.dll from [kwsch/SysBot.NET](https://github.com/kwsch/SysBot.NET)
