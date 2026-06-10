@@ -13,7 +13,7 @@ public class ConnectionWrapperAsync(SwitchConnectionConfig Config, Action<string
     public readonly ISwitchConnectionAsync Connection = Config.Protocol switch
     {
         SwitchProtocol.USB => new SwitchUSBAsync(Config.Port),
-        _ => new SwitchSocketAsync(Config),
+        _ => SwitchSocketAsync.CreateInstance(Config),
     };
 
     public bool Connected => IsConnected;

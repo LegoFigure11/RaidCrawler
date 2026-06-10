@@ -1,0 +1,16 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+  </Configurations>
+  <Project Path="RaidCrawler.Core/RaidCrawler.Core.csproj">
+    <Platform Project="x64" />
+  </Project>
+  <Project Path="RaidCrawler.Tests/RaidCrawler.Tests.csproj">
+    <BuildDependency Project="RaidCrawler.Core/RaidCrawler.Core.csproj" />
+  </Project>
+  <Project Path="RaidCrawler.WinForms/RaidCrawler.WinForms.csproj">
+    <BuildDependency Project="RaidCrawler.Core/RaidCrawler.Core.csproj" />
+    <Platform Project="x64" />
+  </Project>
+</Solution>

@@ -17,13 +17,13 @@ public partial class MainWindow : Form
     private static CancellationTokenSource Source = new();
     private static CancellationTokenSource DateAdvanceSource = new();
 
-    private static readonly object _connectLock = new();
-    private static readonly object _readLock = new();
+    private static readonly Lock _connectLock = new();
+    private static readonly Lock _readLock = new();
 
     private readonly ClientConfig Config;
     private ConnectionWrapperAsync ConnectionWrapper = default!;
 
-    private readonly SwitchConnectionConfig ConnectionConfig;
+    private SwitchConnectionConfig ConnectionConfig;
 
     private readonly RaidContainer RaidContainer;
     private readonly NotificationHandler Webhook;
@@ -204,7 +204,6 @@ public partial class MainWindow : Form
     {
         TextBox textBox = (TextBox)sender;
         Config.IP = textBox.Text;
-        ConnectionConfig.IP = textBox.Text;
     }
 
     private void USB_Port_Changed(object sender, EventArgs e)
@@ -216,7 +215,6 @@ public partial class MainWindow : Form
         if (int.TryParse(textBox.Text, out int port) && port >= 0)
         {
             Config.UsbPort = port;
-            ConnectionConfig.Port = port;
             return;
         }
 
@@ -230,6 +228,12 @@ public partial class MainWindow : Form
             if (ConnectionWrapper is { Connected: true })
                 return;
 
+            ConnectionConfig = new()
+            {
+                IP = Config.IP,
+                Protocol = Config.Protocol,
+                Port = Config.Protocol is SwitchProtocol.WiFi ? 6000 : Config.UsbPort,
+            };
             ConnectionWrapper = new(ConnectionConfig, UpdateStatus);
             Connect(Source.Token);
         }
@@ -1610,7 +1614,6 @@ public partial class MainWindow : Form
             LabelSwitchIP.Visible = false;
             USB_Port_label.Visible = true;
             USB_Port_TB.Visible = true;
-            ConnectionConfig.Port = Config.UsbPort;
         }
         else
         {
@@ -1618,7 +1621,6 @@ public partial class MainWindow : Form
             LabelSwitchIP.Visible = true;
             USB_Port_label.Visible = false;
             USB_Port_TB.Visible = false;
-            ConnectionConfig.Port = 6000;
         }
     }
 
