@@ -13,7 +13,7 @@
 	</PackageReference>
 	<PackageReference Include="FlatSharp.Runtime" Version="7.9.0" />
     <PackageReference Include="LibUsbDotNet" Version="2.2.75" />
-    <PackageReference Include="PKHeX.Core" Version="25.6.9" />
+    <PackageReference Include="PKHeX.Core" Version="26.7.7" />
 	<Reference Include="SysBot.Base">
 	  <HintPath>deps\SysBot.Base.dll</HintPath>
 	</Reference>
