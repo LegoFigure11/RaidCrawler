@@ -42,7 +42,7 @@ public partial class RewardsView : Form
             var img = GetItem(rewards, i);
 
             if (img != null && Rewards.RareRewards.Contains(reward.Item1))
-                img = ImageUtil.LayerImage(img, rare, 0, 0, 0.7);
+                img = ImageUtil.LayerImage((Bitmap)img, rare, 0, 0, 0.7);
 
             pb.Image = img;
             label.Text = $"{item} x{reward.Item2} {subject}".TrimEnd();

@@ -176,8 +176,8 @@ public class RaidFilter
         if (filters.Count == 0)
             return true;
 
-        BatchEditing.ScreenStrings(filters);
-        return BatchEditing.IsFilterMatch(filters, blank);
+        EntityBatchEditor.ScreenStrings(filters);
+        return BatchEditingUtil.IsFilterMatch(filters, blank);
     }
 
     public bool FilterSatisfied(

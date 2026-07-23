@@ -943,7 +943,7 @@ public partial class MainWindow : Form
             raid.GenerateDataPK9(blank, param, encounter.Shiny, raid.Seed);
 
             var img = blank.Sprite();
-            img = (Bitmap)ApplyTeraColor((byte)teraType, img, SpriteBackgroundType.BottomStripe);
+            ApplyTeraColor((byte)teraType, img, SpriteBackgroundType.BottomStripe);
 
             var form = ShowdownParsing.GetStringFromForm(
                 encounter.Form,
@@ -997,12 +997,12 @@ public partial class MainWindow : Form
         Task.Run(async () => await this.DisplayMessageBox(Webhook, msg, Source.Token).ConfigureAwait(false), Source.Token);
     }
 
-    private static Image? GetDisplayGemImage(int teratype, Raid raid)
+    private static Bitmap? GetDisplayGemImage(int teratype, Raid raid)
     {
         var shouldDisplayBlack = raid.IsBlack || raid.Flags == 3;
         var baseImg = shouldDisplayBlack
-            ? (Image?)Properties.Resources.ResourceManager.GetObject($"black_{teratype:D2}")
-            : (Image?)Properties.Resources.ResourceManager.GetObject($"gem_{teratype:D2}");
+            ? (Bitmap?)Properties.Resources.ResourceManager.GetObject($"black_{teratype:D2}")
+            : (Bitmap?)Properties.Resources.ResourceManager.GetObject($"gem_{teratype:D2}");
         if (baseImg is null)
             return null;
 
@@ -1012,7 +1012,7 @@ public partial class MainWindow : Form
             baseImg.PixelFormat
         );
         baseImg = ImageUtil.LayerImage(backlayer, baseImg, 5, 5);
-        var pixels = ImageUtil.GetPixelData((Bitmap)baseImg);
+        var pixels = baseImg.GetBitmapData();
         for (int i = 0; i < pixels.Length; i += 4)
         {
             if (pixels[i + 3] == 0)
@@ -1333,16 +1333,16 @@ public partial class MainWindow : Form
         return s;
     }
 
-    private static Image ApplyTeraColor(byte elementalType, Image img, SpriteBackgroundType type)
+    private static void ApplyTeraColor(byte elementalType, Bitmap img, SpriteBackgroundType type)
     {
         var color = TypeColor.GetTypeSpriteColor(elementalType);
         var thk = SpriteBuilder.ShowTeraThicknessStripe;
         var op = SpriteBuilder.ShowTeraOpacityStripe;
         var bg = SpriteBuilder.ShowTeraOpacityBackground;
-        return ApplyColor(img, type, color, thk, op, bg);
+        ApplyColor(img, type, color, thk, op, bg);
     }
 
-    private static Image ApplyColor(Image img, SpriteBackgroundType type, Color color, int thick, byte opacStripe, byte opacBack)
+    private static void ApplyColor(Bitmap img, SpriteBackgroundType type, Color color, int thick, byte opacStripe, byte opacBack)
     {
         if (type == SpriteBackgroundType.BottomStripe)
         {
@@ -1350,7 +1350,7 @@ public partial class MainWindow : Form
             if ((uint)stripeHeight > img.Height) // clamp negative & too-high values back to height.
                 stripeHeight = img.Height;
 
-            return ImageUtil.BlendTransparentTo(img, color, opacStripe, img.Width * 4 * (img.Height - stripeHeight));
+            img.BlendTransparentTo(color, opacStripe, img.Width * 4 * (img.Height - stripeHeight));
         }
         if (type == SpriteBackgroundType.TopStripe)
         {
@@ -1358,11 +1358,10 @@ public partial class MainWindow : Form
             if ((uint)stripeHeight > img.Height) // clamp negative & too-high values back to height.
                 stripeHeight = img.Height;
 
-            return ImageUtil.BlendTransparentTo(img, color, opacStripe, 0, (img.Width * 4 * stripeHeight) - 4);
+            img.BlendTransparentTo(color, opacStripe, 0, img.Width * 4 * stripeHeight);
         }
         if (type == SpriteBackgroundType.FullBackground) // full background
-            return ImageUtil.BlendTransparentTo(img, color, opacBack);
-        return img;
+            img.ChangeTransparentTo(color, opacBack);
     }
 
     private static Bitmap? GenerateMap(Raid raid, int teratype)
@@ -1396,7 +1395,7 @@ public partial class MainWindow : Form
         try
         {
             (double x, double z) = GetCoordinate(raid, locData, gem);
-            return ImageUtil.LayerImage(map, gem, (int)x, (int)z);
+            return ImageUtil.LayerImage((Bitmap)map, gem, (int)x, (int)z);
         }
         catch
         {
