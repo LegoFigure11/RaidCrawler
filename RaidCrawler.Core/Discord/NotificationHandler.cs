@@ -283,32 +283,32 @@ public class NotificationHandler(IWebhookConfig config)
             switch (config.IVsStyle)
             {
                 case 0:
-                {
-                    s += ivs[i] switch
                     {
-                        00 => emoji ? $"{iv0 [i]}{(verbose ? " " + stats[i] : string.Empty)}" : $"`✓`{(verbose ? " " + stats[i] : string.Empty)}",
-                        31 => emoji ? $"{iv31[i]}{(verbose ? " " + stats[i] : string.Empty)}" : $"`✓`{(verbose ? " " + stats[i] : string.Empty)}",
-                        _  =>         $"`{ivs[i]}`{(verbose ? " " + stats[i] : string.Empty)}",
-                    };
+                        s += ivs[i] switch
+                        {
+                            00 => emoji ? $"{iv0[i]}{(verbose ? " " + stats[i] : string.Empty)}" : $"`✓`{(verbose ? " " + stats[i] : string.Empty)}",
+                            31 => emoji ? $"{iv31[i]}{(verbose ? " " + stats[i] : string.Empty)}" : $"`✓`{(verbose ? " " + stats[i] : string.Empty)}",
+                            _ => $"`{ivs[i]}`{(verbose ? " " + stats[i] : string.Empty)}",
+                        };
 
-                    if (i < 5)
-                        s += " / ";
-                    break;
-                }
+                        if (i < 5)
+                            s += " / ";
+                        break;
+                    }
                 case 1:
-                {
-                    s += $"`{ivs[i]:D}`{(verbose ? " " + stats[i] : string.Empty)}";
-                    if (i < 5)
-                        s += " / ";
-                    break;
-                }
+                    {
+                        s += $"`{ivs[i]:D}`{(verbose ? " " + stats[i] : string.Empty)}";
+                        if (i < 5)
+                            s += " / ";
+                        break;
+                    }
                 case 2:
-                {
-                    s += $"{ivs[i]:D}{(verbose ? " " + stats[i] : string.Empty)}";
-                    if (i < 5)
-                        s += " / ";
-                    break;
-                }
+                    {
+                        s += $"{ivs[i]:D}{(verbose ? " " + stats[i] : string.Empty)}";
+                        if (i < 5)
+                            s += " / ";
+                        break;
+                    }
             }
         }
         return s;

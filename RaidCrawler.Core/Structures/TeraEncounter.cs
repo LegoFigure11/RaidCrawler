@@ -1,4 +1,4 @@
-﻿using PKHeX.Core;
+using PKHeX.Core;
 using pkNX.Structures.FlatBuffers.Gen9;
 using System.Diagnostics;
 

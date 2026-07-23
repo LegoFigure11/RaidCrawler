@@ -1,4 +1,4 @@
-﻿using RaidCrawler.Core.Structures;
+using RaidCrawler.Core.Structures;
 using System.Reflection;
 using System.Text.Json;
 

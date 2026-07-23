@@ -1,4 +1,4 @@
-﻿namespace RaidCrawler.WinForms.SubForms;
+namespace RaidCrawler.WinForms.SubForms;
 
 public partial class MapView : Form
 {

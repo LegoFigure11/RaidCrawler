@@ -1,7 +1,6 @@
 using FlatSharp.Attributes;
 using PKHeX.Core;
 using System.ComponentModel;
-using System.Text.Json.Serialization;
 
 namespace RaidCrawler.Core.Structures;
 
@@ -478,7 +477,6 @@ public class RaidLotteryRewards
     };
 }
 
-[JsonSerializable(typeof(RaidLotteryRewardItemInfo))]
 [FlatBufferTable, TypeConverter(typeof(ExpandableObjectConverter))]
 public class RaidLotteryRewardItemInfo
 {
@@ -498,7 +496,6 @@ public class RaidLotteryRewardItemInfo
     public bool RareItemFlag { get; set; }
 }
 
-[JsonSerializable(typeof(RaidFixedRewardItemInfo))]
 [FlatBufferTable, TypeConverter(typeof(ExpandableObjectConverter))]
 public class RaidFixedRewardItemInfo
 {
